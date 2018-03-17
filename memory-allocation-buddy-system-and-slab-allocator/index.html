@@ -1,0 +1,1019 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Heap,Linux,Memory Management,Buddy System,Slab Allocator," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
+<meta name="keywords" content="转载,Heap,Linux,Memory Management,Buddy System,Slab Allocator">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存分配-----伙伴算法和slab算法">
+<meta property="og:url" content="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png">
+<meta property="og:image" content="http://xnerv.wang/assets/memory-allocation-buddy-system-and-slab-allocator/slab.png">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="内存分配-----伙伴算法和slab算法">
+<meta name="twitter:description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
+<meta name="twitter:image" content="http://xnerv.wang/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/"/>
+
+
+
+
+
+  <title>内存分配-----伙伴算法和slab算法 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">内存分配-----伙伴算法和slab算法</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-02T09:39:03+08:00">
+                2014-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="内存管理问题"><a class="header-anchor" href="#内存管理问题"></a>内存管理问题</h2>
+<p>内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题):<br>
+内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并.</p>
+<p>解决方法:</p>
+<ol>
+<li>小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法)</li>
+<li>伙伴算法.</li>
+<li>slab算法.</li>
+</ol>
+<a id="more"></a>
+<h2 id="伙伴算法"><a class="header-anchor" href="#伙伴算法"></a>伙伴算法</h2>
+<ol>
+<li>将空闲页面分为m个组,第1组存储2<sup>0个单位的内存块,第2组存储2</sup>1个单位的内存块,第3组存储2<sup>2个单位的内存块,第4组存储2</sup>3个单位的内存块,以此类推.直到m组.</li>
+<li>每个组是一个链表,用于连接同等大小的内存块.</li>
+<li>伙伴块的大小是相等的,并且第1块和第2块是伙伴,第三块和第四块是伙伴.以此类推.</li>
+</ol>
+<center>
+<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png" alt="buddy system">
+</center>
+<h3 id="伙伴算法分配内存"><a class="header-anchor" href="#伙伴算法分配内存"></a>伙伴算法分配内存</h3>
+<p>若申请的内存大小为n则将n向上取整为2的幂设次数为s,则需要分配s大小的内存块,定位大相应数组,</p>
+<ol>
+<li>如果该数组有剩余内存块,则分配出去.</li>
+<li>若没有剩余内存块就沿数组向上查找,然后再将该内存块分割出来s并将剩余的内存块放入相应大小的数组中.</li>
+</ol>
+<p>例如分配5大小的内存块<br>
+-----------&gt;定位到大小为8的链表中 --------&gt;若该链表中之中没有空余元素,则定位到16的链表中,16中有剩余元素,则取出该元素,并分割出大小为8的内存块供用户使用,然后将剩余的8连接到大小为8的数组中.</p>
+<h3 id="伙伴算法的内存合并"><a class="header-anchor" href="#伙伴算法的内存合并"></a>伙伴算法的内存合并</h3>
+<p>当用户用完内存后会归还,然后根据该内存块实际大小(向上取整为2的幂)归入链表中,在归入之前,</p>
+<ol>
+<li>我们还要检测他的伙伴内存块是否空闲,</li>
+<li>如果空闲就合并在一起,合并后转到1,继续执行.</li>
+<li>若果不是空闲的就直接归入链表中.</li>
+</ol>
+<p>一般来说,伙伴算法实现中会用位图记录内存块是否被使用,用于伙伴内存的合并.</p>
+<h3 id="伙伴算法的特点"><a class="header-anchor" href="#伙伴算法的特点"></a>伙伴算法的特点</h3>
+<p>显而易见,伙伴算法会浪费大量的内存,(如果需要大小为9的内存块必须分配大小为16的内存块).而优点也是明显的,分配和合并算法都很简单易行.但是,当分配和回收较快的时候,例如分配大小为9的内存块,此时分配16,然后又回收,即合并伙伴内存块,这样会造成不必要的cpu浪费,应该设置链表中内存块的低潮个数,即当链表中内存块个数小于某个值的时候,并不合并伙伴内存块,只要当高于低潮个数的时候才合并.</p>
+<h2 id="slab算法"><a class="header-anchor" href="#slab算法"></a>slab算法</h2>
+<p>一般来说,伙伴算法的改进算法用于操作系统分配和回收内存,而且内存块的单位较大,利于Linux使用的伙伴算法以页为单位.对于小块内存的分配和回收,伙伴算法就显得有些得不偿失了.</p>
+<p>对于小块内存,一般采用slab算法,或者叫做slab机制.</p>
+<p>Linux 所使用的 slab 分配器的基础是 Jeff Bonwick 为SunOS 操作系统首次引入的一种算法。Jeff的分配器是围绕对象缓存进行的。在内核中，会为有限的对象集（例如文件描述符和其他常见结构）分配大量内存。Jeff发现对内核中普通对象进行初始化所需的时间超过了对其进行分配和释放所需的时间。因此他的结论是不应该将内存释放回一个全局的内存池，而是将内存保持为针对特定目而初始化的状态。例如，如果内存被分配给了一个互斥锁，那么只需在为互斥锁首次分配内存时执行一次互斥锁初始化函数（mutex_init）即可。后续的内存分配不需要执行这个初始化函数，因为从上次释放和调用析构之后，它已经处于所需的状态中了。</p>
+<p>Linux slab分配器使用了这种思想和其他一些思想来构建一个在空间和时间上都具有高效性的内存分配器。</p>
+<center>
+<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/slab.png" alt="slab allocator">
+</center>
+<p>图中给出了 slab结构的高层组织结构。在最高层是 cache_chain，这是一个 slab 缓存的链接列表。这对于 best-fit算法非常有用，可以用来查找最适合所需要的分配大小的缓存（遍历列表）。cache_chain 的每个元素都是一个 kmem_cache 结构的引用（称为一个 cache）。它定义了一个要管理的给定大小的对象池。</p>
+<p>每个缓存都包含了一个 slabs 列表，这是一段连续的内存块（通常都是页面）。存在3 种 slab：<br>
+<strong>slabs_full</strong>: 完全分配的slab<br>
+<strong>slabs_partial</strong>: 部分分配的slab<br>
+<strong>slabs_empty</strong>: 空slab，或者没有对象被分配</p>
+<p>slab 列表中的每个 slab都是一个连续的内存块（一个或多个连续页），它们被划分成一个个对象。这些对象是从特定缓存中进行分配和释放的基本元素。注意 slab 是 slab分配器进行操作的最小分配单位，因此如果需要对 slab 进行扩展，这也就是所扩展的最小值。通常来说，每个 slab 被分配为多个对象。</p>
+<p>由于对象是从 slab 中进行分配和释放的，因此单个 slab 可以在 slab列表之间进行移动。例如，当一个 slab中的所有对象都被使用完时，就从slabs_partial 列表中移动到 slabs_full 列表中。当一个 slab完全被分配并且有对象被释放后，就从 slabs_full 列表中移动到slabs_partial 列表中。当所有对象都被释放之后，就从 slabs_partial 列表移动到 slabs_empty 列表中。</p>
+<h3 id="slab背后的动机"><a class="header-anchor" href="#slab背后的动机"></a>slab背后的动机</h3>
+<p>与传统的内存管理模式相比， slab缓存分配器提供了很多优点。首先，内核通常依赖于对小对象的分配，它们会在系统生命周期内进行无数次分配。slab缓存分配器通过对类似大小的对象进行缓存而提供这种功能，从而避免了常见的碎片问题。slab分配器还支持通用对象的初始化，从而避免了为同一目而对一个对象重复进行初始化。最后，slab分配器还可以支持硬件缓存对齐和着色，这允许不同缓存中的对象占用相同的缓存行，从而提高缓存的利用率并获得更好的性能。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</a></strong><br>
+转载自：<a href="http://blog.csdn.net/u013009575/article/details/17751147" target="_blank" rel="noopener">内存分配-----伙伴算法和slab算法</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Heap/" rel="tag"># Heap</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+          
+            <a href="/tags/Buddy-System/" rel="tag"># Buddy System</a>
+          
+            <a href="/tags/Slab-Allocator/" rel="tag"># Slab Allocator</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/everything-you-always-wanted-to-know-about-fsync/" rel="next" title="Everything You Always Wanted to Know About Fsync()">
+                <i class="fa fa-chevron-left"></i> Everything You Always Wanted to Know About Fsync()
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/transaction-processing-of-distributed-system/" rel="prev" title="分布式系统的事务处理">
+                分布式系统的事务处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理问题"><span class="nav-text">内存管理问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#伙伴算法"><span class="nav-text">伙伴算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#伙伴算法分配内存"><span class="nav-text">伙伴算法分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伙伴算法的内存合并"><span class="nav-text">伙伴算法的内存合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伙伴算法的特点"><span class="nav-text">伙伴算法的特点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slab算法"><span class="nav-text">slab算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#slab背后的动机"><span class="nav-text">slab背后的动机</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

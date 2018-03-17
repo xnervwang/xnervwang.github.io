@@ -1,0 +1,940 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,操作系统,协程,线程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据">
+<meta name="keywords" content="转载,操作系统,协程,线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【协程原理】 - 协程不过是用户态的线程">
+<meta property="og:url" content="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.173Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【协程原理】 - 协程不过是用户态的线程">
+<meta name="twitter:description" content="笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/"/>
+
+
+
+
+
+  <title>【协程原理】 - 协程不过是用户态的线程 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">【协程原理】 - 协程不过是用户态的线程</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-10T00:00:00+08:00">
+                2014-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据的区域，相当于高级语言里的变量。但是有一个寄存器是特殊的，它存放了cpu当前正在执行的指令的内存地址(Instruction Register)。一个高级语言中的函数一般会被编译成指令存放在一段连续的内存空间中（data segment）。那么所谓函数执行到了第几行这样的信息其实就是保存在这个Instruction Register中的。另外一个很特殊的寄存器是Stack Register，它其中存放的内存地址指向的内存区域用于函数之间传递参数和返回值，以及存放一个函数内的局部变量。如果不考虑现代计算机cpu中各种各样其他存放中间结果的寄存器，理论上保存了Instruction Register（执行到哪儿了）和Stack Register（堆栈上的变量）就保存了一个函数的当前执行状态，分别是函数当前执行到了哪，以及这个函数局部变量所代表的当前state。</p>
+<a id="more"></a>
+<p>事实上，操作系统的几个关键切换也是这么来完成的。操作系统提供了两个执行态，一个是用户态，一般我们的代码都是执行在用户态的。另外一个是内核态，像驱动程序之类的代码会用各种方式被加载到操作系统内部执行在内核之中。内核态里的代码可以完全控制CPU的I/O中断，从而可以和外部设备交互。用户态的代码属于受限代码，必须把I/O请求通过syscall交由运行在内核态的操作系统来完成。当一个cpu的核在执行用户态代码时，其寄存器里存放的状态是你的应用的代码的状态，但是应用要进行I/O操作的时候，cpu要被切换到内核的代码里去执行内核态的代码。这里就需要进行一次context switch，所谓context switch其实原理不会比把寄存器的值存到内存的一个地方，等回来的时候再把内存中临时保存的值加载回寄存器复杂多少。</p>
+<p>操作系统还有一个需要进行context switch的地方，那就是在协程与协程之间。操作系统在执行一个ELF或者PE的可执行文件的时候，对于这个可执行文件内的汇编代码来说，整个内存寻址空间是独立的。也就是1.exe的执行状态完全无法感知到2.exe的执行状态的内存。也就是现代操作系统的虚拟内存空间。有cpu在两个进程之间切换状态的时候，需要把内存的映射关系调整过来，否则虚拟内存的地址是无法对应到正确的物理地址的。一个进程内的两个线成切换的时候，要稍微简单一些，只需要把当前线成正在执行的位置和栈做切换就可以了。</p>
+<p>无论是操作系统做user/kernel的switch，还是process/process，thread/thread的switch，其实现方式都是大同小异的。通过把“当前执行状态”这样的一个抽象概念落实为一个具体的数据结构存储起来，然后指挥cpu在不同的场合加载不同的数据恢复不同的“当前执行状态”。</p>
+<p>在高级语言中，一个函数正在执行的位置以及其状态，内部都可以有一个抽象的表达方式。有的高级语言直接被编译成原生的机器码，那么其执行状态的表述就和操作系统的context switch的context非常类似。有的高级语言自身执行在一个虚拟机之上，那么其context的表述可能是虚拟机的instruction register和stack register，而不是80x86这样原生的机器的物理寄存器。但是原理是非常类似的。</p>
+<p>取决于语言设计者的觉悟，有的语言会把这种表达执行状态的能力直接提供出来，让一个函数在执行过程中可以把当前状态保存，然后把执行权交给另外一个函数执行，等那个函数放弃执行权回来的时候再把保存的状态恢复。这也就是所谓的协程（co-routine）。协程与线程的区别在于，协程的context switch是在完全在用户态，由语言的runtime或者是库来完成的。而线程的context switch则是操作系统来完成的。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</a></strong><br>
+转载自：<a href="https://segmentfault.com/a/1190000000663472" target="_blank" rel="noopener">【协程原理】 - 协程不过是用户态的线程</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/操作系统/" rel="tag"># 操作系统</a>
+          
+            <a href="/tags/协程/" rel="tag"># 协程</a>
+          
+            <a href="/tags/线程/" rel="tag"># 线程</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/how-to-implement-a-malloc/" rel="next" title="如何实现一个malloc">
+                <i class="fa fa-chevron-left"></i> 如何实现一个malloc
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/debugging-alibaba-softwares/" rel="prev" title="在调试器中看阿里的软件兵团">
+                在调试器中看阿里的软件兵团 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

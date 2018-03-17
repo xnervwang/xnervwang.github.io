@@ -1,0 +1,1094 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Windows,DLL," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="For the chinese translated version, please click 关于DLL的一些你不会想要知道的知识.  I’ve recently had cause to investigate how dynamic linking is implemented on Windows. This post is basically a brain dump of every">
+<meta name="keywords" content="转载,Windows,DLL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Everything You Never Wanted To Know About DLLs">
+<meta property="og:url" content="http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="For the chinese translated version, please click 关于DLL的一些你不会想要知道的知识.  I’ve recently had cause to investigate how dynamic linking is implemented on Windows. This post is basically a brain dump of every">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.035Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Everything You Never Wanted To Know About DLLs">
+<meta name="twitter:description" content="For the chinese translated version, please click 关于DLL的一些你不会想要知道的知识.  I’ve recently had cause to investigate how dynamic linking is implemented on Windows. This post is basically a brain dump of every">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/"/>
+
+
+
+
+
+  <title>Everything You Never Wanted To Know About DLLs | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Everything You Never Wanted To Know About DLLs</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2011-07-04T00:00:00+08:00">
+                2011-07-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>For the chinese translated version, please click <strong><em><a href="/everything-you-never-wanted-to-know-about-dlls-cn/">关于DLL的一些你不会想要知道的知识</a></em></strong>.</p>
+<hr>
+<p>I’ve recently had cause to investigate how dynamic linking is implemented on Windows. This post is basically a brain dump of everything I’ve learnt on the issue. This is mostly for my future reference, but I hope it will be useful to others too as I’m going to bring together lots of information you would otherwise have to hunt around for.</p>
+<p>Without further ado, here we go:</p>
+<a id="more"></a>
+<h2 id="export-and-import-directories"><a class="header-anchor" href="#export-and-import-directories"></a>Export and import directories</h2>
+<p>The Windows executable loader is responsible for doing all dynamic loading and symbol resolution before running the code. The linker works out what functions are exported or imported by each image (an <em>image</em> is a DLL or EXE file) by inspecting the <code>.edata</code> and <code>.idata</code> sections of those images, respectively.</p>
+<p>The contents of these sections is covered in detail by the <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms680547.aspx" target="_blank" rel="noopener">PE/COFF specification</a>.</p>
+<h3 id="the-edata-section"><a class="header-anchor" href="#the-edata-section"></a>The <code>.edata</code> section</h3>
+<p>This section records the exports of the image (yes, EXEs can export things). This takes the form of:</p>
+<ul>
+<li>
+<p>The export address table: an array of length N holding the addresses of the exported functions/data (the addresses are stored relative to the image base). Indexes into this table are called ordinals.</p>
+</li>
+<li>
+<p>The export name pointer table: an array of length M holding pointers to strings that represent the name of an export. This array is lexically ordered by name, to allow binary searches for a given export.</p>
+</li>
+<li>
+<p>The export ordinal table: a parallel array of length M holding the ordinal of the corresponding name in the export name pointer table.</p>
+</li>
+</ul>
+<p>(As an alternative to importing an image’s export by its name, it is possible to import by specifying an ordinal. Importing by ordinal is slightly faster at runtime because the dynamic linker doesn’t have to do a lookup. Furthermore, if the import is not given a name by the exporting DLL, importing by ordinal is the <strong>only</strong> way to do the import.)</p>
+<p>How does the <code>.edata</code> section get created in the first place? There are two main methods:</p>
+<ol>
+<li>
+<p>Most commonly, they start life in the object files created by compiling some source code that defines a function/some data that was declared with the <code>__declspec(dllimport)</code> modifier. The compiler just emits an appropriate <code>.edata</code> section naming these exports.</p>
+</li>
+<li>
+<p>Less commonly, the programmer might <a href="https://msdn.microsoft.com/en-us/library/d91k01sh.aspx" target="_blank" rel="noopener">write a .def file</a> specifying which functions they would like to export. By supplying this to <code>dlltool --output-exp</code>, an export file can be generated. An export file is just an object file which only contains a <code>.edata</code> section, exporting (via some unresolved references that will be filled in by the linker in the usual way) the symbols named in the .def file. This export library must be named by the programmer when he comes to link together his object files into a DLL.</p>
+</li>
+</ol>
+<p>In both these cases, the linker collects the <code>.edata</code> sections from all objects named on the link line to build the <code>.edata</code> for the overall image file. One last possible way that the <code>.edata</code> can be created is by the linker itself, without having to put <code>.edata</code> into any object files:</p>
+<ol start="3">
+<li>The linker could choose to export all symbols defined by object files named on the link line. For example, this is the <a href="http://sourceware.org/binutils/docs/ld/WIN32.html" target="_blank" rel="noopener">default behaviour of GNU ld</a> (the behaviour can also be explicitly asked for using <code>–-export-all-symbols</code>). In this case, the linker generates the <code>.edata</code> section itself. (GNU ld also supports specifying a .def file on the command line, in which case the generated section will export just those things named by the .def).</li>
+</ol>
+<h3 id="the-idata-section"><a class="header-anchor" href="#the-idata-section"></a>The <code>.idata</code> section</h3>
+<p>The <code>.idata</code> section records those things that the image imports. It consists of:</p>
+<ul>
+<li>
+<p>For every image from which symbols are imported:</p>
+<ul>
+<li>
+<p>The filename of the image. Used by the dynamic linker to locate it on disk.</p>
+</li>
+<li>
+<p>The import lookup table: an array of length N, which each entry is either an ordinal or a pointer to a string representing the name to import.</p>
+</li>
+<li>
+<p>The import address table: an array of N pointers. The dynamic linker is responsible for filling out this array with the address of the function/data named by the corresponding symbol in the import lookup table.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>The ways in which <code>.idata</code> entries are created are as follows:</p>
+<ol>
+<li>
+<p>Most commonly, they originate in a library of object files called an <code>import library</code>. This <code>import library</code> can be created by usingdlltool on the DLL you wish to export or a .def file of the type we discussed earlier. Just like the export library, the import library must be named by the user on the link line.</p>
+</li>
+<li>
+<p>Alternatively, some linkers (like GNU ld) let you specify a DLL directly on the link line. The linker will automatically generate <code>.idata</code> entries for any symbols that you must import from the DLL.</p>
+</li>
+</ol>
+<p>Notice that unlike the case when we were exporting symbols, <code>__declspec(dllimport)</code> does not cause <code>.idata</code> sections to be generated.</p>
+<p>Import libraries are a bit more complicated than they first appear. The Windows dynamic loader fills the import <strong>address</strong> table with the addresses of the imported symbols (say, the address of a function <code>Func</code>). However, when the assembly code in other object files says <code>call Func</code> they expect that <code>Func</code> to name the address of that code. But we don’t know that address until runtime: the only thing we know statically is the address <strong>where that address will be placed by the dynamic linker</strong>. We will call this address <code>__imp__Func</code>.</p>
+<p>To deal with this extra level of indirection, the import library exports a function <code>Func</code> that just dereferences <code>__imp__Func</code> (to get the actual function pointer) and then <code>jmp</code>s to it. All of the other object files in the project can now say <code>call Func</code> just as they would if <code>Func</code> had been defined in some other object file, rather than a DLL. For this reason, saying <code>__declspec(dllimport)</code> in the declaration of a dynamically linked function is optional (though in fact you will get slightly more efficient code if you add them, as we will see later).</p>
+<p>Unfortunately, there is no equivalent trick if you want to import data from another DLL. If we have some imported data <code>myData</code>, there is no way the import library can be defined so that a <code>mov $eax, myData</code> in an object file linked against it writes to the storage for <code>myData</code> in that DLL. Instead, the import library defines a symbol <code>__imp__myData</code> that resolves to the address at which the linked-in address of the storage can be found. The compiler then ensures that when you read or write from a <em>variable</em> defined with <code>__declspec(dllimport)</code> those reads and writes go through the <code>__imp_myData</code> indirection. Because different code needs to be generated at the use site, <code>__declspec</code> declarations on data imports are not optional.</p>
+<h2 id="practical-example"><a class="header-anchor" href="#practical-example"></a>Practical example</h2>
+<p>Theory is all very well but it can be helpful to see all the pieces in play.</p>
+<h3 id="building-a-dll"><a class="header-anchor" href="#building-a-dll"></a>Building a DLL</h3>
+<p>First, lets build a simple DLL exporting both functions and data. For maximum clarity, we’ll use an explicit export library rather instead of decorating our functions with <code>declspec(dllexport)</code> or supply a .def file to the linker.</p>
+<p>First lets write the .def file, <code>library.def</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY library</span><br><span class="line">EXPORTS</span><br><span class="line">   function_export</span><br><span class="line">   data_export      DATA</span><br></pre></td></tr></table></figure>
+<p>(The <code>DATA</code> keyword and <code>LIBRARY</code> line only affects how the import library is generated, as explained later on. Ignore them for now.)</p>
+<p>Build an export file from that:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dlltool --output-exp library_exports.o -d library.def</span><br></pre></td></tr></table></figure>
+<p>The resulting object basically just contains an <code>.edata</code> section that exports the symbols <code>_data_export</code> and <code>_function_export</code> under the names <code>data_export</code> and <code>function_export</code> respectively:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -xs library_exports.o</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">There is an export table in .edata at 0x0</span><br><span class="line"></span><br><span class="line">The Export Tables (interpreted .edata section contents)</span><br><span class="line"></span><br><span class="line">Export Flags                    0</span><br><span class="line">Time/Date stamp                 4e10e5c1</span><br><span class="line">Major/Minor                     0/0</span><br><span class="line">Name                            00000028 library_exports.o.dll</span><br><span class="line">Ordinal Base                    1</span><br><span class="line">Number in:</span><br><span class="line">        Export Address Table            00000002</span><br><span class="line">        [Name Pointer/Ordinal] Table    00000002</span><br><span class="line">Table Addresses</span><br><span class="line">        Export Address Table            00000040</span><br><span class="line">        Name Pointer Table              00000048</span><br><span class="line">        Ordinal Table                   00000050</span><br><span class="line"></span><br><span class="line">Export Address Table -- Ordinal Base 1</span><br><span class="line"></span><br><span class="line">[Ordinal/Name Pointer] Table</span><br><span class="line">        [   0] data_export</span><br><span class="line">        [   1] function_export</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .edata        00000070  00000000  00000000  000000b4  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec -2)(fl 0x00)(ty   0)(scl 103) (nx 1) 0x00000000 fake</span><br><span class="line">File</span><br><span class="line">[  2](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000028 name</span><br><span class="line">[  3](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000040 afuncs</span><br><span class="line">[  4](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000048 anames</span><br><span class="line">[  5](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000050 anords</span><br><span class="line">[  6](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000054 n1</span><br><span class="line">[  7](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000060 n2</span><br><span class="line">[  8](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .text</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 10](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .data</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 12](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .bss</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 14](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .edata</span><br><span class="line">AUX scnlen 0x70 nreloc 8 nlnno 0</span><br><span class="line">[ 16](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 _data_export</span><br><span class="line">[ 17](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 _function_export</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.edata]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">0000000c rva32             .edata</span><br><span class="line">0000001c rva32             .edata</span><br><span class="line">00000020 rva32             .edata</span><br><span class="line">00000024 rva32             .edata</span><br><span class="line">00000040 rva32             _data_export</span><br><span class="line">00000044 rva32             _function_export</span><br><span class="line">00000048 rva32             .edata</span><br><span class="line">0000004c rva32             .edata</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .edata:</span><br><span class="line"> 0000 00000000 c1e5104e 00000000 28000000  .......N....(...</span><br><span class="line"> 0010 01000000 02000000 02000000 40000000  ............@...</span><br><span class="line"> 0020 48000000 50000000 6c696272 6172795f  H...P...library_</span><br><span class="line"> 0030 6578706f 7274732e 6f2e646c 6c000000  exports.o.dll...</span><br><span class="line"> 0040 00000000 00000000 54000000 60000000  ........T...`...</span><br><span class="line"> 0050 00000100 64617461 5f657870 6f727400  ....data_export.</span><br><span class="line"> 0060 66756e63 74696f6e 5f657870 6f727400  function_export.</span><br></pre></td></tr></table></figure>
+<p>We’ll fulfil these symbol with a trivial implementation of the DLL, <code>library.c</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> data_export = <span class="number">42</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">function_export</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1337</span> + data_export;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>We can put it together into a DLL:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -shared -o library.dll library.c library_exports.o</span><br></pre></td></tr></table></figure>
+<p>The export table for the DLL is as follows, showing that we have exported what we wanted:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">The Export Tables (interpreted .edata section contents)</span><br><span class="line"></span><br><span class="line">Export Flags                    0</span><br><span class="line">Time/Date stamp                 4e10e5c1</span><br><span class="line">Major/Minor                     0/0</span><br><span class="line">Name                            00005028 library_exports.o.dll</span><br><span class="line">Ordinal Base                    1</span><br><span class="line">Number in:</span><br><span class="line">        Export Address Table            00000002</span><br><span class="line">        [Name Pointer/Ordinal] Table    00000002</span><br><span class="line">Table Addresses</span><br><span class="line">        Export Address Table            00005040</span><br><span class="line">        Name Pointer Table              00005048</span><br><span class="line">        Ordinal Table                   00005050</span><br><span class="line"></span><br><span class="line">Export Address Table -- Ordinal Base 1</span><br><span class="line">        [   0] +base[   1] 200c Export RVA</span><br><span class="line">        [   1] +base[   2] 10f0 Export RVA</span><br><span class="line"></span><br><span class="line">[Ordinal/Name Pointer] Table</span><br><span class="line">        [   0] data_export</span><br><span class="line">        [   1] function_export</span><br></pre></td></tr></table></figure>
+<h3 id="using-the-dll"><a class="header-anchor" href="#using-the-dll"></a>Using the DLL</h3>
+<p>When we come to look at using the DLL, things become a lot more interesting. First, we need an import library:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dlltool --output-lib library.dll.a -d library.def</span><br></pre></td></tr></table></figure>
+<p>(The reason that we have an import <strong>library</strong> but an export <strong>object</strong> is because using a library for the imports allows the linker to discard <code>.idata</code> for any imports that are not used. Contrariwise ,he linker can never discard any <code>.edata</code> entry because any export may potentially be used by a user of the DLL).</p>
+<p>This import library is rather complex. It contains one object for each export (<code>disds00000.o</code> and <code>disds00001.o</code>) but also two other object files (<code>distdt.o</code> and <code>disdh.o</code>) that set up the header and footer of the import list. (The header of the import list contains, among other things, the name of the DLL to link in at runtime, as derived from the <code>LIBRARY</code> line of the .def file.)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -xs library.dll.a</span><br><span class="line">In archive library.dll.a:</span><br><span class="line"></span><br><span class="line">disdt.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$4      00000004  00000000  00000000  00000104  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  4 .idata$5      00000004  00000000  00000000  00000108  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  5 .idata$7      0000000c  00000000  00000000  0000010c  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec -2)(fl 0x00)(ty   0)(scl 103) (nx 1) 0x00000000 fake</span><br><span class="line">File</span><br><span class="line">[  2](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .text</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  4](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .data</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  6](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .bss</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  8](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$4</span><br><span class="line">AUX scnlen 0x4 nreloc 0 nlnno 0</span><br><span class="line">[ 10](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$5</span><br><span class="line">AUX scnlen 0x4 nreloc 0 nlnno 0</span><br><span class="line">[ 12](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$7</span><br><span class="line">AUX scnlen 0x7 nreloc 0 nlnno 0</span><br><span class="line">[ 14](sec  6)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __library_dll_a_iname</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .idata$4:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$5:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$7:</span><br><span class="line"> 0000 6c696272 6172792e 646c6c00           library.dll.</span><br><span class="line"></span><br><span class="line">disdh.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$2      00000014  00000000  00000000  00000104  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, RELOC, DATA</span><br><span class="line">  4 .idata$5      00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  5 .idata$4      00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec -2)(fl 0x00)(ty   0)(scl 103) (nx 1) 0x00000000 fake</span><br><span class="line">File</span><br><span class="line">[  2](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 hname</span><br><span class="line">[  3](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 fthunk</span><br><span class="line">[  4](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .text</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  6](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .data</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  8](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .bss</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 10](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$2</span><br><span class="line">AUX scnlen 0x14 nreloc 3 nlnno 0</span><br><span class="line">[ 12](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$4</span><br><span class="line">[ 13](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$5</span><br><span class="line">[ 14](sec  4)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __head_library_dll_a</span><br><span class="line">[ 15](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __library_dll_a_iname</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$2]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$4</span><br><span class="line">0000000c rva32             __library_dll_a_iname</span><br><span class="line">00000010 rva32             .idata$5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .idata$2:</span><br><span class="line"> 0000 00000000 00000000 00000000 00000000  ................</span><br><span class="line"> 0010 00000000                             ....</span><br><span class="line"></span><br><span class="line">disds00001.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000008  00000000  00000000  0000012c  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$7      00000004  00000000  00000000  00000134  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  4 .idata$5      00000004  00000000  00000000  00000138  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  5 .idata$4      00000004  00000000  00000000  0000013c  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  6 .idata$6      00000012  00000000  00000000  00000140  2**1</span><br><span class="line">                  CONTENTS</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .text</span><br><span class="line">[  1](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .data</span><br><span class="line">[  2](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .bss</span><br><span class="line">[  3](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$7</span><br><span class="line">[  4](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$5</span><br><span class="line">[  5](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$4</span><br><span class="line">[  6](sec  7)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$6</span><br><span class="line">[  7](sec  1)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 _function_export</span><br><span class="line">[  8](sec  5)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __imp__function_export</span><br><span class="line">[  9](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.text]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000002 dir32             .idata$5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$7]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$5]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$4]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .text:</span><br><span class="line"> 0000 ff250000 00009090                    .%......</span><br><span class="line">Contents of section .idata$7:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$5:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$4:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$6:</span><br><span class="line"> 0000 01006675 6e637469 6f6e5f65 78706f72  ..function_expor</span><br><span class="line"> 0010 7400                                 t.</span><br><span class="line"></span><br><span class="line">disds00000.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$7      00000004  00000000  00000000  0000012c  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  4 .idata$5      00000004  00000000  00000000  00000130  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  5 .idata$4      00000004  00000000  00000000  00000134  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  6 .idata$6      0000000e  00000000  00000000  00000138  2**1</span><br><span class="line">                  CONTENTS</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .text</span><br><span class="line">[  1](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .data</span><br><span class="line">[  2](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .bss</span><br><span class="line">[  3](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$7</span><br><span class="line">[  4](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$5</span><br><span class="line">[  5](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$4</span><br><span class="line">[  6](sec  7)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$6</span><br><span class="line">[  7](sec  5)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __imp__data_export</span><br><span class="line">[  8](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$7]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$5]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$4]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .idata$7:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$5:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$4:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$6:</span><br><span class="line"> 0000 00006461 74615f65 78706f72 7400      ..data_export.</span><br></pre></td></tr></table></figure>
+<p>Note that the object corresponding to <code>data_export</code> has an empty <code>.text</code> section, whereas <code>function_export</code> does define some code. If we disassemble it we get this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">00000000 &lt;_function_export&gt;:</span><br><span class="line">   0:   ff 25 00 00 00 00       jmp    *0x0</span><br><span class="line">                        2: dir32        .idata$5</span><br><span class="line">   6:   90                      nop</span><br><span class="line">   7:   90                      nop</span><br></pre></td></tr></table></figure>
+<p>The relocation of type <code>dir32</code> tells the linker how to fill in the address being dereferenced by the <code>jmp</code>. We can see that <code>_function_export</code>, when entered, will jump directly to the function at the address loaded from the memory named <code>.idata$5</code>. Inspection of the complete <code>.idata</code> section satisfies us that <code>.idata$5</code> corresponds to the address of the fragment of the import address table corresponding to the <code>function_export</code> import name, and hence the address where the absolute address of the loaded <code>function_export</code> import can be found.</p>
+<p>Although only <code>function_export</code> gets a corresponding <code>_function_export</code> function, both of the exports have lead to a symbol with the <code>__imp__</code> prefix (<code>__imp__data_export</code> and <code>__imp__function_export</code>) being defined in the import library. As discussed before, this symbol stands for the address at which the pointer to the data/function will be inserted by the dynamic linker. As such, the <code>__imp__</code> symbols always point directly into the import address table.</p>
+<p>With an import library in hand, we are capable of writing some client code that uses our exports, <code>main1.c</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">__declspec(dllimport) extern int function_export(void);</span><br><span class="line">__declspec(dllimport) extern int data_export;</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    data_export++;</span><br><span class="line"></span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Build and link it against the import library and we will get the results we expect:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main1.c library.dll.a -o main1 &amp;&amp; ./main1</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
+<p>The reason that this works even though there is no <code>data_export</code> symbol defined by <code>library.dll.a</code> is because the <code>__declspec(dllimport)</code> qualifier on our <code>data_export</code> declaration in <code>main.c</code> has caused the compiled to generate code that uses the <code>__imp_data_export</code> symbol directly, as we can see if we disassemble the generated code:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c main1.c -o main1.o &amp;&amp; objdump --disassemble -r main1.o</span><br><span class="line"></span><br><span class="line">main1.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">00000000 &lt;_main&gt;:</span><br><span class="line">   0:   8d 4c 24 04             lea    0x4(%esp),%ecx</span><br><span class="line">   4:   83 e4 f0                and    $0xfffffff0,%esp</span><br><span class="line">   7:   ff 71 fc                pushl  -0x4(%ecx)</span><br><span class="line">   a:   55                      push   %ebp</span><br><span class="line">   b:   89 e5                   mov    %esp,%ebp</span><br><span class="line">   d:   51                      push   %ecx</span><br><span class="line">   e:   83 ec 14                sub    $0x14,%esp</span><br><span class="line">  11:   e8 00 00 00 00          call   16 &lt;_main+0x16&gt;</span><br><span class="line">                        12: DISP32      ___main</span><br><span class="line">  16:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        17: dir32       __imp__function_export</span><br><span class="line">  1b:   ff d0                   call   *%eax</span><br><span class="line">  1d:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  21:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        24: dir32       .rdata</span><br><span class="line">  28:   e8 00 00 00 00          call   2d &lt;_main+0x2d&gt;</span><br><span class="line">                        29: DISP32      _printf</span><br><span class="line">  2d:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        2e: dir32       __imp__data_export</span><br><span class="line">  32:   8b 00                   mov    (%eax),%eax</span><br><span class="line">  34:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  38:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        3b: dir32       .rdata</span><br><span class="line">  3f:   e8 00 00 00 00          call   44 &lt;_main+0x44&gt;</span><br><span class="line">                        40: DISP32      _printf</span><br><span class="line">  44:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        45: dir32       __imp__data_export</span><br><span class="line">  49:   8b 00                   mov    (%eax),%eax</span><br><span class="line">  4b:   8d 50 01                lea    0x1(%eax),%edx</span><br><span class="line">  4e:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        4f: dir32       __imp__data_export</span><br><span class="line">  53:   89 10                   mov    %edx,(%eax)</span><br><span class="line">  55:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        56: dir32       __imp__function_export</span><br><span class="line">  5a:   ff d0                   call   *%eax</span><br><span class="line">  5c:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  60:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        63: dir32       .rdata</span><br><span class="line">  67:   e8 00 00 00 00          call   6c &lt;_main+0x6c&gt;</span><br><span class="line">                        68: DISP32      _printf</span><br><span class="line">  6c:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        6d: dir32       __imp__data_export</span><br><span class="line">  71:   8b 00                   mov    (%eax),%eax</span><br><span class="line">  73:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  77:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        7a: dir32       .rdata</span><br><span class="line">  7e:   e8 00 00 00 00          call   83 &lt;_main+0x83&gt;</span><br><span class="line">                        7f: DISP32      _printf</span><br><span class="line">  83:   b8 00 00 00 00          mov    $0x0,%eax</span><br><span class="line">  88:   83 c4 14                add    $0x14,%esp</span><br><span class="line">  8b:   59                      pop    %ecx</span><br><span class="line">  8c:   5d                      pop    %ebp</span><br><span class="line">  8d:   8d 61 fc                lea    -0x4(%ecx),%esp</span><br><span class="line">  90:   c3                      ret</span><br><span class="line">  91:   90                      nop</span><br><span class="line">  92:   90                      nop</span><br><span class="line">  93:   90                      nop</span><br></pre></td></tr></table></figure>
+<p>In fact, we can see that the generated code doesn’t even use the <code>_function_export</code> symbol, preferring <code>__imp__function_export</code>. Essentially, the code of the <code>_function_export</code> symbol in the import library has been inlined at every use site. This is why using <code>__declspec(dllimport)</code> can improve performance of cross-DLL calls, even though it is entirely optional on function declarations.</p>
+<p>We might wonder what happens if we drop the <code>__declspec(dllimport)</code> qualifier on our declarations. Because of our discussion about the difference between data and function imports earlier, you might expect linking to fail. Our test file, <code>main2.c</code> is:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">extern</span> <span class="keyword">int</span> <span class="title">function_export</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> data_export;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, function_export());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, data_export);</span><br><span class="line"></span><br><span class="line">    data_export++;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, function_export());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d\n"</span>, data_export);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Let’s try it out:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main2.c library.dll.a -o main2 &amp;&amp; ./main2</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
+<p>What the hell – it worked? This is a bit uprising. The reason that it works despite the fact that the import library <code>library.dll.a</code> not defining the <code>_data_export</code> symbol is because of a nifty feature of GNU ld called auto-import. Without auto-import the link fails as we would expect:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main2.c library.dll.a -o main2 -Wl,--disable-auto-import &amp;&amp; ./main2</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x2c): undefined reference to `_data_export&apos;</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x41): undefined reference to `_data_export&apos;</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x49): undefined reference to `_data_export&apos;</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x63): undefined reference to `_data_export&apos;</span><br><span class="line">collect2: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+<p>The Microsoft linker does not implement auto-import, so this is the error you would get if you were using the Microsoft toolchain.</p>
+<p>However, there is a way to write client code that does not depend on auto-import or use the <code>__declspec(dllimport)</code> keyword. Our new client, <code>main3.c</code> is as follows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">extern int (*_imp__function_export)(void);</span><br><span class="line">extern int *_imp__data_export;</span><br><span class="line"></span><br><span class="line">#define function_export (*_imp__function_export)</span><br><span class="line">#define data_export (*_imp__data_export)</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    data_export++;</span><br><span class="line"></span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>In this code, we directly use the <code>__imp__</code>-prefixed symbols from the import library. These name an address at which the real address of the import can be found, which is reflected by our C-preprocessor definitions of <code>data_export</code> and <code>function_export</code>.</p>
+<p>This code compiles perfectly even without auto-import:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main3.c library.dll.a -o main3 -Wl,--disable-auto-import &amp;&amp; ./main3</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
+<p>If you have followed along until this point you should have a solid understanding of how DLL import and export are implemented on Windows.</p>
+<h2 id="how-auto-import-works"><a class="header-anchor" href="#how-auto-import-works"></a>How auto-import works</h2>
+<p>As a bonus, I’m going to explain how auto-import is implemented by the GNU linker. It is a rather cute hack you may get a kick out of.</p>
+<p>As a reminder, auto-import is a feature of the linker that allows the programmer to declare an item of DLL-imported data with a simple <code>extern</code> keyword, without having to explicitly use <code>__declspec(dllimport)</code>. This is extremely convenient because this is exactly how most <em>_nix</em> source code declares symbols it expects to import from a shared library, so by supporting this use case that_nix code becomes more portable to Windows.</p>
+<p>Auto-import kicks in whenever the linker finds an object file making use of a symbol <code>foo</code> which is not defined by any other object in the link, but where a symbol <code>__imp_foo</code> <strong>is</strong> defined by some object. In this case, it assumes that the use of <code>foo</code> is an attempt to access some DLL-imported data item called <code>foo</code>.</p>
+<p>Now, the problem is that the linker needs to replace the use of <code>foo</code> with the address of <code>foo</code> itself. However, all we seem to know statically is an address where that address will be placed at runtime (<code>__imp_foo</code>). To square the circle, the linker plays a clever trick.</p>
+<p>The trick is to extend the <code>.idata</code> of the image being created with an entry for a “new” DLL. The new entry is set up as follows:</p>
+<ul>
+<li>
+<p>The filename of the image being imported is set to the same filename as the <code>.idata</code> entry covering <code>__imp_foo</code>. So if <code>__imp_foo</code> was being filled out by an address in <code>Bar.dll</code>, our new <code>.idata</code> entry will use <code>Bar.dll</code> here.</p>
+</li>
+<li>
+<p>The import lookup table is of length 1, whose sole entry is a pointer to the name of the imported symbol corresponding to <code>__imp_foo</code>. So if <code>__imp_foo</code> is filled out by the address of the <code>foo</code> export from <code>Bar.dll</code>, the name of the symbol we put in here will be <code>foo</code>.</p>
+</li>
+<li>
+<p>The import address table is of length 1 – and here is the clever bit – <strong>is located precisely at the location in the object file that was referring to the (undefined) symbol</strong> <code>foo</code>.</p>
+</li>
+</ul>
+<p>This solution neatly defers the task of filling out the address that the object file wants to the dynamic linker. The reason that the linker can play this trick is that it can see all of the object code that goes into the final image, and can thus fix all of the sites that need to refer to the imported data.</p>
+<p>Note that in general the final image’s <code>.idata</code> will contain several entries for the same DLL: one from the import library, and one for every place in any object file in the link which referred to some data exported by the DLL. Although this is somewhat unusual behaviour, the Windows linker has no problem with there being several imports of the same DLL.</p>
+<h3 id="a-wrinkle"><a class="header-anchor" href="#a-wrinkle"></a>A wrinkle</h3>
+<p>Unfortunately, the scheme described above only works if the object code has an undefined reference to <code>foo</code> itself. What if instead it has a reference to <code>foo+N</code>, an address N bytes after the address of <code>foo</code> itself? There is no way to set up the <code>.idata</code> so that the dynamic linker adds a constant to the address it fills in, so we seem to be stuck.</p>
+<p>Alas, such relocations are reasonably common, and originate from code that accesses a field of a DLL-imported structure type. Cygwin actually contains another hack to make auto-import work in such cases, known as “pseudo-relocations”. If you want to know the details of how these works, there is more information in the <a href="http://www.cygwin.com/ml/cygwin-apps/2002-06/msg00276.html" target="_blank" rel="noopener">original thread on the topic</a>.</p>
+<h2 id="conclusion"><a class="header-anchor" href="#conclusion"></a>Conclusion</h2>
+<p>Dynamic linking on Windows is hairier than it at first appears. I hope this article has gone some way to clearing up the meaning of the mysterious <code>dllimport</code> and <code>dllexport</code> keywords, and at clarifying the role of the import and export libraries.</p>
+<p>Linux and friends implement dynamic linking in a totally different manner to Windows. The scheme they use is more flexible and allows more in-memory sharing of code, but incurs a significant runtime penalty (especially on i386). For more details see <a href="http://www.greyhat.ch/lab/downloads/pic.html" target="_blank" rel="noopener">here</a> and <a href="http://www.skyfree.org/linux/references/ELF_Format.pdf" target="_blank" rel="noopener">the Dynamic Linking section of the the ELF spec</a>.</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/">http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/</a></strong><br>
+Reprinted from: <a href="http://blog.omega-prime.co.uk/2011/07/04/everything-you-never-wanted-to-know-about-dlls/" target="_blank" rel="noopener">Everything You Never Wanted To Know About DLLs</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+            <a href="/tags/DLL/" rel="tag"># DLL</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/further-disscusion-of-pagerank-4/" rel="next" title="深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来">
+                <i class="fa fa-chevron-left"></i> 深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/" rel="prev" title="(Stack Overflow) What are the main uses of yield(), and how does it differ from join() and interrupt()?">
+                (Stack Overflow) What are the main uses of yield(), and how does it differ from join() and interrupt()? <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#export-and-import-directories"><span class="nav-text">Export and import directories</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#the-edata-section"><span class="nav-text">The .edata section</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#the-idata-section"><span class="nav-text">The .idata section</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#practical-example"><span class="nav-text">Practical example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#building-a-dll"><span class="nav-text">Building a DLL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#using-the-dll"><span class="nav-text">Using the DLL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#how-auto-import-works"><span class="nav-text">How auto-import works</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-wrinkle"><span class="nav-text">A wrinkle</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

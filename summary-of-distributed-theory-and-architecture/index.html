@@ -1,0 +1,1035 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,分布式及存储,2PC,3PC," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="CAP理论及BASE理论  分布式系统的CAP理论  一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。 麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
+<meta name="keywords" content="转载,分布式及存储,2PC,3PC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式理论及架构的一些整理">
+<meta property="og:url" content="http://xnerv.wang/summary-of-distributed-theory-and-architecture/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="CAP理论及BASE理论  分布式系统的CAP理论  一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。 麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg">
+<meta property="og:image" content="http://img.blog.csdn.net/20130508221106201">
+<meta property="og:image" content="http://img.my.csdn.net/uploads/201301/09/1357697101_4690.jpg">
+<meta property="og:image" content="https://www.lvtao.net/content/uploadfile/201312/3bdf79391dc2ddf5c52a67d08d87ad3720131225075456.jpg">
+<meta property="og:image" content="https://www.lvtao.net/content/uploadfile/201312/2a4ba3d47c43013ec31257aee3be666d20131225075456.jpg">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.050Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分布式理论及架构的一些整理">
+<meta name="twitter:description" content="CAP理论及BASE理论  分布式系统的CAP理论  一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。 麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
+<meta name="twitter:image" content="http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/summary-of-distributed-theory-and-architecture/"/>
+
+
+
+
+
+  <title>分布式理论及架构的一些整理 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/summary-of-distributed-theory-and-architecture/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">分布式理论及架构的一些整理</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-26T15:19:00+08:00">
+                2017-11-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="cap理论及base理论"><a class="header-anchor" href="#cap理论及base理论"></a>CAP理论及BASE理论</h2>
+<p><img src="http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg" alt="分布式系统的CAP理论"></p>
+<h3 id="分布式系统的cap理论"><a class="header-anchor" href="#分布式系统的cap理论"></a><a href="http://www.hollischuang.com/archives/666" target="_blank" rel="noopener">分布式系统的CAP理论</a></h3>
+<blockquote>
+<p>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。<br>
+<a href="http://www.glassbeam.com/sites/all/themes/glassbeam/images/blog/10.1.1.67.6951.pdf" target="_blank" rel="noopener">麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP</a></p>
+</blockquote>
+<a id="more"></a>
+<h3 id="分布式系统的base理论"><a class="header-anchor" href="#分布式系统的base理论"></a><a href="http://www.hollischuang.com/archives/672" target="_blank" rel="noopener">分布式系统的BASE理论</a></h3>
+<blockquote>
+<p>eBay的架构师Dan Pritchett源于对大规模分布式系统的实践总结，在ACM上发表文章提出BASE理论，BASE理论是对CAP理论的延伸，核心思想是即使无法做到强一致性（Strong Consistency，CAP的一致性就是强一致性），但应用可以采用适合的方式达到最终一致性（Eventual Consitency）。</p>
+<blockquote>
+<p>BASE是指基本可用（Basically Available）、软状态（ Soft State）、最终一致性（ Eventual Consistency）。</p>
+<ul>
+<li>基本可用（Basically Available）<br>
+基本可用是指分布式系统在出现故障的时候，允许损失部分可用性，即保证核心可用。<br>
+电商大促时，为了应对访问量激增，部分用户可能会被引导到降级页面，服务层也可能只提供降级服务。这就是损失部分可用性的体现。</li>
+<li>软状态（ Soft State）<br>
+软状态是指允许系统存在中间状态，而该中间状态不会影响系统整体可用性。分布式存储中一般一份数据至少会有三个副本，允许不同节点间副本同步的延时就是软状态的体现。mysql replication的异步复制也是一种体现。</li>
+<li>最终一致性（ Eventual Consistency）<br>
+最终一致性是指系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。弱一致性和强一致性相反，最终一致性是弱一致性的一种特殊情况。</li>
+</ul>
+</blockquote>
+</blockquote>
+<p>两阶段提交主要保证了分布式事务的原子性：即所有结点要么全做要么全不做。<br>
+一个协调者，多个参与者。协调者收集参与者的投票，全通过就commit，否则abort。<br>
+将提交分成两阶段进行的目的很明确，就是尽可能晚地提交事务，让事务在提交前尽可能地完成所有能完成的工作，这样，最后的提交阶段将是一个耗时极短的微小操作，这种操作在一个分布式系统中失败的概率是非常小的，也就是所谓的“网络通讯危险期”非常的短暂，这是两阶段提交确保分布式事务原子性的关键所在。（唯一理论上两阶段提交出现问题的情况是当协调者发出提交指令后当机并出现磁盘故障等永久性错误，导致事务不可追踪和恢复）。<br>
+（注意，二阶段提交相对的就是一阶段提交，就是普通的本地事务模式）</p>
+<h3 id="关于分布式事务-两阶段提交协议-三阶提交协议"><a class="header-anchor" href="#关于分布式事务-两阶段提交协议-三阶提交协议"></a><a href="http://www.hollischuang.com/archives/681" target="_blank" rel="noopener">关于分布式事务、两阶段提交协议、三阶提交协议</a></h3>
+<blockquote>
+<p>无论是二阶段提交还是三阶段提交都无法彻底解决分布式的一致性问题。Google Chubby的作者Mike Burrows说过， there is only one consensus protocol, and that’s Paxos” – all other approaches are just broken versions of Paxos. 意即世上只有一种一致性算法，那就是Paxos，所有其他一致性算法都是Paxos算法的不完整版。<br>
+3PC在2PC的基础上，加上了第一个CanCommit阶段。在第三个doCommit阶段，如果超时会自动commit，其它阶段超时会自动rollback。</p>
+</blockquote>
+<h4 id="深入理解分布式系统的2pc和3pc"><a class="header-anchor" href="#深入理解分布式系统的2pc和3pc"></a><a href="http://www.hollischuang.com/archives/1580" target="_blank" rel="noopener">深入理解分布式系统的2PC和3PC</a></h4>
+<blockquote>
+<p>2PC协议中，如果出现协调者和参与者都挂了的情况，有可能导致数据不一致。（这个应该指的是一个参加者节点在一段很短的时间内处于数据不一致状态，这也是不允许的，即使之后能够逐步恢复）<br>
+简单概括一下就是，如果挂掉的那台机器已经执行了commit，那么协调者可以从所有未挂掉的参与者的状态中分析出来，并执行commit。如果挂掉的那个参与者执行了rollback，那么协调者和其他的参与者执行的肯定也是rollback操作。<br>
+所以，再多引入一个阶段之后，3PC解决了2PC中存在的那种由于协调者和参与者同时挂掉有可能导致的数据一致性问题。<br>
+3PC存在的问题<br>
+在doCommit阶段，如果参与者无法及时接收到来自协调者的doCommit或者rebort请求时，会在等待超时之后，会继续进行事务的提交。<br>
+所以，由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。</p>
+</blockquote>
+<h4 id="xa事务"><a class="header-anchor" href="#xa事务"></a>XA事务</h4>
+<p>MySQL的XA事务，估计就是对XA事务的支持。这样如果有一个XA事务管理器，就可以在MySQL和其它支持XA事务的数据库如SQL Server之间，进行分布式事务处理了。</p>
+<blockquote>
+<p>X/Open 组织（即现在的 Open Group ）定义了分布式事务处理模型。 X/Open DTP 模型（ 1994 ）包括应用程序（ AP ）、事务管理器（ TM ）、资源管理器（ RM ）、通信资源管理器（ CRM ）四部分。一般，常见的事务管理器（ TM ）是交易中间件，常见的资源管理器（ RM ）是数据库，常见的通信资源管理器（ CRM ）是消息中间件。    通常把一个数据库内部的事务处理，如对多个表的操作，作为本地事务看待。数据库的事务处理对象是本地事务，而分布式事务处理的对象是全局事务。<br>
+XA 就是 X/Open DTP 定义的交易中间件与数据库之间的接口规范（即接口函数），交易中间件用它来通知数据库事务的开始、结束以及提交、回滚等。 XA 接口函数由数据库厂商提供。</p>
+</blockquote>
+<h2 id="拜占庭将军问题"><a class="header-anchor" href="#拜占庭将军问题"></a><a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98" target="_blank" rel="noopener">拜占庭将军问题</a></h2>
+<p>拜占庭将军问题（Byzantine Generals Problem），是由莱斯利兰伯特提出的点对点通信中的基本问题。 在分布式计算上，不同的计算机透过讯息交换，尝试达成共识；但有时候，系统上协调计算机（Coordinator / Commander）或成员计算机 （Member / Lieutanent）可能因系统错误并交换错的讯息，导致影响最终的系统一致性。拜占庭将军问题就根据错误计算机的数量，寻找可能的解决办法 ，这无法找到一个绝对的答案，但只可以用来验证一个机制的有效程度）。</p>
+<h2 id="开源分布式系统"><a class="header-anchor" href="#开源分布式系统"></a>开源分布式系统</h2>
+<h3 id="hbase"><a class="header-anchor" href="#hbase"></a><img src="http://img.blog.csdn.net/20130508221106201" alt="HBase"></h3>
+<p>HBase可以看作对应Google BigTable的开源实现。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。</p>
+<h3 id="解析全球级分布式数据库google-spanner"><a class="header-anchor" href="#解析全球级分布式数据库google-spanner"></a><a href="http://www.csdn.net/article/2012-09-19/2810132-google-spanner-next-database-datacenter" target="_blank" rel="noopener">解析全球级分布式数据库Google Spanner</a></h3>
+<h3 id="oceanbase"><a class="header-anchor" href="#oceanbase"></a><a href="http://blog.csdn.net/expleeve/article/details/8484213" target="_blank" rel="noopener">OceanBase</a></h3>
+<p><img src="http://img.my.csdn.net/uploads/201301/09/1357697101_4690.jpg" alt="OceanBase"></p>
+<p>一个高性能的分布式表格系统，提供类似BigTable的性能和扩展性，但表格中保存的是强类型的数据，比如integer, string， datetime等。 它使用C++编写，运行于64位Linux环境下。生产环境下需要使用多台机器搭建OceanBase集群以提供高可用和高性能，但是你也完全可以使用一台机器运行OceanBase。</p>
+<h3 id="tfs-taobao-filesystem"><a class="header-anchor" href="#tfs-taobao-filesystem"></a><a href="http://code.taobao.org/p/tfs/wiki/intro/" target="_blank" rel="noopener">TFS（Taobao !FileSystem）</a></h3>
+<p>淘宝针对海量非结构化数据存储设计的分布式系统，构筑在普通的Linux机器集群上，可为外部提供高可靠和高并发的存储访问。高可扩展、高可用、高性能、面向互联网服务。</p>
+<h3 id="tair"><a class="header-anchor" href="#tair"></a><a href="http://tair.taobao.org/" target="_blank" rel="noopener">Tair</a></h3>
+<blockquote>
+<p>Tair是一个高性能，分布式，可扩展，高可靠的key/value结构存储系统。</p>
+</blockquote>
+<h4 id="tair的总体结构"><a class="header-anchor" href="#tair的总体结构"></a>tair的总体结构</h4>
+<blockquote>
+<p><img src="https://www.lvtao.net/content/uploadfile/201312/3bdf79391dc2ddf5c52a67d08d87ad3720131225075456.jpg" alt="tair的总体结构"></p>
+</blockquote>
+<h4 id="tair的负载均衡算法"><a class="header-anchor" href="#tair的负载均衡算法"></a>tair的负载均衡算法</h4>
+<p><img src="https://www.lvtao.net/content/uploadfile/201312/2a4ba3d47c43013ec31257aee3be666d20131225075456.jpg" alt="tair的负载均衡算法"></p>
+<blockquote>
+<p>tair的分布采用的是一致性哈希算法，对于所有的key，分到Q个桶中，桶是负载均衡和数据迁移的基本单位。config server 根据一定的策略把每个桶指派到不同的data server上。因为数据按照key做hash算法，所以可以认为每个桶中的数据基本是平衡的。保证了桶分布的均衡性，就保证了数据分布的均衡性。</p>
+</blockquote>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/summary-of-distributed-theory-and-architecture/">http://xnerv.wang/summary-of-distributed-theory-and-architecture/</a></strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/分布式及存储/" rel="tag"># 分布式及存储</a>
+          
+            <a href="/tags/2PC/" rel="tag"># 2PC</a>
+          
+            <a href="/tags/3PC/" rel="tag"># 3PC</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/some-knowledge-points-learned-in-university/" rel="next" title="一些大学常用算法及知识点的回顾">
+                <i class="fa fa-chevron-left"></i> 一些大学常用算法及知识点的回顾
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/" rel="prev" title="HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace">
+                HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#cap理论及base理论"><span class="nav-number">1.</span> <span class="nav-text">CAP理论及BASE理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统的cap理论"><span class="nav-number">1.1.</span> <span class="nav-text">分布式系统的CAP理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式系统的base理论"><span class="nav-number">1.2.</span> <span class="nav-text">分布式系统的BASE理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于分布式事务-两阶段提交协议-三阶提交协议"><span class="nav-number">1.3.</span> <span class="nav-text">关于分布式事务、两阶段提交协议、三阶提交协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#深入理解分布式系统的2pc和3pc"><span class="nav-number">1.3.1.</span> <span class="nav-text">深入理解分布式系统的2PC和3PC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#xa事务"><span class="nav-number">1.3.2.</span> <span class="nav-text">XA事务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拜占庭将军问题"><span class="nav-number">2.</span> <span class="nav-text">拜占庭将军问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开源分布式系统"><span class="nav-number">3.</span> <span class="nav-text">开源分布式系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#hbase"><span class="nav-number">3.1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解析全球级分布式数据库google-spanner"><span class="nav-number">3.2.</span> <span class="nav-text">解析全球级分布式数据库Google Spanner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#oceanbase"><span class="nav-number">3.3.</span> <span class="nav-text">OceanBase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tfs-taobao-filesystem"><span class="nav-number">3.4.</span> <span class="nav-text">TFS（Taobao !FileSystem）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tair"><span class="nav-number">3.5.</span> <span class="nav-text">Tair</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tair的总体结构"><span class="nav-number">3.5.1.</span> <span class="nav-text">tair的总体结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tair的负载均衡算法"><span class="nav-number">3.5.2.</span> <span class="nav-text">tair的负载均衡算法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

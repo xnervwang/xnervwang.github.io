@@ -1,0 +1,1408 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,C++,MSDN,Programing," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="各种 printf 函数采用格式字符串和可选参数，并生成用于输出的格式化的字符序列。 格式字符串包含零个或多个指令，这些指令是用于输出的文本字符或描述如何在输出中设置参数格式的已编码的转换规范。 本主题介绍用于对格式字符串中的转换规范进行编码的语法。 有关这些函数的列表，请参阅流 I/O。 一个转换规范由以下形式的可选和必需字段组成： %[标志][宽度][.精度][大小]类型 转换规范的每个字段都">
+<meta name="keywords" content="转载,C++,MSDN,Programing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(MSDN) 格式规范语法：printf 和 wprintf 函数">
+<meta property="og:url" content="http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="各种 printf 函数采用格式字符串和可选参数，并生成用于输出的格式化的字符序列。 格式字符串包含零个或多个指令，这些指令是用于输出的文本字符或描述如何在输出中设置参数格式的已编码的转换规范。 本主题介绍用于对格式字符串中的转换规范进行编码的语法。 有关这些函数的列表，请参阅流 I/O。 一个转换规范由以下形式的可选和必需字段组成： %[标志][宽度][.精度][大小]类型 转换规范的每个字段都">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.221Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(MSDN) 格式规范语法：printf 和 wprintf 函数">
+<meta name="twitter:description" content="各种 printf 函数采用格式字符串和可选参数，并生成用于输出的格式化的字符序列。 格式字符串包含零个或多个指令，这些指令是用于输出的文本字符或描述如何在输出中设置参数格式的已编码的转换规范。 本主题介绍用于对格式字符串中的转换规范进行编码的语法。 有关这些函数的列表，请参阅流 I/O。 一个转换规范由以下形式的可选和必需字段组成： %[标志][宽度][.精度][大小]类型 转换规范的每个字段都">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/"/>
+
+
+
+
+
+  <title>(MSDN) 格式规范语法：printf 和 wprintf 函数 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">(MSDN) 格式规范语法：printf 和 wprintf 函数</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-18T21:33:00+08:00">
+                2017-11-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>各种 <code>printf</code> 函数采用格式字符串和可选参数，并生成用于输出的格式化的字符序列。 格式字符串包含零个或多个指令，这些指令是用于输出的文本字符或描述如何在输出中设置参数格式的已编码的转换规范。 本主题介绍用于对格式字符串中的转换规范进行编码的语法。 有关这些函数的列表，请参阅<a href="stream-i-o">流 I/O</a>。</p>
+<p>一个转换规范由以下形式的可选和必需字段组成：</p>
+<p><strong>%</strong>[<a href="#flags"><em>标志</em></a>][<a href="#width"><em>宽度</em></a>][.<a href="#precision"><em>精度</em></a>][<a href="#size"><em>大小</em></a>]<a href="#type"><em>类型</em></a></p>
+<p>转换规范的每个字段都是一个用于指示特定的格式选项或转换说明符的字符或数字。 必填的类型字段指定要应用于参数的转换类型。 可选的标志、宽度和精度字段控制格式的其他方面（如前导空格或前导零、对齐方式和显示的精度）。 大小字段指定使用和转换的参数的大小。</p>
+<p>一个基本的转换规范仅包含百分号和一个类型字符。 例如，<code>%s</code> 指定一个字符串转换。 若要打印百分号字符，请使用 <code>%%</code>。 如果百分号后跟一个没有任何意义的字符作为格式字段，则将调用无效的参数处理程序。 有关详细信息，请参阅<a href="parameter-validation">参数验证</a>。</p>
+<a id="more"></a>
+<blockquote>
+<p><strong>重要</strong></p>
+<p>为了实现安全性和稳定性，请确保转换规范字符串不是用户定义的。 例如，考虑这样一个程序，它提示用户输入名称并将输入存储在一个名为 <code>user_name</code> 的字符串变量中。 若要打印 <code>user_name</code>，请勿执行下列操作：</p>
+<p>printf( user_name ); /* Danger! If user_name contains “%s”, program will crash */`</p>
+<p>而应执行以下操作：</p>
+<p><code>printf( &quot;%s&quot;, user_name );</code></p>
+</blockquote>
+<h2 id="类型转换说明符"><a class="header-anchor" href="#类型转换说明符"></a>类型转换说明符</h2>
+<p>类型转换说明符字符指定是否要将相应的参数解释为字符、字符串、指针、整数或浮点数。 类型字符是唯一必填的转换规范字段，它出现在任何可选字段之后。</p>
+<p>将根据相应的类型字符和可选的<a href="#size">大小</a>前缀对紧跟格式字符串的参数进行解释。 将通过使用 <strong>c</strong> 或 <strong>C</strong>指定字符类型 <code>char</code> 和 <code>wchar_t</code> 的转换，将通过使用 <strong>s</strong> 或 <strong>S</strong> 指定单字节和多字节或宽字符字符串，具体取决于正在使用的格式设置函数。 通过使用 <strong>c</strong> 和 <strong>s</strong> 指定的字符和字符串参数将被 <code>printf</code> 系列函数解释为 <code>char</code> 和 <code>char*</code>，或被 <code>wprintf</code> 系列函数解释为 <code>wchar_t</code> 和 <code>wchar_t*</code>。 通过使用 <strong>C</strong> 和 <strong>S</strong> 指定的字符和字符串参数将被 <code>printf</code> 系列函数解释为 <code>wchar_t</code> 和 <code>wchar_t*</code>，或被 <code>wprintf</code> 系列函数解释为 <code>char</code> 和 <code>char*</code>。 此行为是 Microsoft 专用的。</p>
+<p>将通过使用 <strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 和 <strong>X</strong> 指定整数类型（如 <code>short</code>、<code>int</code>、<code>long</code>、<code>long long</code>）及其 <code>unsigned</code> 变体。将通过使用 <strong>a</strong>、<strong>A</strong>、<strong>e</strong>、<strong>E</strong>、<strong>f</strong>、<strong>F</strong>、<strong>g</strong> 和 <strong>G</strong> 指定浮点类型（如 <code>float</code>、<code>double</code> 和 <code>long double</code>）。默认情况下，除非由大小前缀进行修改，否则整数参数将被强制为 <code>int</code> 类型，浮点参数将被强制为 <code>double</code>。 在 64 位系统上，<code>int</code> 是 32 位的值；因此，确定 64 位整数的输出格式时，将把它截断，除非使用 <strong>ll</strong> 或 <strong>I64</strong> 的大小前缀。 由 <strong>p</strong> 指定的指针类型使用平台的默认指针大小。</p>
+<blockquote>
+<p><strong>备注</strong></p>
+<p>与 <code>printf</code> 和 <code>wprintf</code> 函数一起使用时，<strong>Z</strong> 类型字符以及 <strong>c</strong>、<strong>C</strong>、<strong>s</strong> 和 <strong>S</strong> 类型字符的行为是 Microsoft 扩展。 在所有的格式设置函数中，ISO C 标准始终对窄字符和字符串使用 <strong>c</strong> 和 <strong>s</strong>，而对宽字符和字符串使用 <strong>C</strong> 和 <strong>S</strong>。</p>
+</blockquote>
+<h3 id="类型字段字符"><a class="header-anchor" href="#类型字段字符"></a>类型字段字符</h3>
+<table>
+<thead>
+<tr>
+<th>类型字符</th>
+<th>参数</th>
+<th>输出格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>c</strong></td>
+<td>字符</td>
+<td>与 <code>printf</code> 函数一起使用时，指定单字节字符；与 <code>wprintf</code> 函数一起使用时，指定宽字符。</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>字符</td>
+<td>与 <code>printf</code> 函数一起使用时，指定宽字符；与 <code>wprintf</code> 函数一起使用时，指定单字节字符。</td>
+</tr>
+<tr>
+<td><strong>d</strong></td>
+<td>整数</td>
+<td>带符号十进制整数。</td>
+</tr>
+<tr>
+<td><strong>i</strong></td>
+<td>整数</td>
+<td>带符号十进制整数。</td>
+</tr>
+<tr>
+<td><strong>o</strong></td>
+<td>整数</td>
+<td>无符号八进制整数。</td>
+</tr>
+<tr>
+<td><strong>u</strong></td>
+<td>整数</td>
+<td>无符号十进制整数。</td>
+</tr>
+<tr>
+<td><strong>x</strong></td>
+<td>整数</td>
+<td>无符号十六进制整数；使用“abcdef.”</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>整数</td>
+<td>无符号十六进制整数；使用“ABCDEF.”</td>
+</tr>
+<tr>
+<td><strong>e</strong></td>
+<td>浮点</td>
+<td>有符号的值，形式为 [-]<em>d.dddd</em><strong>e±</strong><em>dd</em>[<em>d</em>]，其中 <em>d</em> 是一个十进制数，<em>dddd</em> 是一个或多个十进制数（具体取决于指定的精度），或为默认的六个数，<em>dd</em>[<em>d</em>] 是两个或三个十进制数（具体取决于<a href="set-output-format">输出格式</a>和指数大小）。</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>浮点</td>
+<td>与 <strong>e</strong> 格式相同，只不过指数由 <strong>E</strong> 引入，而不是由 <strong>e</strong> 引入。</td>
+</tr>
+<tr>
+<td><strong>f</strong></td>
+<td>浮点</td>
+<td>有符号的值，形式为 [-]<em>dddd</em><strong>.</strong><em>dddd</em>，其中 <em>dddd</em> 是一个或多个十进制数。 小数点前的数字位数取决于数字的度量值，小数点后的数字位数取决于请求的精度，或为默认的六位数。</td>
+</tr>
+<tr>
+<td><strong>F</strong></td>
+<td>浮点</td>
+<td>与 <strong>f</strong> 格式相同，只不过 infinity 和 nan 输出为大写形式。</td>
+</tr>
+<tr>
+<td><strong>g</strong></td>
+<td>浮点</td>
+<td>有符号的值将显示为 <strong>f</strong> 或 <strong>e</strong> 格式，取其中对于给定的值和精度更为精简一个。 仅当值的指数小于 -4 或大于等于 <em>precision</em> 参数时，才使用 <strong>e</strong> 格式。 截去尾随零，仅当后跟一个或多个数字时，才会显示小数点。</td>
+</tr>
+<tr>
+<td><strong>G</strong></td>
+<td>浮点</td>
+<td>与 <strong>g</strong> 格式相同，只不过指数由 <strong>E</strong> 引入，而不是由 <strong>e</strong> 引入（如果适用）。</td>
+</tr>
+<tr>
+<td><strong>a</strong></td>
+<td>浮点</td>
+<td>有符号的十六进制双精度浮点值，形式为 [-]0x_h.hhhh_<strong>p±</strong><em>dd</em>，其中 <em>h.hhhh</em> 是尾数的十六进制数（使用小写字母），<em>dd</em> 是一位指数或多位指数。 精度指定此点后的数字位数。</td>
+</tr>
+<tr>
+<td><strong>A</strong></td>
+<td>浮点</td>
+<td>有符号的十六进制双精度浮点值，形式为 [-]0X_h.hhhh_<strong>P±</strong><em>dd</em>，其中 <em>h.hhhh</em> 是尾数的十六进制数（使用大写字母），<em>dd</em> 是一位指数或多位指数。 精度指定此点后的数字位数。</td>
+</tr>
+<tr>
+<td><strong>n</strong></td>
+<td>指向整数的指针</td>
+<td>目前成功写入流或缓冲区的字符数。 此值存储在地址作为自变量的整数中。 可通过参数大小规范前缀控制指向的整数的大小。 n 说明符默认为禁用；请参阅重要的安全说明了解相关信息。</td>
+</tr>
+<tr>
+<td><strong>p</strong></td>
+<td>指针类型</td>
+<td>将自变量显示为十六进制数中的地址。</td>
+</tr>
+<tr>
+<td><strong>s</strong></td>
+<td>字符串</td>
+<td>与 <code>printf</code> 函数一起使用时，指定单字节或多字节字符串；与 <code>wprintf</code> 函数一起使用时，指定宽字符字符串。 将于第一个空字符之前或达到精度值时显示字符。</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>字符串</td>
+<td>与 <code>printf</code> 函数一起使用时，指定宽字符字符串；与 <code>wprintf</code> 函数一起使用时，指定单字节或多字节字符串。 将于第一个空字符之前或达到精度值时显示字符。</td>
+</tr>
+<tr>
+<td><strong>Z</strong></td>
+<td><code>ANSI_STRING</code> 或 <code>UNICODE_STRING</code> 结构</td>
+<td>将 <a href="http://msdn.microsoft.com/library/windows/hardware/ff540605.aspx" target="_blank" rel="noopener">ANSI_STRING</a> 或 <a href="http://msdn.microsoft.com/library/windows/hardware/ff564879.aspx" target="_blank" rel="noopener">UNICODE_STRING</a> 结构的地址作为参数传递时，会显示包含在由结构的 <code>Buffer</code> 字段指向的缓冲区中的字符串。 使用 <strong>w</strong> 的大小修饰符前缀指定 <code>UNICODE_STRING</code> 参数，例如 <code>%wZ</code>。 结构的 <code>Length</code> 字段必须设置为字符串的长度（以字节为单位）。 结构的 <code>MaximumLength</code> 字段必须设置为缓冲区的长度（以字节为单位）。</td>
+</tr>
+</tbody>
+</table>
+<p>通常情况下，<strong>Z</strong> 类型字符仅在使用转换规范的驱动程序调试函数（如 <code>dbgPrint</code> 和 <code>kdPrint</code>）中使用。 |</p>
+<p>从 Visual Studio 2015 开始，如果对应浮点转换说明符（<strong>a</strong>、<strong>A</strong>、<strong>e</strong>、<strong>E</strong>、<strong>f</strong>、<strong>F</strong>、<strong>g</strong>、<strong>G</strong>）的参数为无穷大、不定或 NaN，格式化的输出则符合 C99 标准。 下表列出了格式化的输出：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>infinity</td>
+<td><code>inf</code></td>
+</tr>
+<tr>
+<td>静默 NaN</td>
+<td><code>nan</code></td>
+</tr>
+<tr>
+<td>信号 NaN</td>
+<td><code>nan(snan)</code></td>
+</tr>
+<tr>
+<td>不定 NaN</td>
+<td><code>nan(ind)</code></td>
+</tr>
+</tbody>
+</table>
+<p>可能以符号作为其中任何一个值的前缀。 如果浮点类型转换说明符字符是一个大写字母，则输出也将使用大写字母格式。 例如，如果格式说明符是 <code>%F</code>而不是 <code>%f</code>，则 infinity 的格式将被设置为 <code>INF</code>，而不是 <code>inf</code>。 <code>scanf</code> 函数也可以分析这些字符串，使这些值可以通过 <code>printf</code> 和 <code>scanf</code> 函数进行往返。</p>
+<p>在 Visual Studio 2015 之前，CRT 使用一种不同的非标准格式作为无穷大、不定和 NaN 值的输出：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+ 无穷</td>
+<td><code>1.#INF</code> 随机数字</td>
+</tr>
+<tr>
+<td>- 无穷</td>
+<td><code>-1.#INF</code> 随机数字</td>
+</tr>
+<tr>
+<td>不定（与静默 NaN 相同）</td>
+<td><em>数字</em> <code>.#IND</code> 随机数字</td>
+</tr>
+<tr>
+<td>NaN</td>
+<td><em>数字</em> <code>.#NAN</code> 随机数字</td>
+</tr>
+</tbody>
+</table>
+<p>其中任何一种都可能已采用符号作为前缀并且格式设置也可能略有不同，具体取决于字段宽度和精度，有时会起到不寻常的作用。 例如，<code>printf(&quot;%.2f\n&quot;, INFINITY)</code> 可以打印 <code>1.#J</code>，因为 #INF 会“四舍五入”到 2 位数的精度。</p>
+<blockquote>
+<p><strong>备注</strong></p>
+<p>如果与 <code>%s</code> 或 <code>%S</code> 对应的参数，或与 <code>%Z</code> 对应的参数的 <code>Buffer</code> 字段为空指针，则将显示“(null)”。</p>
+</blockquote>
+<blockquote>
+<p><strong>备注</strong></p>
+<p>在所有的指数格式中，要显示的指数的位数最少为两位，仅在必要时使用三位。 通过使用 <a href="set-output-format">_set_output_format</a> 函数，可以将显示的数字位数设置为三位，以确保与为 Visual Studio 2013 及更早版本编写的代码的后向兼容性。</p>
+</blockquote>
+<blockquote>
+<p><strong>重要</strong></p>
+<p><code>%n</code> 格式在本质上是不安全的，因此它默认处于禁用状态。 如果在格式字符串中遇到 <code>%n</code>，则将调用无效的参数处理程序，如<a href="parameter-validation">参数验证</a>中所述。 若要启用 <code>%n</code> 支持，请参阅 <a href="../c-runtime-library/reference/set-printf-count-output">_set_printf_count_output</a>。</p>
+</blockquote>
+<h2 id="标志指令"><a class="header-anchor" href="#标志指令"></a>标志指令</h2>
+<p>转换规范中的第一个可选字段包含标志指令、零个或多个标志字符，用于指定输出对齐方式以及控制符号、空白、前导零、小数点以及八进制和十六进制前缀的输出。 转换规范中可能会出现多个标志指令，并且标志字符可能会按任意顺序出现。</p>
+<h3 id="标志字符"><a class="header-anchor" href="#标志字符"></a>标志字符</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>含义</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>-</strong></td>
+<td>在给定的字段宽度内左对齐结果。</td>
+<td>右对齐。</td>
+</tr>
+<tr>
+<td><strong>+</strong></td>
+<td>如果输出值为有符号的类型，则在该值前使用符号（+ 或 -）作为前缀。</td>
+<td>只对有符号的负值 (-) 显示符号。</td>
+</tr>
+<tr>
+<td><strong>0</strong></td>
+<td>如果将 <strong>0</strong> 作为宽度的前缀，则会在达到最小宽度前添加前导零。 如果 <strong>0</strong> 和 <strong>-</strong> 同时出现，<strong>0</strong> 则将被忽略。 如果为整数格式（<strong>i</strong>、<strong>u</strong>、<strong>x</strong>、<strong>X</strong>、<strong>o</strong>、<strong>d</strong>）指定了 <strong>0</strong>，并且还存在精度规范（例如 <code>%04.d</code>），<strong>0</strong> 则将被忽略。 如果为 <strong>a</strong> 或 <strong>A</strong> 浮点格式指定了 <strong>0</strong>，则会在 <code>0x</code> 或 <code>0X</code> 前缀后，在尾数前追加前导零。</td>
+<td>不填充。</td>
+</tr>
+<tr>
+<td><strong>空白</strong> (’ ')</td>
+<td>如果输出值为有符号的正值，则使用空白作为其前缀。 如果空白和 + 标志同时出现，空白则将被忽略。</td>
+<td>没有显示空白。</td>
+</tr>
+<tr>
+<td><strong>#</strong></td>
+<td>与 <strong>o</strong>、<strong>x</strong> 或 <strong>X</strong> 格式一起使用时，<strong>#</strong> 标志将分别使用 0、0x 或 0X 作为任何非零输出值的前缀。</td>
+<td>没有显示空白。</td>
+</tr>
+<tr>
+<td></td>
+<td>与<strong>e</strong>、<strong>E</strong>、<strong>f</strong>、<strong>F</strong>、<strong>a</strong> 或 <strong>A</strong> 格式一起使用时，<strong>#</strong> 标志将强制输出值包含小数点。</td>
+<td>仅当小数点后紧跟数字时，才会显示小数点。</td>
+</tr>
+<tr>
+<td></td>
+<td>与 <strong>g</strong> 或 <strong>G</strong> 格式一起使用时，<strong>#</strong> 标志将强制输出值包含小数点，并阻止截断尾随零。</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>与 <strong>c</strong>、<strong>d</strong>、<strong>i</strong>、<strong>u</strong> 或 <strong>s</strong> 一起使用时，则将被忽略。 | 仅当小数点后紧跟数字时，才会显示小数点。 尾随零将被截断。 |</p>
+<h2 id="宽度规范"><a class="header-anchor" href="#宽度规范"></a>宽度规范</h2>
+<p>在转换规范中，可选宽度规范字段出现在任何标志字符之后。 宽度参数是控制输出的最小字符数量的非负十进制整数。 如果输出值中的字符数小于指定宽度，则将在值的左侧或右侧添加空白（具体取决于是否指定了左对齐标志 (<strong>-</strong>)），直到达到最小宽度为止。 如果 0 作为宽度的前缀，则将向整数或浮点转换添加前导零，直到达到最小宽度为止，但转换到 infinity 或 NaN 时除外。</p>
+<p>宽度规范永远不会导致值被截断。 如果输出值中的字符数大于指定宽度，或如果未提供宽度，则将根据精度规范输出值中的所有字符。</p>
+<p>如果宽度规范是一个星号 (<code>*</code>)，则参数列表中的 <code>int</code> 参数将提供此值。 宽度参数必须先于在参数列表中要设置其格式的值，如以下示例中所示：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"%0*f"</span>, <span class="number">5</span>, <span class="number">3</span>); <span class="comment">/* 00003 is output */</span></span><br></pre></td></tr></table></figure>
+<p>转换规范中缺少宽度值或此值较小将不会导致截断输出值。 如果转换结果的宽度大于宽度值，则字段将扩展以包含转换结果。</p>
+<h2 id="精度规范"><a class="header-anchor" href="#精度规范"></a>精度规范</h2>
+<p>在转换规范中，第三个可选字段是精度规范。 它包含一个句点 (.)，后跟一个非负十进制整数，指定字符串字符数、小数位数或要输出的有效数字位数，具体取决于转换类型.</p>
+<p>与宽度规范不同的是，精度规范可能导致输出值截断或浮点值舍入。 如果将精度指定为 0 并且要转换的值为 0，则结果为无字符输出，如以下示例中所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>( <span class="string">"%.0d"</span>, <span class="number">0</span> ); <span class="comment">/* No characters output */</span></span><br></pre></td></tr></table></figure>
+<p>如果精度规范是一个星号 (*)，则参数列表中的某个 <code>int</code> 参数将提供此值。 在参数列表中，精度参数前必须先于要设置其格式的值，如以下示例中所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">printf</span>( <span class="string">"%.*f"</span>, <span class="number">3</span>, <span class="number">3.14159265</span> ); <span class="comment">/* 3.142 output */</span></span><br></pre></td></tr></table></figure>
+<p>如果省略精度，则类型字符将决定精度的解释或默认精度，如下表中所示。</p>
+<h3 id="精度值如何影响类型"><a class="header-anchor" href="#精度值如何影响类型"></a>精度值如何影响类型</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>默认</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>a</strong>、<strong>A</strong></td>
+<td>精度指定此点后的数字位数。</td>
+<td>默认精度为 13。 如果精度为 0，除非使用了 <strong>#</strong> 标志，否则不会打印小数点。</td>
+</tr>
+<tr>
+<td><strong>c</strong>、<strong>C</strong></td>
+<td>精度不产生任何影响。</td>
+<td>打印字符。</td>
+</tr>
+<tr>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong>、<strong>X</strong></td>
+<td>精度指定要打印的最小数字位数。 如果参数中的数字位数小于精度，则将在输出值的左侧使用零进行填充。 数字位数超过精度时，值将不会被截断。</td>
+<td>默认精度为 1。</td>
+</tr>
+<tr>
+<td><strong>e</strong>、<strong>E</strong></td>
+<td>精度指定此小数点后要打印的数字位数。 打印的最后一位数舍入。</td>
+<td>默认精度为 6。 如果精度为 0，或者如果句点 (.) 后面不跟数字，则不会打印小数点。</td>
+</tr>
+<tr>
+<td><strong>f</strong>、<strong>F</strong></td>
+<td>精度值指定此小数点后的数字位数。 如果出现小数点，则在它之前至少会显示一个数字。 该值舍入为适当数量的数字。</td>
+<td>默认精度为 6。 如果精度为 0，或者如果句点 (.) 后面不跟数字，则不会打印小数点。</td>
+</tr>
+<tr>
+<td><strong>g</strong>、<strong>G</strong></td>
+<td>精度指定打印的最大有效位数。</td>
+<td>打印六个有效位数，并且任何尾随零都会被截断。</td>
+</tr>
+<tr>
+<td><strong>s</strong>、<strong>S</strong></td>
+<td>精度指定要打印的最大字符数。 不会打印超过精度的字符。</td>
+<td>在遇到 null 字符之前不会打印字符。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参数大小规范"><a class="header-anchor" href="#参数大小规范"></a>参数大小规范</h2>
+<p>在转换规范中，大小字段是类型转换说明符的参数长度修饰符。 大小字段作为类型字段（<strong>hh</strong>、<strong>h</strong>、<strong>j</strong>、<strong>l</strong>（小写的 L）、<strong>L</strong>、<strong>ll</strong>、<strong>t</strong>、<strong>w</strong>、<strong>z</strong>、<strong>I</strong>（大写的 i）、<strong>I32</strong> 和 <strong>I64</strong>）的前缀，根据它们修饰的转换说明符，指定对应参数的“大小”（长型或短型、32 位或 64 位、单字节字符或宽字符）。 这些大小前缀在 <code>printf</code> 和 <code>wprintf</code> 系列函数中与 <em>类型</em> 字符一起使用，以指定参数大小的解释（如下表中所示）。 大小字段对于某些参数类型是可选的。 未指定任何大小前缀时，格式化程序使用整数参数（例如，有符号或无符号的 <code>char</code>、<code>short</code>、<code>int</code>、<code>long</code> 和枚举类型）作为 32 位 <code>int</code> 类型，而使用 <code>float</code>、<code>double</code> 和 <code>long double</code> 浮点参数作为 64 位 <code>double</code> 类型。 这与变量自变量列表的默认自变量提升规则相匹配。 有关自变量提升的详细信息，请参阅<a href="../cpp/postfix-expressions">后缀表达式</a>中的“省略号和默认自变量”。 在 32 位和 64 位系统上，64 位整数参数的转换规范必须包含 <strong>ll</strong> 或 <strong>I64</strong> 大小前缀。 否则，格式化程序的行为是不明确的。</p>
+<p>某些类型在 32 位和 64 位代码中具有不同大小。 例如，<code>size_t</code> 在针对 x86 编译的代码中是 32 位长，而在针对 x64 编译的代码中是 64 位。 若要为宽度可变的类型创建与平台无关的格式设置代码，可以使用宽度可变的参数大小修饰符。 或者，使用 64 位参数大小修饰符，并将宽度可变的参数类型显式提升为 64 位。 特定于 Microsoft 的 <strong>I</strong>（大写的 i）参数大小修饰符可处理宽度可变的整数参数，但我们建议使用特定于类型的 <strong>j</strong>、<strong>t</strong> 和 <strong>z</strong> 修饰符以确保可移植性。</p>
+<h3 id="printf-和-wprintf-格式类型说明符的大小前缀"><a class="header-anchor" href="#printf-和-wprintf-格式类型说明符的大小前缀"></a>printf 和 wprintf 格式类型说明符的大小前缀</h3>
+<table>
+<thead>
+<tr>
+<th>若要指定</th>
+<th>使用前缀</th>
+<th>及类型说明符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>char</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>unsigned char</code></td>
+<td><strong>hh</strong></td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>short int</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>short unsigned int</code></td>
+<td><strong>h</strong></td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>__int32</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>unsigned __int32</code></td>
+<td><strong>I32</strong></td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>__int64</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>unsigned __int64</code></td>
+<td><strong>I64</strong></td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>intmax_t</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>uintmax_t</code></td>
+<td><strong>j</strong> 或 <strong>I</strong>（大写的 i）</td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>long double</code></td>
+<td><strong>l</strong>（小写的 L）或 <strong>L</strong></td>
+<td><strong>a</strong>、<strong>A</strong>、<strong>e</strong>、<strong>E</strong>、<strong>f</strong>、<strong>F</strong>、<strong>g</strong> 或 <strong>G</strong></td>
+</tr>
+<tr>
+<td><code>long int</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>long unsigned int</code></td>
+<td><strong>l</strong>（小写的 L）</td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>long long int</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>unsigned long long int</code></td>
+<td><strong>ll</strong>（小写的 LL）</td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>ptrdiff_t</code></td>
+<td><strong>t</strong> 或 <strong>I</strong>（大写的 i）</td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td><code>size_t</code></td>
+<td><strong>z</strong> 或 <strong>I</strong>（大写的 i）</td>
+<td><strong>d</strong>、<strong>i</strong>、<strong>o</strong>、<strong>u</strong>、<strong>x</strong> 或 <strong>X</strong></td>
+</tr>
+<tr>
+<td>单字节字符</td>
+<td><strong>h</strong></td>
+<td><strong>c</strong> 或 <strong>C</strong></td>
+</tr>
+<tr>
+<td>宽字符</td>
+<td><strong>l</strong>（小写的 L）或 <strong>w</strong></td>
+<td><strong>c</strong> 或 <strong>C</strong></td>
+</tr>
+<tr>
+<td>单字节字符串</td>
+<td><strong>h</strong></td>
+<td><strong>s</strong>、<strong>S</strong> 或 <strong>Z</strong></td>
+</tr>
+<tr>
+<td>宽字符字符串</td>
+<td><strong>l</strong>（小写的 L）或 <strong>w</strong></td>
+<td><strong>s</strong>、<strong>S</strong> 或 <strong>Z</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>intmax_t</code>、<code>uintmax_t</code>、<code>ptrdiff_t</code> 和 <code>size_t</code> 类型在 32 位平台上为 <code>__int32</code> 或 <code>unsigned __int32</code>，在 64 位平台上为 <code>__int64</code> 或 <code>unsigned __int64</code>。 <strong>I</strong>（大写的 i）、<strong>j</strong>、<strong>t</strong> 和 <strong>z</strong> 大小前缀采用平台的正确参数宽度。</p>
+<p>在 Visual C++ 中，虽然 <code>long double</code> 是互异的类型，但是它具有与 <code>double</code> 相同的内部表示形式。</p>
+<p><strong>hc</strong> 或 <strong>hC</strong> 类型说明符与 <code>printf</code> 函数中的 <strong>c</strong> 以及 <code>wprintf</code> 函数中的 <strong>C</strong> 是同义的。 <strong>lc</strong>、<strong>lC</strong>、<strong>wc</strong> 或 <strong>wC</strong> 类型说明符与 <code>printf</code> 函数中的 <strong>C</strong> 以及 <code>wprintf</code> 函数中的 <strong>c</strong> 是同义的。 <strong>hs</strong> 或 <strong>hS</strong> 类型说明符与 <code>printf</code> 函数中的 <strong>s</strong> 以及 <code>wprintf</code> 函数中的 <strong>S</strong> 是同义的。 <strong>ls</strong>、<strong>lS</strong>、<strong>ws</strong> 或 <strong>wS</strong> 类型说明符与 <code>printf</code> 函数中的 <strong>S</strong> 以及 <code>wprintf</code> 函数中的 <strong>s</strong> 是同义的。</p>
+<blockquote>
+<p><strong>备注</strong></p>
+<p><strong>I</strong>（大写的 i）、<strong>I32</strong>、<strong>I64</strong> 和 <strong>w</strong> 参数大小修饰符前缀是 Microsoft 扩展，且不符合 ISO C。 <strong>h</strong> 前缀（在与 <code>char</code> 类型的数据一起使用时）和 <strong>l</strong> 前缀（在与 <code>double</code> 类型的数据一起使用时）是 Microsoft 扩展。</p>
+</blockquote>
+<h2 id="另请参阅"><a class="header-anchor" href="#另请参阅"></a>另请参阅</h2>
+<ul>
+<li><a href="../c-runtime-library/reference/printf-printf-l-wprintf-wprintf-l">printf、_printf_l、wprintf、_wprintf_l</a></li>
+<li><a href="../c-runtime-library/reference/printf-s-printf-s-l-wprintf-s-wprintf-s-l">printf_s、_printf_s_l、wprintf_s、_wprintf_s_l</a></li>
+<li><a href="printf-p-positional-parameters">printf_p 位置参数</a></li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/">http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</a></strong><br>
+转载自：<a href="https://docs.microsoft.com/zh-cn/cpp/c-runtime-library/format-specification-syntax-printf-and-wprintf-functions" target="_blank" rel="noopener">(MSDN) Format Specification Syntax: printf and wprintf Functions</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/MSDN/" rel="tag"># MSDN</a>
+          
+            <a href="/tags/Programing/" rel="tag"># Programing</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/format-specification-fields-scanf-and-wscanf-functions/" rel="next" title="(MSDN) 格式规范字段：scanf 和 wscanf 函数">
+                <i class="fa fa-chevron-left"></i> (MSDN) 格式规范字段：scanf 和 wscanf 函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/some-knowledge-points-learned-in-university/" rel="prev" title="一些大学常用算法及知识点的回顾">
+                一些大学常用算法及知识点的回顾 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换说明符"><span class="nav-text">类型转换说明符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#类型字段字符"><span class="nav-text">类型字段字符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标志指令"><span class="nav-text">标志指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#标志字符"><span class="nav-text">标志字符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#宽度规范"><span class="nav-text">宽度规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#精度规范"><span class="nav-text">精度规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#精度值如何影响类型"><span class="nav-text">精度值如何影响类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数大小规范"><span class="nav-text">参数大小规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#printf-和-wprintf-格式类型说明符的大小前缀"><span class="nav-text">printf 和 wprintf 格式类型说明符的大小前缀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另请参阅"><span class="nav-text">另请参阅</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

@@ -1,0 +1,993 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Windows,Heap,DLL,DLL Hell," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="单例模式是一种很简单常用的设计模式,常见的做法可能是这样: 12345Renderer&amp;amp; getInstance()&amp;#123;    static Renderer renderer;    return renderer;&amp;#125; 当然,这个代码在不支持static local variable thread-safe init的编译器上,是没有办法保证线程安全的,c++11标准已">
+<meta name="keywords" content="转载,Windows,Heap,DLL,DLL Hell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="静态库那些事儿&#x2F;MT &#x2F;MD">
+<meta property="og:url" content="http://xnerv.wang/something-about-static-library-mt-md/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="单例模式是一种很简单常用的设计模式,常见的做法可能是这样: 12345Renderer&amp;amp; getInstance()&amp;#123;    static Renderer renderer;    return renderer;&amp;#125; 当然,这个代码在不支持static local variable thread-safe init的编译器上,是没有办法保证线程安全的,c++11标准已">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/something-about-static-library-mt-md/1.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/something-about-static-library-mt-md/2.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/something-about-static-library-mt-md/3.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/something-about-static-library-mt-md/4.jpg">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="静态库那些事儿&#x2F;MT &#x2F;MD">
+<meta name="twitter:description" content="单例模式是一种很简单常用的设计模式,常见的做法可能是这样: 12345Renderer&amp;amp; getInstance()&amp;#123;    static Renderer renderer;    return renderer;&amp;#125; 当然,这个代码在不支持static local variable thread-safe init的编译器上,是没有办法保证线程安全的,c++11标准已">
+<meta name="twitter:image" content="http://xnerv.wang/assets/something-about-static-library-mt-md/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/something-about-static-library-mt-md/"/>
+
+
+
+
+
+  <title>静态库那些事儿/MT /MD | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/something-about-static-library-mt-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">静态库那些事儿/MT /MD</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-03-08T10:46:54+08:00">
+                2016-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>单例模式是一种很简单常用的设计模式,常见的做法可能是这样:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Renderer&amp; <span class="title">getInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Renderer renderer;</span><br><span class="line">    <span class="keyword">return</span> renderer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然,这个代码在不支持static local variable thread-safe init的编译器上,是没有办法保证线程安全的,c++11标准已经规定static local variable只会被初始化一次了,然而vs2013还没有实现,vs2015里才支持了这条标准.不过这条代码在我们的程序里只有一个线程访问,所以也就不存在线程安全的问题.</p>
+<a id="more"></a>
+<p>然后有一天,写了点代码,程序崩溃了:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Renderer::getInstance().xxxx();</span><br></pre></td></tr></table></figure>
+<p>分析发现是Renderer里的一个成员变量<code>m_pMap == NULL</code>了,而在项目的其他地方,也有用这个xxxx()函数的地方,竟然没有问题.</p>
+<p>那就在xxxx()里下个断点,然后看下this指针的值吧,第一次命中时this的值是0x0456adc4, 第二次命中的时候是0x074324ad(这个地址是我随便写的,反正就是这两次命中断点this的值不一样).这是怎么回事呢?为什么出现了两个Renderer的实例呢?</p>
+<p>细心的我发现这两个this指向的Renderer实例并没有在同一个模块内,一个在a.dll里,一个在main.exe里!造成这种现象的原因,是因为开篇的那个getInstance()方法所在工程是一个静态库,然后main.exe工程和a.dll工程均链接了这个静态库,导致main.exe里和a.dll里都存在一个renderer实例.而我们这个renderer实例在使用前,要这样:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Renderer::getInstance().Create();</span><br></pre></td></tr></table></figure>
+<p>然后才可以初始化m_pMap, 崩溃在main.exe里那行代码之前,并没有调用Create(),所以导致m_pMap == NULL崩溃了.</p>
+<p>问题到这里已经水落石出了,想办法弄成在两个模块里共用一个实例就可以了!问题解决.</p>
+<p>当然,如果文章就这样结束了,未免太没劲儿了吧,顺便说说另一个大家经常忽略的事情.</p>
+<p>在开发dll的过程中,总会有意无意的写出一些跨模块分配释放内存的代码,比如在A模块malloc了一块内存,在B模块free,然后导致崩溃.然后将编译器选项由/MT改为/MD就可以解决问题.为什么会出现这种问题呢?我们来看看malloc的实现(vs2013 crt):</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">__forceinline <span class="keyword">void</span> * __cdecl _heap_alloc (<span class="keyword">size_t</span> size)</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (_crtheap == <span class="number">0</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined (_CRT_APP) || defined (_DEBUG)</span></span><br><span class="line">        _FF_MSGBANNER();    <span class="comment">/* write run-time error banner */</span></span><br><span class="line">        _NMSG_WRITE(_RT_CRT_NOTINIT);  <span class="comment">/* write message */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span>  <span class="comment">/* !defined (_CRT_APP) || defined (_DEBUG) */</span></span></span><br><span class="line">        __crtExitProcess(<span class="number">255</span>);  <span class="comment">/* normally _exit(255) */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> HeapAlloc(_crtheap, <span class="number">0</span>, size ? size : <span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>malloc最后会调用HeapAlloc来分配内存,msdn看看HeapAlloc的说明,</p>
+<blockquote>
+<p>HeapAlloc Function</p>
+<p>Allocates a block of memory from a heap. The allocated memory is not movable.</p>
+<p>Syntax</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="function">LPVOID WINAPI <span class="title">HeapAlloc</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">&gt;   __in  HANDLE hHeap,</span></span></span><br><span class="line"><span class="function"><span class="params">&gt;   __in  DWORD dwFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">&gt;   __in  SIZE_T dwBytes</span></span></span><br><span class="line"><span class="function"><span class="params">&gt; )</span></span>;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>Parameters</p>
+<p>hHeap A handle to the heap from which the memory will be allocated. This handle is returned by the <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366597.aspx" target="_blank" rel="noopener">HeapCreate</a> or <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366569.aspx" target="_blank" rel="noopener">GetProcessHeap</a> function.</p>
+</blockquote>
+<p>对着msdn的说明可以知道,malloc用的heap handle是 _crtheap,这个_crtheap是个全局变量,那我们看看是什么时候给_crtheap赋值的吧.</p>
+<p><img src="/assets/something-about-static-library-mt-md/1.jpg" alt=""></p>
+<p>跟着红色箭头从上往下分析,首先在BaseThreadInitThunk上下个断点,然后F5执行,断点命中之后执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x *!*_crtheap*</span><br></pre></td></tr></table></figure>
+<p>找到crtheap的地址,结果显示在0f7ec190这里,这里的值目前也是0x00000000,证明还没有被赋值,那就在这个地址上打个写断点,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ba w4 0f7ec190</span><br></pre></td></tr></table></figure>
+<p>F5执行,断点命中,输入kb显示调用栈,结果发现是在_heap_init里对_crtheap赋值的,看看heap_init的代码吧:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __cdecl _heap_init (<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">//  Initialize the "big-block" heap first.</span></span><br><span class="line">        <span class="keyword">if</span> ( (_crtheap = GetProcessHeap()) == <span class="literal">NULL</span> )</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>只是调用GetProcessHeap而已,那还得看看GetProcessHeap的实现:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">KERNELBASE!GetProcessHeap:</span><br><span class="line">75415620 64a118000000    mov     eax,dword ptr fs:[00000018h]</span><br><span class="line">75415626 8b4030          mov     eax,dword ptr [eax+30h]</span><br><span class="line">75415629 8b4018          mov     eax,dword ptr [eax+18h]</span><br><span class="line">7541562c c3              ret</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/something-about-static-library-mt-md/2.jpg" alt=""></p>
+<p>分析汇编可知,首先去TEB + 0x18里取值赋值给eax,根据上图可知,0x18为Self指针,其实就是TEB自己的地址,然后去TEB+0x30里取值赋值给eax,由图可知,0x30为ProcessEnvironmentBlock,即PEB, 然后去PEB+0x18里取值作为返回值,也就是ProcessHeap(见下图),那我们看看PEB+0x18是多少,</p>
+<p><img src="/assets/something-about-static-library-mt-md/3.jpg" alt=""></p>
+<p><img src="/assets/something-about-static-library-mt-md/4.jpg" alt=""></p>
+<p>由图可知GetProcessHeap会返回005d0000,然后赋值给_crtheap.那和/MT /MD有什么关系呢?</p>
+<p>/MT:</p>
+<blockquote>
+<p>Causes your application to use the multithread, static version of the run-time library.</p>
+</blockquote>
+<p>/MD:</p>
+<blockquote>
+<p>Causes your application to use the multithread- and DLL-specific version of the run-time library.</p>
+</blockquote>
+<p>如果使用/MT,会使用静态版本的运行时库,每个模块里都会有一个_crtheap全局变量,_heap_init就会在每个模块里都被调用一次,而使用/MD则使用动态库版本的运行时库,整个进程里只有运行时库里才有一份_crtheap全局变量,在crt的dll加载的时候调用一次_heap_init.但是分析_heap_init的实现可知,就算调用多次,返回的依然是PEB里的那个堆句柄啊,也不会导致不同模块里的_crtheap有不同的值,那HeapFree和HeapAlloc使用的handle就是同一个,也不应该引起崩溃啊.事实的确如此,我也是在今天写这篇专栏用windbg分析的时候才发现这个问题.是我之前记错了还是crt的实现有变化呢?于是我查看了下vs2003的crt的_heap_init的实现:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __cdecl _heap_init (</span><br><span class="line">        <span class="keyword">int</span> mtflag</span><br><span class="line">        )</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">//  Initialize the "big-block" heap first.</span></span><br><span class="line">        <span class="keyword">if</span> ( (_crtheap = HeapCreate( mtflag ? <span class="number">0</span> : HEAP_NO_SERIALIZE,</span><br><span class="line">                                     BYTES_PER_PAGE, <span class="number">0</span> )) == <span class="literal">NULL</span> )</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _WIN64</span></span><br><span class="line">        <span class="comment">// Pick a heap, any heap</span></span><br><span class="line">        __active_heap = __heap_select();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> ( __active_heap == __V6_HEAP )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//  Initialize the small-block heap</span></span><br><span class="line">            <span class="keyword">if</span> (__sbh_heap_init(MAX_ALLOC_DATA_SIZE) == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                HeapDestroy(_crtheap);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CRTDLL</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ( __active_heap == __V5_HEAP )</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> ( __old_sbh_new_region() == <span class="literal">NULL</span> )</span><br><span class="line">            &#123;</span><br><span class="line">                HeapDestroy( _crtheap );</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span>  <span class="comment">/* CRTDLL */</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span>  <span class="comment">/* _WIN64 */</span></span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就明了了,如果在vs2003里开发dll,然后编译dll的时候选择/MT,那这个dll内部就会有一份_crtheap,那在加载这个dll的时候,会调用一次_heap_init,然后调用HeapCreate来初始化_crtheap.这也就意味着其他模块使用/MT选项也会如此,导致每个模块里的_crtheap值是不同的.这样跨模块执行free,就会导致在handle A上分配的内存去handle B上释放导致了崩溃.如果所有模块均使用/MD选项,则只有crt的dll里有一份_crtheap,在crt的dll被加载的时候执行一次HeapCreate并赋值给_crtheap,然后HeapAlloc与 HeapFree使用的HANDLE都是同一个_crtheap,就不会崩溃了.</p>
+<p>问题到这里就分析完毕了。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/something-about-static-library-mt-md/">http://xnerv.wang/something-about-static-library-mt-md/</a></strong><br>
+转载自：<a href="https://zhuanlan.zhihu.com/p/20628410" target="_blank" rel="noopener">静态库那些事儿/MT /MD</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+            <a href="/tags/Heap/" rel="tag"># Heap</a>
+          
+            <a href="/tags/DLL/" rel="tag"># DLL</a>
+          
+            <a href="/tags/DLL-Hell/" rel="tag"># DLL Hell</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/process-memory-layout/" rel="next" title="进程内存布局">
+                <i class="fa fa-chevron-left"></i> 进程内存布局
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/debugging-baidu-pan/" rel="prev" title="在调试器里看百度云管家">
+                在调试器里看百度云管家 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

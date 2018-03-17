@@ -1,0 +1,1108 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,分布式及存储,InnoDB,TokuDB,RocksDB,TiDB,CockroachDB," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="概述 本文简要介绍了一些存储引擎存储结构，包括InnoDB, TokuDB, RocksDB, TiDB, CockroachDB, 供大家对比分析 InnoDB InnoDB 底层存储结构为B+树，结构如下">
+<meta name="keywords" content="转载,分布式及存储,InnoDB,TokuDB,RocksDB,TiDB,CockroachDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些流行引擎存储格式简介">
+<meta property="og:url" content="http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="概述 本文简要介绍了一些存储引擎存储结构，包括InnoDB, TokuDB, RocksDB, TiDB, CockroachDB, 供大家对比分析 InnoDB InnoDB 底层存储结构为B+树，结构如下">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/dd1413b4fed7c0a756ee70cba6610f98.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/c5a908f693bee18e747827957107975f.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/2922a11a3ef1006a86fc12fd476d249f.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/3f95cac52f4dc3aa7a07a59f31eba1db.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/1e448f44fca20e47bc5ed6b6a83c3be8.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/caddf538cf0ea192640f0c53ca1da890.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/9901603bcbd388271c4e0efd244037f2.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/b8315e48c3ff0f4a78255bb7bbe87416.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/0abea895e3849958da154361eaa8a816.png">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/ff1c24a5412a5c3c1db08b3ca692b6ef.png">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.062Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些流行引擎存储格式简介">
+<meta name="twitter:description" content="概述 本文简要介绍了一些存储引擎存储结构，包括InnoDB, TokuDB, RocksDB, TiDB, CockroachDB, 供大家对比分析 InnoDB InnoDB 底层存储结构为B+树，结构如下">
+<meta name="twitter:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/dd1413b4fed7c0a756ee70cba6610f98.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/"/>
+
+
+
+
+
+  <title>一些流行引擎存储格式简介 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">一些流行引擎存储格式简介</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T20:47:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="概述"><a class="header-anchor" href="#概述"></a>概述</h2>
+<p>本文简要介绍了一些存储引擎存储结构，包括InnoDB, TokuDB, RocksDB, TiDB, CockroachDB, 供大家对比分析</p>
+<h2 id="innodb"><a class="header-anchor" href="#innodb"></a>InnoDB</h2>
+<p>InnoDB 底层存储结构为B+树，结构如下<br>
+<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/dd1413b4fed7c0a756ee70cba6610f98.png" alt="image.png"></p>
+<a id="more"></a>
+<p>B树的每个节点对应innodb的一个page，page大小是固定的，一般设为16k。 其中非叶子节点只有键值，叶子节点包含完整数据。<br>
+InnoDB按segment, extent, page方式管理page<br>
+<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/c5a908f693bee18e747827957107975f.png" alt="image.png"></p>
+<p>每个数据节点page结构如下<br>
+<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/2922a11a3ef1006a86fc12fd476d249f.png" alt="image.png"></p>
+<p>数据记录record按行存储，record具体格式由row_format决定. 详情可以参考<a href="http://mysql.taobao.org/monthly/2016/02/" target="_blank" rel="noopener">数据内核月报</a></p>
+<h2 id="tokudb"><a class="header-anchor" href="#tokudb"></a>TokuDB</h2>
+<p>TokuDB 底层存储结构为Fractal Tree <img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/3f95cac52f4dc3aa7a07a59f31eba1db.png" alt="屏幕快照 2017-10-16 下午2.38.11.png"></p>
+<p>Fractal Tree的结构与B+树有些类似, 在Fractal Tree中，每一个child指针除了需要指向一个child节点外，还会带有一个Message Buffer ，这个Message Buffer 是一个FIFO的队列，用来缓存更新操作。</p>
+<p>例如，一次插入操作只需要落在某节点的Message Buffer就可以马上返回了，并不需要搜索到叶子节点。这些缓存的更新会在查询时或后台异步合并应用到对应的节点中。</p>
+<h2 id="rocksdb"><a class="header-anchor" href="#rocksdb"></a>RocksDB</h2>
+<p>RockDB的存储结构如下<br>
+<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/1e448f44fca20e47bc5ed6b6a83c3be8.png" alt="xx.png"></p>
+<p>RocksDB写入数据时，先写到memtable中,memtable一般为skiplist, memtable写满时转为immutable memtable并刷入Level 0.</p>
+<p>Level0中的SST文件中的数据都是有序的，Level0中SST文件之间的数据范围可能存在重叠。 其他Level中的SST文件之间的数据范围不重叠。</p>
+<p>RocksDB会以一定的<a href="https://github.com/facebook/rocksdb/wiki/Compaction" target="_blank" rel="noopener">机制</a>从低level compact数据到高level中。</p>
+<p>RocksDB中SST文件的结构如下<br>
+<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/caddf538cf0ea192640f0c53ca1da890.png" alt="image.png"></p>
+<p>MyRocks使用的存储引擎就是RocksDB, MyRocks的中RocksDB的数据映射关系参考 <a href="http://mysql.taobao.org/monthly/2016/10/05/" target="_blank" rel="noopener">之前的月报</a> <img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/9901603bcbd388271c4e0efd244037f2.png" alt="image.png"></p>
+<h2 id="tidb"><a class="header-anchor" href="#tidb"></a>TiDB</h2>
+<p><strong>TiDB的存储结构</strong></p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/b8315e48c3ff0f4a78255bb7bbe87416.png" alt="image.png"></p>
+<p>TiDB是分布式存储，分为两个部分TiKV和Placement Driver server。<br>
+TiKV用于存储真正的数据，TiKV由分布在不同机器上的RocksDB实例组成。 数据按范围划分为一个个Region. 并且会尽量保持每个 Region 中保存的数据不超过一定的大小(这个大小可以配置，目前默认是 64MB). 同一Region分布在不同的RocksDB实例中，一个RocksDB实例包含多个Region. 图中，Region4有三个副本分布在三个RocksDB实例中，这三个Region副本组成一个RaftGroup，副本间通过Raft协议保证一致性。<br>
+Placement Driver server（PD）， 也是一个集群，也通过Raft协议保证一致性。PD主要有以下作用：</p>
+<ul>
+<li>存储region的位置等元数据信息</li>
+<li>调度和rebalance regions, TiKV中的Raft leader等信息</li>
+<li>分配全局事务ID</li>
+</ul>
+<p><strong>TiDB的数据映射关系</strong><br>
+以下表为例</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="keyword">user</span>(user_id <span class="built_in">int</span> primary <span class="keyword">key</span>, <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">100</span>), email <span class="built_in">varchar</span>(<span class="number">200</span>));</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span> <span class="keyword">VALUES</span> (<span class="number">1</span>, “bob”, “huang@pingcap.com”);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">user</span> <span class="keyword">VALUES</span> (<span class="number">2</span>, “tom”, “tom@pingcap.com”);</span><br></pre></td></tr></table></figure>
+<p>对应到RocksDB中的KV结构如下</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>user/1</td>
+<td>bob <a href="mailto:huang@pingcap.com" target="_blank" rel="noopener">huang@pingcap.com</a></td>
+</tr>
+<tr>
+<td>user/2</td>
+<td>tom <a href="mailto:tom@pingcap.com" target="_blank" rel="noopener">tom@pingcap.com</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="cockroachdb"><a class="header-anchor" href="#cockroachdb"></a>CockroachDB</h2>
+<p><strong>CockroachDB的存储结构</strong></p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/0abea895e3849958da154361eaa8a816.png" alt="image.png"></p>
+<p><img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/ff1c24a5412a5c3c1db08b3ca692b6ef.png" alt="image.png"></p>
+<p>CockroachDB的也是分布式存储，其结构和TiDB类似。CockroachDB按范围划分为Range，Range默认为64M，Range的存储为RocksDB， CockroachDB的一个node包含多个RocksDB实例。 Range副本分布在不同的node中，通过Raft协议保证一致。</p>
+<p>Range的元数据信息也保存在Range中(靠前的Range中).</p>
+<p>System keys come in several subtypes:</p>
+<ul>
+<li>Global keys store cluster-wide data such as the “meta1” and “meta2” keys as well as various other system-wide keys such as the node and store ID allocators.</li>
+<li>Store local keys are used for unreplicated store metadata (e.g. the StoreIdent structure). “Unreplicated” indicates that these values are not replicated across multiple stores because the data they hold is tied to the lifetime of the store they are present on.</li>
+<li>Range local keys store range metadata that is associated with a global key. Range local keys have a special prefix followed by a global key and a special suffix. For example, transaction records are range local keys which look like: <code>\x01ktxn-</code>.</li>
+<li>Replicated Range ID local keys store range metadata that is present on all of the replicas for a range. These keys are updated via Raft operations. Examples include the range lease state and abort cache entries.</li>
+<li>Unreplicated Range ID local keys store range metadata that is local to a replica. The primary examples of such keys are the Raft state and Raft log.</li>
+</ul>
+<p><strong>CockroachDB的数据映射关系</strong></p>
+<p>以下表为例</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> mydb.customers(<span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">100</span>) primary <span class="keyword">key</span>, address <span class="built_in">varchar</span>(<span class="number">100</span>) , <span class="keyword">URL</span> <span class="built_in">varchar</span>(<span class="number">100</span>));</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> mydb.customers <span class="keyword">values</span>(<span class="string">'Apple'</span>,<span class="string">'1 Infinite Loop, Cupertino, CA'</span>,<span class="string">'http://apple.com/'</span>);</span><br></pre></td></tr></table></figure>
+<p>表结构信息</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/system/databases/mydb/id</td>
+<td>51</td>
+</tr>
+<tr>
+<td>/system/tables/customer/id</td>
+<td>42</td>
+</tr>
+<tr>
+<td>/system/desc/51/42/address</td>
+<td>69</td>
+</tr>
+<tr>
+<td>/system/desc/51/42/url</td>
+<td>66</td>
+</tr>
+</tbody>
+</table>
+<p>表中的数据</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Values</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/51/42/Apple/69</td>
+<td>1 Infinite Loop, Cupertino, CA</td>
+</tr>
+<tr>
+<td>/51/42/Apple/66</td>
+<td><a href="http://apple.com/" target="_blank" rel="noopener">http://apple.com/</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="最后"><a class="header-anchor" href="#最后"></a>最后</h2>
+<p>本文简要介绍了各存储引擎的结构，供大家参考，有错误之处请指正.</p>
+<h2 id="参考文档"><a class="header-anchor" href="#参考文档"></a>参考文档</h2>
+<ul>
+<li><a href="https://github.com/facebook/rocksdb" target="_blank" rel="noopener">https://github.com/facebook/rocksdb</a></li>
+<li><a href="https://www.percona.com/doc/percona-server/LATEST/tokudb/tokudb_intro.html" target="_blank" rel="noopener">https://www.percona.com/doc/percona-server/LATEST/tokudb/tokudb_intro.html</a></li>
+<li><a href="https://github.com/cockroachdb/cockroach/blob/master/docs/design.md" target="_blank" rel="noopener">https://github.com/cockroachdb/cockroach/blob/master/docs/design.md</a></li>
+<li><a href="https://github.com/pingcap/tidb" target="_blank" rel="noopener">https://github.com/pingcap/tidb</a></li>
+<li><a href="https://www.percona.com/live/plam16/sessions/how-we-build-tidb" target="_blank" rel="noopener">https://www.percona.com/live/plam16/sessions/how-we-build-tidb</a></li>
+<li><a href="https://dev.mysql.com/doc/internals/en/innodb.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/internals/en/innodb.html</a></li>
+<li><a href="http://img3.tbcdn.cn/L1/461/1/d0069515c04809a449eda659386afbe966e0d1df" target="_blank" rel="noopener">http://img3.tbcdn.cn/L1/461/1/d0069515c04809a449eda659386afbe966e0d1df</a></li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/">http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</a></strong><br>
+转载自：<a href="http://mysql.taobao.org/monthly/2017/10/04/" target="_blank" rel="noopener">一些流行引擎存储格式简介</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/分布式及存储/" rel="tag"># 分布式及存储</a>
+          
+            <a href="/tags/InnoDB/" rel="tag"># InnoDB</a>
+          
+            <a href="/tags/TokuDB/" rel="tag"># TokuDB</a>
+          
+            <a href="/tags/RocksDB/" rel="tag"># RocksDB</a>
+          
+            <a href="/tags/TiDB/" rel="tag"># TiDB</a>
+          
+            <a href="/tags/CockroachDB/" rel="tag"># CockroachDB</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/dynamo-implement/" rel="next" title="分布式键值存储 Dynamo 的实现原理">
+                <i class="fa fa-chevron-left"></i> 分布式键值存储 Dynamo 的实现原理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/implement-of-binlog-group-commit-in-mysql56/" rel="prev" title="MySQL 5.6中Binlog Group Commit实现">
+                MySQL 5.6中Binlog Group Commit实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#innodb"><span class="nav-text">InnoDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tokudb"><span class="nav-text">TokuDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rocksdb"><span class="nav-text">RocksDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tidb"><span class="nav-text">TiDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cockroachdb"><span class="nav-text">CockroachDB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

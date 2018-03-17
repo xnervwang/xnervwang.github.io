@@ -1,0 +1,1181 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Linux,Shell,TTY,PTS," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="当我们在键盘上敲下一个字母的时候，到底是怎么发送到相应的进程的呢？我们通过ps、who等命令看到的类似tty1、pts/0这样的输出，它们的作用和区别是什么呢？">
+<meta name="keywords" content="转载,Linux,Shell,TTY,PTS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux TTY&#x2F;PTS概述">
+<meta property="og:url" content="http://xnerv.wang/linux-tty-pts-summary/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="当我们在键盘上敲下一个字母的时候，到底是怎么发送到相应的进程的呢？我们通过ps、who等命令看到的类似tty1、pts/0这样的输出，它们的作用和区别是什么呢？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.903Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux TTY&#x2F;PTS概述">
+<meta name="twitter:description" content="当我们在键盘上敲下一个字母的时候，到底是怎么发送到相应的进程的呢？我们通过ps、who等命令看到的类似tty1、pts/0这样的输出，它们的作用和区别是什么呢？">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/linux-tty-pts-summary/"/>
+
+
+
+
+
+  <title>Linux TTY/PTS概述 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/linux-tty-pts-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Linux TTY/PTS概述</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-16T00:00:00+08:00">
+                2017-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>当我们在键盘上敲下一个字母的时候，到底是怎么发送到相应的进程的呢？我们通过ps、who等命令看到的类似tty1、pts/0这样的输出，它们的作用和区别是什么呢？</p>
+<a id="more"></a>
+<h2 id="tty历史"><a class="header-anchor" href="#tty历史"></a>TTY历史</h2>
+<h3 id="支持多任务的计算机出现之前"><a class="header-anchor" href="#支持多任务的计算机出现之前"></a>支持多任务的计算机出现之前</h3>
+<p>在计算机出来以前，人们就已经在使用一种叫teletype的设备，用来相互之间传递信息，看起来像下面这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+----------+     Physical Line     +----------+</span><br><span class="line">| teletype |&lt;---------------------&gt;| teletype |</span><br><span class="line">+----------+                       +----------+</span><br></pre></td></tr></table></figure>
+<p>两个teletype之间用线连接起来，线两端可能也有类似于调制解调器之类的设备（这里将它们忽略），在一端的teletype上敲键盘时，相应的数据会发送到另一端的teletype，具体功能是干什么的，我也不太了解。(我脑袋里面想到画面是在一端敲字，另一端打印出来)</p>
+<blockquote>
+<p>这些都是老古董了，完全没接触过，所以只能简单的推测。</p>
+</blockquote>
+<h3 id="支持多任务的计算机出现之后"><a class="header-anchor" href="#支持多任务的计算机出现之后"></a>支持多任务的计算机出现之后</h3>
+<p>等到计算机支持多任务后，人们想到把这些teletype连到计算机上，作为计算机的终端，从而可以操作计算机。</p>
+<p>使用teletype的主要原因有两个（个人见解）：</p>
+<ul>
+<li>现实中已经存在了大量不同厂商的teletype，可以充分利用现有资源</li>
+<li>teletype的相关网络已经比较成熟，连起来方便</li>
+</ul>
+<p>于是连接就发展成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                                                                      +----------+</span><br><span class="line">+----------+   +-------+     Physical Line     +-------+   +------+   |          |</span><br><span class="line">| Terminal |&lt;-&gt;| Modem |&lt;---------------------&gt;| Modem |&lt;-&gt;| UART |&lt;-&gt;| Computer |</span><br><span class="line">+----------+   +-------+                       +-------+   +------+   |          |</span><br><span class="line">                                                                      +----------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>左边的Terminal就是各种各样的teletype</li>
+<li>物理线路两边用上了Modem，就是我们常说的“猫”，那是因为后来网络已经慢慢的变发达了，大家可以共享连接了。（大概推测，可能不对）</li>
+<li>UART可以理解为将teletype的信号转换成计算机能识别的信号的设备</li>
+</ul>
+<h3 id="内核tty子系统"><a class="header-anchor" href="#内核tty子系统"></a>内核TTY子系统</h3>
+<p>计算机为了支持这些teletype，于是设计了名字叫做TTY的子系统，内部结构如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    +-----------------------------------------------+</span><br><span class="line">    |                    Kernel                     |</span><br><span class="line">    |                                 +--------+    |</span><br><span class="line">    |   +--------+   +------------+   |        |    |       +----------------+</span><br><span class="line">    |   |  UART  |   |    Line    |   |  TTY   |&lt;----------&gt;| User process A |</span><br><span class="line">&lt;------&gt;|        |&lt;-&gt;|            |&lt;-&gt;|        |    |       +----------------+</span><br><span class="line">    |   | driver |   | discipline |   | driver |&lt;----------&gt;| User process B |</span><br><span class="line">    |   +--------+   +------------+   |        |    |       +----------------+</span><br><span class="line">    |                                 +--------+    |</span><br><span class="line">    |                                               |</span><br><span class="line">    +-----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>UART driver对接外面的UART设备</li>
+<li>Line discipline主要是对输入和输出做一些处理，可以理解它是TTY driver的一部分</li>
+<li>TTY driver用来处理各种终端设备</li>
+<li>用户空间的进程通过TTY driver来和终端打交道</li>
+</ul>
+<blockquote>
+<p>为了简单起见，后面的介绍中不再单独列出UART driver和Line discipline，可以认为它们是TTY driver的一部分</p>
+</blockquote>
+<h3 id="tty设备"><a class="header-anchor" href="#tty设备"></a>TTY设备</h3>
+<p>对于每一个终端，TTY driver都会创建一个TTY设备与它对应，如果有多个终端连接过来，那么看起来就是这个样子的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">                     +----------------+</span><br><span class="line">                     |   TTY Driver   |</span><br><span class="line">                     |                |</span><br><span class="line">                     |   +-------+    |       +----------------+</span><br><span class="line">+------------+       |   |       |&lt;----------&gt;| User process A |</span><br><span class="line">| Terminal A |&lt;---------&gt;| ttyS0 |    |       +----------------+</span><br><span class="line">+------------+       |   |       |&lt;----------&gt;| User process B |</span><br><span class="line">                     |   +-------+    |       +----------------+</span><br><span class="line">                     |                |</span><br><span class="line">                     |   +-------+    |       +----------------+</span><br><span class="line">+------------+       |   |       |&lt;----------&gt;| User process C |</span><br><span class="line">| Terminal B |&lt;---------&gt;| ttyS1 |    |       +----------------+</span><br><span class="line">+------------+       |   |       |&lt;----------&gt;| User process D |</span><br><span class="line">                     |   +-------+    |       +----------------+</span><br><span class="line">                     |                |</span><br><span class="line">                     +----------------+</span><br></pre></td></tr></table></figure>
+<p>当驱动收到一个终端的连接时，就会根据终端的型号和参数创建相应的tty设备（上图中设备名称叫ttyS0是因为大部分终端的连接都是串行连接），由于每个终端可能都不一样，有自己的特殊命令和使用习惯，于是每个tty设备的配置可能都不一样。比如按delete键的时候，有些可能是要删前面的字符，而有些可能是删后面的，如果没配置对，就会导致某些按键不是自己想要的行为，这也是我们在使用模拟终端时，如果默认的配置跟我们的习惯不符，需要做一些个性化配置的原因。</p>
+<p>后来随着计算机的不断发展，teletype这些设备逐渐消失，我们不再需要专门的终端设备了，每个机器都有自己的键盘和显示器，每台机器都可以是其它机器的终端，远程的操作通过ssh来实现，但是内核TTY驱动这一架构没有发生变化，我们想要和系统中的进程进行I/O交互，还是需要通过TTY设备，于是出现了各种终端模拟软件，并且模拟的也是常见的几种终端，如VT100、VT220、XTerm等。</p>
+<blockquote>
+<ol>
+<li>可以通过命令<code>toe -a</code>列出系统支持的所有终端类型</li>
+<li>可以通过命令infocmp来比较两个终端的区别，比如<code>infocmp vt100 vt220</code>将会输出vt100和vt220的区别。</li>
+</ol>
+</blockquote>
+<h2 id="程序如何和tty打交道"><a class="header-anchor" href="#程序如何和tty打交道"></a>程序如何和TTY打交道</h2>
+<p>在讨论TTY设备是如何被创建及配置之前，我们先来看看TTY是如何被进程使用的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#先用tty命令看看当前bash关联到了哪个tty</span></span><br><span class="line">dev@debian:~$ tty</span><br><span class="line">/dev/pts/1</span><br><span class="line"></span><br><span class="line"><span class="comment">#看tty都被哪些进程打开了</span></span><br><span class="line">dev@debian:~$ lsof /dev/pts/1</span><br><span class="line">COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</span><br><span class="line">bash     907  dev    0u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line">bash     907  dev    1u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line">bash     907  dev    2u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line">bash     907  dev  255u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line">lsof    1118  dev    0u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line">lsof    1118  dev    1u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line">lsof    1118  dev    2u   CHR  136,1      0t0    4 /dev/pts/1</span><br><span class="line"></span><br><span class="line"><span class="comment">#往tty里面直接写数据跟写标准输出是一样的效果</span></span><br><span class="line">dev@dev:~$ <span class="built_in">echo</span> aaa &gt; /dev/pts/2</span><br><span class="line">aaa</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>pts也是tty设备，它们的关系后面会介绍到</p>
+</blockquote>
+<p>通过上面的lsof可以看出，当前运行的bash和lsof进程的stdin(0u)、stdout(1u)、stderr(2u)都绑定到了这个TTY上。</p>
+<p>下面是tty和进程以及I/O设备交互的结构图：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   Input    +--------------------------+    R/W     +------+</span><br><span class="line">-----------&gt;|                          |&lt;----------&gt;| bash |</span><br><span class="line">            |          pts/1           |            +------+</span><br><span class="line">&lt;-----------|                          |&lt;----------&gt;| lsof |</span><br><span class="line">   Output   | Foreground process group |    R/W     +------+</span><br><span class="line">            +--------------------------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以把tty理解成一个管道（pipe），在一端写的内容可以从另一端读取出来，反之亦然。</li>
+<li>这里input和output可以简单的理解为键盘和显示器，后面会介绍在各种情况下input/ouput都连接的什么东西。</li>
+<li>tty里面有一个很重要的属性，叫Foreground process group，记录了当前前端的进程组是哪一个。process group的概念会在下一篇文章中介绍，这里可以简单的认为process group里面只有一个进程。</li>
+<li>当pts/1收到input的输入后，会检查当前前端进程组是哪一个，然后将输入放到进程组的leader的输入缓存中，这样相应的leader进程就可以通过read函数得到用户的输入</li>
+<li>当前端进程组里面的进程往tty设备上写数据时，tty就会将数据输出到output设备上</li>
+<li>当在shell中执行不同的命令时，前端进程组在不断的变化，而这种变化会由shell负责更新到tty设备中</li>
+</ul>
+<p>从上面可以看出，进程和tty打交道很简单，只要保证后台进程不要读写tty就可以了，即写后台程序时，要将stdin/stdout/stderr重定向到其它地方（当然deamon程序还需要做很多其它处理）。</p>
+<p>先抛出两个问题(后面有答案)：</p>
+<ul>
+<li>当非前端进程组里面的进程（后台进程）往tty设备上写数据时，会发生什么？会输出到outpu上吗？</li>
+<li>当非前端进程组里面的进程（后台进程）从tty设备上读数据时，会发生什么？进程会阻塞吗？</li>
+</ul>
+<h2 id="tty是如何被创建的"><a class="header-anchor" href="#tty是如何被创建的"></a>TTY是如何被创建的</h2>
+<p>下面介绍几种常见的情况下tty设备是如何创建的，以及input和output设备都是啥。</p>
+<h3 id="键盘显示器直连-终端"><a class="header-anchor" href="#键盘显示器直连-终端"></a>键盘显示器直连（终端）</h3>
+<p>先看图再说话：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">                  +-----------------------------------------+</span><br><span class="line">                  |          Kernel                         |</span><br><span class="line">                  |                           +--------+    |       +----------------+</span><br><span class="line">+----------+      |   +-------------------+   |  tty1  |&lt;----------&gt;| User processes |</span><br><span class="line">| Keyboard |---------&gt;|                   |   +--------+    |       +----------------+</span><br><span class="line">+----------+      |   | Terminal Emulator |&lt;-&gt;|  tty2  |&lt;----------&gt;| User processes |</span><br><span class="line">| Monitor  |&lt;---------|                   |   +--------+    |       +----------------+</span><br><span class="line">+----------+      |   +-------------------+   |  tty3  |&lt;----------&gt;| User processes |</span><br><span class="line">                  |                           +--------+    |       +----------------+</span><br><span class="line">                  |                                         |</span><br><span class="line">                  +-----------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>键盘、显示器都和内核中的终端模拟器相连，由模拟器决定创建多少tty，比如你在键盘上输入ctrl+alt+F1时，模拟器首先捕获到该输入，然后激活tty1，这样键盘的输入会转发到tty1，而tty1的输出会转发到显示器，同理用输入ctrl+alt+F2，就会切换到tty2。</p>
+<p>当模拟器激活tty时如果发现没有进程与之关联，意味着这是第一次打开该tty，于是会启动配置好的进程并和该tty绑定，一般该进程就是负责login的进程。</p>
+<p>当切换到tty2后，tty1里面的输出会输出到哪里呢？tty1的输出还是会输出给模拟器，模拟器里会有每个tty的缓存，不过由于模拟器的缓存空间有限，所以下次切回tty1的时候，只能看到最新的输出，以前的输出已经不在了。</p>
+<blockquote>
+<p>不确定这里的终端模拟器对应内核中具体的哪个模块，但肯定有这么个东西存在</p>
+</blockquote>
+<h3 id="ssh远程访问"><a class="header-anchor" href="#ssh远程访问"></a>SSH远程访问</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">+----------+       +------------+</span><br><span class="line">| Keyboard |------&gt;|            |</span><br><span class="line">+----------+       |  Terminal  |</span><br><span class="line">| Monitor  |&lt;------|            |</span><br><span class="line">+----------+       +------------+</span><br><span class="line">                         |</span><br><span class="line">                         |  ssh protocol</span><br><span class="line">                         |</span><br><span class="line">                         ↓</span><br><span class="line">                   +------------+</span><br><span class="line">                   |            |</span><br><span class="line">                   | ssh server |--------------------------+</span><br><span class="line">                   |            |           fork           |</span><br><span class="line">                   +------------+                          |</span><br><span class="line">                       |   ↑                               |</span><br><span class="line">                       |   |                               |</span><br><span class="line">                 write |   | read                          |</span><br><span class="line">                       |   |                               |</span><br><span class="line">                 +-----|---|-------------------+           |</span><br><span class="line">                 |     |   |                   |           ↓</span><br><span class="line">                 |     ↓   |      +-------+    |       +-------+</span><br><span class="line">                 |   +--------+   | pts/0 |&lt;----------&gt;| shell |</span><br><span class="line">                 |   |        |   +-------+    |       +-------+</span><br><span class="line">                 |   |  ptmx  |&lt;-&gt;| pts/1 |&lt;----------&gt;| shell |</span><br><span class="line">                 |   |        |   +-------+    |       +-------+</span><br><span class="line">                 |   +--------+   | pts/2 |&lt;----------&gt;| shell |</span><br><span class="line">                 |                +-------+    |       +-------+</span><br><span class="line">                 |    Kernel                   |</span><br><span class="line">                 +-----------------------------+</span><br></pre></td></tr></table></figure>
+<p>这里的Terminal可能是任何地方的程序，比如windows上的putty，所以不讨论客户端的Terminal程序是怎么和键盘、显示器交互的。由于Terminal要和ssh服务器打交道，所以肯定要实现ssh的客户端功能。</p>
+<p>这里将建立连接和收发数据分两条线路解释，为了描述简洁，这里以sshd代替ssh服务器程序：</p>
+<h4 id="建立连接"><a class="header-anchor" href="#建立连接"></a>建立连接</h4>
+<ul>
+<li>
+<ol>
+<li>Terminal请求和sshd建立连接</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>如果验证通过，sshd将创建一个新的session</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>调用API（posix_openpt()）请求ptmx创建一个pts，创建成功后，sshd将得到和ptmx关联的fd，并将该fd和session关联起来。</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#pty（pseudo terminal device）由两部分构成，ptmx是master端，pts是slave端，</span><br><span class="line">#进程可以通过调用API请求ptmx创建一个pts，然后将会得到连接到ptmx的读写fd和一个新创建的pts，</span><br><span class="line">#ptmx在内部会维护该fd和pts的对应关系，随后往这个fd的读写会被ptmx转发到对应的pts。</span><br><span class="line"></span><br><span class="line">#这里可以看到sshd已经打开了/dev/ptmx</span><br><span class="line">dev@debian:~$ sudo lsof /dev/ptmx</span><br><span class="line">COMMAND  PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME</span><br><span class="line">sshd    1191  dev    8u   CHR    5,2      0t0 6531 /dev/ptmx</span><br><span class="line">sshd    1191  dev   10u   CHR    5,2      0t0 6531 /dev/ptmx</span><br><span class="line">sshd    1191  dev   11u   CHR    5,2      0t0 6531 /dev/ptmx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<ol start="4">
+<li>同时sshd创建shell进程，将新创建的pts和shell绑定</li>
+</ol>
+</li>
+</ul>
+<h4 id="收发消息"><a class="header-anchor" href="#收发消息"></a>收发消息</h4>
+<ul>
+<li>
+<ol>
+<li>Terminal收到键盘的输入，Terminal通过ssh协议将数据发往sshd</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>sshd收到客户端的数据后，根据它自己管理的session，找到该客户端对应的关联到ptmx上的fd</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>往找到的fd上写入客户端发过来的数据</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>ptmx收到数据后，根据fd找到对应的pts（该对应关系由ptmx自动维护），将数据包转发给对应的pts</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>pts收到数据包后，检查绑定到自己上面的当前前端进程组，将数据包发给该进程组的leader</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>由于pts上只有shell，所以shell的read函数就收到了该数据包</li>
+</ol>
+</li>
+<li>
+<ol start="7">
+<li>shell对收到的数据包进行处理，然后输出处理结果（也可能没有输出）</li>
+</ol>
+</li>
+<li>
+<ol start="8">
+<li>shell通过write函数将结果写入pts</li>
+</ol>
+</li>
+<li>
+<ol start="9">
+<li>pts将结果转发给ptmx</li>
+</ol>
+</li>
+<li>
+<ol start="10">
+<li>ptmx根据pts找到对应的fd，往该fd写入结果</li>
+</ol>
+</li>
+<li>
+<ol start="11">
+<li>sshd收到该fd的结果后，找到对应的session，然后将结果发给对应的客户端</li>
+</ol>
+</li>
+</ul>
+<h3 id="键盘显示器直连-图形界面"><a class="header-anchor" href="#键盘显示器直连-图形界面"></a>键盘显示器直连（图形界面）</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">+----------+       +------------+</span><br><span class="line">| Keyboard |------&gt;|            |</span><br><span class="line">+----------+       |  Terminal  |--------------------------+</span><br><span class="line">| Monitor  |&lt;------|            |           fork           |</span><br><span class="line">+----------+       +------------+                          |</span><br><span class="line">                       |   ↑                               |</span><br><span class="line">                       |   |                               |</span><br><span class="line">                 write |   | read                          |</span><br><span class="line">                       |   |                               |</span><br><span class="line">                 +-----|---|-------------------+           |</span><br><span class="line">                 |     |   |                   |           ↓</span><br><span class="line">                 |     ↓   |      +-------+    |       +-------+</span><br><span class="line">                 |   +--------+   | pts/0 |&lt;----------&gt;| shell |</span><br><span class="line">                 |   |        |   +-------+    |       +-------+</span><br><span class="line">                 |   |  ptmx  |&lt;-&gt;| pts/1 |&lt;----------&gt;| shell |</span><br><span class="line">                 |   |        |   +-------+    |       +-------+</span><br><span class="line">                 |   +--------+   | pts/2 |&lt;----------&gt;| shell |</span><br><span class="line">                 |                +-------+    |       +-------+</span><br><span class="line">                 |    Kernel                   |</span><br><span class="line">                 +-----------------------------+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>为了简化起见，本篇不讨论Linux下图形界面里Terminal程序是怎么和键盘、显示器交互的。</p>
+</blockquote>
+<p>这里和上面的不同点就是，这里的Terminal不需要实现ssh客户端，但需要把ssh服务器要干的活也干了（当然ssh通信相关的除外）。</p>
+<h3 id="ssh-screen-tmux"><a class="header-anchor" href="#ssh-screen-tmux"></a>SSH + Screen/Tmux</h3>
+<p>常用Linux的同学应该对screen和tmux不陌生，通过它们启动的进程，就算网络断开了，也不会受到影响继续执行，下次连上去时还能看到进程的所有输出，还能继续接着干活。</p>
+<p>这里以tmux为例介绍其原理：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">+----------+       +------------+</span><br><span class="line">| Keyboard |------&gt;|            |</span><br><span class="line">+----------+       |  Terminal  |</span><br><span class="line">| Monitor  |&lt;------|            |</span><br><span class="line">+----------+       +------------+</span><br><span class="line">                         |</span><br><span class="line">                         |  ssh protocol</span><br><span class="line">                         |</span><br><span class="line">                         ↓</span><br><span class="line">                   +------------+</span><br><span class="line">                   |            |</span><br><span class="line">                   | ssh server |--------------------------+</span><br><span class="line">                   |            |           fork           |</span><br><span class="line">                   +------------+                          |</span><br><span class="line">                       |   ↑                               |</span><br><span class="line">                       |   |                               |</span><br><span class="line">                 write |   | read                          |</span><br><span class="line">                       |   |                               |</span><br><span class="line">                 +-----|---|-------------------+           |</span><br><span class="line">                 |     ↓   |                   |           ↓</span><br><span class="line">                 |   +--------+   +-------+    |       +-------+  fork   +-------------+</span><br><span class="line">                 |   |  ptmx  |&lt;-&gt;| pts/0 |&lt;----------&gt;| shell |--------&gt;| tmux client |</span><br><span class="line">                 |   +--------+   +-------+    |       +-------+         +-------------+</span><br><span class="line">                 |   |        |                |                               ↑</span><br><span class="line">                 |   +--------+   +-------+    |       +-------+               |</span><br><span class="line">                 |   |  ptmx  |&lt;-&gt;| pts/2 |&lt;----------&gt;| shell |               |</span><br><span class="line">                 |   +--------+   +-------+    |       +-------+               |</span><br><span class="line">                 |     ↑   |  Kernel           |           ↑                   |</span><br><span class="line">                 +-----|---|-------------------+           |                   |</span><br><span class="line">                       |   |                               |                   |</span><br><span class="line">                       |w/r|   +---------------------------+                   |</span><br><span class="line">                       |   |   |            fork                               |</span><br><span class="line">                       |   ↓   |                                               |</span><br><span class="line">                   +-------------+                                             |</span><br><span class="line">                   |             |                                             |</span><br><span class="line">                   | tmux server |&lt;--------------------------------------------+</span><br><span class="line">                   |             |</span><br><span class="line">                   +-------------+</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>系统中的ptmx只有一个，上图中画出来了两个，目的是为了表明tmux服务器和sshd都用ptmx，但它们之间又互不干涉。</p>
+</blockquote>
+<p>这种情况要稍微复杂一点，不过原理都是一样的，前半部分和普通ssh的方式是一样的，只是pts/0关联的前端进程不是shell了，而是变成了tmux客户端，所以ssh客户端发过来的数据包都会被tmux客户端收到，然后由tmux客户端转发给tmux服务器，而tmux服务器干的活和ssh的类似，也是维护一堆的session，为每个session创建一个pts，然后将tmux客户端发过来的数据转发给相应的pts。</p>
+<p>由于tmux服务器只和tmux客户端打交道，和sshd没有关系，当终端和sshd的连接断开时，虽然pts/0会被关闭，和它相关的shell和tmux客户端也将被kill掉，但不会影响tmux服务器，当下次再用tmux客户端连上tmux服务器时，看到的还是上次的内容。</p>
+<h2 id="tty和pts的区别"><a class="header-anchor" href="#tty和pts的区别"></a>TTY和PTS的区别</h2>
+<p>从上面的流程中应该可以看出来了，对用户空间的程序来说，他们没有区别，都是一样的；从内核里面来看，pts的另一端连接的是ptmx，而tty的另一端连接的是内核的终端模拟器，ptmx和终端模拟器都只是负责维护会话和转发数据包；再看看ptmx和内核终端模拟器的另一端，ptmx的另一端连接的是用户空间的应用程序，如sshd、tmux等，而内核终端模拟器的另一端连接的是具体的硬件，如键盘和显示器。</p>
+<h2 id="常见的tty配置"><a class="header-anchor" href="#常见的tty配置"></a>常见的TTY配置</h2>
+<p>先先来看看当前tty的所有配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dev@dev:~$ stty -a</span><br><span class="line">speed 38400 baud; rows 51; columns 204; line = 0;</span><br><span class="line">intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; eol = M-^?; eol2 = M-^?; swtch = &lt;undef&gt;; start = ^Q; stop = ^S; susp = ^Z; rprnt = ^R; werase = ^W; lnext = ^V; discard = ^O; min = 1; time = 0;</span><br><span class="line">-parenb -parodd -cmspar cs8 -hupcl -cstopb cread -clocal -crtscts</span><br><span class="line">-ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl ixon -ixoff -iuclc ixany imaxbel -iutf8</span><br><span class="line">opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0</span><br><span class="line">isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop -echoprt echoctl echoke -flusho -extproc</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>stty还可以用来修改tty的参数，用法请参考<code>man stty</code></p>
+</blockquote>
+<p>只要是有权限的程序，都可以通过Linux提供的API来修改TTY的配置，下面介绍一些常见的的配置项。</p>
+<h4 id="rows-51-columns-204"><a class="header-anchor" href="#rows-51-columns-204"></a>rows 51; columns 204;</h4>
+<p>这个配置一般由终端控制，当终端的窗口大小发生变化时，需要通过一定的手段修改该配置，比如ssh协议里面就有修改窗口大小的参数，sshd收到客户端的请求后，会通过API修改tty的这个参数，然后由tty通过信号SIGWINCH通知前端程序（比如shell或者vim），前端程序收到信号后，再去读tty的这个参数，然后就知道如何调整自己的输出排版了。</p>
+<h4 id="intr-c"><a class="header-anchor" href="#intr-c"></a>intr = ^C</h4>
+<p>tty除了在终端和前端进程之间转发数据之外，还支持很多控制命令，比如终端输入了CTRL+C，那么tty不会将该输入串转发给前端进程，而是将它转换成信号SIGINT发送给前端进程。这个就是用来配置控制命令对应的输入组合的，比如我们可以配置“intr = ^E”表示用CTRL+E代替CTRL+C。</p>
+<h4 id="start-q-stop-s"><a class="header-anchor" href="#start-q-stop-s"></a>start = ^Q; stop = ^S;</h4>
+<p>这是两个特殊的控制命令，估计经常有人会碰到，在键盘上不小心输入CTRL+S后，终端没反应了，即没输出，也不响应任何输入。这是因为这个命令会告诉TTY暂停，阻塞所有读写操作，即不转发任何数据，只有按了CTRL+Q后，才会继续。这个功能应该是历史遗留，以前终端和服务器之间没有流量控制功能，所以有可能服务器发送数据过快，导致终端处理不过来，于是需要这样一个命令告诉服务器不要再发了，等终端处理完了后在通知服务器继续。</p>
+<p>该命令现在比较常用的一个场景就是用<code>tail -f</code>命令监控日志文件的内容时，可以随时按CTRL+S让屏幕停止刷新，看完后再按CTRL+Q让它继续刷，如果不这样的话，需要先CTRL+C退出，看完后在重新运行<code>tail -f</code>命令。</p>
+<h4 id="echo"><a class="header-anchor" href="#echo"></a>echo</h4>
+<p>在终端输入字符的时候，之所以我们能及时看到我们输入的字符，那是因为TTY在收到终端发过去的字符后，会先将字符原路返回一份，然后才交给前端进程处理，这样终端就能及时的显示输入的字符。echo就是用来控制该功能的配置项，如果是-echo的话表示disable echo功能。</p>
+<h4 id="tostop"><a class="header-anchor" href="#tostop"></a>-tostop</h4>
+<p>如果你在shell中运行程序的时候，后面添加了<code>&amp;</code>，比如<code>./myapp &amp;</code>，这样myapp这个进程就会在后台运行，但如果这个进程继续往tty上写数据呢？这个参数就用来控制是否将输出转发给终端，也即结果会不会在终端显示，这里“-tostop”表示会输出到终端，如果配置为“tostop”的话，将不输出到终端，并且tty会发送信号SIGTTOU给myapp，该信号的默认行为是将暂停myapp的执行。</p>
+<h2 id="tty相关信号"><a class="header-anchor" href="#tty相关信号"></a>TTY相关信号</h2>
+<p>除了上面介绍配置时提到的SIGINT，SIGTTOU，SIGWINCHU外，还有这么几个跟TTY相关的信号</p>
+<h4 id="sigttin"><a class="header-anchor" href="#sigttin"></a>SIGTTIN</h4>
+<p>当后台进程读tty时，tty将发送该信号给相应的进程组，默认行为是暂停进程组中进程的执行。暂停的进程如何继续执行呢？请参考下一篇文章中的SIGCONT。</p>
+<h4 id="sighup"><a class="header-anchor" href="#sighup"></a>SIGHUP</h4>
+<p>当tty的另一端挂掉的时候，比如ssh的session断开了，于是sshd关闭了和ptmx关联的fd，内核将会给和该tty相关的所有进程发送SIGHUP信号，进程收到该信号后的默认行为是退出进程。</p>
+<h4 id="sigtstp"><a class="header-anchor" href="#sigtstp"></a>SIGTSTP</h4>
+<p>终端输入CTRL+Z时，tty收到后就会发送SIGTSTP给前端进程组，其默认行为是将前端进程组放到后端，并且暂停进程组里所有进程的执行。</p>
+<blockquote>
+<p>跟tty相关的信号都是可以捕获的，可以修改它的默认行为</p>
+</blockquote>
+<h2 id="结束语"><a class="header-anchor" href="#结束语"></a>结束语</h2>
+<p>本文介绍了常见的tty功能和特点，下一篇中将详细介绍和tty密切相关的进程session id，进程组，job，后台程序等，敬请期待。</p>
+<h2 id="参考"><a class="header-anchor" href="#参考"></a>参考</h2>
+<ul>
+<li><a href="http://www.linusakesson.net/programming/tty/index.php" target="_blank" rel="noopener">The TTY demystified</a></li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/linux-tty-pts-summary/">http://xnerv.wang/linux-tty-pts-summary/</a></strong><br>
+转载自：<a href="https://segmentfault.com/a/1190000009082089" target="_blank" rel="noopener">(SegmentFault) Linux TTY/PTS概述</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Shell/" rel="tag"># Shell</a>
+          
+            <a href="/tags/TTY/" rel="tag"># TTY</a>
+          
+            <a href="/tags/PTS/" rel="tag"># PTS</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ddl-commands-in-transactions-in-sql-server-versus-oracle/" rel="next" title="DDL commands in Transactions in SQL Server versus Oracle">
+                <i class="fa fa-chevron-left"></i> DDL commands in Transactions in SQL Server versus Oracle
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/linux-session-and-processgroup-summary/" rel="prev" title="Linux session和进程组概述">
+                Linux session和进程组概述 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tty历史"><span class="nav-text">TTY历史</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#支持多任务的计算机出现之前"><span class="nav-text">支持多任务的计算机出现之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支持多任务的计算机出现之后"><span class="nav-text">支持多任务的计算机出现之后</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核tty子系统"><span class="nav-text">内核TTY子系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tty设备"><span class="nav-text">TTY设备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序如何和tty打交道"><span class="nav-text">程序如何和TTY打交道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tty是如何被创建的"><span class="nav-text">TTY是如何被创建的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#键盘显示器直连-终端"><span class="nav-text">键盘显示器直连（终端）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh远程访问"><span class="nav-text">SSH远程访问</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#建立连接"><span class="nav-text">建立连接</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#收发消息"><span class="nav-text">收发消息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键盘显示器直连-图形界面"><span class="nav-text">键盘显示器直连（图形界面）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh-screen-tmux"><span class="nav-text">SSH + Screen/Tmux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tty和pts的区别"><span class="nav-text">TTY和PTS的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见的tty配置"><span class="nav-text">常见的TTY配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#rows-51-columns-204"><span class="nav-text">rows 51; columns 204;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#intr-c"><span class="nav-text">intr = ^C</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#start-q-stop-s"><span class="nav-text">start = ^Q; stop = ^S;</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#echo"><span class="nav-text">echo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tostop"><span class="nav-text">-tostop</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tty相关信号"><span class="nav-text">TTY相关信号</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sigttin"><span class="nav-text">SIGTTIN</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sighup"><span class="nav-text">SIGHUP</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sigtstp"><span class="nav-text">SIGTSTP</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束语"><span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

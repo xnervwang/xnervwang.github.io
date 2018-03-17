@@ -1,0 +1,1006 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,MySQL,Index Condition Pushdown," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言 上一篇文章 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考这里。 ICP 测试 首先，咱们来看一下打开 ICP 与关闭 ICP 之">
+<meta name="keywords" content="转载,DBMS,MySQL,Index Condition Pushdown">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL - Index Condition Pushdown (ICP)">
+<meta property="og:url" content="http://xnerv.wang/mysql-index-condition-pushdown/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="前言 上一篇文章 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考这里。 ICP 测试 首先，咱们来看一下打开 ICP 与关闭 ICP 之">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.773Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL - Index Condition Pushdown (ICP)">
+<meta name="twitter:description" content="前言 上一篇文章 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考这里。 ICP 测试 首先，咱们来看一下打开 ICP 与关闭 ICP 之">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/mysql-index-condition-pushdown/"/>
+
+
+
+
+
+  <title>MySQL - Index Condition Pushdown (ICP) | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/mysql-index-condition-pushdown/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">MySQL - Index Condition Pushdown (ICP)</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T22:46:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
+<p><a href="http://mysql.taobao.org/monthly/2015/11/07/" target="_blank" rel="noopener">上一篇文章</a> 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考<a href="https://dev.mysql.com/doc/refman/5.6/en/condition-pushdown-optimization.html" target="_blank" rel="noopener">这里</a>。</p>
+<h2 id="icp-测试"><a class="header-anchor" href="#icp-测试"></a>ICP 测试</h2>
+<p>首先，咱们来看一下打开 ICP 与关闭 ICP 之间的性能区别，以下是测试过程：</p>
+<p>准备数据：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> icp(<span class="keyword">id</span> <span class="built_in">int</span>, age <span class="built_in">int</span>, <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">30</span>), memo <span class="built_in">varchar</span>(<span class="number">600</span>)) <span class="keyword">engine</span>=<span class="keyword">innodb</span>;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> icp <span class="keyword">add</span> <span class="keyword">index</span> aind(age, <span class="keyword">name</span>, memo);</span><br><span class="line"><span class="comment">--let $i= 100000</span></span><br><span class="line">while ($i)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">--eval insert into icp values($i, 1, 'a$i', repeat('a$i', 100))</span></span><br><span class="line">  <span class="comment">--dec $i</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PS: MySQL 有一个叫profile的东东，可以用来监视 SQL 语句在各个阶段的执行情况，咱们可以使用这个工具来观察 SQL 语句在各个阶段的运行情况，关于 profile 的详细说明可以参考<a href="http://dev.mysql.com/doc/refman/5.7/en/show-profile.html" target="_blank" rel="noopener">官方文档</a>。</p>
+<a id="more"></a>
+<p>打开 ICP 的性能测试：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> profiling=<span class="keyword">on</span>;</span><br><span class="line"><span class="keyword">set</span> optimizer_switch=<span class="string">'index_condition_pushdown=on'</span>; （default enabled）</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> icp <span class="keyword">where</span> age = <span class="number">1</span> <span class="keyword">and</span> memo <span class="keyword">like</span> <span class="string">'%9999%'</span>;</span><br><span class="line">mysql&gt; show profile cpu,block io for query 7;</span><br><span class="line">+<span class="comment">----------------------+-----------+-----------+------------+--------------+---------------+</span></span><br><span class="line">| Status               | Duration  | CPU_user  | CPU_system | Block_ops_in | Block_ops_out |</span><br><span class="line">+<span class="comment">----------------------+-----------+-----------+------------+--------------+---------------+</span></span><br><span class="line">| executing            |  0.000009 |  0.000000 |   0.000000 |            0 |             0 |</span><br><span class="line">| Sending data         | 3.225383 | 3.507467 |   0.037994 |            0 |             0 |</span><br><span class="line">+<span class="comment">----------------------+-----------+-----------+------------+--------------+---------------+</span></span><br><span class="line">mysql&gt; show session status like '%handler%';show session status like '%handler%';</span><br><span class="line">+<span class="comment">----------------------------+--------+</span></span><br><span class="line">| Handler_read_next          | 19    |</span><br><span class="line">| Handler_read_rnd_next      | 30    |</span><br><span class="line">+<span class="comment">----------------------------+--------+</span></span><br><span class="line">18 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>关闭 ICP 的性能测试：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set optimizer_switch='index_condition_pushdown=off';</span><br><span class="line">mysql&gt; select * from icp where age = 1 and memo like '%9999%';</span><br><span class="line">mysql&gt; show profile cpu, block io for query 20;</span><br><span class="line">+<span class="comment">----------------------+----------+----------+------------+--------------+---------------+</span></span><br><span class="line">| Status               | Duration | CPU_user | CPU_system | Block_ops_in | Block_ops_out |</span><br><span class="line">+<span class="comment">----------------------+----------+----------+------------+--------------+---------------+</span></span><br><span class="line">| Sending data         | 15.327345 | 17.443348 |   0.165975 |            0 |             0 |</span><br><span class="line">+<span class="comment">----------------------+----------+----------+------------+--------------+---------------+</span></span><br><span class="line">15 rows in <span class="keyword">set</span>, <span class="number">1</span> <span class="keyword">warning</span> (<span class="number">0.00</span> sec)</span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">session</span> <span class="keyword">status</span> <span class="keyword">like</span> <span class="string">'%handler%'</span>;</span><br><span class="line">+<span class="comment">----------------------------+--------+</span></span><br><span class="line">| Variable_name              | Value  |</span><br><span class="line">+<span class="comment">----------------------------+--------+</span></span><br><span class="line">| Handler_read_next          | 100019 |</span><br><span class="line">| Handler_read_rnd_next      | 47     |</span><br><span class="line">+<span class="comment">----------------------------+--------+</span></span><br><span class="line">18 rows in <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br></pre></td></tr></table></figure>
+<p>测试结论：由以上测试情况可以看到，在二级索引是复合索引且前面的条件过滤性较低的情况下，打开 ICP 可以有效的降低 server 层和 engine 层之间交互的次数，从而有效的降低在运行时间。</p>
+<h2 id="icp-原理"><a class="header-anchor" href="#icp-原理"></a>ICP 原理</h2>
+<p>5.6 之前，在 SQL 语句的执行过程中，server 层通过 engine 的 api 获取数据，然后再进行 where_cond 的判断（具体判断逻辑在: <code>evaluate_join_record</code>），每一条数据都需要从engine层返回server层做判断。我们回顾一下上面把 ICP 关掉的测试，可以看到 <code>Handler_read_next</code> 的值陡增，其原因是第 1 个字段区分度不高，且 memo 字段无法使用索引，造成了类似 index 扫描的的情况，性能较低。</p>
+<p>5.6 之后，在利用索引扫描的过程中，如果发现 where_cond 中含有这个 index 相关的条件，则将此条件记录在 handler 接口中，在索引扫描的过程中，只有满足索引与handler接口的条件时，才会返回到 server 层做进一步的处理，在前缀索引区分度不够，其它字段区分度高的情况下可以有效的减少 server &amp; engine之间的开销，提升查询性能。</p>
+<h2 id="icp-源码实现"><a class="header-anchor" href="#icp-源码实现"></a>ICP 源码实现</h2>
+<p>我们在上小节提到，index condition down 所用的条件是记在handler接口中的，咱们分析一下“记录”的过程是如何实现的。</p>
+<p>首先，优化器计算代价后会生成一个 JOIN_TAB 的左支树，每一个 JOIN_TAB 包含相关表的指针、表的读取方式、访问表所包含的索引等信息，优化器会在 <code>make_join_readinfo</code> 中对JOIN_TAB中表的访问方式进行相应的修正，并进一步将 where cond 中和索引相关的条件记录到 table 的句柄中，堆栈如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">0</span>  make_cond_for_index (cond=<span class="number">0x2b69680179e8</span>, table=<span class="number">0x2b6968012100</span>, keyno=<span class="number">0</span>, other_tbls_ok=<span class="literal">true</span>)</span><br><span class="line">#<span class="number">1</span>  <span class="function">in <span class="title">push_index_cond</span> <span class="params">(tab=<span class="number">0x2b696802aa48</span>, keyno=<span class="number">0</span>, other_tbls_ok=<span class="literal">true</span>, trace_obj=<span class="number">0x2b696413ec30</span>)</span></span></span><br><span class="line">#2  in make_join_readinfo (join=0x2b6968017db0, options=0, no_jbuf_after=4294967295)</span><br><span class="line">#<span class="number">3</span>  in JOIN::optimize (<span class="keyword">this</span>=<span class="number">0x2b6968017db0</span>)</span><br><span class="line">#<span class="number">4</span>  <span class="function">in <span class="title">mysql_execute_select</span> <span class="params">(thd=<span class="number">0x3176760</span>, select_lex=<span class="number">0x3179470</span>, free_join=<span class="literal">true</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>其次， <code>make_cond_for_index</code> 是一个递归的过程，对 where_cond中的每一个条件进行判断，对满足条件的 cond 重新组合成一个新的cond，最后将新的 cond 挂在table-&gt;file 下面（table-&gt;file 指的是操作物理表的接口函数，此变量为thd下私有的，不共享，共享的是tab-&gt;table-&gt;s），详细参考<code>make_cond_for_index</code> 的详细实现，设置的堆栈如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">0</span>  ha_innobase::idx_cond_push (<span class="keyword">this</span>=<span class="number">0x2b696800e810</span>, keyno=<span class="number">0</span>, idx_cond=<span class="number">0x2b69680179e8</span>)</span><br><span class="line">#<span class="number">1</span>  <span class="number">0x0000000000a60a55</span> <span class="function">in <span class="title">push_index_cond</span> <span class="params">(tab=<span class="number">0x2b696802aa48</span>, keyno=<span class="number">0</span>, other_tbls_ok=<span class="literal">true</span>, trace_obj=<span class="number">0x2b696413ec30</span>)</span></span></span><br><span class="line">#2  0x0000000000a6362f in make_join_readinfo (join=0x2b6968017db0, options=0, no_jbuf_after=4294967295)</span><br><span class="line">#<span class="number">3</span>  <span class="number">0x0000000000d9b8bd</span> in JOIN::optimize (<span class="keyword">this</span>=<span class="number">0x2b6968017db0</span></span><br><span class="line">#<span class="number">4</span>  <span class="number">0x0000000000a5b9ae</span> in mysql_execute_select (thd=<span class="number">0x3176760</span>, select_lex=<span class="number">0x3179470</span>, free_join=<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>再次，server 层根据生成的 JOIN_TAB 读取engine层的内容，在engine读取的时候，会进行<code>index_condition_pushdown</code>的调用，即 ICP 的调用，堆栈如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">0</span>  Item_func_like::val_int (<span class="keyword">this</span>=<span class="number">0x2b6978005a28</span>)</span><br><span class="line">#<span class="number">1</span>  <span class="number">0x0000000001187b66</span> <span class="function">in <span class="title">innobase_index_cond</span> <span class="params">(file=<span class="number">0x2b696800e810</span>)</span></span></span><br><span class="line">#2  0x0000000001393566 in row_search_idx_cond_check (mysql_rec=0x2b69680129f0  &lt;incomplete sequence \361&gt;, prebuilt=0x2b69680130f8, rec=0x2b692b56e4cf "\200", offsets=0x2b697008d450)</span><br><span class="line">#<span class="number">3</span>  <span class="number">0x0000000001397e2b</span> <span class="function">in <span class="title">row_search_for_mysql</span> <span class="params">(buf=<span class="number">0x2b69680129f0</span>  &lt;incomplete sequence \<span class="number">361</span>&gt;, mode=<span class="number">2</span>, prebuilt=<span class="number">0x2b69680130f8</span>, match_mode=<span class="number">1</span>, direction=<span class="number">0</span>)</span></span></span><br><span class="line">#4  0x00000000011696b9 in ha_innobase::index_read (this=0x2b696800e810, buf=0x2b69680129f0  &lt;incomplete sequence \361&gt;, key_ptr=0x2b697800a660 "", key_len=5, find_flag=HA_READ_KEY_EXACT)</span><br><span class="line">#<span class="number">5</span>  <span class="number">0x00000000006ecc58</span> in handler::index_read_map (<span class="keyword">this</span>=<span class="number">0x2b696800e810</span>, buf=<span class="number">0x2b69680129f0</span>  &lt;incomplete sequence \<span class="number">361</span>&gt;, key=<span class="number">0x2b697800a660</span> <span class="string">""</span>, keypart_map=<span class="number">1</span>, find_flag=HA_READ_KEY_EXACT)</span><br><span class="line">#<span class="number">6</span>  <span class="number">0x00000000006d6bb4</span> in handler::ha_index_read_map (<span class="keyword">this</span>=<span class="number">0x2b696800e810</span>, buf=<span class="number">0x2b69680129f0</span>  &lt;incomplete sequence \<span class="number">361</span>&gt;, key=<span class="number">0x2b697800a660</span> <span class="string">""</span>, keypart_map=<span class="number">1</span>, find_flag=HA_READ_KEY_EXACT)</span><br><span class="line">#<span class="number">7</span>  <span class="number">0x00000000009a1870</span> <span class="function">in <span class="title">join_read_always_key</span> <span class="params">(tab=<span class="number">0x2b697800a1b8</span>)</span></span></span><br><span class="line">#8  0x000000000099d480 in sub_select (join=0x2b6978005df0, join_tab=0x2b697800a1b8, end_of_records=false)</span><br><span class="line">#<span class="number">9</span>  <span class="number">0x000000000099c6c0</span> <span class="function">in <span class="title">do_select</span> <span class="params">(join=<span class="number">0x2b6978005df0</span>)</span></span></span><br><span class="line">#10 0x00000000009980a4 in JOIN::exec (this=0x2b6978005df0)</span><br><span class="line">#<span class="number">11</span> <span class="number">0x0000000000a5bac0</span> <span class="function">in <span class="title">mysql_execute_select</span> <span class="params">(thd=<span class="number">0x32801a0</span>, select_lex=<span class="number">0x3282eb0</span>, free_join=<span class="literal">true</span>)</span></span></span><br></pre></td></tr></table></figure>
+<p>可见在 ICP 的判断是调用相关item的函数的，虽然同是调用 server 层的函数，但是没有 ICP 的调用需要根据主建找到记录，然后再匹配，而有了 ICP 可以省略一次主键查找数据的过程，进而提升效率。</p>
+<h2 id="icp-使用限制及问题"><a class="header-anchor" href="#icp-使用限制及问题"></a>ICP 使用限制及问题</h2>
+<ul>
+<li>
+<p>只支持 select 语句；</p>
+</li>
+<li>
+<p>5.6 中只支持 MyISAM 与 InnoDB 引擎;</p>
+</li>
+<li>
+<p>ICP的优化策略可用于range、ref、eq_ref、ref_or_null 类型的访问数据方法；</p>
+</li>
+<li>
+<p>不支持主建索引的 ICP；</p>
+</li>
+<li>
+<p>当 SQL 使用覆盖索引时但只检索部分数据时，ICP 无法使用，详细的分析可以参考 <a href="http://bugs.mysql.com/bug.php?id=68554" target="_blank" rel="noopener">bug#68554</a> 中 Olav Sandstå的分析，代码实现部分可以参考 <code>make_join_readinfo</code>；</p>
+</li>
+<li>
+<p>在查询的时候即使正确的使用索引的前Ｎ个字段（即遵循前缀索引的原则），还是会用到 ICP，无故的多了 ICP 相关的判断，这应该是一个退化的问题，例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from icp where age=1 and name = &apos;a1&apos;;</span><br><span class="line">+----+-------------+-------+------+---------------+------+---------+-------------+------+-----------------------+</span><br><span class="line">| id | select_type | table | type | possible_keys | key  | key_len | ref         | rows | Extra                 |</span><br><span class="line">+----+-------------+-------+------+---------------+------+---------+-------------+------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | icp   | ref  | aind          | aind | 38      | const,const |    1 | Using index condition |</span><br><span class="line">+----+-------------+-------+------+---------------+------+---------+-------------+------+-----------------------+</span><br><span class="line">1 row in set (3.26 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>PS: engine condition pushdown 是 NDB 使用的，其它引擎不支持。</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/mysql-index-condition-pushdown/">http://xnerv.wang/mysql-index-condition-pushdown/</a></strong><br>
+Reprinted from: <a href="http://mysql.taobao.org/monthly/2015/12/08/" target="_blank" rel="noopener">Index Condition Pushdown (ICP)</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/Index-Condition-Pushdown/" rel="tag"># Index Condition Pushdown</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/introduction-of-innodb-transaction-lock/" rel="next" title="InnoDB 事务锁系统简介">
+                <i class="fa fa-chevron-left"></i> InnoDB 事务锁系统简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/what-set-names-does/" rel="prev" title="MySQL - set names 都做了什么">
+                MySQL - set names 都做了什么 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#icp-测试"><span class="nav-text">ICP 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#icp-原理"><span class="nav-text">ICP 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#icp-源码实现"><span class="nav-text">ICP 源码实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#icp-使用限制及问题"><span class="nav-text">ICP 使用限制及问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

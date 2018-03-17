@@ -1,0 +1,1187 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="This article is part of a series. You do not have to read them in order but I will be referring to topics and explanations in previous articles:  Implementing Your Own Transactions with MVCC SQL Trans">
+<meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL TRANSACTION ISOLATION LEVELS EXPLAINED">
+<meta property="og:url" content="http://xnerv.wang/sql-transaction-isolation-levels-explained/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="This article is part of a series. You do not have to read them in order but I will be referring to topics and explanations in previous articles:  Implementing Your Own Transactions with MVCC SQL Trans">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://postachio-images.s3.amazonaws.com/aa0e0e8e-5932-48c5-bbd5-bb782bc5caef/10b13ce3-f899-409d-8004-b28197b473c7/a3b0f2ca-fc22-4418-a86e-57a6d410a66b.png">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQL TRANSACTION ISOLATION LEVELS EXPLAINED">
+<meta name="twitter:description" content="This article is part of a series. You do not have to read them in order but I will be referring to topics and explanations in previous articles:  Implementing Your Own Transactions with MVCC SQL Trans">
+<meta name="twitter:image" content="http://postachio-images.s3.amazonaws.com/aa0e0e8e-5932-48c5-bbd5-bb782bc5caef/10b13ce3-f899-409d-8004-b28197b473c7/a3b0f2ca-fc22-4418-a86e-57a6d410a66b.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/sql-transaction-isolation-levels-explained/"/>
+
+
+
+
+
+  <title>SQL TRANSACTION ISOLATION LEVELS EXPLAINED | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/sql-transaction-isolation-levels-explained/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">SQL TRANSACTION ISOLATION LEVELS EXPLAINED</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T22:36:00+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This article is part of a series. You do not have to read them in order but I will be referring to topics and explanations in previous articles:</p>
+<ol>
+<li><a href="/implementing-your-own-transactions-with-mvcc">Implementing Your Own Transactions with MVCC</a></li>
+<li><strong>SQL Transaction Isolation Levels Explained</strong></li>
+<li><a href="/implementing-repeatable-read-and-serializable-transaction-isolation">Implementing Repeatable Read and Serializable Transaction Isolation</a></li>
+</ol>
+<a id="more"></a>
+<hr>
+<p><img src="http://postachio-images.s3.amazonaws.com/aa0e0e8e-5932-48c5-bbd5-bb782bc5caef/10b13ce3-f899-409d-8004-b28197b473c7/a3b0f2ca-fc22-4418-a86e-57a6d410a66b.png" alt=""></p>
+<h2 id="the-bad-stuff"><a class="header-anchor" href="#the-bad-stuff"></a>The Bad Stuff</h2>
+<p>Before I can explain what’s different about the isolation levels we have to understand what it is that can go wrong with concurrent transactions (more than one client viewing or modifying the data at the same time).</p>
+<p>Let’s say we have a table <code>users</code>:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Joe</td>
+<td>20</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Jill</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dirty-reads"><a class="header-anchor" href="#dirty-reads"></a>Dirty Reads</h3>
+<p>A <em>dirty read</em> is when the current transaction reads a row written by another uncommitted transaction that’s currently in-flight. For example:</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BEGIN;</code></td>
+<td><code>BEGIN;</code></td>
+</tr>
+<tr>
+<td><code>SELECT age FROM users WHERE id = 1; /* will read 20 */</code></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><code>UPDATE users SET age = 21 WHERE id = 1; /* No commit here */</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>SELECT age FROM users WHERE id = 1; /* will read 21 */</code></td>
+</tr>
+</tbody>
+</table>
+<p>Basically, if the database is not able to keep track of who is changing the data (by keeping multiple versions of the same row with different visibilities) then rows be read even through they should not yet be visible to that other transaction.</p>
+<h3 id="non-repeatable-reads"><a class="header-anchor" href="#non-repeatable-reads"></a>Non-repeatable Reads</h3>
+<p>A <em>non-repeatable read</em> occurs when the current transaction reads the same data but this time it is different. It is different because another transaction has been committed during the life of the current transaction:</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BEGIN;</code></td>
+<td><code>BEGIN;</code></td>
+</tr>
+<tr>
+<td><code>SELECT * FROM users WHERE id = 1;</code></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><code>UPDATE users SET age = 21 WHERE id = 1;</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>COMMIT;</code></td>
+</tr>
+<tr>
+<td><code>SELECT * FROM users WHERE id = 1; /* will read 21 */</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Basically, the database does not maintain what the transaction has <em>already seen</em> so each time the data is read (such as multiple <code>SELECT</code> statements in the same transaction) the same visibility check is done on those rows but some rows may have changed in the mean time.</p>
+<h3 id="phantom-reads"><a class="header-anchor" href="#phantom-reads"></a>Phantom Reads</h3>
+<p>A <em>phantom read</em> happens when the current transaction re-executes a query returning a set of rows that satisfy a search condition and finds that the set of rows satisfying the condition has changed due to another recently-committed transaction.</p>
+<table>
+<thead>
+<tr>
+<th>Transaction 1</th>
+<th>Transaction 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BEGIN;</code></td>
+<td><code>BEGIN;</code></td>
+</tr>
+<tr>
+<td><code>SELECT COUNT(*) FROM users WHERE age BETWEEN 10 AND 30; /* will return 5 */</code></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td><code>INSERT INTO users(id,name,age) VALUES ( 3, 'Bob', 27 );</code></td>
+</tr>
+<tr>
+<td></td>
+<td><code>COMMIT;</code></td>
+</tr>
+<tr>
+<td><code>SELECT COUNT(*) FROM users WHERE age BETWEEN 10 AND 30; /* will return 6 */</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>This can be thought of as a special type of non-repeatable read, but it is important to distinguish it as a different case because the possibility of it occurring depends on the isolation levels explained next.</p>
+<p>The distinction is that that the original rows are re-read correctly (even if they had been changed) but a new row (or rows) have been inserted into the <em>range</em> it previously selected. So it hasn’t broken the re-read rule, but the data returned is still different.</p>
+<h2 id="the-sql-standard"><a class="header-anchor" href="#the-sql-standard"></a>The SQL Standard</h2>
+<p>The SQL Standard defines four isolation levels which are described by what type of errors they are allowed to permit. It does not specify how the implementations themselves work.</p>
+<p>In most databases MVCC is used. Sometimes with some complex rules to handle higher isolation levels built on top. However, there are other mechanisms; SQLite3 use a separate journal, for example.</p>
+<ul>
+<li><strong>Read uncommitted</strong> permits dirty reads, non repeatable reads and phantom reads.</li>
+<li><strong>Read committed</strong> permits non repeatable reads and phantom reads.</li>
+<li><strong>Repeatable read</strong> permits only phantom reads.</li>
+<li><strong>Serializable</strong> does not permit any read errors.</li>
+</ul>
+<h3 id="read-uncommitted"><a class="header-anchor" href="#read-uncommitted"></a>Read Uncommitted</h3>
+<p>“Read uncommitted&quot; is the most loose transaction isolation and is in fact not even implemented in some databases because it is too loose to be useful. A transaction in this mode is susceptible to all types of read errors mentioned above since it is not required to even check if a row is committed or not.</p>
+<p>If the database itself was not able to keep multiple version of a row but you still wanted the virtual container of a transaction to be able to perform a <code>ROLLBACK</code> this might be your only choice.</p>
+<h3 id="read-committed"><a class="header-anchor" href="#read-committed"></a>Read Committed</h3>
+<p>“Read committed&quot; is the most common transaction isolation and usually is the default as it has the best balance between locking and performance. It will never read versions of rows that are currently uncommitted, however it is still susceptible to other transactions changing data between statements.</p>
+<h3 id="repeatable-read"><a class="header-anchor" href="#repeatable-read"></a>Repeatable Read</h3>
+<p>“Repeatable read&quot; ensures rows that have been read (rather than modified) will still be read, even if they are changed by other transactions. This provides an almost true snapshot of the data however it does incur overhead with locking and/or causing other transactions to be rolled back more commonly.</p>
+<h3 id="serializable"><a class="header-anchor" href="#serializable"></a>Serializable</h3>
+<p>In a perfect world (at least for a database) we would like only one client to be connected to the database at a any given time. This would guarantee there are no side effects between concurrent clients, since there are none.</p>
+<p>This is “Serializable&quot;, the most strict mode and works exactly like this - client perform transactions in serial.</p>
+<p>In practicality a database could not serve just one person at a time so some fancy internal algorithms are used to make sure that clients are not overlapping in anyway. This is tricky but means clients can concurrently work with the database but have the same guarantees as if the transactions were formed one after another.</p>
+<p>Depending on the database system it may rollback a transaction at the time of, or at the end of the transaction if it thinks the transaction isolation has been compromised. Applications that need this level of isolation should be built carefully so that they can always retry the transaction on failure.</p>
+<h2 id="database-vendors"><a class="header-anchor" href="#database-vendors"></a>Database Vendors</h2>
+<p>Here are some of the common database vendors and what levels of isolation they support.</p>
+<h3 id="db2"><a class="header-anchor" href="#db2"></a>DB2</h3>
+<p>DB2 supports all four database isolation levels, but has different names for each of the levels:</p>
+<ul>
+<li>Uncommitted read (UR) -&gt; Read uncommitted.</li>
+<li>Cursor stability (CS) -&gt; Read committed (default).</li>
+<li>Read stability (RS) -&gt; Repeatable read.</li>
+<li>Repeatable read (RR) -&gt; Serializable.</li>
+</ul>
+<p>Links:</p>
+<ul>
+<li><a href="http://www.ibm.com/support/knowledgecenter/SSEPGG_9.7.0/com.ibm.db2.luw.admin.perf.doc/doc/c0004121.html" target="_blank" rel="noopener">IBM Knowledge Center</a></li>
+</ul>
+<h3 id="derby"><a class="header-anchor" href="#derby"></a>Derby</h3>
+<p>Derby supports all four levels of isolation, with read committed being the default.</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://db.apache.org/derby/docs/10.3/devguide/cdevconcepts15366.html" target="_blank" rel="noopener">Isolation levels and concurrency</a></li>
+</ul>
+<h3 id="h2"><a class="header-anchor" href="#h2"></a>H2</h3>
+<p>H2 supports only three isolation levels; read uncommitted, read committed and serializable which can only be set at the connection level (not per transaction). The default is read committed.</p>
+<p>Links:</p>
+<ul>
+<li><a href="http://www.h2database.com/html/advanced.html#transaction_isolation" target="_blank" rel="noopener">H2 - Advanced</a></li>
+</ul>
+<h3 id="mysql-and-mariadb"><a class="header-anchor" href="#mysql-and-mariadb"></a>MySQL and MariaDB</h3>
+<p>When MySQL and MariaDB are using InnoDB they support all four transaction isolation levels with repeatable read as the default. Even though MySQL and MariaDB allow other pluggable engines, InnoDB is the most common when transactions are required and is usually the default engine on modern versions of either.</p>
+<p>The original engine, MyISAM does not support transactions but it still used and available. Transaction commands will be ignored rather than result in an error. This is effectively running a database in read uncommitted mode.</p>
+<p>Links:</p>
+<ol>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-transaction-isolation-levels.html" target="_blank" rel="noopener">MySQL :: MySQL 5.7 Reference Manual :: 15.5.2.1 Transaction Isolation Levels</a></li>
+<li><a href="https://mariadb.com/kb/en/mariadb/set-transaction/" target="_blank" rel="noopener">SET TRANSACTION - MariaDB Knowledge Base</a></li>
+</ol>
+<h3 id="oracle"><a class="header-anchor" href="#oracle"></a>Oracle</h3>
+<p>Oracle only supports read committed (default) and serializable.</p>
+<p>Links:</p>
+<ul>
+<li><a href="http://www.oracle.com/technetwork/issue-archive/2005/05-nov/o65asktom-082389.html" target="_blank" rel="noopener">Ask Tom: On Transaction Isolation Levels</a></li>
+</ul>
+<h3 id="postgresql"><a class="header-anchor" href="#postgresql"></a>PostgreSQL</h3>
+<p>PostgreSQL supports three levels; read committed, repeatable read and serializable. The syntax allows you to choose read read uncommitted but it will function as read committed.</p>
+<p>Read committed is the default.</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://www.postgresql.org/docs/9.1/static/transaction-iso.html" target="_blank" rel="noopener">PostgreSQL: Documentation: 9.1: Transaction Isolation</a></li>
+</ul>
+<h3 id="redshift"><a class="header-anchor" href="#redshift"></a>Redshift</h3>
+<p><a href="http://docs.aws.amazon.com/redshift/latest/mgmt/welcome.html" target="_blank" rel="noopener">Redshift</a> is a modified version of PostgreSQL that can only be used on <a href="https://aws.amazon.com" target="_blank" rel="noopener">Amazon Web Services (AWS)</a>. Redshift only supports serializable. Selecting a different isolation level will have no effect.</p>
+<p>Links:</p>
+<ul>
+<li><a href="http://docs.aws.amazon.com/redshift/latest/dg/r_BEGIN.html" target="_blank" rel="noopener">BEGIN - Amazon Redshift</a></li>
+</ul>
+<h3 id="sql-server"><a class="header-anchor" href="#sql-server"></a>SQL Server</h3>
+<p>Microsoft SQL Server (which is also commonly used as a backend for Microsoft Access instead of the in-built engine) supports all four transaction isolation levels with the default being read committed.</p>
+<p>SQL Server also has a fifth option called “snapshot&quot; which allows transactions to see a consistent read state. It is unclear if this is an alias of another isolation level or has a specific implementation.</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://msdn.microsoft.com/en-AU/library/ms173763.aspx" target="_blank" rel="noopener">SET TRANSACTION ISOLATION LEVEL (Transact-SQL)</a></li>
+</ul>
+<h3 id="sqlite3"><a class="header-anchor" href="#sqlite3"></a>SQLite3</h3>
+<p>The default implementation of SQLite3 (since you can compile it from source with lots of different options) only works in Serialized mode.</p>
+<p>Anyone that has dealt with SQLite3 a lot will understand that this can cause a lot of locking issues but it also the most safe safe considering all the mission-critical systems that SQLite3 is deployed in.</p>
+<p>Since v3.7.0 write-ahead logging (WAL) has been introduced to make concurrent environments work more like other database vendors.</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://www.sqlite.org/isolation.html" target="_blank" rel="noopener">Isolation In SQLite</a></li>
+<li><a href="https://www.sqlite.org/wal.html" target="_blank" rel="noopener">Write-Ahead Logging</a></li>
+</ul>
+<hr>
+<p>If your favourite database vendor is not listed, please let me know.</p>
+<h2 id="other-resources"><a class="header-anchor" href="#other-resources"></a>Other Resources</h2>
+<ul>
+<li><a href="https://github.com/ept/hermitage" target="_blank" rel="noopener">GitHub - ept/hermitage</a>: What are the differences between the transaction isolation levels in databases? This is a suite of test cases which differentiate isolation levels.</li>
+</ul>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/sql-transaction-isolation-levels-explained/">http://xnerv.wang/sql-transaction-isolation-levels-explained/</a></strong><br>
+Reprinted from: <a href="http://elliot.land/post/sql-transaction-isolation-levels-explained" target="_blank" rel="noopener">SQL TRANSACTION ISOLATION LEVELS EXPLAINED</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/SQL-Server/" rel="tag"># SQL Server</a>
+          
+            <a href="/tags/Transaction/" rel="tag"># Transaction</a>
+          
+            <a href="/tags/Isolation-Level/" rel="tag"># Isolation Level</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/implementing-repeatable-read-and-serializable-transaction-isolation/" rel="next" title="IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION">
+                <i class="fa fa-chevron-left"></i> IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/understanding-mysql-isolation-levels-repeatable-read/" rel="prev" title="Understanding MySQL Isolation Levels: Repeatable-Read">
+                Understanding MySQL Isolation Levels: Repeatable-Read <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#the-bad-stuff"><span class="nav-text">The Bad Stuff</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dirty-reads"><span class="nav-text">Dirty Reads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#non-repeatable-reads"><span class="nav-text">Non-repeatable Reads</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#phantom-reads"><span class="nav-text">Phantom Reads</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-sql-standard"><span class="nav-text">The SQL Standard</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#read-uncommitted"><span class="nav-text">Read Uncommitted</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#read-committed"><span class="nav-text">Read Committed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#repeatable-read"><span class="nav-text">Repeatable Read</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#serializable"><span class="nav-text">Serializable</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#database-vendors"><span class="nav-text">Database Vendors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#db2"><span class="nav-text">DB2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#derby"><span class="nav-text">Derby</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#h2"><span class="nav-text">H2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-and-mariadb"><span class="nav-text">MySQL and MariaDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#oracle"><span class="nav-text">Oracle</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#postgresql"><span class="nav-text">PostgreSQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redshift"><span class="nav-text">Redshift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sql-server"><span class="nav-text">SQL Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqlite3"><span class="nav-text">SQLite3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#other-resources"><span class="nav-text">Other Resources</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

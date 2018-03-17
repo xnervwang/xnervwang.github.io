@@ -1,0 +1,2308 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="xnerv, xnervwang, Xnerv Surveys, Xnerv Blog, xnerv.wang" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C++、数据库引擎开发、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度等大型互联网企业工作，目前奋斗在微软，从事SQL Server和MySQL的数据库引擎开发。">
+<meta name="keywords" content="xnerv, xnervwang, Xnerv Surveys, Xnerv Blog, xnerv.wang">
+<meta property="og:type" content="website">
+<meta property="og:title" content="XNERV SURVEYS">
+<meta property="og:url" content="http://xnerv.wang/page/8/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C++、数据库引擎开发、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度等大型互联网企业工作，目前奋斗在微软，从事SQL Server和MySQL的数据库引擎开发。">
+<meta property="og:locale" content="zh-Hans">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XNERV SURVEYS">
+<meta name="twitter:description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C++、数据库引擎开发、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度等大型互联网企业工作，目前奋斗在微软，从事SQL Server和MySQL的数据库引擎开发。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/page/8/"/>
+
+
+
+
+
+  <title>XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/memory-allocation-mechanism-in-linux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/memory-allocation-mechanism-in-linux/" itemprop="url">Memory Allocation Mechanism in Linux</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-20T00:00:00+08:00">
+                2014-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Each Linux process has its own dedicated address space dynamically translated into physical memory address space by the MMU (and the kernel) [1]. To each individual process, the view is as if it alone has full access to the system’s physical memory [2]. More importantly, the address space of even a single process can be much larger than physical memory. However, the memory usage of each process is bounded with Linux resource limitation (via setrlimit()).</p>
+<center>
+<img src="/assets/memory-allocation-mechanism-in-linux/linux_malloc.png" alt="linux malloc">
+</center>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/memory-allocation-mechanism-in-linux/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/debugging-alibaba-softwares/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/debugging-alibaba-softwares/" itemprop="url">在调试器中看阿里的软件兵团</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-16T14:48:00+08:00">
+                2014-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WinDbg/" itemprop="url" rel="index">
+                    <span itemprop="name">WinDbg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>摘要：为了抢占用户桌面，很多客户端软件都是主动送上门的，不需要花钱购买。可能只要你一个认可，就在电脑上安家落户。住下来之后，有些软件偶尔动动，但也有些高调强势，让你不得不注意到它，本文要谈的就是这样的软件。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/debugging-alibaba-softwares/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/coroutine-is-a-type-of-user-mode-thread/" itemprop="url">【协程原理】 - 协程不过是用户态的线程</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-10T00:00:00+08:00">
+                2014-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/操作系统/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据的区域，相当于高级语言里的变量。但是有一个寄存器是特殊的，它存放了cpu当前正在执行的指令的内存地址(Instruction Register)。一个高级语言中的函数一般会被编译成指令存放在一段连续的内存空间中（data segment）。那么所谓函数执行到了第几行这样的信息其实就是保存在这个Instruction Register中的。另外一个很特殊的寄存器是Stack Register，它其中存放的内存地址指向的内存区域用于函数之间传递参数和返回值，以及存放一个函数内的局部变量。如果不考虑现代计算机cpu中各种各样其他存放中间结果的寄存器，理论上保存了Instruction Register（执行到哪儿了）和Stack Register（堆栈上的变量）就保存了一个函数的当前执行状态，分别是函数当前执行到了哪，以及这个函数局部变量所代表的当前state。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/coroutine-is-a-type-of-user-mode-thread/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/how-to-implement-a-malloc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/how-to-implement-a-malloc/" itemprop="url">如何实现一个malloc</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-08-19T00:00:00+08:00">
+                2014-08-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>任何一个用过或学过C的人对malloc都不会陌生。大家都知道malloc可以分配一段连续的内存空间，并且在不再使用时可以通过free释放掉。但是，许多程序员对malloc背后的事情并不熟悉，许多人甚至把malloc当做操作系统所提供的系统调用或C的关键字。实际上，malloc只是C的标准库中提供的一个普通函数，而且实现malloc的<strong>基本</strong>思想并不复杂，任何一个对C和操作系统有些许了解的程序员都可以很容易理解。</p>
+<p>这篇文章通过实现一个简单的malloc来描述malloc背后的机制。当然与现有C的标准库实现（例如glibc）相比，我们实现的malloc并不是特别高效，但是这个实现比目前真实的malloc实现要简单很多，因此易于理解。重要的是，这个实现和真实实现在基本原理上是一致的。</p>
+<p>这篇文章将首先介绍一些所需的基本知识，如操作系统对进程的内存管理以及相关的系统调用，然后逐步实现一个简单的malloc。为了简单起见，这篇文章将只考虑x86_64体系结构，操作系统为Linux。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/how-to-implement-a-malloc/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/16-useful-online-tools/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/16-useful-online-tools/" itemprop="url">16个很有用的在线工具</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-07-31T18:49:00+08:00">
+                2014-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/程序员生活/" itemprop="url" rel="index">
+                    <span itemprop="name">程序员生活</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="1-explainshell-com-命令解释"><a class="header-anchor" href="#1-explainshell-com-命令解释"></a>1. <a href="http://explainshell.com/" target="_blank" rel="noopener">ExplainShell.com</a> 命令解释</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846578997821.jpg" alt="explainshell"></p>
+<p>对于 Linux 用户来说每天都会写各种命令和脚本，那么你可以使用这个网站工具来查看命令式如何工作的，这样可以避免不必要的错误出现；也是一个很好的学习命令的方式。</p>
+<h2 id="2-bashrcgenerator-com-定制个性命令提示符"><a class="header-anchor" href="#2-bashrcgenerator-com-定制个性命令提示符"></a>2. <a href="http://simlinux.com/BashrcGenerator.com/" target="_blank" rel="noopener">BashrcGenerator.com</a> 定制个性命令提示符</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846584158262.jpg" alt="BashrcGenerator"></p>
+<p>简单说就是个性化生成命令提示符，可将生成的代码写入到用户家目录的 .bashrc 或者可以设置全局变量文件/etc/profile 对所有用户生效。</p>
+<p>可参考：<a href="http://stackoverflow.com/questions/4133904/ps1-line-with-git-current-branch-and-colors" target="_blank" rel="noopener">http://stackoverflow.com/questions/4133904/ps1-line-with-git-current-branch-and-colors</a></p>
+<h2 id="3-vim-adventures-com-通过-rpg-游戏练习-vim-使用"><a class="header-anchor" href="#3-vim-adventures-com-通过-rpg-游戏练习-vim-使用"></a>3. <a href="http://vim-adventures.com/" target="_blank" rel="noopener">Vim-adventures.com</a> 通过 RPG 游戏练习 VIM 使用</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846586021207.jpg" alt="Vim-adventures"></p>
+<p>通过 RPG 游戏练习 VIM 编辑器的使用，使用h,j,k,l字符移动人物来获得新的命令能力和搜集钥匙，查看帮助可使用:help;赶脚这个非常 cool!</p>
+<h2 id="4-try-github-在线学习-git-版本控制"><a class="header-anchor" href="#4-try-github-在线学习-git-版本控制"></a>4. <a href="https://try.github.io/levels/1/challenges/2" target="_blank" rel="noopener">Try Github</a> 在线学习 Git 版本控制</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846588214907.jpg" alt="Try Github"></p>
+<p>十五分钟学会 Git，很明显这个网站模拟了一个控制台，以很时尚的界面让人对 Git 不再望而生畏。</p>
+<h2 id="5-shortcutfoo-com"><a class="header-anchor" href="#5-shortcutfoo-com"></a>5. <a href="http://shortcutfoo.com/" target="_blank" rel="noopener">Shortcutfoo.com</a></h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846584465721.jpg" alt="Shortcutfoo.com"></p>
+<p>是一个练习快捷键的好地方，涵盖了 vim、sublime、emacs、git 等软件的快捷使用方式和友好的说明。</p>
+<h2 id="6-github-free-programming-books-免费编程书籍"><a class="header-anchor" href="#6-github-free-programming-books-免费编程书籍"></a>6. <a href="https://github.com/geekwolf/free-programming-books" target="_blank" rel="noopener">GitHub Free Programming Books</a> 免费编程书籍</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846583999735.jpg" alt="GitHub Free Programming Books"></p>
+<p>以 Github 管理的方式搜集了免费的编程和系统管理等书籍，给作者点 1024 个赞~~，另外连接是 fork 原作者，后续增加中文书籍。</p>
+<h2 id="7-collabedit-com-实时文本交互聊天"><a class="header-anchor" href="#7-collabedit-com-实时文本交互聊天"></a>7. <a href="http://collabedit.com/" target="_blank" rel="noopener">Collabedit.com</a> 实时文本交互聊天</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846591809862.jpg" alt="Collabedit.com">   先说下使用，你可以创建一个文档<code>http://collabedit.com/yb22u</code>填写相关的用户名和选择语言；然后可以将此文档地址发给另一个人，那么互相之间就可以实时看到对方的输入，有高亮语法；使用场合嘛，比如通过 collabedit 可以考量对方编程能力等。</p>
+<h2 id="8-cpp-sh-在线编写运行分享-c-代码编辑器"><a class="header-anchor" href="#8-cpp-sh-在线编写运行分享-c-代码编辑器"></a>8. <a href="http://cpp.sh/" target="_blank" rel="noopener">Cpp.sh</a> 在线编写运行分享 C++ 代码编辑器</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846592741835.jpg" alt="Cpp.sh"></p>
+<p>可在线编辑运行 C++ 代码，亦可 Ctrl+Z 生成 url 分享给好友。</p>
+<h2 id="9-copy-sh-浏览器运行虚拟机"><a class="header-anchor" href="#9-copy-sh-浏览器运行虚拟机"></a>9. <a href="http://copy.sh/v24/" target="_blank" rel="noopener">Copy.sh</a> 浏览器运行虚拟机</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846596336791.jpg" alt="Copy.sh"></p>
+<p>又一个非常 crazy 的工具，在线运行虚拟机，可以选择下载虚拟机镜像也可以上传自己的 iso，<a href="http://copy.sh" target="_blank" rel="noopener">copy.sh</a> 在线运行虚拟机源码：<a href="https://github.com/copy/v86" target="_blank" rel="noopener">https://github.com/copy/v86</a>；</p>
+<h2 id="10-commandlinefu-com-命令或记录网站"><a class="header-anchor" href="#10-commandlinefu-com-命令或记录网站"></a>10. <a href="http://commandlinefu.com/" target="_blank" rel="noopener">Commandlinefu.com</a> 命令或记录网站</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311846598377262.jpg" alt="Commandlinefu.com"></p>
+<p>做运维的应该都知道这个网站，可以分享自己的 CLI 库，也可以学习借鉴别人的命令脚本。</p>
+<h2 id="11-alias-sh-命令别名数据库"><a class="header-anchor" href="#11-alias-sh-命令别名数据库"></a>11. <a href="http://alias.sh/" target="_blank" rel="noopener">Alias.sh</a> 命令别名数据库</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311847005875633.jpg" alt="Alias.sh"></p>
+<p>有点类似 commandlinefu 了，可以通过这个网站借鉴获取和分享有用的命令别名。</p>
+<p>比如 lr 别名定义了显示目录树。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">alias</span> lr=<span class="string">'ls -R  grep ":$"  sed -e '</span>\<span class="string">''</span>s/:$//<span class="string">'\'</span><span class="string">' -e '</span>\<span class="string">''</span>s/[^-][^\/]*\//--/g<span class="string">'\'</span><span class="string">' -e '</span>\<span class="string">''</span>s/^/   /<span class="string">'\'</span><span class="string">' -e '</span>\<span class="string">''</span>s/-//<span class="string">'\'</span><span class="string">''</span></span><br></pre></td></tr></table></figure>
+<h2 id="12-distrowatch-com-提供了-linux-发行版的详细信息"><a class="header-anchor" href="#12-distrowatch-com-提供了-linux-发行版的详细信息"></a>12. <a href="http://distrowatch.com/" target="_blank" rel="noopener">Distrowatch.com</a> 提供了 Linux 发行版的详细信息</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311847005717105.jpg" alt="Distrowatch.com"></p>
+<p>通过 Distrowath 不仅可以精确的查看互联网都有哪些流行的 Linux 发行版，还可以查看每个发行版的相关信息如默认桌面环境、默认应用程序及镜像的下载链接；堪称 Linux 的数据库。</p>
+<h2 id="13-linuxmanpages-com-在线查看命令帮助"><a class="header-anchor" href="#13-linuxmanpages-com-在线查看命令帮助"></a>13. <a href="http://linuxmanpages.com/" target="_blank" rel="noopener">Linuxmanpages.com</a> 在线查看命令帮助</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311847008525319.jpg" alt="Linuxmanpages.com"></p>
+<p>相当于系统内部的 man、help、info 等的综合吧。</p>
+<h2 id="14-awesomecow-com-适用-linux-环境的软件搜索引擎-awesomecow-com"><a class="header-anchor" href="#14-awesomecow-com-适用-linux-环境的软件搜索引擎-awesomecow-com"></a>14. <a href="http://awesomecow.com/" target="_blank" rel="noopener">AwesomeCow.com</a> 适用 Linux 环境的软件搜索引擎**<img src="https:////images0.cnblogs.com/news/66372/201407/311847017123189.jpg" alt="AwesomeCow.com"></h2>
+<p>如果有款 win 下好用的软件想在 linux 下使用，或许可以通过 AwesomeCow 找到与其类似或者一样的软件，或者通过 WINE。</p>
+<h2 id="15-penguspy-com-linux-好玩游戏合集"><a class="header-anchor" href="#15-penguspy-com-linux-好玩游戏合集"></a>15. <a href="http://penguspy.com/" target="_blank" rel="noopener">PenguSpy.com</a> Linux 好玩游戏合集</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311847024774789.jpg" alt="PenguSpy.com"></p>
+<h2 id="16-linux-cross-reference-by-free-electrons-在线查看内核代码及不同版本的差异"><a class="header-anchor" href="#16-linux-cross-reference-by-free-electrons-在线查看内核代码及不同版本的差异"></a>16. <a href="http://lxr.free-electrons.com/" target="_blank" rel="noopener">Linux Cross Reference by Free Electrons</a> 在线查看内核代码及不同版本的差异</h2>
+<p><img src="https:////images0.cnblogs.com/news/66372/201407/311847033214132.jpg" alt="Linux Cross Reference by Free Electrons"></p>
+<p>对于内核开发者或许有很大的帮助。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/16-useful-online-tools/">http://xnerv.wang/16-useful-online-tools/</a></strong><br>
+转载自：<a href="https://news.cnblogs.com/n/214828/" target="_blank" rel="noopener">16个很有用的在线工具</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/study-consistent-hashing-in-5min/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/study-consistent-hashing-in-5min/" itemprop="url">每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-04-11T00:21:03+08:00">
+                2014-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>一致性哈希算法在1997年由麻省理工学院提出的一种分布式哈希（DHT）实现算法，设计目标是为了解决因特网中的热点(Hot spot)问题，初衷和CARP十分类似。一致性哈希修正了CARP使用的简 单哈希算法带来的问题，使得分布式哈希（DHT）可以在P2P环境中真正得到应用。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/study-consistent-hashing-in-5min/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/transaction-processing-of-distributed-system/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/transaction-processing-of-distributed-system/" itemprop="url">分布式系统的事务处理</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-20T00:00:00+08:00">
+                2014-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p><img src="https://coolshell.cn/wp-content/uploads/2014/01/trade-off.jpg" alt="">当我们在生产线上用一台服务器来提供数据服务的时候，我会遇到如下的两个问题：</p>
+<p>1）一台服务器的性能不足以提供足够的能力服务于所有的网络请求。</p>
+<p>2）我们总是害怕我们的这台服务器停机，造成服务不可用或是数据丢失。</p>
+<p>于是我们不得不对我们的服务器进行扩展，加入更多的机器来分担性能上的问题，以及来解决单点故障问题。 通常，我们会通过两种手段来扩展我们的数据服务：</p>
+<p>1）<strong>数据分区</strong>：就是把数据分块放在不同的服务器上（如：uid % 16，一致性哈希等）。</p>
+<p>2）<strong>数据镜像</strong>：让所有的服务器都有相同的数据，提供相当的服务。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/transaction-processing-of-distributed-system/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/memory-allocation-buddy-system-and-slab-allocator/" itemprop="url">内存分配-----伙伴算法和slab算法</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-01-02T09:39:03+08:00">
+                2014-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="内存管理问题"><a class="header-anchor" href="#内存管理问题"></a>内存管理问题</h2>
+<p>内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题):<br>
+内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并.</p>
+<p>解决方法:</p>
+<ol>
+<li>小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法)</li>
+<li>伙伴算法.</li>
+<li>slab算法.</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/memory-allocation-buddy-system-and-slab-allocator/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/everything-you-always-wanted-to-know-about-fsync/" itemprop="url">Everything You Always Wanted to Know About Fsync()</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-15T00:00:00+08:00">
+                2013-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>And then the developer wondered:</p>
+<blockquote>
+<p><em>is my file properly sync’ed on disk ?</em></p>
+</blockquote>
+<p>You probably know <strong>more or less</strong> how databases (or things that look like one) store their data on disk in a <strong>permanent</strong> and <strong>safe</strong> way. Or at least, you know the basic principles. Or not ?</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/everything-you-always-wanted-to-know-about-fsync/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/your-visual-how-to-guide-for-selinux-policy-enforcement/" itemprop="url">Your visual how-to guide for SELinux policy enforcement</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-13T00:00:00+08:00">
+                2013-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="https://opensource.com/sites/default/files/styles/image-full-size/public/lead-images/selinux_rules_lead_image.png?itok=N4TKqxei" alt=""><br>
+<em><strong>Image by</strong> : <a href="http://opensource.com" target="_blank" rel="noopener">opensource.com</a></em></p>
+<p>We are celebrating the SELinux 10th year anversary this year. Hard to believe it. SELinux was first introduced in Fedora Core 3 and later in Red Hat Enterprise Linux 4. For those who have never used SELinux, or would like an explanation…</p>
+<p>SElinux is a labeling system. Every process has a label. Every file/directory object in the operating system has a label. Even network ports, devices, and potentially hostnames have labels assigned to them. We write rules to control the access of a process label to an a object label like a file. We call this <em>policy</em>. The kernel enforces the rules. Sometimes this enforcement is called Mandatory Access Control (MAC).</p>
+<p>The owner of an object does not have discretion over the security attributes of a object. Standard Linux access control, owner/group + permission flags like rwx, is often called Discretionary Access Control (DAC). SELinux has no concept of UID or ownership of files. Everything is controlled by the labels. Meaning an SELinux system can be setup without an all powerful root process.</p>
+<p><strong>Note:</strong> _SELinux does not let you side step DAC Controls. SELinux is a parallel enforcement model. An application has to be allowed by BOTH SELinux and DAC to do certain activities. This can lead to confusion for administrators because the process gets Permission Denied. Administrators see Permission Denied means something is wrong with DAC, not SELinux labels.</p>
+<h3 id="type-enforcement"><a class="header-anchor" href="#type-enforcement"></a>Type enforcement</h3>
+<p>Lets look a little further into the labels. The SELinux primary model or enforcement is called <em>type enforcement</em>. Basically this means we define the label on a process based on its type, and the label on a file system object based on its type.</p>
+<p><em>Analogy</em></p>
+<p>Imagine a system where we define types on objects like cats and dogs. A cat and dog are process types.</p>
+<p><em>*all cartoons by <a href="https://opensource.com/users/mairin" title="profile on Opensource.com" target="_blank" rel="noopener">Máirín Duffy</a></em></p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_01_catdog.png" alt="Image showing a cartoon of a cat and dog."></p>
+<p>We have a class of objects that they want to interact with which we call food. And I want to add types to the food, <em>cat_food</em> and <em>dog_food</em>.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_03_foods.png" alt="Cartoon Cat eating Cat Food and Dog eating Dog Food"></p>
+<p>As a policy writer, I would say that a dog has permission to eat <em>dog_chow</em> food and a cat has permission to eat <em>cat_chow</em> food. In SELinux we would write this rule in policy.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_04_policy.png" alt="allow cat cat_chow:food eat; allow dog dog_chow:food eat" title="SELinux rule"></p>
+<p>allow cat cat_chow:food eat;</p>
+<p>allow dog dog_chow:food eat;</p>
+<p>With these rules the kernel would allow the cat process to eat food labeled <em>cat_chow</em> and the dog to eat food labeled <em>dog_chow</em>.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_02_eat.png" alt="Cartoon Cat eating Cat Food and Dog eating Dog Food"></p>
+<p>But in an SELinux system everything is denied by default. This means that if the dog process tried to eat the <em>cat_chow</em>, the kernel would prevent it.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_06_tux-dog-leash.png" alt=""></p>
+<p>Likewise cats would not be allowed to touch dog food.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_07_tux-cat-no.png" alt="Cartoon cat not allowed to eat dog fooda" title="Cartoon cat not allowed to eat dog fooda"></p>
+<p><em>Real world</em></p>
+<p>We label Apache processes as <em>httpd_t</em> and we label Apache content as <em>httpd_sys_content_t</em> and <em>httpd_sys_content_rw_t</em>. Imagine we have credit card data stored in a mySQL database which is labeled <em>msyqld_data_t</em>. If an Apache process is hacked, the hacker could get control of the <em>httpd_t process</em> and would be allowed to read <em>httpd_sys_content_t</em> files and write to <em>httpd_sys_content_rw_t</em>. But the hacker would not be allowed to read the credit card data (<em>mysqld_data_t</em>) even if the process was running as root. In this case SELinux has mitigated the break in.</p>
+<h3 id="mcs-enforcement"><a class="header-anchor" href="#mcs-enforcement"></a>MCS enforcement</h3>
+<p>_Analogy _</p>
+<p>Above, we typed the dog process and cat process, but what happens if you have multiple dogs processes: Fido and Spot. You want to stop Fido from eating Spot’s <em>dog_chow</em>.</p>
+<p><img src="https://opensource.com/sites/default/files/resize/images/life-uploads/mcs-enforcement_02_fido-eat-spot-food-500x251.png" alt="SELinux rule" title="SELinux rule"></p>
+<p>One solution would be to create lots of new types, like <em>Fido_dog</em> and <em>Fido_dog_chow</em>. But, this will quickly become unruly because all dogs have pretty much the same permissions.</p>
+<p>To handle this we developed a new form of enforcement, which we call Multi Category Security (MCS). In MCS, we add another section of the label which we can apply to the dog process and to the dog_chow food. Now we label the dog process as <em>dog:random1</em> (Fido) and <em>dog:random2</em> (Spot).</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_01_fido-spot.png" alt="Cartoon of two dogs fido and spot"></p>
+<p>We label the dog chow as <em>dog_chow:random1 (Fido)</em> and <em>dog_chow:random2</em> (Spot).</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_03_foods.png" alt="SELinux rule" title="SELinux rule"></p>
+<p>MCS rules say that if the type enforcement rules are OK and the random MCS labels match exactly, then the access is allowed, if not it is denied.</p>
+<p>Fido (dog:random1) trying to eat <em>cat_chow:food</em> is denied by type enforcement.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_04-bad-fido-cat-chow.png" alt="Cartoon of Kernel (Penquin) holding leash to prevent Fido from eating cat food."></p>
+<p>Fido (dog:random1) is allowed to eat <em>dog_chow:random1.</em></p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_05_fido-eat-fido-food.png" alt="Cartoon Fido happily eating his dog food"></p>
+<p>Fido (dog:random1) denied to eat spot’s (<em>dog_chow:random2</em>) food.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_06_fido-no-spot-food.png" alt="Cartoon of Kernel (Penquin) holding leash to prevent Fido from eating spots dog food."></p>
+<p><em>Real world</em></p>
+<p>In computer systems we often have lots of processes all with the same access, but we want them separated from each other. We sometimes call this a <em>multi-tenant environment</em>. The best example of this is virtual machines. If I have a server running lots of virtual machines, and one of them gets hacked, I want to prevent it from attacking the other virtual machines and virtual machine images. But in a type enforcement system the KVM virtual machine is labeled <em>svirt_t</em> and the image is labeled <em>svirt_image_t</em>. We have rules that say <em>svirt_t</em> can read/write/delete content labeled <em>svirt_image_t</em>. With libvirt we implemented not only type enforcement separation, but also MCS separation. When libvirt is about to launch a virtual machine it picks out a random MCS label like <em>s0:c1,c2</em>, it then assigns the <em>svirt_image_t:s0:c1,c2</em> label to all of the content that the virtual machine is going to need to manage. Finally, it launches the virtual machine as <em>svirt_t:s0:c1,c2</em>. Then, the SELinux kernel controls that <em>svirt_t:s0:c1,c2</em> can not write to <em>svirt_image_t:s0:c3,c4</em>, even if the virtual machine is controled by a hacker and takes it over. Even if it is running as root.</p>
+<p>We use <a href="http://people.fedoraproject.org/~dwalsh/SELinux/Presentations/openshift_selinux.ogv" title="SELinux and OpenShift" target="_blank" rel="noopener">similar separation</a> in OpenShift. Each gear (user/app process)runs with the same SELinux type (openshift_t). Policy defines the rules controlling the access of the gear type and a unique MCS label to make sure one gear can not interact with other gears.</p>
+<p>Watch <a href="http://people.fedoraproject.org/~dwalsh/SELinux/Presentations/openshift_selinux.ogv" title="Fedora Project: Openshift gear becomes root" target="_blank" rel="noopener">this short video</a> on what would happen if an Openshift gear became root.</p>
+<h3 id="mls-enforcement"><a class="header-anchor" href="#mls-enforcement"></a>MLS enforcement</h3>
+<p>Another form of SELinux enforcement, used much less frequently, is called Multi Level Security (MLS); it was developed back in the 60s and is used mainly in trusted operating systems like Trusted Solaris.</p>
+<p>The main idea is to control processes based on the level of the data they will be using. A <em>secret</em> process can not read <em>top secret</em> data.</p>
+<p>MLS is very similar to MCS, except it adds a concept of dominance to enforcement. Where MCS labels have to match exactly, one MLS label can dominate another MLS label and get access.</p>
+<p><em>Analogy</em></p>
+<p>Instead of talking about different dogs, we now look at different breeds. We might have a Greyhound and a Chihuahua.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_01_chigrey.png" alt="Cartoon of a Greyhound and a Chihuahua"></p>
+<p>We might want to allow the Greyhound to eat any dog food, but a Chihuahua could choke if it tried to eat Greyhound dog food.</p>
+<p>We want to label the Greyhound as <em>dog:Greyhound</em> and his dog food as _dog_chow:Greyhound, _and label the Chihuahua as <em>dog:Chihuahua</em> and his food as <em>dog_chow:Chihuahua</em>.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_04_mlstypes.png" alt="Cartoon of a Greyhound dog food and a Chihuahua dog food."></p>
+<p>With the MLS policy, we would have the MLS Greyhound label dominate the Chihuahua label. This means <em>dog:Greyhound</em> is allowed to eat _dog_chow:Greyhound _and <em>dog_chow:Chihuahua</em>.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_05_chigreyeating.png" alt="SELinux rule" title="SELinux rule"></p>
+<p>But <em>dog:Chihuahua</em> is not allowed to eat <em>dog_chow:Greyhound</em>.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_03_chichoke.png" alt="Cartoon of Kernel (Penquin) stopping the Chihahua from eating the greyhound food.  Telling him it would be a big too beefy for him."><br>
+Of course, <em>dog:Greyhound</em> and <em>dog:Chihuahua</em> are still prevented from eating <em>cat_chow:Siamese</em> by type enforcement, even if the MLS type Greyhound dominates Siamese.</p>
+<p><img src="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_06_nocatchow.png" alt="Cartoon of Kernel (Penquin) holding leash to prevent both dogs from eating cat food."></p>
+<p><em>Real world</em></p>
+<p>I could have two Apache servers: one running as <em>httpd_t:TopSecret</em> and another running as <em>httpd_t:Secret</em>. If the Apache process <em>httpd_t:Secret</em> were hacked, the hacker could read <em>httpd_sys_content_t:Secret</em> but would be prevented from reading <em>httpd_sys_content_t:TopSecret</em>.</p>
+<p>However, if the Apache server running <em>httpd_t:TopSecret</em> was hacked, it could read <em>httpd_sys_content_t:Secret data</em> as well as <em>httpd_sys_content_t:TopSecret</em>.</p>
+<p>We use the MLS in military environments where a user might only be allowed to see <em>secret</em> data, but another user on the same system could read <em>top secret</em> data.</p>
+<h3 id="conclusion"><a class="header-anchor" href="#conclusion"></a>Conclusion</h3>
+<p>SELinux is a powerful labeling system, controlling access granted to individual processes by the kernel. The primary feature of this is type enforcement where rules define the access allowed to a process is allowed based on the labeled type of the process and the labeled type of the object. Two additional controls have been added to separate processes with the same type from each other called MCS, total separtion from each other, and MLS, allowing for process domination.</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/">http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</a></strong><br>
+Reprinted from: <a href="https://opensource.com/business/13/11/selinux-policy-guide" target="_blank" rel="noopener">Your visual how-to guide for SELinux policy enforcement</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+  </section>
+
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

@@ -1,0 +1,995 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Introduction Snapshot Isolation level was introduced in SQL Server 2005 and has been available ever since. Snapshot isolation levels improve performance but there are some things to take into consider">
+<meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Snapshot Isolation Level in SQL Server - What, Why and How - Part 1">
+<meta property="og:url" content="http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Introduction Snapshot Isolation level was introduced in SQL Server 2005 and has been available ever since. Snapshot isolation levels improve performance but there are some things to take into consider">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Snapshot Isolation Level in SQL Server - What, Why and How - Part 1">
+<meta name="twitter:description" content="Introduction Snapshot Isolation level was introduced in SQL Server 2005 and has been available ever since. Snapshot isolation levels improve performance but there are some things to take into consider">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/"/>
+
+
+
+
+
+  <title>Snapshot Isolation Level in SQL Server - What, Why and How - Part 1 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Snapshot Isolation Level in SQL Server - What, Why and How - Part 1</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T00:37:00+08:00">
+                2018-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="introduction"><a class="header-anchor" href="#introduction"></a>Introduction</h2>
+<p><a href="http://msdn.microsoft.com/en-us/library/tcbchxcb(v=vs.80).aspx" target="_blank" rel="noopener">Snapshot Isolation</a> level was introduced in SQL Server 2005 and has been available ever since. Snapshot isolation levels improve performance but there are some things to take into consideration when using this feature. Some people use it frequently as it minimizes blocking and improves performance/concurrency without knowing its impact on maintaining versions in tempdb, whereas some people stay away from it because of this extra overhead. Some people get confused about the two variants of snapshot isolation level (Read Committed Snapshot Isolation (RCSI) and Snapshot Isolation (SI)) and use one where the other is needed or vice versa.</p>
+<p>In this article series, I am going to discuss what snapshot isolation levels are, their variants, why and when we should use them and how we should start using this feature with examples.</p>
+<a id="more"></a>
+<h2 id="understanding-snapshot-isolation-level"><a class="header-anchor" href="#understanding-snapshot-isolation-level"></a>Understanding Snapshot Isolation Level</h2>
+<p>Isolation level controls how two or more transactions running simultaneously should be isolated from each other in terms of locking and blocking resources. Isolation level determines the level of concurrency and data consistency. Prior to SQL Server we had four isolation levels as briefly discussed below:</p>
+<ul>
+<li><strong>Read Uncommitted</strong> – The transaction that uses this isolation level neither acquires shared locks to prevent others from modifying the data nor is blocked by conflicting locks acquired by other transactions. As this transaction can see the data that has been changed by other transactions but has not been committed, there is a possibility of dirty reads. This isolation level assures higher concurrency at the cost of data consistency.</li>
+<li><strong>Read Committed</strong> – This is the default transaction isolation level in SQL Server and prevents dirty reads by not allowing reading of modified but not yet committed data by other transactions in the current transaction. A transaction with this isolation level acquires shared locks to prevent other transactions from modifying the data during read operation by that transaction. As a shared lock can be acquired only if there is no exclusive lock (needed for data modification) by other transactions, it ensures it reads only committed data.</li>
+<li><strong>Repeatable Read</strong> – A transaction with Read Committed isolation level might face a problem of repeatable read, which means in a single transaction two data reads might see different sets of data if the data is changed between these two data reads. This happens as shared lock is acquired only while data is processed and released immediately after it. In other words, after the first data read the shared lock will be released and if the other transaction modifies the data (as other transactions can acquire exclusive locks) before a subsequent data read, the subsequent data read will see a different set of data than the previous data read.</li>
+</ul>
+<p>To avoid a repeatable read issue, you can use Repeatable Read isolation level with your transaction. The difference between Read Committed and Repeatable Read is, in the Read Committed isolation level the shared lock is released once the data gets processed without waiting for transaction completion whereas in Repeatable Read isolation levels the shared lock is held until the transaction completes either by committing or roll backing. Of course holding the shared lock till the end of the transaction improves the data consistency but reduces concurrency as well.</p>
+<ul>
+<li><strong>Serializable</strong> – Even though Repeatable Read isolation level provides consistency in repeatable reads, there is still the possibility of phantom read ( Phantom read means two reads from a single transaction return a different number of records even though they use exactly same predicates).</li>
+</ul>
+<p>Serializable isolation level provides the highest level of data consistency but at the cost of greatly reduced concurrency. To avoid phantom, it uses range locks in the range of key values that match predicates of each statement executed in the current transaction. This way this isolation level blocks other transactions from inserting or updating any rows, which qualify the predicates used in the current transaction and hence the current transaction will keep on getting exactly the same records in the current transaction for the query. Please note the range locks are acquired and held till the completion of the transaction and hence this isolation is most restrictive and should be used only when absolutely necessary.</p>
+<p>If you notice, in all of the above isolation levels (except in the case of Read Uncommitted where there is a possibility of dirty reads anyway), the data writers (exclusive lock) block data readers (shared lock) and data readers block data writers. SQL Server 2005 introduced two new snapshot based isolation levels. The idea behind these isolation levels is to not let data writers block data readers and vice versa. These new snapshot isolation levels use a row versioning concept where they maintain the version of previously committed data in version store (tempdb) and hence it allows data readers to continue reading the older committed/consistent version of data before the current transaction/statement began, even though current version is locked and being changed by other data writers.</p>
+<h2 id="why-when-and-where-should-we-use-snapshot-isolation-levels"><a class="header-anchor" href="#why-when-and-where-should-we-use-snapshot-isolation-levels"></a>Why, When and Where Should We Use Snapshot Isolation Levels?</h2>
+<p>When using snapshot isolation levels, when the same data is modified by many data writers, SQL Server might need to maintain multiple versions of the old data and hence proper envisioning and planning needs to be done for the tempdb database size and storage before utilizing this feature. SQL Server needs to maintain versions in version store as long as they might be needed by currently running operations and if they are not needed they are removed from the version store by the SQL Server.</p>
+<p>When you use snapshot (how to use is discussed in the next section) isolation levels, any update (please note many updates to the same data in a single transaction does not create multiple versions but rather many updates from multiple transactions do) will be marked with a timestamp and will create a version with old committed data in version store and a pointer (14 bytes needed for pointer and additional overhead) is stored with the changed/new data. This storage of pointers will also add to the cost of using snapshot isolation level. If changes are very frequent, successive prior versions are stored in tempdb using a linked list structure and the newest committed value is always stored in a page in the database.</p>
+<p>There are two variants of using snapshot isolation levels as discussed below:</p>
+<ul>
+<li><strong>Read Committed Snapshot Isolation (RCSI)</strong> – This is also frequently referred to as statement level snapshot isolation level. This is, you can say, an extension of Read Committed isolation level but with increased concurrency. In this data readers don’t get blocked by data writers but rather once enabled at database level, SQL Server starts maintaining a version of data being changed by data writers and data readers get data (last committed version before the statement starts, irrespective of the timing of transaction start) from versions stored in version store. As I said, to use it you just have to enable at database level and no code changes are required as it applies to all the transactions by default.</li>
+<li><strong>Snapshot Isolation (SI)</strong> – This is also frequently referred to as transaction level snapshot isolation level. This increases concurrency along with data consistency at transaction level. Like RCSI, data readers aren’t blocked by data writers but rather once enabled at database level and specified to be used in the code, SQL Server start maintaining a version of the data being changed by data writers and data readers get data (last committed version before the transaction start, in other words it provides transaction level consistent view of data) from versions stored in version store.</li>
+</ul>
+<p>This requires code changes to use the SET command to with the transaction with which you want to use it.</p>
+<p>Using either of the snapshot isolation levels requires enabling it at database level first though another important difference between RCSI and SI is, SI requires you to explicitly change the isolation level to SNAPSHOT for each transaction that you want to execute at the transaction level with SI and usage of this in legacy system requires code changes, whereas RCSI becomes the default for all the transaction without doing any code changes.</p>
+<p>Now at the end, just to summarize the benefit of using snapshot isolation, data readers can get consistent data without being blocked by data writers running at the same time as the versions get stored in version store in the tempdb database before data is changed, whereas the cost of using snapshot isolation is more overheard on SQL Server in creating and maintaining versions and the increased size of tempdb for storage for version data and the increased size of each row for pointers. The overhead even becomes more when you use SI or transaction level snapshot, in which case versions are maintained till the end of the transaction as opposed to completion of the statement, as in case of RCSI.</p>
+<h2 id="conclusion"><a class="header-anchor" href="#conclusion"></a>Conclusion</h2>
+<p>SQL Server 2005 and later versions have 6 different isolation levels. I briefly talked about the earlier four, which have been in SQL Server for a long time and talked in detail about two new snapshot based isolation levels. To learn more about how to use this great feature and how they differ from each other with an example, please refer to the next article on the series.</p>
+<p>In closing, I would like to reiterate, these new snapshot based isolation levels are great as they provide better concurrency but come at a cost. Please ensure you do a thorough study before using this feature and consider the size and load on tempdb. especially in the case of SI.</p>
+<h3 id="resources"><a class="header-anchor" href="#resources"></a>Resources</h3>
+<p><a href="http://msdn.microsoft.com/en-us/library/ms173763(v=sql.105).aspx" target="_blank" rel="noopener">SET TRANSACTION ISOLATION LEVEL (Transact-SQL)</a></p>
+<p><a href="http://msdn.microsoft.com/en-us/library/ms189122(v=sql.105).aspx" target="_blank" rel="noopener">Isolation Levels in the Database Engine</a></p>
+<p><a href="http://www.databasejournal.com/article.php/3880181/Arshad-Ali.htm" target="_blank" rel="noopener"><strong>See all articles by Arshad Ali</strong></a></p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/">http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</a></strong><br>
+Reprinted from: <a href="https://www.databasejournal.com/features/mssql/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1.html" target="_blank" rel="noopener">Snapshot Isolation Level in SQL Server - What, Why and How - Part 1</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/SQL-Server/" rel="tag"># SQL Server</a>
+          
+            <a href="/tags/Transaction/" rel="tag"># Transaction</a>
+          
+            <a href="/tags/Isolation-Level/" rel="tag"># Isolation Level</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/read-committed-snapshot-isolation/" rel="next" title="Read Committed Snapshot Isolation">
+                <i class="fa fa-chevron-left"></i> Read Committed Snapshot Isolation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/why-do-we-need-update-locks-in-sql-server/" rel="prev" title="Why do we need UPDATE Locks in SQL Server?">
+                Why do we need UPDATE Locks in SQL Server? <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#understanding-snapshot-isolation-level"><span class="nav-text">Understanding Snapshot Isolation Level</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#why-when-and-where-should-we-use-snapshot-isolation-levels"><span class="nav-text">Why, When and Where Should We Use Snapshot Isolation Levels?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-text">Conclusion</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resources"><span class="nav-text">Resources</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

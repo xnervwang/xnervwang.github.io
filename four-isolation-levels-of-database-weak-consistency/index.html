@@ -1,0 +1,1007 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,Transaction,Isolation Level," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="SQL-92标准中定义了四个隔离级别，这四个隔离级别在以前版本的SQL Server中即受到支持： READ UNCOMMITTED READ UNCOMMITTED是限制性最弱的隔离级别，因为该级别忽略其他事务放置的锁。使用READ UNCOMMITTED级别执行的事务，可以读取尚未由其他事务提交的修改后的数据值，这些行为称为“脏”读。这是因为在Read Uncommitted级别下，读取数据不">
+<meta name="keywords" content="转载,DBMS,Transaction,Isolation Level">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库弱一致性四个隔离级别">
+<meta property="og:url" content="http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="SQL-92标准中定义了四个隔离级别，这四个隔离级别在以前版本的SQL Server中即受到支持： READ UNCOMMITTED READ UNCOMMITTED是限制性最弱的隔离级别，因为该级别忽略其他事务放置的锁。使用READ UNCOMMITTED级别执行的事务，可以读取尚未由其他事务提交的修改后的数据值，这些行为称为“脏”读。这是因为在Read Uncommitted级别下，读取数据不">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/four-isolation-levels-of-database-weak-consistency/1.png">
+<meta property="og:image" content="http://xnerv.wang/assets/four-isolation-levels-of-database-weak-consistency/2.png">
+<meta property="og:image" content="http://xnerv.wang/assets/four-isolation-levels-of-database-weak-consistency/3.png">
+<meta property="og:image" content="http://xnerv.wang/assets/four-isolation-levels-of-database-weak-consistency/4.png">
+<meta property="og:image" content="http://xnerv.wang/assets/four-isolation-levels-of-database-weak-consistency/5.png">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.857Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库弱一致性四个隔离级别">
+<meta name="twitter:description" content="SQL-92标准中定义了四个隔离级别，这四个隔离级别在以前版本的SQL Server中即受到支持： READ UNCOMMITTED READ UNCOMMITTED是限制性最弱的隔离级别，因为该级别忽略其他事务放置的锁。使用READ UNCOMMITTED级别执行的事务，可以读取尚未由其他事务提交的修改后的数据值，这些行为称为“脏”读。这是因为在Read Uncommitted级别下，读取数据不">
+<meta name="twitter:image" content="http://xnerv.wang/assets/four-isolation-levels-of-database-weak-consistency/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/"/>
+
+
+
+
+
+  <title>数据库弱一致性四个隔离级别 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">数据库弱一致性四个隔离级别</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T19:21:00+08:00">
+                2018-02-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>SQL-92标准中定义了四个隔离级别，这四个隔离级别在以前版本的SQL Server中即受到支持：</p>
+<h2 id="read-uncommitted"><a class="header-anchor" href="#read-uncommitted"></a>READ UNCOMMITTED</h2>
+<p>READ UNCOMMITTED是限制性最弱的隔离级别，因为该级别忽略其他事务放置的锁。使用READ UNCOMMITTED级别执行的事务，可以读取尚未由其他事务提交的修改后的数据值，这些行为称为“脏”读。这是因为<span style="color: #ff0000;"><strong>在Read Uncommitted级别下，读取数据不需要加S锁，这样就不会跟被修改的数据上的X锁冲突</strong></span>。比如，事务1修改一行，事务2在事务1提交之前读取了这一行。如果事务1回滚，事务2就读取了一行没有提交的数据，这样的数据我们认为是不存在的。</p>
+<a id="more"></a>
+<h2 id="read-committed"><a class="header-anchor" href="#read-committed"></a>READ COMMITTED</h2>
+<p>READ COMMITTED(Nonrepeatable reads)是SQL Server默认的隔离级别。该级别通过指定语句不能读取其他事务已修改但是尚未提交的数据值，禁止执行脏读。在当前事务中的各个语句执行之间，其他事务仍可以修改、插入或删除数据，从而产生无法重复的读操作，或“影子”数据。比如，事务1读取了一行，事务2修改或者删除这一行并且提交。如果事务1想再一次读取这一行，它将获得修改后的数据或者发现这一样已经被删除，因此事务的第二次读取结果与第一次读取结果不同，因此也叫不可重复读。</p>
+<h3 id="实验1"><a class="header-anchor" href="#实验1"></a>实验1</h3>
+<p>query1：事务1</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--step1:创建实验数据</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">into</span> Employee <span class="keyword">from</span> AdventureWorks.HumanResources.Employee</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> Employee <span class="keyword">add</span> <span class="keyword">constraint</span> pk_Employee_EmployeeID primary <span class="keyword">key</span>(EmployeeID)</span><br><span class="line"></span><br><span class="line"><span class="comment">--step2:设置隔离级别,这是数据库的默认隔离界别</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> <span class="keyword">READ</span> COMMITTED</span><br><span class="line"></span><br><span class="line"><span class="comment">--step3:开启第一个事务</span></span><br><span class="line"><span class="keyword">BEGIN</span> TRAN tran1</span><br><span class="line">    <span class="comment">--step4:执行select操作,查看VacationHours,对查找的记录加S锁，在语句执行完以后自动释放S锁</span></span><br><span class="line">    <span class="keyword">SELECT</span> EmployeeID, VacationHours</span><br><span class="line">        <span class="keyword">FROM</span> Employee</span><br><span class="line">        <span class="keyword">WHERE</span> EmployeeID = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">--step5:查看当前加锁情况,没有发现在Employee表上面有锁,这是因为当前的隔离界别是READ COMMITTED</span></span><br><span class="line">    <span class="comment">--在执行完step2以后马上释放了S锁.</span></span><br><span class="line">    <span class="keyword">SELECT</span> request_session_id, resource_type, resource_associated_entity_id,</span><br><span class="line">        request_status, request_mode, resource_description</span><br><span class="line">        <span class="keyword">FROM</span> sys.dm_tran_locks</span><br></pre></td></tr></table></figure>
+<p>查看锁的情况如下图所示，我们发现在只有在数据库级别的S锁，而没有在表级别或者更低级别的锁，这是因为**<span style="color: #ff0000;">在Read Committed级别下，S锁在语句执行完以后就被释放</span>**。</p>
+<p><img src="/assets/four-isolation-levels-of-database-weak-consistency/1.png" alt=""></p>
+<p>query2：事务2</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--step6:开启第二个事务</span></span><br><span class="line"><span class="keyword">BEGIN</span> TRAN tran2;</span><br><span class="line">    <span class="comment">--step7:修改VacationHours,需要获得排它锁X,在VacationHours上没有有S锁</span></span><br><span class="line">    <span class="keyword">UPDATE</span> Employee</span><br><span class="line">        <span class="keyword">SET</span> VacationHours = VacationHours - <span class="number">8</span></span><br><span class="line">        <span class="keyword">WHERE</span> EmployeeID = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">--step8:查看当前加锁情况</span></span><br><span class="line">    <span class="keyword">SELECT</span> request_session_id, resource_type, resource_associated_entity_id,</span><br><span class="line">        request_status, request_mode, resource_description</span><br><span class="line">        <span class="keyword">FROM</span> sys.dm_tran_locks</span><br></pre></td></tr></table></figure>
+<p>在开启另外一个update事务以后，我们再去查看当前的锁状况，如下图所示，我们发现在表(<strong>Object</strong>)级别上加了IX锁，在这张表所在的<strong>Page</strong>上也加了IX锁，因为表加了聚集索引，所以在叶子结点上加了X锁，这个锁的类型是<strong>KEY</strong>。</p>
+<p><img src="/assets/four-isolation-levels-of-database-weak-consistency/2.png" alt=""></p>
+<p>然后我们回到事务1当中再次执行查询语句，我们会发现查询被阻塞，我们新建一个查询query3来查看这个时候的锁状况，其查询结果如下，我们可以发现查询操作需要在KEY级别上申请S锁，在Page和表(Object)上面申请IS锁，但是因为Key上面原先有了X锁，与当前读操作申请的S锁冲突，所以这一步处于<span style="color: #ff0000;"><strong>WAIT</strong></span>状态。</p>
+<p><img src="/assets/four-isolation-levels-of-database-weak-consistency/3.png" alt=""></p>
+<p>如果此时提交事务2的update操作，那么事务1的select操作不再被阻塞，得到查询结果，但是我们发现此时得到的查询结果与第一次得到的查询结果不同，这也是为什么将read committed称为不可重复读，因为<span style="color: #ff0000;">同一个事物内的两次相同的查询操作的结果可能不同</span>。</p>
+<h2 id="repeatable-read"><a class="header-anchor" href="#repeatable-read"></a>REPEATABLE READ</h2>
+<p>REPEATABLE READ是比READ COMMITTED限制性更强的隔离级别。该级别包括READ COMMITTED，并且另外指定了在当前事务提交之前，其他任何事务均不可以修改或删除当前事务已读取的数据。并发性低于 READ COMMITTED，因为已读数据的共享锁在整个事务期间持有，而不是在每个语句结束时释放。比如，事务1读取了一行，事务2想修改或者删除这一行并且提交，但是因为事务1尚未提交，数据行中有事务1的锁，事务2无法进行更新操作，因此事务2阻塞。如果这时候事务1想再一次读取这一行，它读取结果与第一次读取结果相同，因此叫可重复读。</p>
+<h3 id="实验2"><a class="header-anchor" href="#实验2"></a>实验2</h3>
+<p>query1：事务1</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--step1:创建实验数据</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">into</span> Employee <span class="keyword">from</span> AdventureWorks.HumanResources.Employee</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> Employee <span class="keyword">add</span> <span class="keyword">constraint</span> pk_Employee_EmployeeID primary <span class="keyword">key</span>(EmployeeID)</span><br><span class="line"></span><br><span class="line"><span class="comment">--step2:设置隔离级别</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> REPEATABLE <span class="keyword">READ</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--step3:开启第一个事务</span></span><br><span class="line"><span class="keyword">BEGIN</span> TRAN tran1</span><br><span class="line">    <span class="comment">--step4:执行select操作,查看VacationHours</span></span><br><span class="line">    <span class="keyword">SELECT</span> EmployeeID, VacationHours</span><br><span class="line">        <span class="keyword">FROM</span> Employee</span><br><span class="line">        <span class="keyword">WHERE</span> EmployeeID = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">--step5:查看当前加锁情况,发现在Employee表上面有S锁,这是因为当前的隔离界别是REPEATABLE READ</span></span><br><span class="line">    <span class="comment">--S锁只有在事务执行完以后才会被释放.</span></span><br><span class="line">    <span class="keyword">SELECT</span> request_session_id, resource_type, resource_associated_entity_id,</span><br><span class="line">        request_status, request_mode, resource_description</span><br><span class="line">        <span class="keyword">FROM</span> sys.dm_tran_locks</span><br></pre></td></tr></table></figure>
+<p>查询锁状态的结果如下图所示，我们发现在KEY上面加了S锁，在Page和Object上面加了IS锁，这是因为**<span style="color: #ff0000;">在Repeatable Read级别下S锁要在事务执行完以后才会被释放</span>**。</p>
+<p><img src="/assets/four-isolation-levels-of-database-weak-consistency/4.png" alt=""></p>
+<p>query2：事务2</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--step6:开启第二个事务</span></span><br><span class="line"><span class="keyword">BEGIN</span> TRAN tran2;</span><br><span class="line">    <span class="comment">--step7:修改VacationHours,需要获得排他锁X,在VacationHours上有S锁，出现冲突，所以update操作被阻塞</span></span><br><span class="line">    <span class="keyword">UPDATE</span> Employee</span><br><span class="line">        <span class="keyword">SET</span> VacationHours = VacationHours - <span class="number">8</span></span><br><span class="line">        <span class="keyword">WHERE</span> EmployeeID = <span class="number">4</span>;</span><br></pre></td></tr></table></figure>
+<p>执行上述update操作的时候发现该操作被阻塞，这是因为update操作要加排它锁X，而因为原先的查询操作的S锁没有释放，所以两者冲突。我们新建一个查询3执行查询锁状态操作，发现结果如下图所示，我们可以发现是**<span style="color: #ff0000;">WAIT</span>**发生在对KEY加X锁的操作上面。</p>
+<p><img src="/assets/four-isolation-levels-of-database-weak-consistency/5.png" alt=""></p>
+<p>此时再次执行查询1中的select操作，我们发现查询结果跟第一次相同，所以这个叫做可重复读操作。但是可重复读操作并不是特定指两次读取的数据一模一样，Repeatable Read存在的一个问题是幻读，就是第二次读取的数据返回的条目数比第一次返回的条目数更多。</p>
+<p>比如在Repeatable Read隔离级别下，事务1第一次执行查询<code>select id from users where id&gt;1 and id &lt;10</code>，返回的结果是2，4，6，8。这个时候事务1没有提交，那么对2，4，6，8上面依然保持有S锁。此时事务2执行一次插入操作insert into user(id) valuse(3)，插入成功。此时再次执行事务1中的查询，那么返回结果就是2，<span style="color: #ff0000;">3</span>，4，6，8。这里的3就是因为幻读而出现的。因此可以得出结论：<strong><span style="color: #ff0000;">REPEATABLE READ隔离级别保证了在相同的查询条件下，同一个事务中的两个查询，第二次读取的内容肯定包换第一次读到的内容。</span></strong></p>
+<h2 id="serializable"><a class="header-anchor" href="#serializable"></a>SERIALIZABLE</h2>
+<p>SERIALIZABLE 是限制性最强的隔离级别，因为该级别<span style="color: #ff0000;"><strong>锁定整个范围的键</strong></span>，并一直持有锁，直到事务完成。该级别包括REPEATABLE READ，并增加了在事务完成之前，其他事务不能向事务已读取的范围<strong>插入新行</strong>的限制。比如，事务1读取了一系列满足搜索条件的行。事务2在执行SQL statement产生一行或者多行满足事务1搜索条件的行时会冲突，则事务2回滚。这时事务1再次读取了一系列满足相同搜索条件的行，第二次读取的结果和第一次读取的结果相同。</p>
+<h2 id="重复读与幻读"><a class="header-anchor" href="#重复读与幻读"></a>重复读与幻读</h2>
+<p>重复读是为了保证在一个事务中，相同查询条件下读取的数据值不发生改变，但是不能保证下次同样条件查询，结果记录数不会增加。</p>
+<p>幻读就是为了解决这个问题而存在的，他将这个查询范围都加锁了，所以就不能再往这个范围内插入数据，这就是SERIALIZABLE 隔离级别做的事情。</p>
+<h2 id="隔离级别与锁的关系"><a class="header-anchor" href="#隔离级别与锁的关系"></a>隔离级别与锁的关系</h2>
+<ol>
+<li>在Read Uncommitted级别下，读操作不加S锁；</li>
+<li>在Read Committed级别下，读操作需要加S锁，但是在语句执行完以后释放S锁；</li>
+<li>在Repeatable Read级别下，读操作需要加S锁，但是在事务提交之前并不释放S锁，也就是必须等待事务执行完毕以后才释放S锁。</li>
+<li>在Serialize级别下，会在Repeatable Read级别的基础上，添加一个范围锁。保证一个事务内的两次查询结果完全一样，而不会出现第一次查询结果是第二次查询结果的子集。</li>
+</ol>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/">http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</a></strong><br>
+转载自：<a href="http://www.cnblogs.com/xwdreamer/archive/2011/01/18/2297042.html" target="_blank" rel="noopener">数据库弱一致性四个隔离级别</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/Transaction/" rel="tag"># Transaction</a>
+          
+            <a href="/tags/Isolation-Level/" rel="tag"># Isolation Level</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/" rel="next" title="The Tale of Two Evaluators: Understanding MASM and C++ Expression Evaluators in WinDbg ">
+                <i class="fa fa-chevron-left"></i> The Tale of Two Evaluators: Understanding MASM and C++ Expression Evaluators in WinDbg 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/mysql-row-format/" rel="prev" title="MySQL Row Format(MySQL行格式详解)">
+                MySQL Row Format(MySQL行格式详解) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#read-uncommitted"><span class="nav-text">READ UNCOMMITTED</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#read-committed"><span class="nav-text">READ COMMITTED</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实验1"><span class="nav-text">实验1</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#repeatable-read"><span class="nav-text">REPEATABLE READ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#实验2"><span class="nav-text">实验2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#serializable"><span class="nav-text">SERIALIZABLE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复读与幻读"><span class="nav-text">重复读与幻读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隔离级别与锁的关系"><span class="nav-text">隔离级别与锁的关系</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

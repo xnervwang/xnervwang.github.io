@@ -1,0 +1,1074 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Windows,Heap,MSDN,Memory Management," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Murali R. Krishnan Microsoft Corporation February 1999 Summary: Discusses common heap performance problems and how to protect against them. (9 printed pages) Introduction Are you a happy-go-lucky user">
+<meta name="keywords" content="转载,Windows,Heap,MSDN,Memory Management">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(MSDN) Heap: Pleasures and Pains">
+<meta property="og:url" content="http://xnerv.wang/msdn-heap-pleasures-and-pains/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Murali R. Krishnan Microsoft Corporation February 1999 Summary: Discusses common heap performance problems and how to protect against them. (9 printed pages) Introduction Are you a happy-go-lucky user">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/msdn-heap-pleasures-and-pains/1.gif">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.989Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="(MSDN) Heap: Pleasures and Pains">
+<meta name="twitter:description" content="Murali R. Krishnan Microsoft Corporation February 1999 Summary: Discusses common heap performance problems and how to protect against them. (9 printed pages) Introduction Are you a happy-go-lucky user">
+<meta name="twitter:image" content="http://xnerv.wang/assets/msdn-heap-pleasures-and-pains/1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/msdn-heap-pleasures-and-pains/"/>
+
+
+
+
+
+  <title>(MSDN) Heap: Pleasures and Pains | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/msdn-heap-pleasures-and-pains/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">(MSDN) Heap: Pleasures and Pains</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-13T22:06:00+08:00">
+                2017-11-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Murali R. Krishnan<br>
+Microsoft Corporation</p>
+<p>February 1999</p>
+<p><strong>Summary:</strong> Discusses common heap performance problems and how to protect against them. (9 printed pages)</p>
+<h2 id="introduction"><a class="header-anchor" href="#introduction"></a>Introduction</h2>
+<p>Are you a happy-go-lucky user of dynamically allocated C/C++ objects? Do you use Automation extensively for communicating back and forth between modules? Is it possible that your program is slow because of heap allocation? You are not alone. Almost all projects run into heap issues sooner or later. The common tendency is to say, “It’s the heap that’s slow and my code is really good.” Well, that is partially right. It pays to understand more about heap, its usage, and what can happen.</p>
+<a id="more"></a>
+<h2 id="a-id-heap3-whatis-a-what-is-a-heap"><a class="header-anchor" href="#a-id-heap3-whatis-a-what-is-a-heap"></a><a id="heap3_whatis"></a>What Is a Heap?</h2>
+<p>(If you already know what a heap is, you can jump ahead to the section <a href="#heap3_commonproblems">“What Are Common Heap Performance Problems?”</a>)</p>
+<p>A heap is used for allocating and freeing objects dynamically for use by the program. Heap operations are called for when:</p>
+<ol>
+<li>The number and size of objects needed by the program are not known ahead of time.</li>
+<li>An object is too large to fit into a stack allocator.</li>
+</ol>
+<p>A heap uses parts of memory outside of what is allocated for the code and stack during run time. The following graph shows the different layers of heap allocators.</p>
+<p><img src="/assets/msdn-heap-pleasures-and-pains/1.gif" alt=""></p>
+<p><strong>GlobalAlloc/GlobalFree:</strong> Heap calls that talk directly to the per-process default heap.</p>
+<p><strong>LocalAlloc/LocalFree:</strong> Heap calls that talk directly to the per-process default heap.</p>
+<p><strong>COM’s IMalloc allocator (or CoTaskMemAlloc / CoTaskMemFree):</strong> Functions use the default per-process heap. Automation uses the Component Object Model (COM)'s allocator, and the requests use the per-process heap.</p>
+<p><strong>C/C++ Run-time (CRT) allocator:</strong> Provides <strong>malloc()</strong> and <strong>free()</strong> as well as <strong>new</strong> and <strong>delete</strong> operators. Languages like Microsoft Visual Basic® and Java also offer new operators and use garbage collection instead of heaps. CRT creates its own private heap, which resides on top of the Windows heap.</p>
+<p>The Windows heap is a thin layer surrounding the Windows run-time allocator. All APIs forward their requests to the NTDLL.</p>
+<p>The Windows run-time allocator provides the core heap allocator within Windows. It consists of a front-end allocator with 128 free lists for sizes ranging from 8 to 1,024 bytes. The back-end allocator uses virtual memory to reserve and commit pages.</p>
+<p>At the bottom of the chart is the Virtual Memory Allocator, which reserves and commits pages used by the OS. All allocators use the virtual memory facility for accessing the data.</p>
+<p>Shouldn’t it be simple to allocate and free blocks? Why would this take a long time?</p>
+<h2 id="a-id-heap3-heapimplementation-a-notes-on-heap-implementation"><a class="header-anchor" href="#a-id-heap3-heapimplementation-a-notes-on-heap-implementation"></a><a id="heap3_heapimplementation"></a>Notes on Heap Implementation</h2>
+<p>Traditionally, the operating system and run-time libraries come with an implementation of the heap. At the beginning of a process, the OS creates a default heap called <em>Process heap</em>.The Process heap is used for allocating blocks if no other heap is used. Language run times also can create separate heaps within a process. (For example, C run time creates a heap of its own.) Besides these dedicated heaps, the application program or one of the many loaded dynamic-link libraries (DLLs) may create and use separate heaps. Windows offers a rich set API for creating and using private heaps.</p>
+<p>When applications or DLLs create private heaps, these live in the process space and are accessible process-wide. Any allocation of data made from a given heap should be freed for the same heap. (Allocation from one heap and free to another makes no sense.)</p>
+<p>The heap sits on top of the operating system’s Virtual Memory Manager in all virtual memory systems. The language run-time heaps reside on top of the virtual memory, as well. In some cases, these are layered on OS heaps, but the language run-time heap performs its own memory management by allocating large blocks. Bypassing the OS heap to use the virtual memory functions may enable a heap to do a better job of allocating and using blocks.</p>
+<p>Typical heap implementations consist of front-end and back-end allocators. The front-end allocator maintains a free list of fixed-sized blocks. On an allocation call, the heap attempts to find a free block from the front-end list. If this fails, the heap is forced to allocate a large block from the back end (reserving and committing virtual memory) to satisfy the request. Common implementations have per-block allocation overhead, which costs execution cycles and also reduces available storage.</p>
+<p>The Knowledge Base article Q10758, “Managing Memory with calloc() and malloc()” (search on article ID number), contains more background on these topics. Also, a detailed discussion on the heap implementations and designs can be found in “Dynamic Storage Allocation: A Survey and Critical Review” by Paul R. Wilson, Mark S. Johnstone, Michael Neely, and David Boles. In <em>International Workshop on Memory Management</em>,Kinross, Scotland, UK, September 1995 (<a href="http://www.cs.utexas.edu/users/oops/papers.html" target="_blank" rel="noopener">http://www.cs.utexas.edu/users/oops/papers.html</a>).</p>
+<p>The implementation (Windows NT version 4.0 and later) uses 127 free lists of 8-byte aligned blocks ranging from 8 to 1,024 bytes and a grab-bag list. The grab-bag list (free list[0]) holds blocks greater than 1,024 bytes in size. The free list contains objects linked together in a doubly linked list. By default, the Process heap performs coalescing operations. (Coalescing is the act of combining adjacent free blocks to build a larger block.) Coalescing costs additional cycles but reduces internal fragmentation of heap blocks.</p>
+<p>A single global lock protects the heap against multithreaded usage. (See the first commandment in <a href="https://msdn.microsoft.com/en-us/library/ms951773.aspx" target="_blank" rel="noopener">Server Performance and Scalability Killers</a> by George Reilly.) This lock is essential to protecting the heap data structures from random access across multiple threads. This lock can have an adverse impact on performance when heap operations are too frequent.</p>
+<h2 id="a-id-heap3-commonproblems-a-what-are-common-heap-performance-problems"><a class="header-anchor" href="#a-id-heap3-commonproblems-a-what-are-common-heap-performance-problems"></a><a id="heap3_commonproblems"></a>What Are Common Heap Performance Problems?</h2>
+<p>Here are the most common obstacles you will encounter when working with the heap:</p>
+<ul>
+<li>
+<p><strong>Slowdown as a result of allocation operations.</strong> It simply takes a long time to allocate. The most likely cause of the slowdown is that the free lists do not have the blocks, and hence the run-time allocator code spends cycles hunting for a larger free block or allocating a fresh block from the back-end allocator.</p>
+</li>
+<li>
+<p><strong>Slowdown as a result of free operations.</strong> Free operations consume more cycles, mainly if coalescing is enabled. During coalescing, each free operation should “find” its neighbors, pull them out to construct a larger block, and reinsert the larger block into the free list. During that find, memory may be touched in a random order, causing cache misses and performance slowdown.</p>
+</li>
+<li>
+<p><strong>Slowdown as a result of heap contention.</strong> Contention occurs when two or more threads try to access data at the same time and one must wait for the other to complete before it can proceed. Contention always causes trouble; it’s by far the biggest problem that one encounters on multiprocessor systems. An application or DLL with heavy use of memory blocks will slow down when run with multiple threads (and on multiprocessor systems). The use of single lock—the common solution—means that all operations using the heap are serialized. The serialization causes threads to switch context while waiting for the lock. Imagine the slowdown caused by stop-and-go at a flashing red stoplight.</p>
+<p>Contention usually leads to context switch of the threads and processes. Context switches are very costly, but even more costly is the loss of data from the processor cache and the rebuilding of that data when the thread is brought to life afterwards.</p>
+</li>
+<li>
+<p><strong>Slowdown as a result of heap corruption.</strong> Corruption occurs when the application does not use the heap blocks properly. Common scenarios include double free or use of a block after a free, and the obvious problems of overwriting beyond block boundaries.</p>
+</li>
+<li>
+<p><strong>Slowdown as a result of frequent allocs and reallocs.</strong> This is a very common phenomenon when you use scripting languages. The strings are repeatedly allocated, grown with reallocation, and freed up. Don’t do this. Try to allocate large strings, if possible, and use the buffer. An alternative is to minimize concatenation operations.</p>
+</li>
+</ul>
+<p>Contention is the problem that introduces slowdown in the allocation as well as free operations. Ideally we would like to have a heap with no contention and fast alloc/free. Alas, such a general-purpose heap does not exist yet, though it might sometime in the future.</p>
+<p>In all the server systems (such as IIS, MSProxy, DatabaseStacks, Network servers, Exchange, and others), the heap lock is a BIG bottleneck. The larger the number of processors, the worse the contention.</p>
+<h2 id="a-id-heap3-protect-a-protecting-yourself-from-the-heap"><a class="header-anchor" href="#a-id-heap3-protect-a-protecting-yourself-from-the-heap"></a><a id="heap3_protect"></a>Protecting Yourself from the Heap</h2>
+<p>Now that you understand the problems with heap, don’t you want the magic wand that can eliminate these problems? I wish there were one. But there is no magic to make the heap go faster—so don’t expect to make things faster in the last week before shipping the product. Plan your heap strategy earlier, and you will be far better off. Altering the way you use the heap, and reducing the number of heap operations, is a solid strategy for improving performance.</p>
+<p>How do you reduce the use of heap operations? You can reduce the number of heap operations by exploiting locality inside data structures. Consider the following example:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ObjectA</span> &#123;</span></span><br><span class="line">   <span class="comment">// data for objectA</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ObjectB</span> &#123;</span></span><br><span class="line">   <span class="comment">// data for objectB</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Use of ObjectA and ObjectB together.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Use pointers</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ObjectB</span> &#123;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">ObjectA</span> * <span class="title">pObjA</span>;</span></span><br><span class="line">   <span class="comment">// data for objectB</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Use embedding</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ObjectB</span> &#123;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">ObjectA</span> <span class="title">pObjA</span>;</span></span><br><span class="line">   <span class="comment">// data for objectB</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Aggregation – use ObjectA and ObjectB inside another object</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ObjectX</span> &#123;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">ObjectA</span>  <span class="title">objA</span>;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">ObjectB</span>  <span class="title">objB</span>;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>Avoid using pointers for associating two data structures.</strong> If you use pointers to associate two data structures, the objects A and B from the preceding example will be allocated and freed separately. This is an additional cost—and is <em>the practice we want to avoid</em>.</li>
+<li><strong>Embed pointed child objects into the parent object.</strong> Anytime we have a pointer in an object, it means we have a dynamic element (80 percent) and a new location to be dereferenced. Embedding increases locality and reduces the need for further allocation/free. This will improve the performance of your application.</li>
+<li><strong>Combine smaller objects to form bigger objects (aggregation).</strong> Aggregation reduces the number of blocks allocated and freed up. If you have multiple developers working on various parts of a design, you may end up with many small objects that can be combined. The challenge of this integration is to find the right aggregation boundaries.</li>
+<li><strong>Inline a buffer that can satisfy 80 percent of your needs (aka the 80-20 rule).</strong> In several situations, memory buffers are required for storing string/binary data and the total number of bytes is not known ahead of time. Take measurements and inline a buffer of a size that can satisfy 80 percent of your needs. For the remaining 20 percent, you can allocate a new buffer and have a pointer for that buffer. This way, you reduce the allocation and free calls as well as increase spatial locality of data, which ultimately will improve the performance of your code.</li>
+<li><strong>Allocate objects in chunks (chunking).</strong> Chunking is a way of allocating objects in groups of more than one object at a time. If you have to keep track of a list of items, for example a list of {name, value} pairs, you have two options: Option 1 is to allocate one node per name-value pair. Option 2 is to allocate a structure that can hold, say, five name-value pairs. And if, for example, storing four pairs is a common scenario, you would reduce the number of nodes and the amount of extra space needed for additional linked-list pointers.<br>
+Chunking is processor cache-friendly, especially for the L1-cache, because of the increased locality it offers—not to mention that some of the data blocks are located in the same virtual page for chunked allocations.</li>
+<li><strong>Use _amblksiz appropriately.</strong> The C run time (CRT) has its custom front-end allocator that allocates blocks in sizes of _amblksiz from the back end (Windows heap). Setting _amblksiz to a higher value can potentially reduce the number of calls made to the back end. This is applicable only to programs using the CRT extensively.</li>
+</ol>
+<p>The savings you will gain by using the preceding techniques will vary with object types, sizes, and workload. But you will always gain in performance and scalability. On the downside, the code will be a bit specialized, but it can be manageable if well-thought-out.</p>
+<h3 id="more-performance-boosters"><a class="header-anchor" href="#more-performance-boosters"></a>More Performance Boosters</h3>
+<p>The following are a few more techniques for enhancing speed:</p>
+<ol>
+<li><strong>Use the Windows heap</strong><br>
+Thanks to the efforts and hard work of several folks, a few significant improvements went into Microsoft Windows 2000:</li>
+</ol>
+<ul>
+<li><strong>Improved locking inside the heap code.</strong> The heap code uses one lock per heap. This global lock is used for protecting the heap data structure for multithreaded usage. Unfortunately, in high-traffic scenarios, a heap can still get bogged down in this global lock, leading to high contention and poor performance. On Windows 2000, the critical region of code inside locks is reduced to minimize the probability of contention, thus improving scalability.</li>
+<li><strong>Use of Lookaside lists.</strong> The heap data structure uses a fast cache for all free items of blocks sized between 8 and 1,024 bytes (in 8-byte increments). The fast cache was originally protected within the global lock. Now lookaside lists are used to access the fast cache free list. These lists do not require locking, and instead use 64-bit interlocked operations, thus improving performance.</li>
+<li><strong>Internal data structure algorithms</strong> are improved as well.</li>
+</ul>
+<p>These improvements eliminate the need for allocation caches, but do not preclude other optimizations. Evaluate your code with the Windows heap; it should be optimal for blocks of less than 1,024 bytes (1 KB) (blocks from front-end allocator). <strong>GlobalAlloc()</strong> and <strong>LocalAlloc()</strong> build on the same heap and are common mechanisms to access the per-process heaps. Use Heap* APIs to access the per-process heap, or to create your own heaps for allocation operations if high localized performance is desired. You can also use <strong>VirtualAlloc()</strong> / <strong>VirtualFree()</strong> operations directly if needed for large block operations.</p>
+<p>The described improvements made their way into Windows 2000 beta 2 and Windows NT 4.0 SP4. After the changes, the rate of heap lock contention fell significantly. This benefits all direct users of Windows heaps. The CRT heap is built on top of the Windows heap, but uses its own small-block heap and hence does not benefit from Windows changes. (Visual C++ version 6.0 also has an improved heap allocator.)</p>
+<ol start="2">
+<li><strong>Use allocation caches</strong><br>
+An allocation cache allows you to cache allocated blocks for future reuse. This can reduce the number of alloc/free calls to the process heap (or global heap), as well as allow maximum reuse of the blocks once allocated. In addition, allocation caches permit you to gather statistics to gain a better understanding of object usage at the higher level.</li>
+</ol>
+<p>Typically, a custom heap allocator is implemented on top of the process heap. The custom heap allocator behaves much like the system heap. The major difference is that it provides a cache on top of the process heap for the allocated objects. The caches are designed for a fixed set of sizes (for example, 32 bytes, 64 bytes, 128 bytes, and so on). This is a good strategy, but this sort of custom heap allocator misses the <em>semantic information</em> related to the objects that are allocated and freed.</p>
+<p>In contrast to the custom heap allocators, “Alloc-caches” are implemented as a per-class allocation cache. They can retain a lot of semantic information_,_ in addition to providing all the goodies of the custom heap allocator. Each allocation cache handler is associated with one object in the target binary. It can be initialized with a set of parameters indicating the concurrency level, size of the object, number of elements to keep in the free list, and so on. The allocation cache handler object maintains its own private pool of freed entities (not exceeding the specified threshold) and uses private lock for protection. Together, the allocation cache and private locks reduce the traffic to the main system heap, thus providing increased concurrency, maximum reuse, and higher scalability.</p>
+<p>A scavenger is required periodically to check the activity of all the allocation cache handlers and reclaim unused resources. If and when no activity is found, the pool of allocated objects can be freed, thus improving performance.</p>
+<p>Each alloc/free activity can be audited. The first level of information includes a total count of objects, allocations, and free calls made. You can derive the semantic relationship between various objects by looking at their statistics. The relationship can be used to reduce memory allocation using one of the many techniques just explained.</p>
+<p>Allocation caches also act as a debugging aid in helping you track down the number of objects that are not properly cleaned up. You can even find exact callers in fault by looking at dynamic stack back traces and signatures in addition to the objects that were not cleaned up.</p>
+<ol start="3">
+<li><strong>MP heap</strong><br>
+MP heap is a package for multiprocessor-friendly distributed allocation. Originally implemented by JVert, the heap abstraction here is built on top of the Windows heap package. MP heap creates multiple heaps and attempts to distribute allocation calls to different heaps with the goal of reducing the contention on any single lock.</li>
+</ol>
+<p>This package is a good step—sort of an improved MP-friendly custom heap allocator. However, it offers no semantic information and lacks in statistics. A common way to use the MP heap is as an SDK library. You can benefit greatly if you create a reusable component with this SDK. If you build this SDK library into every DLL, however, you will increase your working set.</p>
+<ol start="4">
+<li><strong>Rethink algorithms and data structures</strong><br>
+To scale on multiprocessor machines, algorithms, implementation, data structures, and hardware have to scale dynamically. Look at the data structures most commonly allocated and freed. Ask yourself, “Can I get the job done with a different data structure?” For example, if you have a list of read-only items that is loaded at application initialization time, this list does not need to be a linear-linked list. It can very well be a dynamically allocated array. A dynamically allocated array would reduce heap blocks in memory, reduce fragmentation, and therefore give you a performance boost.</li>
+</ol>
+<p>Reducing the number of small objects needed reduces the load on the heap allocator. For example, we used five different objects in our server’s critical processing path, each separately allocated and freed. Caching the objects together reduced heap calls from five to one and dramatically reduced the load on the heap, especially when we were processing more than 1,000 requests per second.</p>
+<p>If you make extensive use of Automation structures, consider factoring out Automation BSTRs from your mainline code, or at least avoid repeated operations on BSTR. (BSTR concatenation leads to excessive reallocs and alloc/free operations.)</p>
+<h2 id="summary"><a class="header-anchor" href="#summary"></a>Summary</h2>
+<p>Heap implementations tend to stay general for all platforms, and hence have heavy overhead. Each individual’s code has specific requirements, but design can accommodate the principles discussed in this article to reduce heap interaction.</p>
+<ol>
+<li>Evaluate the use of heap in your code.</li>
+<li>Streamline your code to use fewer heap calls: Analyze the critical paths and fix data structures.</li>
+<li>Make measurements to quantify the costs of heap calls before implementing custom wrappers.</li>
+<li>If you are unhappy about performance, ask the OS group to improve the heap. More requests of this sort mean more attention toward improving the heap.</li>
+<li>Ask the C run-time group to make the allocators thin wrappers on heaps provided by the OS. As a result, the cost of C run-time heap calls is reduced as the OS heap is improved.</li>
+<li>Heap improvements are continuously made in the operating system. Stay tuned and take advantage of the same.</li>
+</ol>
+<p><em>Murali Krishnan is a lead software design engineer with the Internet Information Server (IIS) team. He has worked on IIS since version 1.0 and has successfully shipped versions 1.0 through 4.0. Murali formed and led the IIS performance team for three years (1995-1998), and has influenced IIS performance from day one. He holds an M.S. from the University of Wisconsin-Madison and a B.S. from Anna University, India, both in Computer Science. Outside work, he reads, plays volleyball, and cooks at home.</em></p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/msdn-heap-pleasures-and-pains/">http://xnerv.wang/msdn-heap-pleasures-and-pains/</a></strong><br>
+Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810466.aspx" target="_blank" rel="noopener">(MSDN) Heap: Pleasures and Pains</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+            <a href="/tags/Heap/" rel="tag"># Heap</a>
+          
+            <a href="/tags/MSDN/" rel="tag"># MSDN</a>
+          
+            <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/analysis-of-unix-linux-platform-executable-file-format/" rel="next" title="UNIX/LINUX 平台可执行文件格式分析">
+                <i class="fa fa-chevron-left"></i> UNIX/LINUX 平台可执行文件格式分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/msdn-managing-heap-memory/" rel="prev" title="(MSDN) Managing Heap Memory">
+                (MSDN) Managing Heap Memory <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-id-heap3-whatis-a-what-is-a-heap"><span class="nav-text">What Is a Heap?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-id-heap3-heapimplementation-a-notes-on-heap-implementation"><span class="nav-text">Notes on Heap Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-id-heap3-commonproblems-a-what-are-common-heap-performance-problems"><span class="nav-text">What Are Common Heap Performance Problems?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-id-heap3-protect-a-protecting-yourself-from-the-heap"><span class="nav-text">Protecting Yourself from the Heap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#more-performance-boosters"><span class="nav-text">More Performance Boosters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-text">Summary</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

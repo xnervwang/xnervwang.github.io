@@ -1,0 +1,1102 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,网络协议,FTP,Active FTP,Passive FTP," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Introduction One of the most commonly seen questions when dealing with firewalls and other Internet connectivity issues is the difference between active and passive FTP and how best to support either">
+<meta name="keywords" content="转载,网络协议,FTP,Active FTP,Passive FTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Active FTP vs. Passive FTP, a Definitive Explanation">
+<meta property="og:url" content="http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Introduction One of the most commonly seen questions when dealing with firewalls and other Internet connectivity issues is the difference between active and passive FTP and how best to support either">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://slacksite.com/images/ftp/activeftp.gif">
+<meta property="og:image" content="http://slacksite.com/images/ftp/passiveftp.gif">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.267Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Active FTP vs. Passive FTP, a Definitive Explanation">
+<meta name="twitter:description" content="Introduction One of the most commonly seen questions when dealing with firewalls and other Internet connectivity issues is the difference between active and passive FTP and how best to support either">
+<meta name="twitter:image" content="http://slacksite.com/images/ftp/activeftp.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/"/>
+
+
+
+
+
+  <title>Active FTP vs. Passive FTP, a Definitive Explanation | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Active FTP vs. Passive FTP, a Definitive Explanation</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-20T14:34:00+08:00">
+                2018-02-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络协议/" itemprop="url" rel="index">
+                    <span itemprop="name">网络协议</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="introduction"><a class="header-anchor" href="#introduction"></a>Introduction</h2>
+<p>One of the most commonly seen questions when dealing with firewalls and other Internet connectivity issues is the difference between active and passive FTP and how best to support either or both of them. Hopefully the following text will help to clear up some of the confusion over how to support FTP in a firewalled environment.</p>
+<p>This may not be <em>the</em> definitive explanation, as the title claims, however, I’ve heard enough good feedback and seen this document linked in enough places to know that quite a few people have found it to be useful. I am always looking for ways to improve things though, and if you find something that is not quite clear or needs more explanation, please let me know! Recent additions to this document include the examples of both active and passive command line FTP sessions. These session examples should help make things a bit clearer. They also provide a nice picture into what goes on behind the scenes during an FTP session. Now, on to the information…</p>
+<a id="more"></a>
+<h2 id="the-basics"><a class="header-anchor" href="#the-basics"></a>The Basics</h2>
+<p>FTP is a TCP based service exclusively. There is no UDP component to FTP. FTP is an unusual service in that it utilizes two ports, a ‘data’ port and a ‘command’ port (also known as the control port). Traditionally these are port 21 for the command port and port 20 for the data port. The confusion begins however, when we find that depending on the mode, the data port is not always on port 20.</p>
+<h2 id="active-ftp"><a class="header-anchor" href="#active-ftp"></a>Active FTP</h2>
+<p>In active mode FTP the client connects from a random unprivileged port (N &gt; 1023) to the FTP server’s command port, port 21. Then, the client starts listening to port N+1 and sends the FTP command <code>PORT N+1</code> to the FTP server. The server will then connect back to the client’s specified data port from its local data port, which is port 20.</p>
+<p>From the server-side firewall’s standpoint, to support active mode FTP the following communication channels need to be opened:</p>
+<ul>
+<li>FTP server’s port 21 from anywhere (Client initiates connection)</li>
+<li>FTP server’s port 21 to ports &gt; 1023 (Server responds to client’s control port)</li>
+<li>FTP server’s port 20 to ports &gt; 1023 (Server initiates data connection to client’s data port)</li>
+<li>FTP server’s port 20 from ports &gt; 1023 (Client sends ACKs to server’s data port)</li>
+</ul>
+<p>When drawn out, the connection appears as follows:</p>
+<center>
+<img src="http://slacksite.com/images/ftp/activeftp.gif" alt="Active FTP">
+</center>
+<p>In step 1, the client’s command port contacts the server’s command port and sends the command <code>PORT 1027</code>. The server then sends an ACK back to the client’s command port in step 2. In step 3 the server initiates a connection on its local data port to the data port the client specified earlier. Finally, the client sends an ACK back as shown in step 4.</p>
+<p>The main problem with active mode FTP actually falls on the client side. The FTP client doesn’t make the actual connection to the data port of the server–it simply tells the server what port it is listening on and the server connects back to the specified port on the client. From the client side firewall this appears to be an outside system initiating a connection to an internal client–something that is usually blocked.</p>
+<h2 id="active-ftp-example"><a class="header-anchor" href="#active-ftp-example"></a>Active FTP Example</h2>
+<p>Below is an actual example of an active FTP session. The only things that have been changed are the server names, IP addresses, and user names. In this example an FTP session is initiated from <a href="http://testbox1.slacksite.com" target="_blank" rel="noopener">testbox1.slacksite.com</a> (192.168.150.80), a linux box running the standard FTP command line client, to <a href="http://testbox2.slacksite.com" target="_blank" rel="noopener">testbox2.slacksite.com</a> (192.168.150.90), a linux box running ProFTPd 1.2.2RC2. The debugging (<code>-d</code>) flag is used with the FTP client to show what is going on behind the scenes. Everything in <font color="red">red</font> is the debugging output which shows the actual FTP commands being sent to the server and the responses generated from those commands. Normal server output is shown in black, and user input is in <strong>bold</strong>.</p>
+<p>There are a few interesting things to consider about this dialog. Notice that when the <code>PORT</code> command is issued, it specifies a port on the <em>client</em> (192.168.150.80) system, rather than the server. We will see the opposite behavior when we use passive FTP. While we are on the subject, a quick note about the format of the <code>PORT</code> command. As you can see in the example below it is formatted as a series of six numbers separated by commas. The first four octets are the IP address while the last two octets comprise the port that will be used for the data connection. To find the actual port multiply the fifth octet by 256 and then add the sixth octet to the total. Thus in the example below the port number is ( (14*256) + 178), or 3762. A quick check with <code>netstat</code> should confirm this information.</p>
+<blockquote>
+<p><samp>testbox1: {/home/p-t/slacker/public_html} % <strong>ftp -d testbox2</strong><br>
+Connected to <a href="http://testbox2.slacksite.com" target="_blank" rel="noopener">testbox2.slacksite.com</a>.<br>
+220 <a href="http://testbox2.slacksite.com" target="_blank" rel="noopener">testbox2.slacksite.com</a> FTP server ready.<br>
+Name (testbox2:slacker): <strong>slacker</strong><br>
+<font color="red">—&gt; USER slacker</font><br>
+331 Password required for slacker.<br>
+Password: <strong>TmpPass</strong><br>
+<font color="red">—&gt; PASS XXXX</font><br>
+230 User slacker logged in.<br>
+<font color="red">—&gt; SYST<br>
+215 UNIX Type: L8</font><br>
+Remote system type is UNIX.<br>
+Using binary mode to transfer files.<br>
+ftp&gt; <strong>ls</strong><br>
+<font color="red">ftp: setsockopt (ignored): Permission denied<br>
+—&gt; PORT 192,168,150,80,14,178</font><br>
+200 PORT command successful.<br>
+<font color="red">—&gt; LIST</font><br>
+150 Opening ASCII mode data connection for file list.<br>
+drwx------   3 slacker    users         104 Jul 27 01:45 public_html<br>
+226 Transfer complete.<br>
+ftp&gt; <strong>quit</strong><br>
+<font color="red">—&gt; QUIT</font><br>
+221 Goodbye.<br>
+</samp></p>
+</blockquote>
+<h2 id="passive-ftp"><a class="header-anchor" href="#passive-ftp"></a>Passive FTP</h2>
+<p>In order to resolve the issue of the server initiating the connection to the client a different method for FTP connections was developed. This was known as passive mode, or <code>PASV</code>, after the command used by the client to tell the server it is in passive mode.</p>
+<p>In passive mode FTP the client initiates both connections to the server, solving the problem of firewalls filtering the incoming data port connection to the client from the server. When opening an FTP connection, the client opens two random unprivileged ports locally (N &gt; 1023 and N+1). The first port contacts the server on port 21, but instead of then issuing a <code>PORT</code> command and allowing the server to connect back to its data port, the client will issue the <code>PASV</code> command. The result of this is that the server then opens a random unprivileged port (P &gt; 1023) and sends <code>P</code> back to the client in response to the <code>PASV</code> command. The client then initiates the connection from port N+1 to port P on the server to transfer data.</p>
+<p>From the server-side firewall’s standpoint, to support passive mode FTP the following communication channels need to be opened:</p>
+<ul>
+<li>FTP server’s port 21 from anywhere (Client initiates connection)</li>
+<li>FTP server’s port 21 to ports &gt; 1023 (Server responds to client’s control port)</li>
+<li>FTP server’s ports &gt; 1023 from anywhere (Client initiates data connection to random port specified by server)</li>
+<li>FTP server’s ports &gt; 1023 to remote ports &gt; 1023 (Server sends ACKs (and data) to client’s data port)</li>
+</ul>
+<p>When drawn, a passive mode FTP connection looks like this:</p>
+<center>
+<img src="http://slacksite.com/images/ftp/passiveftp.gif" alt="Passive FTP">
+</center>
+<p>In step 1, the client contacts the server on the command port and issues the <code>PASV</code> command. The server then replies in step 2 with <code>PORT 2024</code>, telling the client which port it is listening to for the data connection. In step 3 the client then initiates the data connection from its data port to the specified server data port. Finally, the server sends back an ACK in step 4 to the client’s data port.</p>
+<p>While passive mode FTP solves many of the problems from the client side, it opens up a whole range of problems on the server side. The biggest issue is the need to allow any remote connection to high numbered ports on the server. Fortunately, many FTP daemons, including the popular WU-FTPD allow the administrator to specify a range of ports which the FTP server will use. See <a href="#appendix-1">Appendix 1</a> for more information.</p>
+<p>The second issue involves supporting and troubleshooting clients which do (or do not) support passive mode. As an example, the command line FTP utility provided with Solaris does not support passive mode, necessitating a third-party FTP client, such as ncftp.<br>
+NOTE: This is no longer the case–use the <code>-p</code> option with the Solaris FTP client to enable passive mode!</p>
+<p>With the massive popularity of the World Wide Web, many people prefer to use their web browser as an FTP client. Most browsers only support passive mode when accessing ftp:// URLs. This can either be good or bad depending on what the servers and firewalls are configured to support.</p>
+<h2 id="passive-ftp-example"><a class="header-anchor" href="#passive-ftp-example"></a>Passive FTP Example</h2>
+<p>Below is an actual example of a passive FTP session. The only things that have been changed are the server names, IP addresses, and user names. In this example an FTP session is initiated from <a href="http://testbox1.slacksite.com" target="_blank" rel="noopener">testbox1.slacksite.com</a> (192.168.150.80), a linux box running the standard FTP command line client, to <a href="http://testbox2.slacksite.com" target="_blank" rel="noopener">testbox2.slacksite.com</a> (192.168.150.90), a linux box running ProFTPd 1.2.2RC2. The debugging (<code>-d</code>) flag is used with the FTP client to show what is going on behind the scenes. Everything in <font color="red">red</font> is the debugging output which shows the actual FTP commands being sent to the server and the responses generated from those commands. Normal server output is shown in black, and user input is in <strong>bold</strong>.</p>
+<p>Notice the difference in the <code>PORT</code> command in this example as opposed to the active FTP example. Here, we see a port being opened on the <em>server</em> (192.168.150.90) system, rather than the client. See the discussion about the format of the <code>PORT</code> command above, in the <a href="#active-ftp-example-section">Active FTP Example section</a>.</p>
+<blockquote>
+<p><samp>testbox1: {/home/p-t/slacker/public_html} % <strong>ftp -d testbox2</strong><br>
+Connected to <a href="http://testbox2.slacksite.com" target="_blank" rel="noopener">testbox2.slacksite.com</a>.<br>
+220 <a href="http://testbox2.slacksite.com" target="_blank" rel="noopener">testbox2.slacksite.com</a> FTP server ready.<br>
+Name (testbox2:slacker): <strong>slacker</strong><br>
+<font color="red">—&gt; USER slacker</font><br>
+331 Password required for slacker.<br>
+Password: <strong>TmpPass</strong><br>
+<font color="red">—&gt; PASS XXXX</font><br>
+230 User slacker logged in.<br>
+<font color="red">—&gt; SYST<br>
+215 UNIX Type: L8</font><br>
+Remote system type is UNIX.<br>
+Using binary mode to transfer files.<br>
+ftp&gt; <strong>passive</strong><br>
+Passive mode on.<br>
+ftp&gt; <strong>ls</strong><br>
+<font color="red">ftp: setsockopt (ignored): Permission denied<br>
+—&gt; PASV</font><br>
+227 Entering Passive Mode (192,168,150,90,195,149).<br>
+<font color="red">—&gt; LIST</font><br>
+150 Opening ASCII mode data connection for file list<br>
+drwx------   3 slacker    users         104 Jul 27 01:45 public_html<br>
+226 Transfer complete.<br>
+ftp&gt; <strong>quit</strong><br>
+<font color="red">—&gt; QUIT</font><br>
+221 Goodbye.<br>
+</samp></p>
+</blockquote>
+<h2 id="other-notes"><a class="header-anchor" href="#other-notes"></a>Other Notes</h2>
+<p>A reader, Maarten Sjouw, pointed out that active FTP will not function when used in conjunction with a client-side NAT (Network Address Translation) device which is not smart enough to alter the IP address info in FTP packets.</p>
+<h2 id="summary"><a class="header-anchor" href="#summary"></a>Summary</h2>
+<p>The following chart should help admins remember how each FTP mode works:</p>
+<blockquote>
+<p><samp>Active FTP :<br>
+command : client &gt;1023 -&gt; server 21<br>
+data    : client &gt;1023 &lt;- server 20</samp></p>
+<p>Passive FTP :<br>
+command : client &gt;1023 -&gt; server 21<br>
+data    : client &gt;1024 -&gt; server &gt;1023<br>
+</p>
+</blockquote>
+<p>A quick summary of the pros and cons of active vs. passive FTP is also in order:</p>
+<p>Active FTP is beneficial to the FTP server admin, but detrimental to the client side admin. The FTP server attempts to make connections to random high ports on the client, which would almost certainly be blocked by a firewall on the client side. Passive FTP is beneficial to the client, but detrimental to the FTP server admin. The client will make both connections to the server, but one of them will be to a random high port, which would almost certainly be blocked by a firewall on the server side.</p>
+<p>Luckily, there is somewhat of a compromise. Since admins running FTP servers will need to make their servers accessible to the greatest number of clients, they will almost certainly need to support passive FTP. The exposure of high level ports on the server can be minimized by specifying a limited port range for the FTP server to use. Thus, everything except for this range of ports can be firewalled on the server side. While this doesn’t eliminate all risk to the server, it decreases it tremendously. See <a href="#appendix-1">Appendix 1</a> for more information.</p>
+<h2 id="references"><a class="header-anchor" href="#references"></a>References</h2>
+<p>An excellent reference on how various internet protocols work and the issues involved in firewalling them can be found in the O’Reilly and Associates book, <em>Building Internet Firewalls, 2nd Ed</em>, by Brent Chapman and Elizabeth Zwicky.<br>
+**Note 2012:**This book is VERY old and the information contained therein may be outdated!</p>
+<p>Finally, the definitive reference on FTP would be RFC 959, which sets forth the official specifications of the FTP protocol. RFCs can be downloaded from numerous locations, including <a href="http://www.faqs.org/rfcs/rfc959.html" target="_blank" rel="noopener">http://www.faqs.org/rfcs/rfc959.html</a>.</p>
+<h2 id="appendix-1"><a class="header-anchor" href="#appendix-1"></a>Appendix 1</h2>
+<h3 id="introduction-v2"><a class="header-anchor" href="#introduction-v2"></a>Introduction</h3>
+<p>This appendix will describe methods used to configure various popular FTP servers to limit the number of passive ports they will listen on. As mentioned in the main text, FTP server admins will almost definitely need to support passive FTP in order to allow the greatest number of clients to access their FTP resources. In order to support passive FTP, however, a large number of high-numbered ports on the server must be opened through a firewall. Luckily, most FTP servers allow this port range to be specified so as to limit exposure to attacks.</p>
+<h3 id="proftpd"><a class="header-anchor" href="#proftpd"></a>ProFTPd</h3>
+<p>ProFTPd, <a href="http://www.proftpd.net" target="_blank" rel="noopener">http://www.proftpd.net</a>, is an increasingly popular FTP server due to its modularity and Apache-style configuration directives. ProFTPd also supports virtual hosts “out of the box”, causing it to become one of the most common FTP servers used by web hosting companies.</p>
+<p>As of version 1.20RC3 and later (current version as of this writing is 1.2.4), ProFTPd supports a directive called <code>PassivePorts</code>. The <code>PassivePorts</code> directive is usually used in a global context in the <code>proftpd.conf</code> file (the location of which varies depending on how ProFTPd was configured and installed). <code>PassivePorts</code> takes two arguments, the minimum port number and the maximum port number, as in the below example:</p>
+<p><samp>PassivePorts 51000 51999<br>
+</samp></p>
+<p>The ProFTPd documentation has the following to say about the <code>PassivePorts</code> directive:</p>
+<blockquote>
+<p>PassivePorts restricts the range of ports from which the server will select when sent the PASV command from a client. The server will randomly choose a number from within the specified range until an open port is found. Should no open ports be found within the given range, the server will default to a normal kernel-assigned port, and a message logged.</p>
+<p>The port range selected must be in the non-privileged range (eg. greater than or equal to 1024); it is STRONGLY RECOMMENDED that the choosen range be large enough to handle many simultaneous passive connections (for example, 49152-65534, the IANA-registered ephemeral port range).</p>
+</blockquote>
+<p>If you are attempting to use SSH port forwarding to securely tunnel the FTP command channel over an SSH connection (so that passwords are not sent in clear text), be aware that you must set the <code>AllowForeignAddress</code> directive to “on” in the <code>proftpd.conf</code> file. If this is not set and a tunnelled connection is attempted, ProFTPd will log a message similar to the following:</p>
+<p><samp>SECURITY VIOLATION: Passive connection from a.b.c.d rejected<br>
+</samp></p>
+<p><font color="RED">Important Note: Please read and understand the documentation about the <code>AllowForeignAddress</code> directive before implementing it. This can open your FTP server up to bounce attacks. It is strongly recommended that this option not be set on systems being used as anonymous FTP servers.</font></p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/">http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</a></strong><br>
+Reprinted from: <a href="http://slacksite.com/other/ftp.html" target="_blank" rel="noopener">Active FTP vs. Passive FTP, a Definitive Explanation</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/网络协议/" rel="tag"># 网络协议</a>
+          
+            <a href="/tags/FTP/" rel="tag"># FTP</a>
+          
+            <a href="/tags/Active-FTP/" rel="tag"># Active FTP</a>
+          
+            <a href="/tags/Passive-FTP/" rel="tag"># Passive FTP</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/innodb-log-block-structure/" rel="next" title="InnoDB Log Block Structure(InnoDB日志Block结构详解)">
+                <i class="fa fa-chevron-left"></i> InnoDB Log Block Structure(InnoDB日志Block结构详解)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/disabling-row-and-page-level-locks-in-sql-server/" rel="prev" title="Disabling ROW and PAGE Level Locks in SQL Server">
+                Disabling ROW and PAGE Level Locks in SQL Server <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#the-basics"><span class="nav-text">The Basics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#active-ftp"><span class="nav-text">Active FTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#active-ftp-example"><span class="nav-text">Active FTP Example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#passive-ftp"><span class="nav-text">Passive FTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#passive-ftp-example"><span class="nav-text">Passive FTP Example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#other-notes"><span class="nav-text">Other Notes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-text">References</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#appendix-1"><span class="nav-text">Appendix 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#introduction-v2"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proftpd"><span class="nav-text">ProFTPd</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

@@ -1,0 +1,1048 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Linux,Shell,Session," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="在上一篇中介绍了tty的相关原理，这篇将介绍跟tty密切相关的session和进程组。  本篇主要目的是澄清一些概念，不涉及细节">
+<meta name="keywords" content="转载,Linux,Shell,Session">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux session和进程组概述">
+<meta property="og:url" content="http://xnerv.wang/linux-session-and-processgroup-summary/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="在上一篇中介绍了tty的相关原理，这篇将介绍跟tty密切相关的session和进程组。  本篇主要目的是澄清一些概念，不涉及细节">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.896Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux session和进程组概述">
+<meta name="twitter:description" content="在上一篇中介绍了tty的相关原理，这篇将介绍跟tty密切相关的session和进程组。  本篇主要目的是澄清一些概念，不涉及细节">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/linux-session-and-processgroup-summary/"/>
+
+
+
+
+
+  <title>Linux session和进程组概述 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/linux-session-and-processgroup-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Linux session和进程组概述</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T00:00:00+08:00">
+                2017-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在<a href="/linux-tty-pts-summary/">上一篇</a>中介绍了tty的相关原理，这篇将介绍跟tty密切相关的session和进程组。</p>
+<blockquote>
+<p>本篇主要目的是澄清一些概念，不涉及细节</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="session"><a class="header-anchor" href="#session"></a>session</h2>
+<p>session就是一组进程的集合，session id就是这个session中leader的进程ID。</p>
+<h3 id="session的特点"><a class="header-anchor" href="#session的特点"></a>session的特点</h3>
+<p>session的主要特点是当session的leader退出后，session中的所有其它进程将会收到SIGHUP信号，其默认行为是终止进程，即session的leader退出后，session中的其它进程也会退出。</p>
+<p>如果session和tty关联的话，它们之间只能一一对应，一个tty只能属于一个session，一个session只能打开一个tty。当然session也可以不和任何tty关联。</p>
+<h3 id="session的创建"><a class="header-anchor" href="#session的创建"></a>session的创建</h3>
+<p>session可以在任何时候创建，调用setsid函数即可，session中的第一个进程即为这个session的leader，leader是不能变的。常见的创建session的场景是：</p>
+<ul>
+<li>用户登录后，启动shell时将会创建新的session，shell会作为session的leader，随后shell里面运行的进程都将属于这个session，当shell退出后，所有该用户运行的进程将退出。这类session一般都会和一个特定的tty关联，session的leader会成为tty的控制进程，当session的前端进程组发生变化时，控制进程负责更新tty上关联的前端进程组，当tty要关闭的时候，控制进程所在session的所有进程都会收到SIGHUP信号。</li>
+<li>启动deamon进程，这类进程需要和父进程划清界限，所以需要启动一个新的session。这类session一般不会和任何tty关联。</li>
+</ul>
+<h2 id="进程组"><a class="header-anchor" href="#进程组"></a>进程组</h2>
+<p>进程组（process group）也是一组进程的集合，进程组id就是这个进程组中leader的进程ID。</p>
+<h3 id="进程组的特点"><a class="header-anchor" href="#进程组的特点"></a>进程组的特点</h3>
+<p>进程组的主要特点是可以以进程组为单位通过函数<a href="http://man7.org/linux/man-pages/man3/killpg.3.html" target="_blank" rel="noopener">killpg</a>发送信号</p>
+<h3 id="进程组的创建"><a class="header-anchor" href="#进程组的创建"></a>进程组的创建</h3>
+<p>进程组主要用在shell里面，shell负责进程组的管理，包括创建、销毁等。（这里shell就是session的leader）</p>
+<ul>
+<li>对大部分进程来说，它自己就是进程组的leader，并且进程组里面就只有它自己一个进程</li>
+<li>shell里面执行类似<code>ls|more</code>这样的以管道连接起来的命令时，两个进程就属于同一个进程组，ls是进程组的leader。</li>
+<li>shell里面启动一个进程后，一般都会将该进程放到一个单独的进程组，然后该进程fork的所有进程都会属于该进程组，比如多进程的程序，它的所有进程都会属于同一个进程组，当在shell里面按下CTRL+C时，该程序的所有进程都会收到SIGINT而退出。</li>
+</ul>
+<h3 id="后台进程组"><a class="header-anchor" href="#后台进程组"></a>后台进程组</h3>
+<p>shell中启动一个进程时，默认情况下，该进程就是一个前端进程组的leader，可以收到用户的输入，并且可以将输出打印到终端，只有当该进程组退出后，shell才可以再响应用户的输入。</p>
+<p>但我们也可以将该进程组运行在后台，这样shell就可以继续相应用户的输入，常见的方法如下：</p>
+<ul>
+<li>启动程序时，在后面加<code>&amp;</code>，如<code>sleep 1000 &amp;</code>，进程将会进入后台继续运行</li>
+<li>程序启动后，可以按CTRL+Z让它进入后台，和后面加<code>&amp;</code>不同的是，进程会被暂停执行</li>
+</ul>
+<p>对于后台运行的进程组，在shell里面体现为job的概念，即一个后台进程组就是一个job，job有如下限制：</p>
+<ul>
+<li>默认情况下，只要后台进程组的任何一个进程读tty，将会使整个进程组的所有进程暂停</li>
+<li>默认情况下，只要后台进程组的任何一个进程写tty，将有可能会使整个进程组的所有进程暂停（依赖于tty的配置，请参考<a href="/linux-tty-pts-summary/">TTY/PTS概述</a>）</li>
+</ul>
+<p>所有后台运行的进程组可以通过jobs命令查看到，也可以通过fg命令将后台进程组切换到前端，这样就可以继续接收用户的输入了。这两个命令的具体用法请参考它们的帮助文件，这里只给出一个简单的例子：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#通常情况下，sleep命令会一直等待在那里，直到指定的时间过去后才退出。</span></span><br><span class="line"><span class="comment">#shell启动sleep程序时，就将sleep放到了一个新的进程组，</span></span><br><span class="line"><span class="comment">#并且该进程组为前端进程组，虽然sleep不需要输入，也没有输出，</span></span><br><span class="line"><span class="comment">#但当前session的标准输入和输出还是归它，别人用不了，</span></span><br><span class="line"><span class="comment">#只有我们按下CTRL+C使sleep进程退出后，shell自己重新变成了前端进程组，</span></span><br><span class="line"><span class="comment">#于是shell重新具备了响应输入以及输出能力</span></span><br><span class="line">dev@debian:~$ sleep 1000</span><br><span class="line">^C</span><br><span class="line"></span><br><span class="line"><span class="comment">#我们可以在命令行的后面加上&amp;符号，shell还是照样会创建新的进程组，</span></span><br><span class="line"><span class="comment">#并且sleep进程就是新进程组的leader，</span></span><br><span class="line"><span class="comment">#但是shell会将sleep进程组放到后端，让它成为后台进程组</span></span><br><span class="line"><span class="comment">#这里[1]是job id，1627是进程组的ID，即sleep进程的id</span></span><br><span class="line">dev@debian:~$ sleep 1000 &amp;</span><br><span class="line">[1] 1627</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以通过jobs命令看到当前有哪些后台进程组（job）</span></span><br><span class="line">dev@debian:~$ <span class="built_in">jobs</span></span><br><span class="line">[1]+  Running                 sleep 1000 &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment">#使用fg命令带上job id，即可让后端进程组回到前端，</span></span><br><span class="line"><span class="comment">#然后我们使用CTRL+Z命令可以让它再次回到后端，并暂停进程的执行</span></span><br><span class="line"><span class="comment">#CTRL+Z和&amp;不一样的地方就是CTRL+Z会让进程暂停执行，而&amp;不会</span></span><br><span class="line">dev@debian:~$ <span class="built_in">fg</span> 1</span><br><span class="line">sleep 1000</span><br><span class="line">^Z</span><br><span class="line">[1]+  Stopped                 sleep 1000</span><br><span class="line"><span class="comment">#Stopped状态表示进程在后台已经暂停执行了</span></span><br><span class="line">dev@debian:~$ <span class="built_in">jobs</span></span><br><span class="line">[1]+  Stopped                 sleep 1000</span><br></pre></td></tr></table></figure>
+<h2 id="session和进程组的关系"><a class="header-anchor" href="#session和进程组的关系"></a>session和进程组的关系</h2>
+<p>deamon程序虽然也是一个session的leader，但一般它不会创建新的进程组，也没有job的管理功能，所以这种情况下一个session就只有一个进程组，所有的进程都属于同样的进程组和session。</p>
+<p>我们这里看一下shell作为session leader的情况，假设我们在shell里面执行了这些命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dev@debian:~$ sleep 1000 &amp;</span><br><span class="line">[1] 1646</span><br><span class="line">dev@debian:~$ cat | wc -l &amp;</span><br><span class="line">[2] 1648</span><br><span class="line">dev@debian:~$ <span class="built_in">jobs</span></span><br><span class="line">[1]-  Running                 sleep 1000 &amp;</span><br><span class="line">[2]+  Stopped                 cat | wc -l</span><br></pre></td></tr></table></figure>
+<p>下面这张图标明了这种情况下它们之间的关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">+--------------------------------------------------------------+</span><br><span class="line">|                                                              |</span><br><span class="line">|      pg1             pg2             pg3            pg4      |</span><br><span class="line">|    +------+       +-------+        +-----+        +------+   |</span><br><span class="line">|    | bash |       | sleep |        | cat |        | jobs |   |</span><br><span class="line">|    +------+       +-------+        +-----+        +------+   |</span><br><span class="line">| session leader                     | wc  |                   |</span><br><span class="line">|                                    +-----+                   |</span><br><span class="line">|                                                              |</span><br><span class="line">+--------------------------------------------------------------+</span><br><span class="line">                            session</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>pg = process group(进程组)</p>
+</blockquote>
+<ul>
+<li>bash是session的leader，sleep、cat、wc和jobs这四个进程都由bash fork而来，所以他们也属于这个session</li>
+<li>bash也是自己所在进程组的leader</li>
+<li>bash会为自己启动的每个进程都创建一个新的进程组，所以这里sleep和jobs进程属于自己单独的进程组</li>
+<li>对于用管道符号“|”连接起来的命令，bash会将它们放到一个进程组中</li>
+</ul>
+<h2 id="nohup"><a class="header-anchor" href="#nohup"></a>nohup</h2>
+<p>nohup是咋回事呢？nohup干了这么几件事：</p>
+<ul>
+<li>将stdin重定向到/dev/null，于是程序读标准输入将会返回EOF</li>
+<li>将stdout和stderr重定向到nohup.out或者用户通过参数指定的文件，程序所有输出到stdout和stderr的内容将会写入该文件（有时在文件中看不到输出，有可能是程序没有调用flush）</li>
+<li>屏蔽掉SIGHUP信号</li>
+<li>调用exec启动指定的命令（nohup进程将会被新进程取代，但进程ID不变）</li>
+</ul>
+<p>从上面nohup干的事可以看出，通过nohup启动的程序有这些特点：</p>
+<ul>
+<li>nohup程序不负责将进程放到后台，这也是为什么我们经常在nohup命令后面要加上符号“<code>&amp;</code>”的原因</li>
+<li>由于stdin、stdout和stderr都被重定向了，nohup启动的程序不会读写tty</li>
+<li>由于stdin重定向到了/dev/null，程序读stdin的时候会收到EOF返回值</li>
+<li>nohup启动的进程本质上还是属于当前session的一个进程组，所以在当前shell里面可以通过jobs看到nohup启动的程序</li>
+<li>当session leader退出后，该进程会收到SIGHUP信号，但由于nohup帮我们忽略了该信号，所以该进程不会退出</li>
+<li>由于session leader已经退出，而nohup启动的进程属于该session，于是出现了一种情况，那就是通过nohup启动的这个进程组所在的session没有leader，这是一种特殊的情况，内核会帮我们处理这种特殊情况，这里就不再深入介绍</li>
+</ul>
+<p>通过nohup，我们最后达到了就算session leader（一般是shell）退出后，进程还可以照常运行的目的。</p>
+<h2 id="deamon"><a class="header-anchor" href="#deamon"></a>deamon</h2>
+<p>通过nohup，就可以实现让进程在后台一直执行的功能，为什么我们还要写deamon进程呢？</p>
+<p>从上面的nohup的介绍中可以看出来，虽然进程是在后台执行，但进程跟当前session还是有着千丝万缕的关系，至少其父进程还是被session管着的，所以我们还是需要一个跟任何session都没有关系的进程来实现deamon的功能。实现deamon进程的大概步骤如下：</p>
+<ul>
+<li>调用fork生成一个新进程，然后原来的进程退出，这样新进程就变成了孤儿进程，于是被init进程接收，这样新进程就和调用进程没有父子关系了。</li>
+<li>调用setsid，创建新的session，新进程将成为新session的leader，同时该新session不和任何tty关联。</li>
+<li>切换当前工作目录到其它地方，一般是切换到根目录，这样就取消了对原工作目录的引用，如果原工作目录是某个挂载点下面的目录，这样就不会影响该挂载点的卸载。</li>
+<li>关闭一些从父进程继承过来而自己不需要的fd，避免不小心读写这些fd。</li>
+<li>重定向stdin、stdout和stderr，避免读写它们出现错误。</li>
+</ul>
+<h2 id="参考"><a class="header-anchor" href="#参考"></a>参考</h2>
+<ul>
+<li><a href="https://www.win.tue.nl/~aeb/linux/lk/lk-10.html" target="_blank" rel="noopener">Processes</a></li>
+<li><a href="https://www.gnu.org/savannah-checkouts/gnu/libc/manual/html_node/Job-Control.html" target="_blank" rel="noopener">Job Control</a></li>
+<li><a href="https://www.ibm.com/developerworks/cn/linux/1702_zhangym_demo/index.html" target="_blank" rel="noopener">那些永不消逝的进程</a></li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/linux-session-and-processgroup-summary/">http://xnerv.wang/linux-session-and-processgroup-summary/</a></strong><br>
+转载自：<a href="https://segmentfault.com/a/1190000009152815" target="_blank" rel="noopener">(SegmentFault) Linux session和进程组概述</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Shell/" rel="tag"># Shell</a>
+          
+            <a href="/tags/Session/" rel="tag"># Session</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/linux-tty-pts-summary/" rel="next" title="Linux TTY/PTS概述">
+                <i class="fa fa-chevron-left"></i> Linux TTY/PTS概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/cpp-bean-knowledge/" rel="prev" title="一些基础的C++豆知识">
+                一些基础的C++豆知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#session"><span class="nav-text">session</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#session的特点"><span class="nav-text">session的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session的创建"><span class="nav-text">session的创建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程组"><span class="nav-text">进程组</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程组的特点"><span class="nav-text">进程组的特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程组的创建"><span class="nav-text">进程组的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后台进程组"><span class="nav-text">后台进程组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#session和进程组的关系"><span class="nav-text">session和进程组的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nohup"><span class="nav-text">nohup</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deamon"><span class="nav-text">deamon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

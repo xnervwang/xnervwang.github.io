@@ -1,0 +1,1016 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="SQL Server provides two physical implementations of the read committed isolation level defined by the SQL standard, locking read committed and read committed snapshot isolation (RCSI). While both impl">
+<meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Read Committed Snapshot Isolation">
+<meta property="og:url" content="http://xnerv.wang/read-committed-snapshot-isolation/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="SQL Server provides two physical implementations of the read committed isolation level defined by the SQL standard, locking read committed and read committed snapshot isolation (RCSI). While both impl">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/read-committed-snapshot-isolation/1.png">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.812Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Read Committed Snapshot Isolation">
+<meta name="twitter:description" content="SQL Server provides two physical implementations of the read committed isolation level defined by the SQL standard, locking read committed and read committed snapshot isolation (RCSI). While both impl">
+<meta name="twitter:image" content="http://xnerv.wang/assets/read-committed-snapshot-isolation/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/read-committed-snapshot-isolation/"/>
+
+
+
+
+
+  <title>Read Committed Snapshot Isolation | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/read-committed-snapshot-isolation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Read Committed Snapshot Isolation</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T23:47:00+08:00">
+                2018-01-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>SQL Server provides two physical implementations of the <strong>read committed</strong> isolation level defined by the SQL standard, locking read committed and read committed snapshot isolation (<strong>RCSI</strong>). While both implementations meet the requirements laid down in the SQL standard for read committed isolation behaviours, RCSI has quite different physical behaviours from the locking implementation we looked at in <a href="/2014/04/t-sql-queries/the-read-committed-isolation-level">the previous post in this series</a>.</p>
+<a id="more"></a>
+<h2 id="logical-guarantees"><a class="header-anchor" href="#logical-guarantees"></a>Logical Guarantees</h2>
+<p>The SQL standard requires that a transaction operating at the read committed isolation level not experience any dirty reads. Another way to express this requirement is to say a read committed transaction <strong>must only encounter committed data</strong>.</p>
+<p>The standard also says that read committed transactions <strong>might</strong> experience the concurrency phenomena known as non-repeatable reads and phantoms (though they are not actually required to do so). As it happens, both physical implementations of read committed isolation in SQL Server can experience non-repeatable reads and phantom rows, though the precise details are quite different.</p>
+<h2 id="a-point-in-time-view-of-committed-data"><a class="header-anchor" href="#a-point-in-time-view-of-committed-data"></a>A point-in-time view of committed data</h2>
+<p>If the database option <code>READ_COMMITTED_SNAPSHOT</code> in <code>ON</code>, SQL Server uses a <a href="http://msdn.microsoft.com/en-us/library/ms177404.aspx" target="_blank" rel="noopener">row-versioning implementation</a> of the read committed isolation level. When this is enabled, transactions requesting read committed isolation automatically use the RCSI implementation; no changes to existing T-SQL code is required to use RCSI. Note carefully though that this is <strong>not the same</strong> as saying that code <strong>will behave the same</strong> under RCSI as when using the locking implementation of read committed, in fact this is quite generally <strong>not the case</strong>.</p>
+<p>There is nothing in the SQL standard that requires the data read by a read committed transaction to be the <strong>most-recently</strong> committed data. The SQL Server RCSI implementation takes advantage of this to provide transactions with a <strong>point-in-time view</strong> of committed data, where that point in time is the moment the <strong>current statement began</strong> execution (not the moment any containing transaction started).</p>
+<p>This is quite different from the behaviour of the SQL Server locking implementation of read committed, where the statement sees the most-recently committed data as of <strong>the moment each item is physically read</strong>. Locking read committed releases shared locks as quickly as possible, so the set of data encountered may come from very different points in time.</p>
+<p>To summarize, locking read committed sees <strong>each row</strong> as it was at the time it was briefly locked and physically read; RCSI sees <strong>all rows</strong> as they were at the time the statement began. Both implementations are guaranteed to never see uncommitted data, but the data they encounter can be very different.</p>
+<h3 id="the-implications-of-a-point-in-time-view"><a class="header-anchor" href="#the-implications-of-a-point-in-time-view"></a>The implications of a point-in-time view</h3>
+<p>Seeing a point-in-time view of committed data might seem self-evidently superior to the more complex behaviour of the locking implementation. It is clear, for example, that a point-in-time view cannot suffer from the problems of <strong>missing rows</strong> or encountering the <strong>same row multiple times</strong>, which are both possible under locking read committed isolation.</p>
+<p>A second important advantage of RCSI is that it <strong>does not acquire shared locks</strong> when reading data, because the data comes from the row version store rather than being accessed directly. The lack of shared locks can dramatically <strong>improve concurrency</strong> by eliminating conflicts with concurrent transactions looking to acquire incompatible locks. This advantage is commonly summarized by saying that readers do not block writers under RCSI, and vice-versa. As a further consequence of reducing blocking due to incompatible lock requests, the opportunity for <strong>deadlocks</strong> is usually greatly reduced when running under RCSI.</p>
+<p>However, these benefits do not come without <strong>costs and caveats</strong>. For one thing, maintaining versions of committed rows consumes system resources, so it is important that the physical environment is configured to cope with this, primarily in terms of <em>tempdb</em> performance and memory/disk space requirements.</p>
+<p>The second caveat is a little more subtle: RCSI provides a snapshot view of committed data <strong>as it was</strong> at the start of the statement, but there is nothing to prevent the real data from being changed (and those changes committed) while the RCSI statement is executing. There are no shared locks, remember. An immediate consequence of this second point is that T-SQL code running under RCSI might <strong>make decisions based on out of date information</strong>, as compared with the current committed state of the database. We will talk more about this shortly.</p>
+<p>There is one last (implementation-specific) observation I want to make about RCSI before we move on. <strong>Scalar and multi-statement functions</strong> execute using a different internal T-SQL context from the containing statement. This means that the point-in-time view seen inside a scalar or multi-statement function invocation can be later than the point-in-time view seen by the rest of the statement. This can result in unexpected inconsistencies, as different parts of the same statement see <strong>data from different points in time</strong>. This weird and confusing behaviour does <strong>not</strong> apply to in-line functions, which see the same snapshot as the statement they appear in.</p>
+<h3 id="non-repeatable-reads-and-phantoms"><a class="header-anchor" href="#non-repeatable-reads-and-phantoms"></a>Non-repeatable reads and phantoms</h3>
+<p>Given a statement-level point-in-time view of the committed state of the database, it might not be immediately apparent how a read committed transaction under RCSI might experience the non-repeatable read or phantom row phenomena. Indeed, if we limit our thinking to the scope of a <strong>single statement</strong>, neither of these phenomena are possible under RCSI.</p>
+<p>Reading the same data multiple times within the <strong>same statement</strong> under RCSI will always return the same data values, no data will disappear between those reads, and no new data will appear either. If you are wondering what sort of statement might read the same data more than once, think about queries that reference the same table more than once, perhaps in a subquery.</p>
+<p>Statement-level read consistency is an obvious consequence of the reads being issued against a fixed snapshot of the data. The reason that RCSI does <strong>not</strong> provide protection from non-repeatable reads and phantoms is that these SQL standard phenomena are defined at the transaction level. Multiple statements within a transaction running at RCSI may see different data, because each statement sees a point-in-time view as of the moment <strong>that particular statement</strong> started.</p>
+<p>To summarize, each <strong>statement</strong> within an RCSI transaction sees a static committed data set, but that set can change between statements inside the same transaction.</p>
+<h2 id="out-of-date-data"><a class="header-anchor" href="#out-of-date-data"></a>Out-of-date data</h2>
+<p>The possibility of our T-SQL code making an important decision based on out-of-date information is more than a little unsettling. Consider for a moment that the point-in-time snapshot used by a single statement running under RCSI might be <strong>arbitrarily old</strong>.</p>
+<p>A statement that runs for a considerable period a time will continue to see the committed state of the database as it was when the statement began. Meanwhile, the statement is missing all the committed changes that occurred in the database since that time.</p>
+<p>This is not to say that problems associated with accessing stale data under RCSI are limited to <strong>long-running</strong> statements, but the issues certainly might be more pronounced in such cases.</p>
+<h3 id="a-question-of-timing"><a class="header-anchor" href="#a-question-of-timing"></a>A question of timing</h3>
+<p>This issue of out-of-date data applies to all RCSI statements in principle, no matter how quickly they might complete. How ever small the time window is, there is always a chance that a concurrent operation might modify the data set we are working with, without us being aware of that change. Let us look again at one of the simple examples we used before when exploring the behaviour of locking read committed:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> dbo.OverdueInvoices</span><br><span class="line"><span class="keyword">SELECT</span> I.InvoiceNumber</span><br><span class="line"><span class="keyword">FROM</span> dbo.Invoices <span class="keyword">AS</span> I</span><br><span class="line"><span class="keyword">WHERE</span> I.TotalDue &gt;</span><br><span class="line">(</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="keyword">SUM</span>(P.Amount)</span><br><span class="line">    <span class="keyword">FROM</span> dbo.Payments <span class="keyword">AS</span> P</span><br><span class="line">    <span class="keyword">WHERE</span> P.InvoiceNumber = I.InvoiceNumber</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>When run under RCSI, this statement <strong>cannot</strong> see any committed database modifications that occur after the statement starts executing. While we will not encounter the problems of missed or multiply-encountered rows possible under the locking implementation, a concurrent transaction might add a payment that <strong>ought</strong> to prevent a customer from being sent a stern warning letter about an overdue payment after the statement above starts executing.</p>
+<p>You can probably think of many other potential problems that might occur in this scenario, or in others that are conceptually similar. The longer the statement runs for, the more out-of-date its view of the database becomes, and the greater the scope for possibly-unintended consequences.</p>
+<p>Of course, there are plenty of mitigating factors in this specific example. The behaviour might well be seen as perfectly acceptable. After all, sending a reminder letter because a payment arrived a few seconds too late is an easily defended action. The principle remains however.</p>
+<h3 id="business-rule-failures-and-integrity-risks"><a class="header-anchor" href="#business-rule-failures-and-integrity-risks"></a>Business Rule Failures and Integrity Risks</h3>
+<p>More serious issues can arise from the use of out-of-date information than sending a warning letter a few seconds early. A good example of this class of weakness can be seen with <strong>trigger code</strong> used to enforce an integrity rule that is perhaps too complex to enforce with declarative referential integrity constraints. To illustrate, consider the following code, which uses a trigger to enforce a variation of a foreign key constraint, but one that enforces the relationship for only certain child table rows:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> Sandpit</span><br><span class="line"><span class="keyword">SET</span> READ_COMMITTED_SNAPSHOT <span class="keyword">ON</span></span><br><span class="line"><span class="keyword">WITH</span> <span class="keyword">ROLLBACK</span> <span class="keyword">IMMEDIATE</span>;</span><br><span class="line">GO</span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> <span class="keyword">READ</span> COMMITTED;</span><br><span class="line">GO</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> dbo.Parent (ParentID <span class="built_in">integer</span> PRIMARY <span class="keyword">KEY</span>);</span><br><span class="line">GO</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> dbo.Child</span><br><span class="line">(</span><br><span class="line">    ChildID <span class="built_in">integer</span> <span class="keyword">IDENTITY</span> PRIMARY <span class="keyword">KEY</span>,</span><br><span class="line">    ParentID <span class="built_in">integer</span> <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line">    CheckMe <span class="built_in">bit</span> <span class="keyword">NOT</span> <span class="literal">NULL</span></span><br><span class="line">);</span><br><span class="line">GO</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TRIGGER</span> dbo.Child_AI</span><br><span class="line"><span class="keyword">ON</span> dbo.Child</span><br><span class="line"><span class="keyword">AFTER</span> <span class="keyword">INSERT</span></span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="comment">-- Child rows with CheckMe = true</span></span><br><span class="line">    <span class="comment">-- must have an associated parent row</span></span><br><span class="line">    <span class="keyword">IF</span> <span class="keyword">EXISTS</span></span><br><span class="line">    (</span><br><span class="line">        <span class="keyword">SELECT</span> ins.ParentID</span><br><span class="line">        <span class="keyword">FROM</span> inserted <span class="keyword">AS</span> ins</span><br><span class="line">        <span class="keyword">WHERE</span> ins.CheckMe = <span class="number">1</span></span><br><span class="line">        <span class="keyword">EXCEPT</span></span><br><span class="line">        <span class="keyword">SELECT</span> P.ParentID</span><br><span class="line">        <span class="keyword">FROM</span> dbo.Parent <span class="keyword">AS</span> P</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">    	RAISERROR (<span class="string">'Integrity violation!'</span>, <span class="number">16</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">ROLLBACK</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line">    <span class="keyword">END</span></span><br><span class="line"><span class="keyword">END</span>;</span><br><span class="line">GO</span><br><span class="line"><span class="comment">-- Insert parent row #1</span></span><br><span class="line"><span class="keyword">INSERT</span> dbo.Parent (ParentID) <span class="keyword">VALUES</span> (<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>Now consider a transaction running in another session (use another SSMS window for this if you are following along) which deletes parent row #1, but does not commit yet:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> <span class="keyword">READ</span> COMMITTED;</span><br><span class="line"><span class="keyword">BEGIN</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> dbo.Parent</span><br><span class="line"><span class="keyword">WHERE</span> ParentID = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>Back in our original session, we try to insert a (checked) child row that references this parent:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> dbo.Child (ParentID, CheckMe)</span><br><span class="line"><span class="keyword">VALUES</span> (<span class="number">1</span>, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>The the trigger code executes, but because RCSI sees only <strong>committed</strong> data as of the time the statement started, it still sees the parent row (not the uncommitted deletion) and the <strong>insert succeeds</strong>!</p>
+<p>The transaction that deleted the parent row can now commit its change successfully, leaving the database in an <strong>inconsistent</strong> state in terms of our trigger logic:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COMMIT</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line"><span class="keyword">SELECT</span> P.* <span class="keyword">FROM</span> dbo.Parent <span class="keyword">AS</span> P;</span><br><span class="line"><span class="keyword">SELECT</span> C.* <span class="keyword">FROM</span> dbo.Child <span class="keyword">AS</span> C;</span><br></pre></td></tr></table></figure>
+<p><img src="/assets/read-committed-snapshot-isolation/1.png" alt="Integrity violation" title="Integrity violation"></p>
+<p>This is a simplified example of course, and one which could easily be circumvented using the built-in constraint facilities. Much more complex business rules and pseudo-integrity constraints can be written inside and <strong>outside of triggers</strong>. The potential for incorrect behaviour under RCSI should be obvious.</p>
+<h3 id="blocking-behaviour-and-latest-committed-data"><a class="header-anchor" href="#blocking-behaviour-and-latest-committed-data"></a>Blocking behaviour and latest-committed data</h3>
+<p>I mentioned earlier that T-SQL code is not guaranteed to behave in the same way under RCSI read committed as it did using the locking implementation. The preceding trigger code example is a good illustration of that, but I need to emphasise that <strong>the general problem is not limited to triggers</strong>.</p>
+<p>RCSI is typically not a good choice for any T-SQL code whose correctness depends on blocking if a concurrent uncommitted change exists. RCSI might also not be the right choice if the code depends on reading <strong>current</strong> committed data, rather than the latest committed data as at the time the statement started. These two considerations are related, but they are not the same thing.</p>
+<h3 id="locking-read-committed-under-rcsi"><a class="header-anchor" href="#locking-read-committed-under-rcsi"></a>Locking read committed under RCSI</h3>
+<p>SQL Server provides one way to request <strong>locking</strong> read committed when RCSI is enabled, using the table hint <code>READCOMMITTEDLOCK</code>. We can modify our trigger to avoid the problems shown above by adding this hint to the table that needs blocking behaviour to perform correctly:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TRIGGER</span> dbo.Child_AI</span><br><span class="line"><span class="keyword">ON</span> dbo.Child</span><br><span class="line"><span class="keyword">AFTER</span> <span class="keyword">INSERT</span></span><br><span class="line"><span class="keyword">AS</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="comment">-- Child rows with CheckMe = true</span></span><br><span class="line">    <span class="comment">-- must have an associated parent row</span></span><br><span class="line">    <span class="keyword">IF</span> <span class="keyword">EXISTS</span></span><br><span class="line">    (</span><br><span class="line">        <span class="keyword">SELECT</span> ins.ParentID</span><br><span class="line">        <span class="keyword">FROM</span> inserted <span class="keyword">AS</span> ins</span><br><span class="line">        <span class="keyword">WHERE</span> ins.CheckMe = <span class="number">1</span></span><br><span class="line">        <span class="keyword">EXCEPT</span></span><br><span class="line">        <span class="keyword">SELECT</span> P.ParentID</span><br><span class="line">        <span class="keyword">FROM</span> dbo.Parent <span class="keyword">AS</span> P <span class="keyword">WITH</span> (READCOMMITTEDLOCK) <span class="comment">-- NEW!!</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">BEGIN</span></span><br><span class="line">        RAISERROR (<span class="string">'Integrity violation!'</span>, <span class="number">16</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">ROLLBACK</span> <span class="keyword">TRANSACTION</span>;</span><br><span class="line">    <span class="keyword">END</span></span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+<p>With this change in place, the attempt to insert the potentially-orphaned child row blocks until the deleting transaction commits (or aborts). If the delete commits, the trigger code detects the integrity violation and raises the expected error.</p>
+<p>Identifying queries that <strong>might not perform correctly</strong> under RCSI is a non-trivial task that may require <strong>extensive testing</strong> to get right (and please remember these issues are quite general and not confined to trigger code!) Also, adding the <code>READCOMMITTEDLOCK</code> hint to every table that needs it can be a tedious and error-prone process. Until SQL Server provides a more broadly-scoped option to request the locking implementation where needed, we are stuck with using the table hints.</p>
+<h3 id="next-time"><a class="header-anchor" href="#next-time"></a>Next Time</h3>
+<p><a href="https://sqlperformance.com/2014/05/t-sql-queries/data-modifications-under-rcsi" target="_blank" rel="noopener">The next post in this series</a> continues our examination of read committed snapshot isolation, with a look at the surprising behaviour of data modification statements under RCSI.</p>
+<p>[ <a href="https://sqlperformance.com/2014/07/t-sql-queries/isolation-levels" target="_blank" rel="noopener">See the index for the whole series</a> ]</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/read-committed-snapshot-isolation/">http://xnerv.wang/read-committed-snapshot-isolation/</a></strong><br>
+Reprinted from: <a href="https://sqlperformance.com/2014/05/t-sql-queries/read-committed-snapshot-isolation" target="_blank" rel="noopener">Read Committed Snapshot Isolation</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/SQL-Server/" rel="tag"># SQL Server</a>
+          
+            <a href="/tags/Transaction/" rel="tag"># Transaction</a>
+          
+            <a href="/tags/Isolation-Level/" rel="tag"># Isolation Level</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/snapshot-isolation-transaction-aborted-due-to-update-conflict/" rel="next" title="Snapshot isolation transaction aborted due to update conflict.">
+                <i class="fa fa-chevron-left"></i> Snapshot isolation transaction aborted due to update conflict.
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/" rel="prev" title="Snapshot Isolation Level in SQL Server - What, Why and How - Part 1">
+                Snapshot Isolation Level in SQL Server - What, Why and How - Part 1 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#logical-guarantees"><span class="nav-text">Logical Guarantees</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-point-in-time-view-of-committed-data"><span class="nav-text">A point-in-time view of committed data</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#the-implications-of-a-point-in-time-view"><span class="nav-text">The implications of a point-in-time view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#non-repeatable-reads-and-phantoms"><span class="nav-text">Non-repeatable reads and phantoms</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#out-of-date-data"><span class="nav-text">Out-of-date data</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-question-of-timing"><span class="nav-text">A question of timing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#business-rule-failures-and-integrity-risks"><span class="nav-text">Business Rule Failures and Integrity Risks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#blocking-behaviour-and-latest-committed-data"><span class="nav-text">Blocking behaviour and latest-committed data</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#locking-read-committed-under-rcsi"><span class="nav-text">Locking read committed under RCSI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#next-time"><span class="nav-text">Next Time</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

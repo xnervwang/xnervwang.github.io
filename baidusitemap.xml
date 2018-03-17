@@ -1,0 +1,2875 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</loc>
+    <lastmod>2018-03-17T14:40:34.267Z</lastmod>
+    <data>
+        <display>
+        <title>Active FTP vs. Passive FTP, a Definitive Explanation</title>
+        <pubTime>2018-02-20T06:34:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>网络协议</tag>
+         
+        <tag>FTP</tag>
+         
+        <tag>Active FTP</tag>
+         
+        <tag>Passive FTP</tag>
+         
+         
+           
+             
+              <breadCrumb title="网络协议" url="http://xnerv.wang/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/virtual-function-and-virtual-table/</loc>
+    <lastmod>2018-03-17T14:40:34.261Z</lastmod>
+    <data>
+        <display>
+        <title>虚函数与虚继承寻踪</title>
+        <pubTime>2013-01-14T01:24:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>编程语言</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>虚表</tag>
+         
+        <tag>多态</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/how-to-implement-a-malloc/</loc>
+    <lastmod>2018-03-17T14:40:34.254Z</lastmod>
+    <data>
+        <display>
+        <title>如何实现一个malloc</title>
+        <pubTime>2014-08-18T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>编程语言</tag>
+         
+        <tag>C</tag>
+         
+        <tag>C内存管理</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/spin-lock-in-cpp/</loc>
+    <lastmod>2018-03-17T14:40:34.248Z</lastmod>
+    <data>
+        <display>
+        <title>Spin Lock in C++</title>
+        <pubTime>2011-05-08T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>Programing</tag>
+         
+        <tag>spinlock</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
+    <lastmod>2018-03-17T14:40:34.241Z</lastmod>
+    <data>
+        <display>
+        <title>Overriding the virtual table in a C++ object</title>
+        <pubTime>2017-11-03T14:52:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>Programing</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/analysis-about-cpp-exception-implementation/</loc>
+    <lastmod>2018-03-17T14:40:34.238Z</lastmod>
+    <data>
+        <display>
+        <title>C++异常机制的实现方式和开销分析</title>
+        <pubTime>2017-10-26T14:36:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>编程语言</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>C++异常</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/all-truths-about-python-encoding-problem/</loc>
+    <lastmod>2018-03-17T14:40:34.233Z</lastmod>
+    <data>
+        <display>
+        <title>彻底研究Python的编码问题</title>
+        <pubTime>2017-11-05T09:14:00.000Z</pubTime>
+        
+        <tag>编程语言</tag>
+         
+        <tag>Python</tag>
+         
+        <tag>未完成</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/cpp-bean-knowledge/</loc>
+    <lastmod>2018-03-17T14:40:34.230Z</lastmod>
+    <data>
+        <display>
+        <title>一些基础的C++豆知识</title>
+        <pubTime>2017-07-23T08:34:00.000Z</pubTime>
+        
+        <tag>编程语言</tag>
+         
+        <tag>C++</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    <lastmod>2018-03-17T14:40:34.224Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) Why can't variables be declared in a switch statement?</title>
+        <pubTime>2008-09-18T05:11:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>Programing</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
+    <lastmod>2018-03-17T14:40:34.221Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) 格式规范语法：printf 和 wprintf 函数</title>
+        <pubTime>2017-11-18T13:33:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Programing</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
+    <lastmod>2018-03-17T14:40:34.215Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) 格式规范字段：scanf 和 wscanf 函数</title>
+        <pubTime>2017-11-18T13:30:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>C++</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Programing</tag>
+         
+         
+           
+             
+              <breadCrumb title="编程语言" url="http://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/16-useful-online-tools/</loc>
+    <lastmod>2018-03-17T14:40:34.212Z</lastmod>
+    <data>
+        <display>
+        <title>16个很有用的在线工具</title>
+        <pubTime>2014-07-31T10:49:00.000Z</pubTime>
+        
+        <tag>程序员生活</tag>
+         
+        <tag>转载</tag>
+         
+         
+           
+             
+              <breadCrumb title="程序员生活" url="http://xnerv.wang/categories/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
+    <lastmod>2018-03-17T14:40:34.209Z</lastmod>
+    <data>
+        <display>
+        <title>10个帮程序员减压放松的网站</title>
+        <pubTime>2015-02-04T13:15:00.000Z</pubTime>
+        
+        <tag>程序员生活</tag>
+         
+        <tag>转载</tag>
+         
+         
+           
+             
+              <breadCrumb title="程序员生活" url="http://xnerv.wang/categories/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%94%9F%E6%B4%BB/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/lock-free-queue-Implementation/</loc>
+    <lastmod>2018-03-17T14:40:34.206Z</lastmod>
+    <data>
+        <display>
+        <title>无锁队列的实现</title>
+        <pubTime>2012-09-06T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>数据结构与算法</tag>
+         
+        <tag>无锁队列</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据结构与算法" url="http://xnerv.wang/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/some-knowledge-points-learned-in-university/</loc>
+    <lastmod>2018-03-17T14:40:34.201Z</lastmod>
+    <data>
+        <display>
+        <title>一些大学常用算法及知识点的回顾</title>
+        <pubTime>2017-11-20T13:13:00.000Z</pubTime>
+        
+        <tag>数据结构与算法</tag>
+         
+        <tag>排序算法</tag>
+         
+        <tag>查找算法</tag>
+         
+        <tag>路由协议</tag>
+         
+         
+           
+             
+              <breadCrumb title="数据结构与算法" url="http://xnerv.wang/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
+    <lastmod>2018-03-17T14:40:34.194Z</lastmod>
+    <data>
+        <display>
+        <title>进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）</title>
+        <pubTime>2014-09-23T03:31:56.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>操作系统</tag>
+         
+        <tag>内存管理</tag>
+         
+        <tag>进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://xnerv.wang/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/process-memory-layout/</loc>
+    <lastmod>2018-03-17T14:40:34.188Z</lastmod>
+    <data>
+        <display>
+        <title>进程内存布局</title>
+        <pubTime>2016-03-06T15:23:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>操作系统</tag>
+         
+        <tag>内存管理</tag>
+         
+        <tag>进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://xnerv.wang/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/understand-memory-barrier/</loc>
+    <lastmod>2018-03-17T14:40:34.186Z</lastmod>
+    <data>
+        <display>
+        <title>理解 Memory barrier（内存屏障）</title>
+        <pubTime>2017-10-26T13:51:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>操作系统</tag>
+         
+        <tag>内存屏障</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://xnerv.wang/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/</loc>
+    <lastmod>2018-03-17T14:40:34.179Z</lastmod>
+    <data>
+        <display>
+        <title>我理解的逻辑地址、线性地址、物理地址和虚拟地址</title>
+        <pubTime>2008-01-15T08:32:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>操作系统</tag>
+         
+        <tag>内存管理</tag>
+         
+        <tag>虚拟内存</tag>
+         
+        <tag>页表</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://xnerv.wang/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</loc>
+    <lastmod>2018-03-17T14:40:34.173Z</lastmod>
+    <data>
+        <display>
+        <title>【协程原理】 - 协程不过是用户态的线程</title>
+        <pubTime>2014-09-09T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>操作系统</tag>
+         
+        <tag>协程</tag>
+         
+        <tag>线程</tag>
+         
+         
+           
+             
+              <breadCrumb title="操作系统" url="http://xnerv.wang/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/memory-barriers-are-like-source-control-perations/</loc>
+    <lastmod>2018-03-17T14:40:34.170Z</lastmod>
+    <data>
+        <display>
+        <title>Memory Barriers Are Like Source Control Operations</title>
+        <pubTime>2012-07-09T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Memory Barrier</tag>
+         
+         
+           
+             
+              <breadCrumb title="OS" url="http://xnerv.wang/categories/OS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</loc>
+    <lastmod>2018-03-17T14:40:34.164Z</lastmod>
+    <data>
+        <display>
+        <title>How does a mutex work? What does it cost?</title>
+        <pubTime>2011-12-15T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Mutex</tag>
+         
+        <tag>Multi Threads</tag>
+         
+         
+           
+             
+              <breadCrumb title="OS" url="http://xnerv.wang/categories/OS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/acquire-and-release-semantics/</loc>
+    <lastmod>2018-03-17T14:40:34.161Z</lastmod>
+    <data>
+        <display>
+        <title>Acquire and Release Semantics</title>
+        <pubTime>2012-09-12T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Memory Barrier</tag>
+         
+         
+           
+             
+              <breadCrumb title="OS" url="http://xnerv.wang/categories/OS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
+    <lastmod>2018-03-17T14:40:34.155Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) What is private bytes, virtual bytes, working set?</title>
+        <pubTime>2009-12-30T22:16:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>Virtual Memory</tag>
+         
+        <tag>Private bytes</tag>
+         
+        <tag>Working Set</tag>
+         
+         
+           
+             
+              <breadCrumb title="OS" url="http://xnerv.wang/categories/OS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
+    <lastmod>2018-03-17T14:40:34.152Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) What are the main uses of yield(), and how does it differ from join() and interrupt()?</title>
+        <pubTime>2011-08-08T01:01:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>yield</tag>
+         
+         
+           
+             
+              <breadCrumb title="OS" url="http://xnerv.wang/categories/OS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/further-disscusion-of-pagerank-4/</loc>
+    <lastmod>2018-03-17T14:40:34.150Z</lastmod>
+    <data>
+        <display>
+        <title>深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来</title>
+        <pubTime>2011-06-21T03:22:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>搜索引擎</tag>
+         
+        <tag>PageRank</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索引擎" url="http://xnerv.wang/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/further-disscusion-of-pagerank-2/</loc>
+    <lastmod>2018-03-17T14:40:34.144Z</lastmod>
+    <data>
+        <display>
+        <title>深入探讨PageRank（二）：PageRank原理剖析</title>
+        <pubTime>2011-06-20T06:55:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>搜索引擎</tag>
+         
+        <tag>PageRank</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索引擎" url="http://xnerv.wang/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/further-disscusion-of-pagerank-1/</loc>
+    <lastmod>2018-03-17T14:40:34.138Z</lastmod>
+    <data>
+        <display>
+        <title>深入探讨PageRank（一）：PageRank算法原理入门</title>
+        <pubTime>2011-06-19T04:22:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>搜索引擎</tag>
+         
+        <tag>PageRank</tag>
+         
+         
+           
+             
+              <breadCrumb title="搜索引擎" url="http://xnerv.wang/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</loc>
+    <lastmod>2018-03-17T14:40:34.133Z</lastmod>
+    <data>
+        <display>
+        <title>比特币白皮书：一种点对点的电子现金系统</title>
+        <pubTime>2018-01-20T07:01:00.000Z</pubTime>
+        
+        <tag>区块链与比特币</tag>
+         
+        <tag>区块链</tag>
+         
+        <tag>比特币</tag>
+         
+         
+           
+             
+              <breadCrumb title="区块链与比特币" url="http://xnerv.wang/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E4%B8%8E%E6%AF%94%E7%89%B9%E5%B8%81/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/spv-spv-nodes-spv-purses/</loc>
+    <lastmod>2018-03-17T14:40:34.127Z</lastmod>
+    <data>
+        <display>
+        <title>SPV、SPV节点和SPV钱包 (初稿）</title>
+        <pubTime>2018-01-20T07:18:00.000Z</pubTime>
+        
+        <tag>区块链与比特币</tag>
+         
+        <tag>区块链</tag>
+         
+        <tag>比特币</tag>
+         
+        <tag>SPV</tag>
+         
+         
+           
+             
+              <breadCrumb title="区块链与比特币" url="http://xnerv.wang/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E4%B8%8E%E6%AF%94%E7%89%B9%E5%B8%81/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/google-3-gifts-gfs/</loc>
+    <lastmod>2018-03-17T14:40:34.121Z</lastmod>
+    <data>
+        <display>
+        <title>谷歌技术"三宝"之谷歌文件系统</title>
+        <pubTime>2012-04-21T09:28:31.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Google</tag>
+         
+        <tag>GFS</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/google-3-gifts-mapreduce/</loc>
+    <lastmod>2018-03-17T14:40:34.116Z</lastmod>
+    <data>
+        <display>
+        <title>谷歌技术"三宝"之MapReduce</title>
+        <pubTime>2012-04-26T14:01:57.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Google</tag>
+         
+        <tag>MapReduce</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/google-3-gifts-bigtable/</loc>
+    <lastmod>2018-03-17T14:40:34.110Z</lastmod>
+    <data>
+        <display>
+        <title>谷歌技术"三宝"之BigTable</title>
+        <pubTime>2012-05-04T14:09:29.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Google</tag>
+         
+        <tag>BigTable</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/cache-update-routines/</loc>
+    <lastmod>2018-03-17T14:40:34.102Z</lastmod>
+    <data>
+        <display>
+        <title>缓存更新的套路</title>
+        <pubTime>2016-07-26T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>缓存</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/bigtable-leveldb/</loc>
+    <lastmod>2018-03-17T14:40:34.096Z</lastmod>
+    <data>
+        <display>
+        <title>浅析 Bigtable 和 LevelDB 的实现</title>
+        <pubTime>2018-03-16T10:30:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Bigtable</tag>
+         
+        <tag>LevelDB</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/study-consistent-hashing-in-5min/</loc>
+    <lastmod>2018-03-17T14:40:34.087Z</lastmod>
+    <data>
+        <display>
+        <title>每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)</title>
+        <pubTime>2014-04-10T16:21:03.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Consistent Hashing</tag>
+         
+        <tag>一致性哈希</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/application-of-mvcc-in-distributed-system/</loc>
+    <lastmod>2018-03-17T14:40:34.081Z</lastmod>
+    <data>
+        <display>
+        <title>多版本并发控制(MVCC)在分布式系统中的应用</title>
+        <pubTime>2012-03-12T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>MVCC</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/dynamo-implement/</loc>
+    <lastmod>2018-03-17T14:40:34.075Z</lastmod>
+    <data>
+        <display>
+        <title>分布式键值存储 Dynamo 的实现原理</title>
+        <pubTime>2018-03-16T10:40:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Dynamo</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/transaction-processing-of-distributed-system/</loc>
+    <lastmod>2018-03-17T14:40:34.068Z</lastmod>
+    <data>
+        <display>
+        <title>分布式系统的事务处理</title>
+        <pubTime>2014-01-19T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>2PC</tag>
+         
+        <tag>分布式事务</tag>
+         
+        <tag>Paxos</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</loc>
+    <lastmod>2018-03-17T14:40:34.062Z</lastmod>
+    <data>
+        <display>
+        <title>一些流行引擎存储格式简介</title>
+        <pubTime>2018-03-16T12:47:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>InnoDB</tag>
+         
+        <tag>TokuDB</tag>
+         
+        <tag>RocksDB</tag>
+         
+        <tag>TiDB</tag>
+         
+        <tag>CockroachDB</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/the-google-file-system-paper-analysis/</loc>
+    <lastmod>2018-03-17T14:40:34.059Z</lastmod>
+    <data>
+        <display>
+        <title>The Google File System——论文详解</title>
+        <pubTime>2015-02-04T02:42:32.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>Google</tag>
+         
+        <tag>GFS</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/leveldb-analysis/</loc>
+    <lastmod>2018-03-17T14:40:34.056Z</lastmod>
+    <data>
+        <display>
+        <title>LevelDB 实现分析</title>
+        <pubTime>2018-03-16T10:20:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>LevelDB</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/summary-of-distributed-theory-and-architecture/</loc>
+    <lastmod>2018-03-17T14:40:34.050Z</lastmod>
+    <data>
+        <display>
+        <title>分布式理论及架构的一些整理</title>
+        <pubTime>2017-11-26T07:19:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>分布式及存储</tag>
+         
+        <tag>2PC</tag>
+         
+        <tag>3PC</tag>
+         
+         
+           
+             
+              <breadCrumb title="分布式及存储" url="http://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/something-about-static-library-mt-md/</loc>
+    <lastmod>2018-03-17T14:40:34.044Z</lastmod>
+    <data>
+        <display>
+        <title>静态库那些事儿/MT /MD</title>
+        <pubTime>2016-03-08T02:46:54.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>DLL</tag>
+         
+        <tag>DLL Hell</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/release-memory-allocated-by-another-module/</loc>
+    <lastmod>2018-03-17T14:40:34.038Z</lastmod>
+    <data>
+        <display>
+        <title>一个模块分配的内存由另外一个模块释放~引发的血案</title>
+        <pubTime>2010-06-07T13:29:46.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>DLL</tag>
+         
+        <tag>DLL Hell</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/</loc>
+    <lastmod>2018-03-17T14:40:34.035Z</lastmod>
+    <data>
+        <display>
+        <title>Everything You Never Wanted To Know About DLLs</title>
+        <pubTime>2011-07-03T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>DLL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</loc>
+    <lastmod>2018-03-17T14:40:34.027Z</lastmod>
+    <data>
+        <display>
+        <title>Allocating and freeing memory across module boundaries</title>
+        <pubTime>2017-10-23T14:23:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>DLL</tag>
+         
+        <tag>DLL Hell</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/</loc>
+    <lastmod>2018-03-17T14:40:34.024Z</lastmod>
+    <data>
+        <display>
+        <title>关于DLL的一些你不会想要知道的知识</title>
+        <pubTime>2017-10-22T15:16:00.000Z</pubTime>
+        
+        <tag>Windows</tag>
+         
+        <tag>DLL</tag>
+         
+        <tag>译文</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/iocp-usage-and-inside/</loc>
+    <lastmod>2018-03-17T14:40:34.018Z</lastmod>
+    <data>
+        <display>
+        <title>IOCP的使用和技术内幕</title>
+        <pubTime>2017-10-22T13:40:00.000Z</pubTime>
+        
+        <tag>Windows</tag>
+         
+        <tag>Windows Internals</tag>
+         
+        <tag>IOCP</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
+    <lastmod>2018-03-17T14:40:34.015Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) When does Windows decide to pull out pages from Working Set?</title>
+        <pubTime>2013-08-15T04:18:31.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>Virtual Memory</tag>
+         
+        <tag>Working Set</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/msdn-managing-virtual-memory/</loc>
+    <lastmod>2018-03-17T14:40:34.012Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Managing Virtual Memory</title>
+        <pubTime>2017-11-14T05:58:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>Virtual Memory</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
+    <lastmod>2018-03-17T14:40:34.005Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Managing Memory-Mapped Files</title>
+        <pubTime>2017-11-13T14:33:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Memory Management</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/msdn-managing-heap-memory/</loc>
+    <lastmod>2018-03-17T14:40:33.998Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Managing Heap Memory</title>
+        <pubTime>2017-11-13T14:18:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Memory Management</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/msdn-heap-pleasures-and-pains/</loc>
+    <lastmod>2018-03-17T14:40:33.989Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Heap: Pleasures and Pains</title>
+        <pubTime>2017-11-13T14:06:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Memory Management</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/msdn-heap-functions/</loc>
+    <lastmod>2018-03-17T14:40:33.983Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Heap Functions</title>
+        <pubTime>2017-10-24T06:19:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Memory Management</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</loc>
+    <lastmod>2018-03-17T14:40:33.980Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Give Me a Handle, and I'll Show You an Object</title>
+        <pubTime>2017-11-14T06:09:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>Memory Management</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/comparing-memory-allocation-methods/</loc>
+    <lastmod>2018-03-17T14:40:33.973Z</lastmod>
+    <data>
+        <display>
+        <title>(MSDN) Comparing Memory Allocation Methods</title>
+        <pubTime>2017-10-23T15:29:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>MSDN</tag>
+         
+         
+           
+             
+              <breadCrumb title="Windows" url="http://xnerv.wang/categories/Windows/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/debugging-baidu-pan/</loc>
+    <lastmod>2018-03-17T14:40:33.970Z</lastmod>
+    <data>
+        <display>
+        <title>在调试器里看百度云管家</title>
+        <pubTime>2016-06-08T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>WinDbg</tag>
+         
+         
+           
+             
+              <breadCrumb title="WinDbg" url="http://xnerv.wang/categories/WinDbg/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/debugging-alibaba-softwares/</loc>
+    <lastmod>2018-03-17T14:40:33.965Z</lastmod>
+    <data>
+        <display>
+        <title>在调试器中看阿里的软件兵团</title>
+        <pubTime>2014-09-16T06:48:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>WinDbg</tag>
+         
+         
+           
+             
+              <breadCrumb title="WinDbg" url="http://xnerv.wang/categories/WinDbg/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/</loc>
+    <lastmod>2018-03-17T14:40:33.957Z</lastmod>
+    <data>
+        <display>
+        <title>The Tale of Two Evaluators: Understanding MASM and C++ Expression Evaluators in WinDbg </title>
+        <pubTime>2018-02-19T10:09:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>WinDbg</tag>
+         
+         
+           
+             
+              <breadCrumb title="WinDbg" url="http://xnerv.wang/categories/WinDbg/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</loc>
+    <lastmod>2018-03-17T14:40:33.951Z</lastmod>
+    <data>
+        <display>
+        <title>HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace</title>
+        <pubTime>2017-12-09T08:43:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Windows</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>MSDN</tag>
+         
+        <tag>WinDbg</tag>
+         
+         
+           
+             
+              <breadCrumb title="WinDbg" url="http://xnerv.wang/categories/WinDbg/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/summary-of-orphan-process-and-zombie-process/</loc>
+    <lastmod>2018-03-17T14:40:33.945Z</lastmod>
+    <data>
+        <display>
+        <title>孤儿进程与僵尸进程[总结]</title>
+        <pubTime>2013-08-20T16:57:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>进程管理</tag>
+         
+        <tag>孤儿进程</tag>
+         
+        <tag>僵尸进程</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</loc>
+    <lastmod>2018-03-17T14:40:33.939Z</lastmod>
+    <data>
+        <display>
+        <title>内存分配-----伙伴算法和slab算法</title>
+        <pubTime>2014-01-02T01:39:03.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>Buddy System</tag>
+         
+        <tag>Slab Allocator</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</loc>
+    <lastmod>2018-03-17T14:40:33.936Z</lastmod>
+    <data>
+        <display>
+        <title>Your visual how-to guide for SELinux policy enforcement</title>
+        <pubTime>2013-11-12T16:00:00.000Z</pubTime>
+        
+        <tag>Linux</tag>
+         
+        <tag>SELinux</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/</loc>
+    <lastmod>2018-03-17T14:40:33.930Z</lastmod>
+    <data>
+        <display>
+        <title>UNIX/LINUX 平台可执行文件格式分析</title>
+        <pubTime>2017-11-13T10:21:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>COFF</tag>
+         
+        <tag>linker</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/special-features-of-linux-memory-management-mechanism/</loc>
+    <lastmod>2018-03-17T14:40:33.923Z</lastmod>
+    <data>
+        <display>
+        <title>Special features of Linux memory management mechanism</title>
+        <pubTime>2014-11-30T08:27:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>Buddy System</tag>
+         
+        <tag>Slab Allocator</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/the-core-algorithm-of-rsync/</loc>
+    <lastmod>2018-03-17T14:40:33.917Z</lastmod>
+    <data>
+        <display>
+        <title>RSYNC的核心算法</title>
+        <pubTime>2012-05-16T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>rsync</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/memory-allocation-mechanism-in-linux/</loc>
+    <lastmod>2018-03-17T14:40:33.914Z</lastmod>
+    <data>
+        <display>
+        <title>Memory Allocation Mechanism in Linux</title>
+        <pubTime>2014-09-19T16:00:00.000Z</pubTime>
+        
+        <tag>Heap</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>reprint</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/version-control-and-usage-of-linux-shared-library/</loc>
+    <lastmod>2018-03-17T14:40:33.908Z</lastmod>
+    <data>
+        <display>
+        <title>linux共享库的版本控制和使用</title>
+        <pubTime>2015-06-27T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Shared Library</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/linux-tty-pts-summary/</loc>
+    <lastmod>2018-03-17T14:40:33.903Z</lastmod>
+    <data>
+        <display>
+        <title>Linux TTY/PTS概述</title>
+        <pubTime>2017-04-15T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Shell</tag>
+         
+        <tag>TTY</tag>
+         
+        <tag>PTS</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/linux-session-and-processgroup-summary/</loc>
+    <lastmod>2018-03-17T14:40:33.896Z</lastmod>
+    <data>
+        <display>
+        <title>Linux session和进程组概述</title>
+        <pubTime>2017-04-20T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Shell</tag>
+         
+        <tag>Session</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</loc>
+    <lastmod>2018-03-17T14:40:33.890Z</lastmod>
+    <data>
+        <display>
+        <title>Everything You Always Wanted to Know About Fsync()</title>
+        <pubTime>2013-11-14T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Linux API</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/linux-process-kernel-and-file-system-summary/</loc>
+    <lastmod>2018-03-17T14:40:33.883Z</lastmod>
+    <data>
+        <display>
+        <title>Linux进程、内核及文件系统总结</title>
+        <pubTime>2017-11-03T08:58:00.000Z</pubTime>
+        
+        <tag>Linux</tag>
+         
+        <tag>信号</tag>
+         
+        <tag>中断</tag>
+         
+        <tag>内核态与用户态</tag>
+         
+        <tag>文件系统</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
+    <lastmod>2018-03-17T14:40:33.877Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) Why are hard links to directories not allowed in UNIX/Linux?</title>
+        <pubTime>2011-10-10T20:21:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Bash</tag>
+         
+        <tag>File System</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
+    <lastmod>2018-03-17T14:40:33.874Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) Signal handling with multiple threads in Linux</title>
+        <pubTime>2012-07-26T15:36:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>yield</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/mmap-vs-reading-blocks/</loc>
+    <lastmod>2018-03-17T14:40:33.872Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) mmap() vs. reading blocks</title>
+        <pubTime>2008-09-05T06:52:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>Memory Management</tag>
+         
+        <tag>mmap</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
+    <lastmod>2018-03-17T14:40:33.869Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) HeapCreate, HeapAlloc in Linux, private allocator for Linux</title>
+        <pubTime>2010-05-21T00:43:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>OS</tag>
+         
+        <tag>Heap</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+        <tag>Memory Management</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
+    <lastmod>2018-03-17T14:40:33.864Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) Execute vs Read bit. How do directory permissions in Linux work?</title>
+        <pubTime>2011-09-22T04:13:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Linux</tag>
+         
+        <tag>Bash</tag>
+         
+        <tag>File System</tag>
+         
+        <tag>Stack Overflow</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux" url="http://xnerv.wang/categories/Linux/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
+    <lastmod>2018-03-17T14:40:33.857Z</lastmod>
+    <data>
+        <display>
+        <title>数据库弱一致性四个隔离级别</title>
+        <pubTime>2018-02-19T11:21:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
+    <lastmod>2018-03-17T14:40:33.852Z</lastmod>
+    <data>
+        <display>
+        <title>【MySQL】MySQL5.6新特性之Multi-Range Read</title>
+        <pubTime>2015-05-27T06:13:09.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>Multi-Range Read</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
+    <lastmod>2018-03-17T14:40:33.849Z</lastmod>
+    <data>
+        <display>
+        <title>Why do we need UPDATE Locks in SQL Server?</title>
+        <pubTime>2018-01-30T15:21:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Update Lock</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
+    <lastmod>2018-03-17T14:40:33.847Z</lastmod>
+    <data>
+        <display>
+        <title>Why do we need Intent Locks in SQL Server?</title>
+        <pubTime>2018-01-31T15:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Intent Lock</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
+    <lastmod>2018-03-17T14:40:33.844Z</lastmod>
+    <data>
+        <display>
+        <title>Understanding MySQL Isolation Levels: Repeatable-Read</title>
+        <pubTime>2018-01-29T15:21:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+        <tag>MySQL</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
+    <lastmod>2018-03-17T14:40:33.838Z</lastmod>
+    <data>
+        <display>
+        <title>SQL TRANSACTION ISOLATION LEVELS EXPLAINED</title>
+        <pubTime>2018-01-29T14:36:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
+    <lastmod>2018-03-17T14:40:33.831Z</lastmod>
+    <data>
+        <display>
+        <title>SQL Server - Buffer Management - Writing Pages</title>
+        <pubTime>2018-02-20T17:16:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Buffer Pool</tag>
+         
+        <tag>Lazy Writing</tag>
+         
+        <tag>Eager Writing</tag>
+         
+        <tag>Checkpoint</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
+    <lastmod>2018-03-17T14:40:33.828Z</lastmod>
+    <data>
+        <display>
+        <title>SQL Server - Buffer Management - Reading Pages</title>
+        <pubTime>2018-02-20T17:07:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Buffer Pool</tag>
+         
+        <tag>Read Ahead</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
+    <lastmod>2018-03-17T14:40:33.822Z</lastmod>
+    <data>
+        <display>
+        <title>Snapshot isolation transaction aborted due to update conflict.</title>
+        <pubTime>2018-01-29T15:34:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</loc>
+    <lastmod>2018-03-17T14:40:33.819Z</lastmod>
+    <data>
+        <display>
+        <title>Snapshot Isolation Level in SQL Server - What, Why and How - Part 1</title>
+        <pubTime>2018-01-29T16:37:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/read-committed-snapshot-isolation/</loc>
+    <lastmod>2018-03-17T14:40:33.812Z</lastmod>
+    <data>
+        <display>
+        <title>Read Committed Snapshot Isolation</title>
+        <pubTime>2018-01-29T15:47:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/mysql-row-format/</loc>
+    <lastmod>2018-03-17T14:40:33.805Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL Row Format(MySQL行格式详解)</title>
+        <pubTime>2018-02-19T12:18:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>Row Format</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</loc>
+    <lastmod>2018-03-17T14:40:33.803Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL 5.6中Binlog Group Commit实现</title>
+        <pubTime>2018-03-16T14:19:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>Binlog Group Commit</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/what-analysis-of-signal-processing-mechanism/</loc>
+    <lastmod>2018-03-17T14:40:33.797Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL - 信号处理机制分析</title>
+        <pubTime>2018-03-17T08:32:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>Signal</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/what-set-names-does/</loc>
+    <lastmod>2018-03-17T14:40:33.791Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL - set names 都做了什么</title>
+        <pubTime>2018-03-16T14:50:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>MySQL charset</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/what-innodb-mini-transation/</loc>
+    <lastmod>2018-03-17T14:40:33.784Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL - InnoDB mini transation</title>
+        <pubTime>2018-03-17T08:42:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>InnoDB</tag>
+         
+        <tag>MTR</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/</loc>
+    <lastmod>2018-03-17T14:40:33.779Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL - InnoDB Adaptive hash index介绍</title>
+        <pubTime>2018-03-17T08:26:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>InnoDB</tag>
+         
+        <tag>Adaptive hash index</tag>
+         
+        <tag>Hash</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/mysql-index-condition-pushdown/</loc>
+    <lastmod>2018-03-17T14:40:33.773Z</lastmod>
+    <data>
+        <display>
+        <title>MySQL - Index Condition Pushdown (ICP)</title>
+        <pubTime>2018-03-16T14:46:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>Index Condition Pushdown</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</loc>
+    <lastmod>2018-03-17T14:40:33.766Z</lastmod>
+    <data>
+        <display>
+        <title>Monitoring Memory Clerk and Buffer Pool Allocations in SQL Server</title>
+        <pubTime>2018-02-20T15:05:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Memory Clerk</tag>
+         
+        <tag>Buffer Pool</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/lock-escalations/</loc>
+    <lastmod>2018-03-17T14:40:33.760Z</lastmod>
+    <data>
+        <display>
+        <title>Lock Escalations</title>
+        <pubTime>2018-02-01T15:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Lock Escalations</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
+    <lastmod>2018-03-17T14:40:33.757Z</lastmod>
+    <data>
+        <display>
+        <title>InnoDB 事务锁系统简介</title>
+        <pubTime>2018-03-16T14:28:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>InnoDB</tag>
+         
+        <tag>Lock</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/innodb-log-block-structure/</loc>
+    <lastmod>2018-03-17T14:40:33.750Z</lastmod>
+    <data>
+        <display>
+        <title>InnoDB Log Block Structure(InnoDB日志Block结构详解)</title>
+        <pubTime>2018-02-19T12:30:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>MySQL</tag>
+         
+        <tag>InnoDB</tag>
+         
+        <tag>InnoDB Log</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
+    <lastmod>2018-03-17T14:40:33.748Z</lastmod>
+    <data>
+        <display>
+        <title>IMPLEMENTING YOUR OWN TRANSACTIONS WITH MVCC</title>
+        <pubTime>2018-01-29T14:21:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>MVCC</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>
+    <lastmod>2018-03-17T14:40:33.741Z</lastmod>
+    <data>
+        <display>
+        <title>IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION</title>
+        <pubTime>2018-01-29T14:33:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Isolation Level</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</loc>
+    <lastmod>2018-03-17T14:40:33.732Z</lastmod>
+    <data>
+        <display>
+        <title>Disabling ROW and PAGE Level Locks in SQL Server</title>
+        <pubTime>2018-02-20T14:40:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Row Lock</tag>
+         
+        <tag>Page Lock</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
+    <lastmod>2018-03-17T14:40:33.729Z</lastmod>
+    <data>
+        <display>
+        <title>DDL commands in Transactions in SQL Server versus Oracle</title>
+        <pubTime>2016-12-08T16:00:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Oracle</tag>
+         
+        <tag>Transaction</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
+    <lastmod>2018-03-17T14:40:33.724Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) Understanding SIX lock in SQL Server</title>
+        <pubTime>2018-02-21T08:53:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>SIX Lock</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
+    <lastmod>2018-03-17T14:40:33.721Z</lastmod>
+    <data>
+        <display>
+        <title>(Stack Overflow) SAVE TRANSACTION vs BEGIN TRANSACTION (SQL Server) how to nest transactions nicely</title>
+        <pubTime>2012-03-14T18:51:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>DBMS</tag>
+         
+        <tag>SQL Server</tag>
+         
+        <tag>Transaction</tag>
+         
+        <tag>Savepoint</tag>
+         
+         
+           
+             
+              <breadCrumb title="DBMS" url="http://xnerv.wang/categories/DBMS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/23-design-patterns-analysis/</loc>
+    <lastmod>2018-03-17T14:40:33.712Z</lastmod>
+    <data>
+        <display>
+        <title>23种设计模式全解析</title>
+        <pubTime>2017-11-04T04:31:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>设计模式</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="设计模式" url="http://xnerv.wang/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://xnerv.wang/google-protocol-buffers-encoding/</loc>
+    <lastmod>2018-03-17T14:40:33.699Z</lastmod>
+    <data>
+        <display>
+        <title>(Google Developer) Protocol Buffers Encoding</title>
+        <pubTime>2017-10-26T14:57:00.000Z</pubTime>
+        
+        <tag>转载</tag>
+         
+        <tag>Google</tag>
+         
+        <tag>Protobuf</tag>
+         
+        <tag>Google Developer</tag>
+         
+         
+           
+             
+              <breadCrumb title="Protobuf" url="http://xnerv.wang/categories/Protobuf/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+    
+</urlset>

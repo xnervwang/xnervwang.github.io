@@ -1,0 +1,1015 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,OS,Memory Barrier," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
+<meta name="keywords" content="转载,OS,Memory Barrier">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Acquire and Release Semantics">
+<meta property="og:url" content="http://xnerv.wang/acquire-and-release-semantics/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/read-acquire.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/write-release.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/acq-rel-barriers.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/platform-fences.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/analogy-small.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/cpp11-fences.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/cpp11-no-fences.png">
+<meta property="og:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/acq-rel-lock.png">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.161Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Acquire and Release Semantics">
+<meta name="twitter:description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
+<meta name="twitter:image" content="http://xnerv.wang/assets/acquire-and-release-semantics/read-acquire.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/acquire-and-release-semantics/"/>
+
+
+
+
+
+  <title>Acquire and Release Semantics | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/acquire-and-release-semantics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Acquire and Release Semantics</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2012-09-13T00:00:00+08:00">
+                2012-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index">
+                    <span itemprop="name">OS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <div class="entry-content">
+<p>Generally speaking, in <a href="http://preshing.com/20120612/an-introduction-to-lock-free-programming" target="_blank" rel="noopener">lock-free programming</a>, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operatively from one thread to another. Acquire and release semantics are crucial for the latter: reliable passing of information between threads. In fact, I would venture to guess that incorrect or missing acquire and release semantics is the <code>#1</code> type of lock-free programming error.</p>
+<a id="more"></a>
+<p>In this post, I’ll demonstrate various ways to achieve acquire and release semantics in C++. I’ll touch upon the C++11 atomic library standard in an introductory way, so you don’t already need to know it. And to be clear from the start, the information here pertains to lock-free programming <em>without</em> <a href="http://preshing.com/20120612/an-introduction-to-lock-free-programming#sequential-consistency" target="_blank" rel="noopener">sequential consistency</a>. We’re dealing directly with memory ordering in a multicore or multiprocessor environment.</p>
+<p>Unfortunately, the terms <em>acquire and release semantics</em> appear to be in even worse shape than the term <em>lock-free</em>, in that the more you scour the web, the more seemingly contradictory definitions you’ll find. Bruce Dawson offers a couple of good definitions (credited to Herb Sutter) about halfway through <a href="http://msdn.microsoft.com/en-us/library/windows/desktop/ee418650.aspx" target="_blank" rel="noopener">this white paper</a>. I’d like to offer a couple of definitions of my own, staying close to the principles behind C++11 atomics:</p>
+<blockquote>
+<p><strong>Acquire semantics</strong> is a property that can only apply to operations that <strong>read</strong> from shared memory, whether they are <a href="http://preshing.com/20120612/an-introduction-to-lock-free-programming#atomic-rmw" target="_blank" rel="noopener">read-modify-write</a> operations or plain loads. The operation is then considered a <strong>read-acquire</strong>. Acquire semantics prevent memory reordering of the read-acquire with any read or write operation that <strong>follows</strong> it in program order.<br>
+<img src="/assets/acquire-and-release-semantics/read-acquire.png" alt="read acquire "><br>
+<strong>Release semantics</strong> is a property that can only apply to operations that <strong>write</strong> to shared memory, whether they are read-modify-write operations or plain stores. The operation is then considered a <strong>write-release</strong>. Release semantics prevent memory reordering of the write-release with any read or write operation that <strong>precedes</strong> it in program order.<br>
+<img src="/assets/acquire-and-release-semantics/write-release.png" alt="write release"></p>
+</blockquote>
+<p>Once you digest the above definitions, it’s not hard to see that acquire and release semantics can be achieved using simple combinations of the memory barrier types I <a href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations" target="_blank" rel="noopener">described at length in my previous post</a>. The barriers must (somehow) be placed <em>after</em> the read-acquire operation, but <em>before</em> the write-release. <em>[Update: Please note that these barriers are technically more strict than what’s required for acquire and release semantics on a single memory operation, but they do achieve the desired effect.]</em></p>
+<center>
+<img src="/assets/acquire-and-release-semantics/acq-rel-barriers.png" alt="acq rel barriers">
+</center>
+<p>What’s cool is that neither acquire nor release semantics requires the use of a <code>#StoreLoad</code> barrier, which is often a more expensive memory barrier type. For example, on PowerPC, the <code>lwsync</code> (short for “lightweight sync”) instruction acts as all three <code>#LoadLoad</code>, <code>#LoadStore</code> and <code>#StoreStore</code> barriers at the same time, yet is less expensive than the <code>sync</code> instruction, which includes a <code>#StoreLoad</code> barrier.</p>
+<h2 id="with-explicit-platform-specific-fence-instructions"><a class="header-anchor" href="#with-explicit-platform-specific-fence-instructions"></a>With Explicit Platform-Specific Fence Instructions</h2>
+<p>One way to obtain the desired memory barriers is by issuing explicit fence instructions. Let’s start with a simple example. Suppose we’re coding for PowerPC, and <code>__lwsync()</code> is a compiler intrinsic function that emits the <code>lwsync</code> instruction. Since <code>lwsync</code> provides so many barrier types, we can use it in the following code to establish either acquire or release semantics as needed. In Thread 1, the store to <code>Ready</code> turns into a write-release, and in Thread 2, the load from <code>Ready</code> becomes a read-acquire.</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/platform-fences.png" alt="platform fences">
+</center>
+<p>If we let both threads run and find that <code>r1 == 1</code>, that serves as confirmation that the value of <code>A</code> assigned in Thread 1 was passed successfully to Thread 2. As such, we are guaranteed that <code>r2 == 42</code>. In my previous post, I already <a href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations" target="_blank" rel="noopener">gave a lengthy analogy</a> for <code>#LoadLoad</code> and <code>#StoreStore</code> to illustrate how this works, so I won’t rehash that explanation here.</p>
+<center>
+<a href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations" target="_blank" rel="noopener"><img src="/assets/acquire-and-release-semantics/analogy-small.png" alt="analogy small"></a>
+</center>
+<p>In formal terms, we say that the store to <code>Ready</code> <em>synchronized-with</em> the load. I’ve written a separate post about <em>synchronizes-with</em> <a href="http://preshing.com/20130823/the-synchronizes-with-relation" target="_blank" rel="noopener">here</a>. For now, suffice to say that for this technique to work in general, the acquire and release semantics must apply to the same variable – in this case, <code>Ready</code> – and both the load and store must be atomic operations. Here, <code>Ready</code> is a simple aligned <code>int</code>, so the operations are already atomic on PowerPC.</p>
+<h2 id="with-fences-in-portable-c-11"><a class="header-anchor" href="#with-fences-in-portable-c-11"></a>With Fences in Portable C++11</h2>
+<p>The above example is compiler- and processor-specific. One approach for supporting multiple platforms is to convert the code to C++11. All C++11 identifiers exist in the <code>std</code> namespace, so to keep the following examples brief, let’s assume the statement <code>using namespace std;</code> was placed somewhere earlier in the code.</p>
+<p>C++11’s atomic library standard defines a portable function <code>atomic_thread_fence()</code> that takes a single argument to specify the type of fence. There are several possible values for this argument, but the values we’re most interested in here are <code>memory_order_acquire</code> and <code>memory_order_release</code>. We’ll use this function in place of <code>__lwsync()</code>.</p>
+<p>There’s one more change to make before this example is complete. On PowerPC, we knew that both operations on <code>Ready</code> were atomic, but we can’t make that assumption about every platform. To ensure atomicity on all platforms, we’ll change the type of <code>Ready</code> from <code>int</code> to <code>atomic&lt;int&gt;</code>. I know, it’s kind of a silly change, considering that aligned loads and stores of <code>int</code> are already atomic on every modern CPU that exists today. I’ll write more about this in the post on <a href="http://preshing.com/20130823/the-synchronizes-with-relation" target="_blank" rel="noopener"><em>synchronizes-with</em></a>, but for now, let’s do it for the warm fuzzy feeling of 100% correctness in theory. No changes to <code>A</code> are necessary.</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/cpp11-fences.png" alt="cpp11 fences">
+</center>
+<p>The <code>memory_order_relaxed</code> arguments above mean “ensure these operations are atomic, but don’t impose any ordering constraints/memory barriers that aren’t already there.”</p>
+<p>Once again, both of the above <code>atomic_thread_fence()</code> calls can be (and hopefully are) implemented as <code>lwsync</code> on PowerPC. Similarly, they could both emit a <code>dmb</code> instruction on ARM, which I believe is at least as effective as PowerPC’s <code>lwsync</code>. On x86/64, both <code>atomic_thread_fence()</code> calls can simply be implemented as <a href="http://preshing.com/20120625/memory-ordering-at-compile-time" target="_blank" rel="noopener">compiler barriers</a>, since <em>usually</em>, every load on x86/64 already implies acquire semantics and every store implies release semantics. This is why x86/64 is often said to be <a href="http://preshing.com/20120930/weak-vs-strong-memory-models" target="_blank" rel="noopener">strongly ordered</a>.</p>
+<h2 id="without-fences-in-portable-c-11"><a class="header-anchor" href="#without-fences-in-portable-c-11"></a>Without Fences in Portable C++11</h2>
+<p>In C++11, it’s possible to achieve acquire and release semantics on <code>Ready</code> without issuing explicit fence instructions. You just need to specify memory ordering constraints directly on the operations on <code>Ready</code>:</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/cpp11-no-fences.png" alt="cpp11 no fences">
+</center>
+<p>Think of it as rolling each fence instruction into the operations on <code>Ready</code> themselves. <em>[Update: Please note that this form is <a href="http://preshing.com/20131125/acquire-and-release-fences-dont-work-the-way-youd-expect" target="_blank" rel="noopener">not exactly the same</a> as the version using standalone fences; technically, it’s less strict.]</em> The compiler will emit any instructions necessary to obtain the required barrier effects. In particular, on Itanium, each operation can be easily implemented as a single instruction: <code>ld.acq</code> and <code>st.rel</code>. Just as before, <code>r1 == 1</code> indicates a <em>synchronizes-with</em> relationship, serving as confirmation that <code>r2 == 42</code>.</p>
+<p>This is actually the preferred way to express acquire and release semantics in C++11. In fact, the <code>atomic_thread_fence()</code> function used in the previous example was <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2633.html" target="_blank" rel="noopener">added relatively late</a> in the creation of the standard.</p>
+<h2 id="acquire-and-release-while-locking"><a class="header-anchor" href="#acquire-and-release-while-locking"></a>Acquire and Release While Locking</h2>
+<p>As you can see, none of the examples in this post took advantage of the <code>#LoadStore</code> barriers provided by acquire and release semantics. Really, only the <code>#LoadLoad</code> and <code>#StoreStore</code> parts were necessary. That’s just because in this post, I chose a simple example to let us focus on API and syntax.</p>
+<p>One case in which the <code>#LoadStore</code> part becomes essential is when using acquire and release semantics to implement a (mutex) lock. In fact, this is where the names come from: acquiring a lock implies acquire semantics, while releasing a lock implies release semantics! All the memory operations in between are contained inside a nice little barrier sandwich, preventing any undesireable memory reordering across the boundaries.</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/acq-rel-lock.png" alt="acq rel lock">
+</center>
+<p>Here, acquire and release semantics ensure that all modifications made while holding the lock will propagate fully to the next thread that obtains the lock. Every implementation of a lock, even one you <a href="http://preshing.com/20120226/roll-your-own-lightweight-mutex" target="_blank" rel="noopener">roll on your own</a>, should provide these guarantees. Again, it’s all about passing information reliably between threads, especially in a multicore or multiprocessor environment.</p>
+<p>In a followup post, I’ll show a <a href="http://preshing.com/20121019/this-is-why-they-call-it-a-weakly-ordered-cpu" target="_blank" rel="noopener">working demonstration</a> of C++11 code, running on real hardware, which can be plainly observed to break if acquire and release semantics are not used.</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/acquire-and-release-semantics/">http://xnerv.wang/acquire-and-release-semantics/</a></strong><br>
+Reprinted from: <a href="http://preshing.com/20120913/acquire-and-release-semantics/" target="_blank" rel="noopener">Acquire and Release Semantics</a></p>
+</div>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/OS/" rel="tag"># OS</a>
+          
+            <a href="/tags/Memory-Barrier/" rel="tag"># Memory Barrier</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/lock-free-queue-Implementation/" rel="next" title="无锁队列的实现">
+                <i class="fa fa-chevron-left"></i> 无锁队列的实现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/virtual-function-and-virtual-table/" rel="prev" title="虚函数与虚继承寻踪">
+                虚函数与虚继承寻踪 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#with-explicit-platform-specific-fence-instructions"><span class="nav-text">With Explicit Platform-Specific Fence Instructions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#with-fences-in-portable-c-11"><span class="nav-text">With Fences in Portable C++11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#without-fences-in-portable-c-11"><span class="nav-text">Without Fences in Portable C++11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#acquire-and-release-while-locking"><span class="nav-text">Acquire and Release While Locking</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

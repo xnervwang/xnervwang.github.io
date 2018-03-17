@@ -1,0 +1,1051 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Windows,Heap,MSDN,WinDbg," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Summary The UnhandledExceptionFilter function is called when no exception handler is defined to handle the exception that is raised. The function typically passes the exception up to the Ntdll.dll fil">
+<meta name="keywords" content="转载,Windows,Heap,MSDN,WinDbg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace">
+<meta property="og:url" content="http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Summary The UnhandledExceptionFilter function is called when no exception handler is defined to handle the exception that is raised. The function typically passes the exception up to the Ntdll.dll fil">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.951Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace">
+<meta name="twitter:description" content="Summary The UnhandledExceptionFilter function is called when no exception handler is defined to handle the exception that is raised. The function typically passes the exception up to the Ntdll.dll fil">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/"/>
+
+
+
+
+
+  <title>HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-09T16:43:00+08:00">
+                2017-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WinDbg/" itemprop="url" rel="index">
+                    <span itemprop="name">WinDbg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="summary"><a class="header-anchor" href="#summary"></a>Summary</h2>
+<p>The <strong>UnhandledExceptionFilter</strong> function is called when no exception handler is defined to handle the exception that is raised. The function typically passes the exception up to the Ntdll.dll file, which catches and tries to handle it.</p>
+<p>In some scenarios in which a memory snapshot of the process exists, you can see that the thread that holds the lock points to a thread that calls the <strong>UnhandledExceptionFilter</strong> function. In those cases, you can follow the steps in this article to identify the DLL that caused the exception.</p>
+<a id="more"></a>
+<h3 id="open-a-dump-file-by-using-windbg-exe"><a class="header-anchor" href="#open-a-dump-file-by-using-windbg-exe"></a>Open a Dump File by Using Windbg.exe</h3>
+<ol>
+<li>Download and install the debuggers. To download the debuggers, visit the following Microsoft Web site:
+<blockquote>
+<p>Microsoft Debugging Tools<br>
+<a href="http://www.microsoft.com/whdc/devtools/ddk/default.mspx" target="_blank" rel="noopener">http://www.microsoft.com/whdc/devtools/ddk/default.mspx</a></p>
+</blockquote>
+</li>
+<li>Open the folder where you installed the debuggers, and then double-click <strong>Windbg.exe</strong> to start the debugger.</li>
+<li>On the <strong>File</strong> menu, click <strong>Open Crash Dump</strong> (or press CTRL+D), and then select the dump file that you want to view.</li>
+</ol>
+<h3 id="use-windbg-exe-to-identify-the-exception-stack"><a class="header-anchor" href="#use-windbg-exe-to-identify-the-exception-stack"></a>Use Windbg.exe to Identify the Exception Stack.</h3>
+<ol>
+<li>
+<p>In Windbg.exe, open the .dmp file of the process.</p>
+</li>
+<li>
+<p>Make sure that you are pointing the symbol path to a correct location. For more information about how to do this, visit the following Microsoft Web site:</p>
+<blockquote>
+<p>How to Get Symbols<br>
+<a href="http://www.microsoft.com/whdc/devtools/ddk/default.mspx" target="_blank" rel="noopener">http://www.microsoft.com/whdc/devtools/ddk/default.mspx</a></p>
+</blockquote>
+</li>
+<li>
+<p>At a command prompt, type ~*kb to list all of the threads in the process.</p>
+</li>
+<li>
+<p>Identify the thread that makes the call to the function <strong>Kernel32!UnhandledExceptionFilter</strong>. It looks similar to the following:</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">120  id: f0f0f0f0.a1c   Suspend: 1 Teb 7ff72000 Unfrozen</span><br><span class="line">ChildEBP RetAddr  Args to Child</span><br><span class="line">09a8f334 77eb9b46 0000244c 00000001 00000000 ntdll!ZwWaitForSingleObject+0xb [i386\usrstubs.asm @ 2004]</span><br><span class="line">09a8f644 77ea7e7a 09a8f66c 77e861ae 09a8f674 KERNEL32!UnhandledExceptionFilter+0x2b5</span><br><span class="line">[D:\nt\private\windows\base\client\thread.c @ 1753]</span><br><span class="line">09a8ffec 00000000 787bf0b8 0216fe94 00000000 KERNEL32!BaseThreadStart+0x65 [D:\nt\private\windows\base\client\support.c @ 453]</span><br></pre></td></tr></table></figure>
+<ol start="5">
+<li>
+<p>Switch to that thread (in this example, the thread is “~120s”).</p>
+</li>
+<li>
+<p>Display the memory contents at the location specified by the first parameter of <strong>Kernel32!UnhandledExceptionFilter</strong> by using <strong>dd <em>First Param</em></strong>. This points to the <strong>EXCEPTION_POINTERS</strong> structure.<br>
+···<br>
+0:120&gt; dd 09a8f66c<br>
+09a8f66c  09a8f738 09a8f754 09a8f698 77f8f45c<br>
+09a8f67c  09a8f738 09a8ffdc 09a8f754 09a8f710<br>
+09a8f68c  09a8ffdc 77f8f5b5 09a8ffdc 09a8f720<br>
+09a8f69c  77f8f3fa 09a8f738 09a8ffdc 09a8f754<br>
+09a8f6ac  09a8f710 77e8615b 09a8fad4 00000000<br>
+09a8f6bc  09a8f738 74a25336 09a8f6e0 09a8f910<br>
+09a8f6cc  01dc8ad8 0d788918 00000001 018d1f28<br>
+09a8f6dc  00000001 61746164 7073612e 09a8f71c<br>
+···</p>
+</li>
+<li>
+<p>The first DWORD represents the exception record. To obtain information about the type of exception, run the following at a command prompt:<br>
+.exr <strong>first DWORD from step 6</strong><br>
+···<br>
+0:120&gt; .exr 09a8f738<br>
+ExceptionAddress: 78011f32 (MSVCRT!strnicmp+0x00000092)<br>
+ExceptionCode: c0000005<br>
+ExceptionFlags: 00000000<br>
+NumberParameters: 2<br>
+Parameter[0]: 00000000<br>
+Parameter[1]: 00000000<br>
+Attempt to read from address 00000000<br>
+···</p>
+</li>
+<li>
+<p>The second DWORD is the context record. To obtain contextual information, run the following at a command prompt:<br>
+.cxr <strong>second DWORD from step 6</strong><br>
+···<br>
+0:120&gt; .cxr 09a8f754<br>
+eax=027470ff ebx=7803cb28 ecx=00000000 edx=00000000 esi=00000000 edi=09a8fad4<br>
+eip=78011f32 esp=09a8fa20 ebp=09a8fa2c iopl=0         nv up ei ng nz na po nc<br>
+cs=001b  ss=0023  ds=0023  es=0023  fs=003b  gs=0000             efl=00010286<br>
+MSVCRT!strnicmp+92:<br>
+78011f32 8a06             mov     al,[esi]<br>
+···</p>
+</li>
+<li>
+<p>Run a kv command to get the call stack of the actual exception. This helps you to identify the actual problem in the process that might not have been handled correctly.</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">0:120&gt; kv</span><br><span class="line">ChildEBP RetAddr  Args to Child</span><br><span class="line">WARNING: Stack unwind information not available. Following frames may be wrong.</span><br><span class="line">09a8fa2c 780119ab 09a8fad4 00000000 09a8faa8 MSVCRT!strnicmp+0x92</span><br><span class="line">09a8fa40 7801197c 09a8fad4 00000000 6d7044fd MSVCRT!stricmp+0x3c</span><br><span class="line">09a8fa80 6e5a6ef6 09a8fad4 2193d68d 00e5e298 MSVCRT!stricmp+0xd</span><br><span class="line">09a8fa94 6d7043bf 09a8fad4 09a8faa8 0000001c IisRTL!CLKRHashTable::FindKey+0x59 (FPO: [2,0,1])</span><br><span class="line">09a8faac 749fc22d 09a8fad4 01d553b0 0000001c ISATQ!CDirMonitor::FindEntry+0x1e</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\inet\iis\svcs\infocomm\atq\dirmon.cpp @ 884]</span><br><span class="line">09a8fac4 749fd1cb 09a8fad4 09a8fb10 525c3a46 asp!RegisterASPDirMonitorEntry+0x6e</span><br><span class="line">(FPO: [EBP 0x09a8fb08] [2,0,4]) [D:\nt\private\inet\iis\svcs\cmp\asp\aspdmon.cpp @ 534]</span><br><span class="line">09a8fb08 749fcdd6 00000000 09a8fcbc 018d1f28 asp!CTemplateCacheManager::RegisterTemplateForChangeNotification+0x8a</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\inet\iis\svcs\cmp\asp\cachemgr.cpp @ 621]</span><br><span class="line">09a8fb3c 74a08bfe 00000000 000000fa 74a30958 asp!CTemplateCacheManager::Load+0x382</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\inet\iis\svcs\cmp\asp\cachemgr.cpp @ 364]</span><br><span class="line">09a8fc68 74a0d4c9 04c12518 018d1f28 09a8fcbc asp!LoadTemplate+0x42</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\inet\iis\svcs\cmp\asp\exec.cpp @ 1037]</span><br><span class="line">09a8fcc0 74a2c3e5 00000000 0637ee38 09a8fd58 asp!CHitObj::ViperAsyncCallback+0x3e8</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\inet\iis\svcs\cmp\asp\hitobj.cpp @ 2414]</span><br><span class="line">09a8fcd8 787c048a 00000000 77aa1b03 01e91ed8 asp!CViperAsyncRequest::OnCall+0x3f</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\inet\iis\svcs\cmp\asp\viperint.cpp @ 194]</span><br><span class="line">09a8fce0 77aa1b03 01e91ed8 77a536d8 00000000 COMSVCS!STAActivityWorkHelper+0xa</span><br><span class="line">(FPO: [1,0,0])</span><br><span class="line">09a8fd24 77aa1927 000752f8 000864dc 787c0480 ole32!EnterForCallback+0x6a</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\ole32\com\dcomrem\crossctx.cxx @ 1759]</span><br><span class="line">09a8fe50 77aa17ea 000864dc 787c0480 01e91ed8 ole32!SwitchForCallback+0x12b</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\ole32\com\dcomrem\crossctx.cxx @ 1644]</span><br><span class="line">09a8fe78 77aa60c1 000864dc 787c0480 01e91ed8 ole32!PerformCallback+0x50</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\ole32\com\dcomrem\crossctx.cxx @ 1559]</span><br><span class="line">09a8fed4 77aa5fa6 04f2b4c0 787c0480 01e91ed8 ole32!CObjectContext::InternalContextCallback+0xf5</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\ole32\com\dcomrem\context.cxx @ 3866]</span><br><span class="line">09a8fef4 787bd3c3 04f2b4c0 787c0480 01e91ed8 ole32!CObjectContext::DoCallback+0x1a</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\ole32\com\dcomrem\context.cxx @ 3746]</span><br><span class="line">09a8ff24 787bf373 0216fb3c 00000007 09a8ffec COMSVCS!STAActivityWork::DoWork+0x73</span><br><span class="line">(FPO: [0,4,2])</span><br><span class="line">09a8ffb4 77e8758a 0216fe94 0216fb3c 00000007 COMSVCS!STAThread::STAThreadWorker+0x2bb</span><br><span class="line">(FPO: [EBP 0x09a8ffec] [1,31,4])</span><br><span class="line">09a8ffec 00000000 787bf0b8 0216fe94 00000000 KERNEL32!BaseThreadStart+0x52</span><br><span class="line">(FPO: [Non-Fpo]) [D:\nt\private\windows\base\client\support.c @ 451]</span><br></pre></td></tr></table></figure>
+<h2 id="references"><a class="header-anchor" href="#references"></a>References</h2>
+<p>For more information, see the following books:</p>
+<ul>
+<li>Solomon, David A., and Mark Russinovich. <em>Inside Microsoft Windows 2000, Third Edition</em> (<a href="http://www.microsoft.com/mspress/books/4354.asp" target="_blank" rel="noopener">http://www.microsoft.com/mspress/books/4354.asp</a>). Redmond: Microsoft Press, 2000.</li>
+<li>Solomon, David A. <em>Inside Windows NT - Second Edition (Microsoft Programming Series)</em>. Redmond: Microsoft Press, 1998.</li>
+<li>Richter, Jeffrey. <em>Programming Applications with Microsoft Windows (<a href="http://www.microsoft.com/mspress/books/2345.asp" target="_blank" rel="noopener">http://www.microsoft.com/mspress/books/2345.asp</a>)</em>. Redmond: Microsoft Press, 1999.</li>
+</ul>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/">http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</a></strong><br>
+Reprinted from: <a href="https://support.microsoft.com/en-us/help/313109/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede" target="_blank" rel="noopener">HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+            <a href="/tags/Heap/" rel="tag"># Heap</a>
+          
+            <a href="/tags/MSDN/" rel="tag"># MSDN</a>
+          
+            <a href="/tags/WinDbg/" rel="tag"># WinDbg</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/summary-of-distributed-theory-and-architecture/" rel="next" title="分布式理论及架构的一些整理">
+                <i class="fa fa-chevron-left"></i> 分布式理论及架构的一些整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/bitcoin-a-peer-to-peer-electronic-cash-system-cn/" rel="prev" title="比特币白皮书：一种点对点的电子现金系统">
+                比特币白皮书：一种点对点的电子现金系统 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#summary"><span class="nav-text">Summary</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#open-a-dump-file-by-using-windbg-exe"><span class="nav-text">Open a Dump File by Using Windbg.exe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#use-windbg-exe-to-identify-the-exception-stack"><span class="nav-text">Use Windbg.exe to Identify the Exception Stack.</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#references"><span class="nav-text">References</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

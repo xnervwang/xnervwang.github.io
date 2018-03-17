@@ -1,0 +1,1160 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编程语言,C++," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="基础语法  由于C++的枚举不像C#中的枚举，其枚举类型名并不是标识符的一部分，因此经常可能发生命名冲突的问题，解决的方法有四个：在枚举元素名称前加限定前缀（如enum EnumFruit { EnumFruit_apple = 1 };），将枚举类型放在一个同名的命名空间中，或将枚举作为类的嵌套类型，或者使用C++11的enum class（What’s an enum class and wh">
+<meta name="keywords" content="编程语言,C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一些基础的C++豆知识">
+<meta property="og:url" content="http://xnerv.wang/cpp-bean-knowledge/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="基础语法  由于C++的枚举不像C#中的枚举，其枚举类型名并不是标识符的一部分，因此经常可能发生命名冲突的问题，解决的方法有四个：在枚举元素名称前加限定前缀（如enum EnumFruit { EnumFruit_apple = 1 };），将枚举类型放在一个同名的命名空间中，或将枚举作为类的嵌套类型，或者使用C++11的enum class（What’s an enum class and wh">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:34.230Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一些基础的C++豆知识">
+<meta name="twitter:description" content="基础语法  由于C++的枚举不像C#中的枚举，其枚举类型名并不是标识符的一部分，因此经常可能发生命名冲突的问题，解决的方法有四个：在枚举元素名称前加限定前缀（如enum EnumFruit { EnumFruit_apple = 1 };），将枚举类型放在一个同名的命名空间中，或将枚举作为类的嵌套类型，或者使用C++11的enum class（What’s an enum class and wh">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/cpp-bean-knowledge/"/>
+
+
+
+
+
+  <title>一些基础的C++豆知识 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/cpp-bean-knowledge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">一些基础的C++豆知识</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-23T16:34:00+08:00">
+                2017-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基础语法"><a class="header-anchor" href="#基础语法"></a>基础语法</h2>
+<ul>
+<li>由于C++的枚举不像C#中的枚举，其枚举类型名并不是标识符的一部分，因此经常可能发生命名冲突的问题，解决的方法有四个：在枚举元素名称前加限定前缀（如enum EnumFruit { EnumFruit_apple = 1 };），将枚举类型放在一个同名的命名空间中，或将枚举作为类的嵌套类型，或者使用C++11的enum class（<a href="https://stackoverflow.com/questions/14041711/whats-an-enum-class-and-why-should-i-care?noredirect=1&amp;lq=1" target="_blank" rel="noopener">What’s an enum class and why should I care?</a>）。</li>
+<li>struct和class的默认类继承方式都是private，这与struct的成员默认继承方式是public是不同的。</li>
+<li><code>#include_next &lt;filename.h&gt;</code>，include位于搜索路径中位于当前文件之后的文件filename.h。</li>
+<li>在vc中，inlucde的路径的反斜杠不需要转义，如<code>#include &quot;..\..\..\Global\Data\GlobalPreferencesMgr.h&quot;</code>。</li>
+<li>对于namespace中的函数或class的前置声明，必须同样也包括在相同的namespace中，而不能用class ::std::A这种写法。（<a href="https://stackoverflow.com/questions/2059665/why-cant-i-forward-declare-a-class-in-a-namespace-like-this" target="_blank" rel="noopener">Why can’t I forward-declare a class in a namespace like this?</a>）</li>
+<li>没有<code>&amp;&amp;=</code>，只有<code>&amp;=</code>。</li>
+<li>（-1 || 0） == 1，请想想为什么。</li>
+</ul>
+<a id="more"></a>
+<h3 id="位移"><a class="header-anchor" href="#位移"></a>位移</h3>
+<ul>
+<li>在C语言中，涉及位移的运算符有2个，&gt;&gt;表示右移，&lt;&lt;则表示左移。<br>
+而汇编指令中，SHL和SHR表示逻辑左移和逻辑右移，SAR和SAL表示算术左移和算术右移。<br>
+其中，逻辑左移和算术左移都是寄存器二进制位整体向左移动，并在右边补0。<br>
+而右移则不同，逻辑右移是整体向右移，并在左边补0，而算术左移则是根据原符号位的值补与其相同的值。</li>
+<li>那么如何在C语言中分别实现逻辑和算术位移呢？根据C标准，如果在位移运算符左边的变量是有符号数，如int,char,short等，编译产生的汇编指令是算术位移指令，如果该变量是无符号数，如unsigned int,unsigned char等，编译产生的汇编指令则是逻辑位移指令。</li>
+</ul>
+<h2 id="变量"><a class="header-anchor" href="#变量"></a>变量</h2>
+<ul>
+<li>
+<p>64位系统vc的long仍然只有4 bytes，64位gcc则是8 bytes。主要是由于64位Linux用的是LP64位数据模型，而64位Windows用的是LLP64位数据模型。（<a href="https://stackoverflow.com/questions/384502/what-is-the-bit-size-of-long-on-64-bit-windows" target="_blank" rel="noopener">What is the bit size of long on 64-bit Windows?</a>）</p>
+</li>
+<li>
+<p>注意1.f也是一种合法的写法，与1.0f是等价的。（<a href="https://stackoverflow.com/questions/15048165/what-is-the-difference-between-1-0f-and-1-f" target="_blank" rel="noopener">What is the difference between “1.0f” and “1.f”?</a>）</p>
+</li>
+<li>
+<p>当一个struct定义了构造函数，或者用新的C++11语法直接赋予成员默认值后（<a href="https://stackoverflow.com/questions/27352021/c11-member-initializer-list-vs-in-class-initializer" target="_blank" rel="noopener">C++11 member initializer list vs in-class initializer?</a>），就不能用new A{1, 2, “a”}这样的“集合初始化”语法了，必须提供构造函数。（<a href="https://stackoverflow.com/questions/16983539/why-can-i-not-brace-initialize-a-struct-derived-from-another-struct" target="_blank" rel="noopener">Why can I not brace initialize a struct derived from another struct?</a>）</p>
+</li>
+<li>
+<p>全局变量可以用函数进行初始化，但注意static成员的初始化顺序不一定是按照定义的顺序进行的。（<a href="https://stackoverflow.com/questions/6337426/may-i-initialize-a-global-variable-with-the-result-of-a-function-call" target="_blank" rel="noopener">May I initialize a global variable with the result of a function call?</a>）</p>
+</li>
+<li>
+<p>字面常量（literal constant）根据平台的不同，有可能存储在text段，也可能存储在data段或其它地方，但具有static生命周期。</p>
+<pre><code>  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *b;</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">char</span> *a = <span class="string">"abc"</span>;</span><br><span class="line">  b = a;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// b仍然是有效指针</span></span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li>
+<p>string类采用了Copy-On-Write，将str b赋值给str a之后，如果a不修改，则a和b其实用的是同样的char*内存。所以这也是一个警示，string的c_str()地址是可能变化的，不应该去依赖这个地址。</p>
+</li>
+<li>
+<p>string本身是没有encoding的，取决于输入的字符串的encoding（<a href="https://stackoverflow.com/questions/1010783/what-encoding-does-stdstring-c-str-use" target="_blank" rel="noopener">What encoding does std::string.c_str() use?</a>）。而字符串encoding一般由</p>
+</li>
+</ul>
+<h3 id="浮点数"><a class="header-anchor" href="#浮点数"></a>浮点数</h3>
+<ul>
+<li>浮点数是不能用 unsigned来规范的。unsigned 的意思就是把内存中的数据第一位也用来表示数据，而不用于表示符号位。而浮点数规定内存中数据的第一位必须是符号位（<a href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format" target="_blank" rel="noopener">Double-precision floating-point format</a>）。因此两者之间是互相矛盾的，这也就是为什么浮点数不会有unsigned类型。在某些编译器下unsigned float 和 unsigned double会被自动转换成unsigned int类型，而不报错。这时sizeof(unsigned float)和sizeof(unsigned double)的值是4。</li>
+<li>定点数的优点是很简单，大部分运算实现起来和整数一样或者略有变化，但是缺点则是表示范围，而且在表示很小的数的时候，大部分位都是0，精度很差，不能充分运用存储单元。浮点数就是设计来克服这个缺点的，它相当于一个定点数加上一个阶码，阶码表示将这个定点数的小数点移动若干位。由于可以用阶码移动小数点，因此称为浮点数。（<a href="https://zhihu.com/question/19848808/answer/120393769" target="_blank" rel="noopener">为什么叫浮点数?</a>）</li>
+</ul>
+<h3 id="数组"><a class="header-anchor" href="#数组"></a>数组</h3>
+<ul>
+<li>对于数组char buff[] = “hello”，将buff 和 &amp;buff 用指针形式输出，结果是一样的。（<a href="https://stackoverflow.com/questions/7707190/address-of-array-difference-between-having-an-ampersand-and-no-ampersand" target="_blank" rel="noopener">Address of array - difference between having an ampersand and no ampersand</a>）</li>
+<li><a href="https://stackoverflow.com/questions/201101/how-to-initialize-all-members-of-an-array-to-the-same-value" target="_blank" rel="noopener">How to initialize all members of an array to the same value?</a><br>
+int array[100] = {0};可以将100个元素都设置成0，但int array[100] = {-1};只能将第一个元素设置成-1，声誉99个元素则设置成0。</li>
+<li>不能将一个char[100]的实参传给一个char*&amp;的形参，因为对于引用，必须是类型严格相同的。char[100]跟char*虽然可以相互转换，但编译时类型并不相同。可以将形参改成int (&amp;arr)[100]这样。</li>
+<li><code>char * arr[n] = { &quot;aaa&quot;, &quot;bbb&quot; }</code>是对的，是char<em>的数组，每一个char</em>指向一个字符串常量。而<code>char ** arr = { &quot;aaa&quot;, &quot;bbb&quot; }</code>是语法错误的，这是指向char*数组的二维指针，所以必须先<code>arr = new char*[n]</code>。</li>
+<li>当数组定义时没有指定大小，当初始化采用列表初始化了，那么数组的大小由初始化时列表元素个数决定。如果明确指定了数组大小，当在初始化时指定的元素个数超过这个大小就会产生错误。如果初始化时指定的的元素个数比数组大小少，剩下的元素都回被初始化为0。字符数组可以方便地采用字符串直接初始化。因此，<code>int a[10] = {0}</code>这种写法，其实本来是将第一个元素置为0，但后续所有元素都会被默认置为0。</li>
+</ul>
+<h2 id="new-delete-malloc-free"><a class="header-anchor" href="#new-delete-malloc-free"></a>new/delete/malloc/free</h2>
+<ul>
+<li><a href="https://kelvinh.github.io/blog/2014/04/19/research-on-operator-new-and-delete/" target="_blank" rel="noopener">深入探究C++的new/delete操作符</a><br>
+new/new[]调用的是operator new/new[]，前者是C++关键字，而后者其实就是（全局或class内的）操作符重载。所谓的placement new其实就是operator new/new[]的重载版本，我们也可以自定义提供了更多参数的placement new版本如operator(size_t size, P2, P3, P4)，然后通过new(P2, P3, P4)这样的语法进行调用。</li>
+<li>calloc返回的是一个数组，而malloc返回的是一个对象。calloc的效率一般是比较低的。calloc相当于malloc后再加memset。关于realloc，原来的指针会被Free，申请可能不成功，会返回NULL。新增区域内的初始值则不确定。alloca是在栈(stack)上申请空间，用完马上就释放。某些系统在函数已被调用后不能增加栈帧长度，于是也就不能支持alloca函数。</li>
+</ul>
+<h3 id="cookie信息"><a class="header-anchor" href="#cookie信息"></a>cookie信息</h3>
+<ul>
+<li>当我们使用 operator new 为一个自定义类型对象分配内存时，实际上我们得到的内存要比实际对象的内存大一些，这些内存除了要存储对象数据外，还需要记录这片内存的大小，此方法称为 cookie。这一点上的实现依据不同的编译器不同。（例如 MFC 选择在所分配内存的头部存储对象实际数据，而后面的部分存储边界标志和内存大小信息。g++ 则采用在所分配内存的头4个字节存储相关信息，而后面的内存存储对象实际数据。）当我们使用 delete operator 进行内存释放操作时，delete operator 就可以根据这些信息正确的释放指针所指向的内存块。</li>
+<li>以上论述的是对于单个对象的内存分配/释放，当我们为数组分配/释放内存时，虽然我们仍然使用 new operator 和 delete operator，但是其内部行为却有不同：new operator 调用了operator new 的数组版的兄弟－ operator new[]，而后针对每一个数组成员调用构造函数。而 delete operator 先对每一个数组成员调用析构函数，而后调用 operator delete[] 来释放内存。需要注意的是，当我们创建或释放由自定义数据类型所构成的数组时，编译器为了能够标识出在 operator delete[] 中所需释放的内存块的大小，也使用了编译器相关的 cookie 技术。</li>
+<li>根据Inside The C++ Object Model上所言，现在的编译器大多使用两种方法， 一种是cookie, 一个记录分配空间大小的内存小块绑定在分配内存的地址头部。二是使用表来对分配了的指针进行管理，每一个分配了空间的指针都在表中对应着分配空间的大小。</li>
+</ul>
+<h2 id="指针"><a class="header-anchor" href="#指针"></a>指针</h2>
+<ul>
+<li>ANSI规定不能对void<em>指针做++/+=等操作，但GNU将void</em>的这些操作当作和char*一样。（<a href="https://stackoverflow.com/questions/6449935/increment-void-pointer-by-one-byte-by-two" target="_blank" rel="noopener">Increment void pointer by one byte? by two?</a>）</li>
+<li>定义指向public成员函数的指针变量的一般形式为<code>数据类型名 (类名::*指针变量名)(参数表列)</code>。使指针变量指向一个公用成员函数的一般形式为<code>指针变量名=&amp;类名::成员函数名</code>。对于普通函数，函数名本身加不加&amp;都能表示函数指针，但是成员函数则必须加&amp;才能取地址。</li>
+<li>在C语言里，一个指针可以指向一个函数。这个指针也有两个属性，但一个是函数的入口地址，另一个是函数的返值类型。但是C里面函数指针的形参列表可以不写出（obsolescent），而C++中则强制要求写出。（<a href="https://stackoverflow.com/questions/20835534/function-pointer-without-arguments-types" target="_blank" rel="noopener">Function pointer without arguments types?</a>）</li>
+</ul>
+<h2 id="函数"><a class="header-anchor" href="#函数"></a>函数</h2>
+<ul>
+<li>
+<p>默认值可以是全局变量、全局常量，甚至是一个函数。但不可以是局部变量。因为默认参数的调用是在编译时确定的，而局部变量位置与默认值在编译时无法确定。</p>
+</li>
+<li>
+<p>当一个stack上的数组如char arr[5]作为参数传递给一个函数void func(char* p)或void func(char p[5])时，就降级为一个指针，sizeof只能取到指针本身的大小。要记得sizeof是一个编译器的行为，对于函数而言，有可能被多处调用到，传递来不同大小的数组，因此不可能在编译器完成sizeof。（<a href="https://stackoverflow.com/questions/2950332/why-does-a-c-array-have-a-wrong-sizeof-value-when-its-passed-to-a-function" target="_blank" rel="noopener">Why does a C-Array have a wrong sizeof() value when it’s passed to a function?</a>）如果要保留数组类型，则要声明函数为void func(char (&amp;a)[5])。（<a href="https://stackoverflow.com/questions/1328223/when-a-function-has-a-specific-size-array-parameter-why-is-it-replaced-with-a-p" target="_blank" rel="noopener">When a function has a specific-size array parameter, why is it replaced with a pointer?</a>）</p>
+</li>
+<li>
+<p>数组的长度与参数声明无关。因此，下列三个声明是等价的：</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">void putValues(int*);</span><br><span class="line">void putValues(int[]);</span><br><span class="line">void putValues(int[10]);</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<p>数组长度不是参数类型的一部分。函数不知道传递给它的数组的实际长度，编译器也不知道，当编译器对实参类型进行参数类型检查时，并不检查数组的长度。</p>
+<ul>
+<li>一个返回void的函数，可以在内部return另一个返回void的函数。</li>
+<li>参数默认值可以写在函数声明处，也可以写在函数定义处，但是不能两处同时写，即使两处写的默认值是一样的。但是不同的cpp在声明一个外部函数时，应该可以使用不同的函数参数默认值声明，虽然在同一个cpp中不能看见有两次同一个函数的声明，即使是同样的默认值。这说明，无论是函数的声明还是定义，无论默认值是否相同，同一个函数的默认值定义不能出现两次。</li>
+<li>string, char*参数都可以用字符串常量作为默认值，说明一个类A的对象，并且支持类型B到A的隐式转换，就可以用B的一个实例b作为参数默认值。（<a href="https://stackoverflow.com/questions/12121645/how-to-set-default-parameter-as-class-object-in-c" target="_blank" rel="noopener">How to set default parameter as class object in c++?</a>）</li>
+<li><a href="http://bbs.csdn.net/topics/300003660" target="_blank" rel="noopener">如何定义一个函数指针，指向一个带有默认值参数的函数?</a><br>
+结论是做不到，只能用类似functor或者std::function等来<a href="https://zh.wikipedia.org/wiki/%E6%9F%AF%E9%87%8C%E5%8C%96" target="_blank" rel="noopener">科里化</a>其中的一个或部分参数值。</li>
+<li>普通的函数不需要通过&amp;来取地址，但是成员方法取地址则必须加上&amp;。（<a href="https://stackoverflow.com/questions/18312186/if-ampersands-arent-needed-for-function-pointers-why-does-boostbind-require" target="_blank" rel="noopener">If ampersands aren’t needed for function pointers, why does boost::bind require one?</a>）</li>
+</ul>
+<h3 id="内联函数"><a class="header-anchor" href="#内联函数"></a>内联函数</h3>
+<ul>
+<li>inline关键字更主要的含义是允许一个函数在不同的编译单元（cpp）同时存在实现，这和在h文件的class定义中直接实现一个方法，而不是将方法的实现放到cpp中，本质上是样的。至于是否会用内联代码代替函数调用，则是由编译器自身决定的。（<a href="https://stackoverflow.com/questions/1809679/difference-between-implementing-a-class-inside-a-h-file-or-in-a-cpp-file" target="_blank" rel="noopener">Difference between implementing a class inside a .h file or in a .cpp file</a>）</li>
+<li>在cpp中定义inline函数（即使在头文件中再次用inline声明了这个函数），对于其它的cpp而言是没有inline效果的。因为对于编译器而言，每个cpp都是独立的编译单元，因此一个cpp是不能inline另一个cpp中定义实现的inline函数的。（<a href="https://stackoverflow.com/questions/3992980/c-inline-member-function-in-cpp-file" target="_blank" rel="noopener">C++ inline member function in .cpp file</a>）</li>
+</ul>
+<h3 id="构造函数"><a class="header-anchor" href="#构造函数"></a>构造函数</h3>
+<ul>
+<li>
+<p>explicit关键字用于取消构造函数的隐式转换，对有多个参数的构造函数使用explicit是个语法错误。即用explict修饰的构造函数有且只能有一个参数。</p>
+</li>
+<li>
+<p>在构造函数里调用另一个构造函数的关键是让第二个构造函数在第一次分配好的内存上执行，而不是分配新的内存，这个可以用标准库的placement new做到。</p>
+<pre><code>  <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">new</span>(<span class="keyword">this</span>)A(<span class="number">11</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<p>注： 若构造函数调用自身，则会出现无限递归调用。</p>
+<ul>
+<li>成员初始化列表不能对基类成员变量赋值，而应该通过调用基类的构造函数达成目标。</li>
+<li>C++初始化类成员时，是按照声明的顺序初始化的，而不是按照出现在初始化列表中的顺序。（<a href="https://stackoverflow.com/a/4037283/2258530" target="_blank" rel="noopener">Order of execution in constructor initialization list</a>）</li>
+<li>删除一个强转成void*的对象指针，会释放内存，但不会调用其析构函数。<a href="https://stackoverflow.com/questions/941832/is-it-safe-to-delete-a-void-pointer" target="_blank" rel="noopener">Is it safe to delete a void pointer?</a></li>
+<li>不要在有虚表的类的构造函数和析构函数中调用虚函数，会调用到基类的函数。（[Calling virtual functions inside constructors(<a href="https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors" target="_blank" rel="noopener">https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors</a>)]，<a href="https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors" target="_blank" rel="noopener">https://stackoverflow.com/questions/962132/calling-virtual-functions-inside-constructors</a>）</li>
+</ul>
+<h3 id="成员函数隐藏"><a class="header-anchor" href="#成员函数隐藏"></a>成员函数隐藏</h3>
+<ul>
+<li><a href="https://stackoverflow.com/questions/11923890/reason-for-c-member-function-hiding" target="_blank" rel="noopener">Reason for C++ member function hiding</a><br>
+当编译器于某一层找到能用（不一定最好，也许需要强制转换参数类型）的方法时，就不会继续再向上一层（父类）查找。不仅仅是类与类之间，嵌套的namespace也存在这个现象。</li>
+</ul>
+<h2 id="sizeof"><a class="header-anchor" href="#sizeof"></a>sizeof</h2>
+<ul>
+<li><a href="http://blog.csdn.net/freefalcon/article/details/54839" target="_blank" rel="noopener">sizeof，终极无惑（上）</a></li>
+</ul>
+<blockquote>
+<p>sizeof有三种语法形式，如下：</p>
+<ol>
+<li>sizeof( object ); // sizeof( 对象 );</li>
+<li>sizeof( type_name ); // sizeof( 类型 );</li>
+<li>sizeof object; // sizeof 对象;</li>
+<li>size_t sz = sizeof( foo() ); // foo() 的返回值类型为char，所以sz = sizeof( char )，foo()并不会被调用。但是foo不能返回为void。<br>
+c99标准支持对VLA取sizeof。</li>
+</ol>
+</blockquote>
+<ul>
+<li><a href="http://www.spongeliu.com/218.html" target="_blank" rel="noopener">结构体的sizeof到底多大？</a></li>
+</ul>
+<blockquote>
+<p>在VC中规定， 结构体变量的首地址能够被其最宽基本类型成员的大小所整除；而在gcc中规定对齐模数最大只能是4，也就是说，即使结构体中有double类型，对齐模数还是4。</p>
+</blockquote>
+<ul>
+<li>
+<p>sizeof也是运算符，虽然不能被重载。<br>
+不能重载的运算符只有5个（<a href="https://www.quora.com/Which-operator-cannot-be-overloaded-in-C++-and-why" target="_blank" rel="noopener">Which operator cannot be overloaded in C++ and why?</a>）：</p>
+<pre><code>  - (成员访问运算符)
+  .*  (成员指针访问运算符)
+  ::  (域运算符)
+  sizeof  (长度运算符)
+  ?:  (条件运算符）
+</code></pre>
+</li>
+<li>
+<p><a href="http://www.spongeliu.com/260.html" target="_blank" rel="noopener">为什么C++中空类和空结构体大小为1？</a></p>
+</li>
+</ul>
+<blockquote>
+<p>这是因为，C++标准中规定，“no object shall have the same address in memory as any other variable” ，就是任何不同的对象不能拥有相同的内存地址。 如果空类大小为0，若我们声明一个这个类的对象数组，那么数组中的每个对象都拥有了相同的地址，这显然是违背标准的。<br>
+基本上所有的指针运算都依赖于sizeof T。</p>
+</blockquote>
+<h2 id="类型转换"><a class="header-anchor" href="#类型转换"></a>类型转换</h2>
+<ul>
+<li><a href="https://stackoverflow.com/questions/10151834/why-cant-i-static-cast-between-char-and-unsigned-char" target="_blank" rel="noopener">Why can’t I static_cast between char * and unsigned char *?</a><br>
+不同的两种类型的指针相互之间不能用static_cast转换，而必须用reinterprete_cast。而普通指针和void*之间则可以用static_cast相互转换。</li>
+<li><a href="https://stackoverflow.com/questions/20798214/how-dynamic-cast-works-internally" target="_blank" rel="noopener">How dynamic_cast works internally?</a><br>
+Formally, of course, it’s implementation defined, but in practice, there will be an additional pointer in the vtable, which points to a description of the object, probably as a DAG of objects which contain pointers to the various children (derived classes) and information regarding their type (a pointer to a  type_info, perhaps).</li>
+</ul>
+<blockquote>
+<p>The compiler then generates code which walks the different paths in the graph until it either finds the targeted type, or has visited all of the nodes. If it finds the targeted type, the node will also contain the necessary information as to how to convert the pointer.</p>
+<p>One additional point occurs to me. Even if the generated code finds a match, it may have to continue navigating in order to ensure that it isn’t ambiguous.</p>
+</blockquote>
+<h2 id="typedef"><a class="header-anchor" href="#typedef"></a>typedef</h2>
+<ul>
+<li>typdef定义的struct/class如何前置声明？</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">my_time_t</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">int</span> hour, minute, second;</span><br><span class="line">&#125; MY_TIME;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">my_time_t</span>;</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">my_time_t</span> <span class="title">MY_TIME</span>;</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(MY_TIME* mt)</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>其实typedef作为一种类似宏的声明，在没有include头文件的情况下要想使用只能重新typedef。</p>
+<ul>
+<li><code>#define</code>没有作用域的限制，只要是之前预定义过的宏，在以后的程序中都可以使用。而typedef有自己的作用域。（<a href="https://stackoverflow.com/questions/2427739/please-explain-syntax-rules-and-scope-for-typedef" target="_blank" rel="noopener">Please explain syntax rules and scope for “typedef”</a>）</li>
+<li>typedef会影响模板参数T的匹配吗？对于func(int, int32_t)和func(int, int)，会优先匹配哪个？实验发现编译错误：func重定义。一个int实参不能传给unsigned&amp;的形参，但typedef可以。以上都表明typedef有点类似define。但是，ifdef/ifndef不能检查typedef。</li>
+<li><code>typedef register int FAST_COUNTER;</code>，这种写法是错误的，编译通不过。问题出在你不能在声明中有多个存储类关键字（storage class specifier）。因为符号typedef已经占据了存储类关键字的位置， typedef声明中不能用register（或任何其它存储类关键字如static）。此外，由于存储类关键字本身并不是类型type的一部分，因此不允许其出现在typedef语句中也是合理的。（<a href="https://stackoverflow.com/questions/2218435/why-typedef-can-not-be-used-with-static" target="_blank" rel="noopener">Why typedef can not be used with static?</a>）</li>
+<li><code>typedef struct tagNode *pNode; struct tagNode { };</code>，在这个例子中，你用typedef给一个还未完全声明的类型起新名字。C语言编译器支持这种做法。</li>
+<li><code>typedef struct tagNode { } *pNode;</code>，定义了一种新的类型pNode，等于一个结构体指针类型。</li>
+<li><code>typedef char *pStr1; #define pStr2 char *; pStr2 s3, s4; pStr2 s3, s4;</code>，在上述的变量定义中，s1、s2、s3都被定义为<code>char *</code>，而s4则定义成了<code>char</code>，不是我们所预期的指针变量，根本原因就在于#define只是简单的字符串替换而typedef则是为一个类型起新名字。</li>
+<li>typedef也有一个特别的长处：它符合范围规则（scope），使用typedef定义的变量类型其作用范围限制在所定义的函数或者文件内（取决于此变量定义的位置），而宏定义则没有这种特性。但typedef定义的类型不能用#ifdef 、#ifndef去检测。</li>
+<li>typedef是一个语句，后面要加分号；。而define是预处理宏，不能加分号。</li>
+<li><code>typedef char Line[81];</code>，<code>定义了一种新的类型Line，等于char[81]，不能错误地写作``typedef char[81] Line;</code>。此外，最好用<code>typedef struct Line { char line[81]; } Line;</code></li>
+<li><code>typedef char * pstr;</code>，定义了一种新的类型pstr，等于<code>char*</code>。按照顺序，<code>const pstr</code>被解释为<code>char * const</code>（一个指向 char 的常量指针），而不是<code>const char *</code>（指向常量 char 的指针）。这个问题很容易解决：<code>typedef const char * cpstr;</code>。</li>
+</ul>
+<h2 id="cdecl和stdcall"><a class="header-anchor" href="#cdecl和stdcall"></a>cdecl和stdcall</h2>
+<p>实际上<code>__cdecl</code>和<code>__stdcall</code>函数参数都是从右到左入栈，它们的区别在于由谁来清栈，<code>__cdecl</code>由外部调用函数清栈，而<code>__stdcall</code>由被调用函数本身清栈， 显然对于可变参数的函数，函数本身没法知道外部函数调用它时传了多少参数（也许有人说例如printf，分析format string不就可以知道传了哪些参数了，但实际上，caller在调用printf时，可以额外多传一些没有用到的参数啊），所以没法支持被调用函数本身清栈（<code>__stdcall</code>）， 所以可变参数只能用__cdecll。<br>
+另外还要理解函数参数传递过程中堆栈是如何生长和变化的，从堆栈低地址到高地址，依次存储 被调用函数局部变量，上一函数堆栈桢基址，函数返回地址，参数1， 参数2， 参数3…</p>
+<h2 id="stl"><a class="header-anchor" href="#stl"></a>STL</h2>
+<ul>
+<li>vector为了防止大量分配连续内存的开销，保持一块默认的尺寸的内存，clear只是清数据了，未清内存，因为vector的capacity容量未变化，系统维护一个的默认值。有什么方法可以释放掉vector中占用的全部内存呢？（vector&lt; T &gt; vtTemp; veTemp.swap( vt );）</li>
+<li>multimap/multiset不支持下标运算。</li>
+<li>const map不支持下标操作，[ ]没有提供const版本。由于[ ]对于不存在的key，会自动insert相应的key，所以const map版本没有提供[ ]。</li>
+</ul>
+<h2 id="longjmp"><a class="header-anchor" href="#longjmp"></a>longjmp</h2>
+<p>在C++中用longjmp，可能导致析构函数不被调用。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/cpp-bean-knowledge/">http://xnerv.wang/cpp-bean-knowledge/</a></strong></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程语言/" rel="tag"># 编程语言</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/linux-session-and-processgroup-summary/" rel="next" title="Linux session和进程组概述">
+                <i class="fa fa-chevron-left"></i> Linux session和进程组概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/iocp-usage-and-inside/" rel="prev" title="IOCP的使用和技术内幕">
+                IOCP的使用和技术内幕 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础语法"><span class="nav-number">1.</span> <span class="nav-text">基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#位移"><span class="nav-number">1.1.</span> <span class="nav-text">位移</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量"><span class="nav-number">2.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浮点数"><span class="nav-number">2.1.</span> <span class="nav-text">浮点数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组"><span class="nav-number">2.2.</span> <span class="nav-text">数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new-delete-malloc-free"><span class="nav-number">3.</span> <span class="nav-text">new/delete/malloc/free</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cookie信息"><span class="nav-number">3.1.</span> <span class="nav-text">cookie信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指针"><span class="nav-number">4.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">5.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内联函数"><span class="nav-number">5.1.</span> <span class="nav-text">内联函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造函数"><span class="nav-number">5.2.</span> <span class="nav-text">构造函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#成员函数隐藏"><span class="nav-number">5.3.</span> <span class="nav-text">成员函数隐藏</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sizeof"><span class="nav-number">6.</span> <span class="nav-text">sizeof</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型转换"><span class="nav-number">7.</span> <span class="nav-text">类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#typedef"><span class="nav-number">8.</span> <span class="nav-text">typedef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#cdecl和stdcall"><span class="nav-number">9.</span> <span class="nav-text">cdecl和stdcall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#stl"><span class="nav-number">10.</span> <span class="nav-text">STL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#longjmp"><span class="nav-number">11.</span> <span class="nav-text">longjmp</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

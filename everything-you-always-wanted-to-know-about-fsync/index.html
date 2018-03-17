@@ -1,0 +1,1010 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Linux,Linux API," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="And then the developer wondered:  is my file properly sync’ed on disk ?  You probably know more or less how databases (or things that look like one) store their data on disk in a permanent and safe wa">
+<meta name="keywords" content="转载,Linux,Linux API">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Everything You Always Wanted to Know About Fsync()">
+<meta property="og:url" content="http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="And then the developer wondered:  is my file properly sync’ed on disk ?  You probably know more or less how databases (or things that look like one) store their data on disk in a permanent and safe wa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.890Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Everything You Always Wanted to Know About Fsync()">
+<meta name="twitter:description" content="And then the developer wondered:  is my file properly sync’ed on disk ?  You probably know more or less how databases (or things that look like one) store their data on disk in a permanent and safe wa">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/"/>
+
+
+
+
+
+  <title>Everything You Always Wanted to Know About Fsync() | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Everything You Always Wanted to Know About Fsync()</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2013-11-15T00:00:00+08:00">
+                2013-11-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>And then the developer wondered:</p>
+<blockquote>
+<p><em>is my file properly sync’ed on disk ?</em></p>
+</blockquote>
+<p>You probably know <strong>more or less</strong> how databases (or things that look like one) store their data on disk in a <strong>permanent</strong> and <strong>safe</strong> way. Or at least, you know the basic principles. Or not ?</p>
+<a id="more"></a>
+<h2 id="being-on-ac-i-d"><a class="header-anchor" href="#being-on-ac-i-d"></a>Being on AC(I)D</h2>
+<p>There are a bunch of concepts that first must be understood: what is <strong>atomicity</strong>, <strong>consistency</strong>, and <strong>durability</strong> ? These concepts apply on databases (see <a href="http://en.wikipedia.org/wiki/ACID" target="_blank" rel="noopener">ACID</a>), but also on the underlying filesystem.</p>
+<ul>
+<li><strong>Atomicity</strong>: a write operation is fully executed at once, and is not <strong>interleaved</strong> with another one (if, for example, someone else is writing to the same location)</li>
+</ul>
+<p>Atomicity is typically guaranteed in operations involving filename handling ; for example, for <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/rename.html" target="_blank" rel="noopener">rename</a>, “<em>specification requires that the action of the function be atomic</em>” – that is, when renaming a file from the old name to the new one, at no circumstances should you ever see the two files at the same time.</p>
+<ul>
+<li><strong>Consistency</strong>: integrity of data must be maintained when executing an operation, even in a crash event – for example, a power outage in the middle of a <code>rename()</code> operation shall not leave the filesystem in a “weird” state, with the filename being unreachable because its metadata has been corrupted. (ie. either the operation is lost, or the operation is committed.)</li>
+</ul>
+<p>Consistency is guaranteed on the filesystem level ; but you also need to have the same guarantee if you build a database on disk, for example by serializing/locking certain operations on a working area, and committing the transaction by changing some kind of generation number.</p>
+<ul>
+<li><strong>Durability</strong>: the write operation is durable, that is, unplugging the power cord (or a kernel panic, a crash…) shall not lose any data (hitting the hard disk with a hammer is however not covered!)</li>
+</ul>
+<p>This is an important one – at a given point, you must ensure that the data is actually written on disk <em>physically</em>, preventing any loss of data in case of a sudden power outage, for example. This is absolutely critical when dealing with a client/server architecture: the client may have its connection or transaction aborted at any time without troubles (ie. the transaction will be retried later), but once the server acknowledges it, no event should ever cause it to be lost (think of responsibility in a commercial transaction, or a digital signature, for example). For this reason, having the data committed in the internal system or hard disk cache is NOT durable for obvious reasons (unless there is a guarantee that no such power outage could happen – if a battery is used on a RAID array, for example).</p>
+<p>On POSIX systems, durability is achieved through sync operations (<code>fsync()</code>, <code>fdatasync()</code>, <code>aio_fsync()</code>): “<em>The fsync() function is intended to force a physical write of data from the buffer cache, and to assure that after a system crash or other failure that all data up to the time of the fsync() call is recorded on the disk.</em>”. [Note: The difference between fsync() and fdatasync() is that the later does not necessarily update the meta-data associated with a file – such as the “last modified” date – but only the file data.]</p>
+<p>Now that these concepts are a bit clearer, let’s go back to our filesystem!</p>
+<h2 id="hey-what-is-a-file-by-the-way"><a class="header-anchor" href="#hey-what-is-a-file-by-the-way"></a>Hey, What is a File, By The Way ?</h2>
+<p>If we want to simplify the concept, let’s consider the filesystem on POSIX platforms as a very simple <em>flat</em> storage manager, allowing to read/write data blobs and basic properties (such as the modified time) indexed by an <em>integer</em> number (hint: they sometimes call that the <em>inode number</em>).</p>
+<p>For example, you may want to read the file #4242’s data. And later, write some data on file #1234.</p>
+<p>To have a more convenient way to handle files (because “I need to send you the presentation number 155324” would not be really convenient in the real world), we use the <strong>filename/directory</strong> concepts. A file has a name, and it is <em>contained</em> within a <em>directory structure</em>. You may put files and directories in a directory, building a hierarchical structure. But everything rely on our previous basic data blobs to store both filename and the associated index.</p>
+<p>As an example, reading the file <code>foo/bar.txt</code> (ie. the file <code>bar.txt</code> within the <code>foo</code> directory) will require to access the data blob associated with the directory <code>foo</code>. After parsing this opaque data blob, the system will fetch the entry for <code>bar.txt</code>, and open the associated data blob. (And yes, there is obviously a root entry, storing references to first-level entries, allowing to access any file top-down)</p>
+<p>If I now want to create a new file named <code>foo/baz.txt</code>, it will require the system to access the data blob associated with the directory <code>foo</code>, add an entry named <code>baz.txt</code> with a new allocated index for the upcoming file, and write the updated directory blob back, and from this point, write to the newly allocated blob. The operation therefore involves <strong>two</strong> data structures: the <strong>directory entry</strong>, and the <strong>file</strong> itself.</p>
+<h2 id="keeping-my-file-name-safe"><a class="header-anchor" href="#keeping-my-file-name-safe"></a>Keeping My File(name) Safe</h2>
+<p>Let’s go back to our database problem: what is the impact of having two data structures for our files ?</p>
+<p><strong>Atomicity</strong> and <strong>consistency</strong> of filenames are handled for us by the filesystem, so this is not really a bother.</p>
+<p>What about <strong>durability</strong> ?</p>
+<p>We know that <code>fsync()</code> provides guarantees related to data and meta-data sync’ing. But if you look closer to the specification, the only data involved are the one related to the file itself – not its directory entry. The “metadata” concept involves modified time, access time etc. – <strong>not</strong> the <em>directory entry</em> itself.</p>
+<p>It would be cumbersome for a filesystem to provide this guarantee, by the way: on POSIX systems, you can have an arbitrary number of directory links to a filename (or to another directory entry). The most common case is <em>one</em>, of course. But you may delete a file being used (the file entry will be removed by the system when the file is closed) – the very reason why erasing a log file which is flooding a filesystem is a futile and deadly action – in such case, the number of links will be zero. And you may also create as many <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/link.html" target="_blank" rel="noopener">hard-links</a> as you want for a given file/directory entry.</p>
+<p>Therefore, in theory, you may create a file, write some data, synchronize it, close the file, and see your <a href="http://upload.wikimedia.org/wikipedia/en/e/e0/Gollum.PNG" target="_blank" rel="noopener">precious</a> file lost forever because of a power outage. Oh, the filesystem must guarantee consistency, of course, but not durability unless <em>explicitly</em> asked by the client – which means that a filesystem check may find your directory entry partially written, and decide to achieve consistency by taking the previous directory blob entry, <strong>wiping</strong> the unreferenced file entry (note: if you are “lucky” enough, the file will be expelled in <code>lost+found</code>)</p>
+<p>The filesystem can, of course, decide to be gentle, and commit all filename operations when fsync’ing. It may also, such as for ext3, commit <a href="https://ext4.wiki.kernel.org/index.php/Ext3_Data%3DOrdered_vs_Data%3DWriteback_mode" target="_blank" rel="noopener">everything</a> when fsync’ing a file – causing the <a href="http://lwn.net/Articles/328363/" target="_blank" rel="noopener">infamous</a> and <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=421482" target="_blank" rel="noopener">horrendous</a> lags in firefox or thunderbird.</p>
+<p>But if you need to have <strong>guarantees</strong>, and not just <em>hope</em> the filesystem “<em>will be gentle</em>”, and do not want to “<em>trust the filesystem</em>” (yes, someone actually told me that: you need to “trust the filesystem” – I swear it), you have to actually make sure that your <strong>filename</strong> entry is properly sync’ed on disk following the POSIX specification.</p>
+<p>Oh, and by the way: according to <a href="http://pubs.opengroup.org/onlinepubs/009695399/functions/fsync.html" target="_blank" rel="noopener">POSIX</a>, <em>The fsync() function is intended to force a physical write of data from the buffer cache, and to assure that after a system crash or other failure that all data up to the time of the fsync() call is recorded on the disk.</em></p>
+<p><em>But</em> things are sometimes a bit obscure on the implementation side :</p>
+<p><a href="http://unixhelp.ed.ac.uk/CGI/man-cgi?fsync" target="_blank" rel="noopener">Linux/ext3</a>: <em>If the underlying hard disk has write caching enabled, then the data may not really be on permanent storage when fsync() / fdatasync() return.</em> (do’h!)</p>
+<p><a href="http://linux.die.net/man/2/fsync" target="_blank" rel="noopener">Linux/ext4</a>: <em>The fsync() implementations in older kernels and lesser used filesystems does not know how to flush disk caches.</em> (do’h!) – issue adressed quite <a href="http://lwn.net/Articles/270891/" target="_blank" rel="noopener">recently</a></p>
+<p><a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man2/fsync.2.html" target="_blank" rel="noopener">OSX</a>: <em>For applications that require tighter guarantees about the integrity of their data, Mac OS X provides the F_FULLFSYNC fcntl. The <code>F_FULLFSYNC</code> fcntl asks the drive to flush all buffered data to permanent storage</em> (hey, fsync was supposed to do that, no ? guys ?) <em>(Edit: no, fsync is actually not required to do that – thanks for the clarification Florent!)</em></p>
+<p>But we may assume that on Linux with <a href="http://monolight.cc/2011/06/barriers-caches-filesystems/" target="_blank" rel="noopener">ext4</a> (and OSX with proper flags ?) the system is properly propagating <a href="http://docs.fedoraproject.org/en-US/Fedora/14/html/Storage_Administration_Guide/writebarr.html" target="_blank" rel="noopener">write barriers</a>.</p>
+<p>On Windows, using <code>FlushFileBuffers()</code> is probably the way to go.</p>
+<h2 id="syncing-filenames"><a class="header-anchor" href="#syncing-filenames"></a>Syncing Filenames</h2>
+<p>I told you that a filesystem was actually a bunch of <em>flat</em> data blobs with associated metadata, and that a file had actually two parts: its directory entry (let’s assume there is only one directory entry for the sake of simplicity), and its actual data. We already know how to sync the later one ; do we have a way to do the same for the directory container itself ?</p>
+<p>On POSIX, you may actually open a directory as if you were opening a file (hint: a directory is <em><a href="http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html" target="_blank" rel="noopener">a file that contains directory entries</a></em>). It means that <code>open()</code> <em>may</em> successfully open a directory entry. But on the other hand, you generally can not open a directory entry for writing (see POSIX <a href="http://pubs.opengroup.org/onlinepubs/009695299/functions/open.html" target="_blank" rel="noopener">remark</a> regarding <code>EISDIR</code>: <em>The named file is a directory and oflag includes O_WRONLY or O_RDWR</em>), and this is perfectly logical: by directly writing to the internal directory entry, you may be able to mess up with the directory structure, ruining the filesystem <strong>consistency</strong>.</p>
+<p>But can we fsync() written data using a file descriptor opened <em>only</em> for reading ? The question is… yes, or at least “<em>yes it should</em>” – even POSIX group had <em>editorial</em> inconsistencies regarding <a href="http://austingroupbugs.net/view.php?id=501" target="_blank" rel="noopener">fdatasync</a> and <a href="http://austingroupbugs.net/view.php?id=671" target="_blank" rel="noopener">aio_fsync()</a>, leading to incorrect <a href="http://cygwin.com/frysk/bugzilla/show_bug.cgi?id=15361" target="_blank" rel="noopener">behavior</a> on various implementations. And the reason it should execute the operation is because requesting the completion of a write operation does not have to require actual write access – which have already been checked and enforced.</p>
+<p>On Windows… err, there is no clear answer. You can not call <code>FlushFileBuffers()</code> on a directory handle as far as I can see.</p>
+<p>Oh, a last funny note: how do you sync the <strong>content</strong> of a <em>symbolic link</em> (and its related meta-data), that is, the filename pointed by this link ? The answer is… you can’t. Nope. This is not possible with the current standard (hint: you can not <code>open()</code> a symbolic link). Which means that if you handle some kind of database generation update based on symbolic links (ie. changing a “last-version” symlink to the latest built generation file), you have zero guarantee over durability.</p>
+<h2 id="conclusion"><a class="header-anchor" href="#conclusion"></a>Conclusion</h2>
+<p>Does it means that we need to call <code>fsync()</code> <em>twice</em>, one on the file data, and one on its parent directory ? When you need to achieve <em>durability</em>, the answer is obviously <strong>yes</strong>. (Remember that file file/filename will be sync’ed on disk anyway by the operating system, so you do not actually need to do that for every single file – only for those you want to have a durability guarantee at a given time)</p>
+<p>However, the question is causing some headache on the POSIX standard, and as a follow-up to the <a href="http://comments.gmane.org/gmane.comp.standards.posix.austin.general/6952" target="_blank" rel="noopener">austin-group</a> (ie. POSIX mailing-list) discussion, an <a href="http://austingroupbugs.net/view.php?id=672" target="_blank" rel="noopener">editorial clarification request</a> is still pending and is waiting for feedback from various implementors. (you may also have a look at the <a href="http://unix.derkeiler.com/Newsgroups/comp.unix.programmer/2013-03/msg00016.html" target="_blank" rel="noopener">comp.unix.programmer discussion</a>)</p>
+<p><strong>TL;DR</strong>: syncing a file is not as simple as it seems!</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/">http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</a></strong><br>
+Reprinted from: <a href="http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/" target="_blank" rel="noopener">Everything You Always Wanted to Know About Fsync()</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+            <a href="/tags/Linux-API/" rel="tag"># Linux API</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/your-visual-how-to-guide-for-selinux-policy-enforcement/" rel="next" title="Your visual how-to guide for SELinux policy enforcement">
+                <i class="fa fa-chevron-left"></i> Your visual how-to guide for SELinux policy enforcement
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/memory-allocation-buddy-system-and-slab-allocator/" rel="prev" title="内存分配-----伙伴算法和slab算法">
+                内存分配-----伙伴算法和slab算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#being-on-ac-i-d"><span class="nav-text">Being on AC(I)D</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hey-what-is-a-file-by-the-way"><span class="nav-text">Hey, What is a File, By The Way ?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#keeping-my-file-name-safe"><span class="nav-text">Keeping My File(name) Safe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#syncing-filenames"><span class="nav-text">Syncing Filenames</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#conclusion"><span class="nav-text">Conclusion</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

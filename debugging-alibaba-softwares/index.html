@@ -1,0 +1,1043 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,Windows,WinDbg," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="摘要：为了抢占用户桌面，很多客户端软件都是主动送上门的，不需要花钱购买。可能只要你一个认可，就在电脑上安家落户。住下来之后，有些软件偶尔动动，但也有些高调强势，让你不得不注意到它，本文要谈的就是这样的软件。">
+<meta name="keywords" content="转载,Windows,WinDbg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在调试器中看阿里的软件兵团">
+<meta property="og:url" content="http://xnerv.wang/debugging-alibaba-softwares/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="摘要：为了抢占用户桌面，很多客户端软件都是主动送上门的，不需要花钱购买。可能只要你一个认可，就在电脑上安家落户。住下来之后，有些软件偶尔动动，但也有些高调强势，让你不得不注意到它，本文要谈的就是这样的软件。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/1.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/2.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/3.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/4.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/5.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/6.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/7.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/6ba.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/8.jpg">
+<meta property="og:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/9.jpg">
+<meta property="og:updated_time" content="2018-03-17T14:40:33.965Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在调试器中看阿里的软件兵团">
+<meta name="twitter:description" content="摘要：为了抢占用户桌面，很多客户端软件都是主动送上门的，不需要花钱购买。可能只要你一个认可，就在电脑上安家落户。住下来之后，有些软件偶尔动动，但也有些高调强势，让你不得不注意到它，本文要谈的就是这样的软件。">
+<meta name="twitter:image" content="http://xnerv.wang/assets/debugging-alibaba-softwares/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/debugging-alibaba-softwares/"/>
+
+
+
+
+
+  <title>在调试器中看阿里的软件兵团 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/debugging-alibaba-softwares/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">在调试器中看阿里的软件兵团</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-16T14:48:00+08:00">
+                2014-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/WinDbg/" itemprop="url" rel="index">
+                    <span itemprop="name">WinDbg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>摘要：为了抢占用户桌面，很多客户端软件都是主动送上门的，不需要花钱购买。可能只要你一个认可，就在电脑上安家落户。住下来之后，有些软件偶尔动动，但也有些高调强势，让你不得不注意到它，本文要谈的就是这样的软件。</p>
+<a id="more"></a>
+<h2 id="谁在消耗电池？"><a class="header-anchor" href="#谁在消耗电池？"></a>谁在消耗电池？</h2>
+<p>人们对手机、笔记本电脑等移动设备的依赖越来越大。一旦电池用尽而又不能立刻充电，便可能把人急得双脚跳。面对类似情况，为了让笔记本电池多支撑一会儿，我会采取两项省电措施：一是把屏幕调暗，二是杀掉特别费电的软件。第一项容易理解，略去不谈。第二项的关键是如何找到高功耗软件。一种简单的方法是调出任务管理器，通过View菜单（Windows 8之前）或者在列表的标题行（Windows 8/8.1）调出图1所示的“选择列”对话框，然后将Page faults（缺页异常总次数）和PF Delta（自上次更新后缺页异常的新增次数，默认为每秒更新一次）两项选中。接下来分别按Page faults、PF Delta和CPU使用率指标对进程排序，找出这几项指标高的进程。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/1.jpg" alt="图1  任务管理器的选择列对话框" title="图1  任务管理器的选择列对话框">
+</center>
+<p>为何选择Page faults来衡量软件对功耗的影响？虽然今天的计算机都配备了比较多的物理内存，但仍离不开虚拟内存技术，把暂时不用的数据放在外存中，当CPU访问这样的数据时，会报告缺页异常，让操作系统的内存管理器将数据从外存中读到物理内存，这个操作通常被称为Page In。物理内存是以页为单位来管理的，因此每次Page In的数据至少是一个页，通常为4KB。访问外存意味着系统总线和硬盘等存储设备的运作，在时间和功耗方面都是较大的开销，因此，Page faults常成为系统调优的一个重要指标。</p>
+<p>正是使用以上方法查找高耗电高软件时，Alipay引起了我的注意。图2是当时的屏幕截图，可以看到，任务管理器中的各个进程（任务）是按Page faults总数排列的，而位列前三的分别是AlipaySecSvc、AlipayBsm和TaobaoProtect，全是Alipay软件成员。它们导致的Page faults总数分别为四亿五千多万次、一亿三千多万次和八千多万次。假定每次Page fault触发的Page In数据都是4KB，那么它们促使系统Page In的数据量分别为大约1.8TB、500GB和300GB。</p>
+<p>另外，从PF Delta列来看，排名第一的AlipaySecSvc进程在最近一秒内就触发了2906次缺页异常。</p>
+<p>坦率说，这样的结果让我惊叹不已。通常排在前列的都是安全软件。而自从我的机器上有了Alipay软件后，它们总是可以轻松超越杀毒软件。图2中，第6名是系统窗口合成器，第4、5、7名都是安全软件。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/2.jpg" alt="图2  Alipay三个进程的Page faults总数垄断前三名" title="图2  Alipay三个进程的Page faults总数垄断前三名">
+</center>
+<p>因为处理每次Page fault时要执行比较复杂的逻辑，所以高Page faults也常意味着较高的CPU使用率。在图2中，AlipaySecSvc进程使用的CPU总时间高达1小时20分32秒。今天的CPU速度惊人，很多“分量”轻的软件运行一天可能也用不上CPU几秒钟（大多被挂起）。尽管AlipaySecSvc的名字中也包含安全字样（Sec），但其CPU总时间如此高也着实离谱。简而言之，这个进程的分量重得惊人。</p>
+<h2 id="alipaysecsvc"><a class="header-anchor" href="#alipaysecsvc"></a>AlipaySecSvc</h2>
+<p>那么，如此重的AlipaySecSvc进程是做什么的呢？好奇心和职业精神都驱使我深入了解这个进程。打开系统服务控制台，找到AlipaySecSvc服务，查看其属性（如图3），可以看到它的全称（Alipay security service）、官方身份和在磁盘上的位置信息。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/3.jpg" alt="图3  AlipaySecSvc的服务属性" title="图3  AlipaySecSvc的服务属性">
+</center>
+<p>根据图3中路径信息，可以在磁盘上找到Alipay目录（如图4），其下有三个子目录。根据布局可以推测，我的机器上已安装了Alipay的三个组件，分别是AliEditPlus、AlipayDHC和SafeTransaction，引起我们注意的AlipaySecSvc是AliEditPlus的一部分。看来，AliEditPlus绝不是孤军奋战，一个兵团已在我的电脑上安营扎寨了。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/4.jpg" alt="图4  Alipay软件的磁盘布局" title="图4  Alipay软件的磁盘布局">
+</center>
+<p>图3中的描述信息声明了AlipaySecSvc服务的重要性，但同时也说明了它的职权范围是“电子支付”。既然如此，当用户未做支付操作时，AlipaySecSvc应该尽可能保持安静。但事实上，它却始终忙碌着，甚至连浏览器进程没有启动时也是如此，这便不正常了。</p>
+<h2 id="上调试器"><a class="header-anchor" href="#上调试器"></a>上调试器</h2>
+<p>不轻信，不迷信，还是请出WinDBG来看分明。以管理员身份运行WinDBG，赐予其系统级的督察权利，然后将其附加到AlipaySecSvc进程。</p>
+<p>接下来的目标是寻找这个进程躁动的原因。如何做呢？有多种方法，例如以前介绍过的使用<code>~*e .ttime</code>命令观察每个线程的执行时间，再例如使用~* k命令显示每个线程的栈回溯，寻找线索。对于眼下的问题，这两种方法也都有效。但为了避免陈词滥调，这次我打算介绍种新方法。</p>
+<p>简单说，就是让被调试对象在调试器里跑一跑，让其“自露马脚”。套用赵本山的话就是“有病没病走两步”。轻扣键盘，发出g命令，恢复AlipaySecSvc运行，端起茶杯，等待WinDBG报告“蛛丝马迹”。</p>
+<p>手里的茶杯还没放下，WinDBG便有所发现。屏幕上出现如下信息。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**(27bc.1b30): Unknown exception – code 000006ba (first chance)**</span><br></pre></td></tr></table></figure>
+<p>看来是有真的异常（Windows系统的结构化异常SEH）发生。继续观察，WinDBG连续输出这样的信息，间隔不到一秒。根据经验，这个信息很有价值，可以作为突破口。轻按Ctrl+Break再将AlipaySecSvc断下，然后通过菜单Debug→Event Filters调出图5所示的调试事件过滤器对话框。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/5.jpg" alt="图5  WinDBG的调试事件过滤器对话框" title="图5  WinDBG的调试事件过滤器对话框">
+</center>
+<p>因为信息输出的6ba异常不在WinDBG的常见异常列表中，所以点击Add按钮增加一个代码为0x6ba的异常。之后选中新增的项目，再点击Command按钮调出图6所示的过滤器关联命令对话框，并输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**.echo ********bang******;? @$tid;.ttime**</span><br></pre></td></tr></table></figure>
+<center>
+<img src="/assets/debugging-alibaba-softwares/6.jpg" alt="图6  过滤器命令" title="图6  过滤器命令">
+</center>
+<p>执行如上操作，再恢复AlipaySecSvc运行，让其再走些步。这时我们看到屏幕上持续输出信息，如图7所示（此图为后补，与图1不属同一次调试）。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/7.jpg" alt="图7  持续不断的6ba异常" title="图7  持续不断的6ba异常">
+</center>
+<p>在软件世界，一次异常就是一起爆炸事件。如此连续不断的爆炸必然会让CPU负担很重。</p>
+<h2 id="6ba异常"><a class="header-anchor" href="#6ba异常"></a>6ba异常</h2>
+<p>接下来的问题是为什么有如此多的6ba异常呢？Ctrl+Break断下，执行命令sxe 6ba告诉WinDBG再有6ba异常发生时立刻停下来。恢复运行后，果然很快又停下，位置正是6ba异常的发生现场：</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/6ba.jpg">
+</center>
+<p>看来是有人调用了著名的RaiseException API发起软件异常。是发生了什么矛盾，以至于要引爆炸弹呢？k一下看缘由吧，结果如图8所示。</p>
+<p>细看图8，关注本专栏的读者一定可以看出个“破绽”，符号不精确。是的，诚然老雷偷懒了，没有使用PDB号，只用了导出符号。但对于我们的分析，这样的信息足够了。因为其中包含了以下重要内容：</p>
+<ul>
+<li>AlipaySecSvc服务调用了WTSEnumerate­Sessions API。</li>
+<li>WTSEnumerateSessionsW函数（WTS­Enumerate­Sessions API的Unicode版本实现）使用了RPC机制在做远程调用。</li>
+<li>RPC机制的运行时模块（rpcrpt4）检测到不正常情况，“大为关火”，抛出了异常。</li>
+</ul>
+<p>有了这些信息，已没必要探究RPC检测到了何种意外，因为我们有了如下结论：AlipaySecSvc服务调用了一个依赖RPC机制的沉重API，而且API执行不顺利，导致了异常。</p>
+<p>根据前面的监视结果（见图7），6ba异常是反复发生的，说明这个沉重的过程也是在循环进行。对wtsapi32!WTSEnumerateSessionsW设置断点，果然反复命中，还不止一个线程命中断点，居然有多个线程在调用这个沉重的API和触发异常。从其中的线程ID来看，也有两个（6960和1032）。综合前面的分析，可以对AlipaySecSvc服务进程的躁动原因做出初步诊断：多个线程循环调用沉重的WTSEnumerateSessions API，而且执行时触发异常。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/8.jpg" alt="图8  追索爆炸原因" title="图8  追索爆炸原因">
+</center>
+<p>对于性能问题，也可用WPT帮忙。它的全称是Windows Performance Toolkit，曾用名xPerf。安装完成后，先启动WPR（Windows Performance Recorder），让其开启系统中早已埋伏好的ETW（Event Tracing for Windows）事件，重现问题后，停止录制，WPR会把收集到的事件整理到一个庞大的etl文件中。最后再使用WPA（Windows Performance Analyzer）打开etl文件进行分析。</p>
+<p>详细介绍WPA的用法超出了本文的范围，这里只做简述。</p>
+<p>图9是使用WPA分析CPU占用情况的截图。重点看右侧的采样数据。画面以曲线图为核心分三个部分，下面的表格是详细数据，左上角是进程、模块列表，可选择其中的一个或多个，每个对应一条曲线。我们故意屏蔽了其他进程，只显示AlipaySecSvc的曲线。</p>
+<p>每个尖峰代表一次较重的负载（占用CPU较多）。尖峰反复出现说明这些负载是周期性的，与我们前面分析的在循环中反复调用沉重API的结论完全一致。尖峰的幅度不很一致，是因为有多个线程在执行重负荷，发生和叠加的时机不同。</p>
+<p>再观察图9中的详细数据，可以看到进程内部模块和函数一级的信息。WPA已根据模块的样本点数做过排序（点数越多，意味着占用CPU越多），内核模块排名第一，说明AlipaySecSvc进程做了多次系统调用，进一步还可发现有一个线程反复分配大堆块和调用NtQuerySystemInformation。</p>
+<p>展开函数一级的信息，可以看到占用CPU较多的函数。例如在kernel32.dll模块下，Process32­NextW赫然在列。这告诉我们，AlipaySecSvc除了调用沉重的WTSEnumerate­Sessions API外，还调用了另一个沉重的API Process32­Next。前者枚举系统中的所有登录会话，而后者枚举会话中的进程。据此，我们可以推测，AlipaySecSvc的循环中，先是枚举会话，然后再枚举会话中的每个进程。笔者多年前就分析过Process32Next API，得到的结论是，这个API与缺页异常密切相关，几乎每次调用，都会触发数百次的缺页异常。而我们正分析的AlipaySecSvc进程，有两个线程在以循环的方式反复调用这个API，其结果就是本文开头说的累计缺页异常数排名第一。</p>
+<center>
+<img src="/assets/debugging-alibaba-softwares/9.jpg" alt="图9  使用WPA分析CPU占用情况" title="图9  使用WPA分析CPU占用情况">
+</center>
+<h2 id="api的分量"><a class="header-anchor" href="#api的分量"></a>API的分量</h2>
+<p>使用同样的方法分析缺页异常总数排名第二和第三的Alipaybsm（Browser Safe Monitor）以及TaobaoProtect，结果与此相似，或许它们三兄弟在共享循环调用沉重API的经典代码吧，也可能它们都出自一位同行之手。</p>
+<p>普通世界中的商品都明确标识重量。这个基本属性非常重要，尤其在今天的网购时代，买家可能根据重量判断货物的质量，卖家很可能根据重量计算运输（快递）成本。但在软件世界中，标记代码的重量还没有任何规范，甚至尚无测量代码重量的标准方法。更严重的是，很多程序员同行会认为，代码有什么重量呢？</p>
+<p>如果说为所有普通函数标记重量还为时过早，那么给操作系统的标准API标识重量该排上议事日程了。这不仅必要而且可行。例如用可能引发的系统调用次数、跨进程调用的次数、触发缺页异常的次数等指标来衡量API的重量。标记之后，程序员就有所依据，避免频繁调用太重的API，尤其不要在当前没有明确任务的进程中调用这些沉重的API，以免白白消耗电池，让用户反感。</p>
+<p>话说回来，关键问题还在于写代码的程序员，即使标记重量了，程序员可能也置之不理。不标记重量，有经验的程序员也心中有数。退一步讲，本文讨论的问题，只要打开任务管理器就能察觉，挂一下WinDBG更容易发现，运行WPT也可以发现，但为什么问题就这样发生了呢？</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/debugging-alibaba-softwares/">http://xnerv.wang/debugging-alibaba-softwares/</a></strong><br>
+转载自：<a href="http://www.csdn.net/article/2014-09-16/2821705" target="_blank" rel="noopener">在调试器中看阿里的软件兵团</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/Windows/" rel="tag"># Windows</a>
+          
+            <a href="/tags/WinDbg/" rel="tag"># WinDbg</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/coroutine-is-a-type-of-user-mode-thread/" rel="next" title="【协程原理】 - 协程不过是用户态的线程">
+                <i class="fa fa-chevron-left"></i> 【协程原理】 - 协程不过是用户态的线程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/memory-allocation-mechanism-in-linux/" rel="prev" title="Memory Allocation Mechanism in Linux">
+                Memory Allocation Mechanism in Linux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#谁在消耗电池？"><span class="nav-text">谁在消耗电池？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#alipaysecsvc"><span class="nav-text">AlipaySecSvc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上调试器"><span class="nav-text">上调试器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6ba异常"><span class="nav-text">6ba异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#api的分量"><span class="nav-text">API的分量</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>
