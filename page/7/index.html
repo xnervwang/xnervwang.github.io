@@ -369,6 +369,450 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/linux-session-and-processgroup-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/linux-session-and-processgroup-summary/" itemprop="url">Linux session和进程组概述</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-21T00:00:00+08:00">
+                2017-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在<a href="/linux-tty-pts-summary/">上一篇</a>中介绍了tty的相关原理，这篇将介绍跟tty密切相关的session和进程组。</p>
+<blockquote>
+<p>本篇主要目的是澄清一些概念，不涉及细节</p>
+</blockquote>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/linux-session-and-processgroup-summary/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/linux-tty-pts-summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/linux-tty-pts-summary/" itemprop="url">Linux TTY/PTS概述</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-16T00:00:00+08:00">
+                2017-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>当我们在键盘上敲下一个字母的时候，到底是怎么发送到相应的进程的呢？我们通过ps、who等命令看到的类似tty1、pts/0这样的输出，它们的作用和区别是什么呢？</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/linux-tty-pts-summary/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/ddl-commands-in-transactions-in-sql-server-versus-oracle/" itemprop="url">DDL commands in Transactions in SQL Server versus Oracle</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-09T00:00:00+08:00">
+                2016-12-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="problem"><a class="header-anchor" href="#problem"></a>Problem</h2>
+<p>Transactions are widely used in database development, especially when a database supports an application where a lot of correlated changes are needed. A transaction is a group of SQL statements that are all committed together (all changes done by these statements become a permanent part of the database) or none of these statements are committed (all these changes are rolled back). More often statements included in transaction are DML (Data Manipulation Language) statements, such as INSERT, UPDATE, DELETE and so on. But what about DDL (Data Definition Language) statements? Is it possible to include DDL commands such as CREATE, ALTER, DROP, etc., in a transaction? In this tip we are going to answer these questions for both - MS SQL Server and Oracle databases.</p>
+<h2 id="solution"><a class="header-anchor" href="#solution"></a>Solution</h2>
+<p>The approaches to use DDL commands within transactions are quite different in Microsoft SQL Server vs. Oracle. Let’s discuss this for each RDBMS separately.</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/ddl-commands-in-transactions-in-sql-server-versus-oracle/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://xnerv.wang/cache-update-routines/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1498,472 +1942,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/the-google-file-system-paper-analysis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="3x3只眼（xnervwang）">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/portraits/nerv.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-
-    
-      <header class="post-header">
-
-      
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/the-google-file-system-paper-analysis/" itemprop="url">The Google File System——论文详解</a></h2>
-        
-		
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-04T10:42:32+08:00">
-                2015-02-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-        
-		  
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式及存储</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>“Google文件存储系统（GFS）是构建在廉价服务器之上的大型分布式系统。它将服务器故障视为正常现象，通过软件方式自动容错，在保证系统可用性和可靠性同时，大大降低系统成本。</p>
-<p>GFS是Google整个分布式系统的基石，其他存储系统如Google BigTable、GoogleMegastore等系统均直接或间接构建在GFS之上。另外，Google的大规模批处理系统MapReduce也是利用GFS系统作为海量数据的输入输出。”</p>
-<p>以下内容为在研读Google_File_System论文时，对其中一些关键技术的理解。要想更加深入的理解GFS，还需进一步研究GFS源码以及论文等。</p>
-<h2 id="一-单一master节点："><a class="header-anchor" href="#一-单一master节点："></a>一、单一Master节点：</h2>
-<p>如何避免单一的Msaster节点成为系统性能瓶颈：</p>
-<ol>
-<li>客户端只向Master请求元数据信息，并不通过Master节点进行chunk数据读写，具体的数据读写操作由ChunkServer直接负责。</li>
-<li>客户端在向Master请求某chunk元数据时,Master会一次返回包括该chunk紧接之后的几个chunk信息，有效减少客户端的请求次数。</li>
-</ol>
-<p>客户端读取数据流程如下：<br>
-<img src="/assets/the-google-file-system-paper-analysis/1.png" alt=""></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/the-google-file-system-paper-analysis/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-    
-	  
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-	  
-    
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/special-features-of-linux-memory-management-mechanism/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="3x3只眼（xnervwang）">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/portraits/nerv.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-
-    
-      <header class="post-header">
-
-      
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/special-features-of-linux-memory-management-mechanism/" itemprop="url">Special features of Linux memory management mechanism</a></h2>
-        
-		
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-11-30T16:27:00+08:00">
-                2014-11-30
-              </time>
-            
-
-            
-
-            
-          </span>
-
-        
-		  
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>In this article, I am going to describe some general features and some specific ones of the memory management in Linux. It will be mainly on dynamic memory allocation and release, as well as the management of the free memory. The article concerns the Linux kernel versions 2.6.X.</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/special-features-of-linux-memory-management-mechanism/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-    
-	  
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-	  
-    
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="3x3只眼（xnervwang）">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/portraits/nerv.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-
-    
-      <header class="post-header">
-
-      
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/two-ways-of-allocating-memory-brk-and-mmap/" itemprop="url">进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）</a></h2>
-        
-		
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-09-23T11:31:56+08:00">
-                2014-09-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-        
-		  
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/操作系统/" itemprop="url" rel="index">
-                    <span itemprop="name">操作系统</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="如何查看进程发生缺页中断的次数？"><a class="header-anchor" href="#如何查看进程发生缺页中断的次数？"></a>如何查看进程发生缺页中断的次数？</h2>
-<p>用ps -o majflt,minflt -C program命令查看。<br>
-majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。<br>
-这两个数值表示一个进程自启动以来所发生的缺页中断的次数。</p>
-<h2 id="发成缺页中断后-执行了那些操作？"><a class="header-anchor" href="#发成缺页中断后-执行了那些操作？"></a>发成缺页中断后，执行了那些操作？</h2>
-<p>当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：</p>
-<ol>
-<li>检查要访问的虚拟地址是否合法</li>
-<li>查找/分配一个物理页</li>
-<li>填充物理页内容（读取磁盘，或者直接置0，或者啥也不干）</li>
-<li><strong>建立映射关系（虚拟地址到物理地址）</strong></li>
-</ol>
-<p>重新执行发生缺页中断的那条指令<br>
-如果第3步，需要读取磁盘，那么这次缺页中断就是majflt，否则就是minflt。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/two-ways-of-allocating-memory-brk-and-mmap/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-    
-	  
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-	  
-    
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2008,7 +1991,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2030,7 +2013,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-count">136</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

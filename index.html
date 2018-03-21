@@ -369,6 +369,479 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/analysis-of-mdl-source-code-for-common-sql-statements/" itemprop="url">MySQL - 常用SQL语句的MDL加锁源码分析</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T19:40:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <section class="post">
+<h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
+<p>MySQL5.5版本开始引入了MDL锁用来保护元数据信息，让MySQL能够在并发环境下多DDL、DML同时操作下保持元数据的一致性。本文用MySQL5.7源码分析了常用SQL语句的MDL加锁实现。</p>
+<h4 id="mdl锁粒度"><a class="header-anchor" href="#mdl锁粒度"></a>MDL锁粒度</h4>
+<p>MDL_key由namespace、db_name、name组成。</p>
+<p>namespace包含：</p>
+<ul>
+<li>
+<p>GLOBAL。用于global read lock，例如FLUSH TABLES WITH READ LOCK。</p>
+</li>
+<li>
+<p>TABLESPACE/SCHEMA。用于保护tablespace/schema。</p>
+</li>
+<li>
+<p>FUNCTION/PROCEDURE/TRIGGER/EVENT。用于保护function/procedure/trigger/event。</p>
+</li>
+<li>
+<p>COMMIT。主要用于global read lock后，阻塞事务提交。</p>
+</li>
+<li>
+<p>USER_LEVEL_LOCK。用于<a href="https://dev.mysql.com/doc/internals/en/user-level-locks.html" target="_blank" rel="noopener">user level lock函数</a>的实现，GET_LOCK(str,timeout)， RELEASE_LOCK(str)。</p>
+</li>
+<li>
+<p>LOCKING_SERVICE。用于<a href="https://dev.mysql.com/doc/refman/5.7/en/locking-service.html" target="_blank" rel="noopener">locking service</a>的实现。</p>
+</li>
+</ul>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/analysis-of-mdl-source-code-for-common-sql-statements/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/trace-metadata-lock-procedure-using-gdb/" itemprop="url">MySQL - 利用gdb跟踪MDL加锁过程</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T19:38:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="mdl-meta-data-lock-的作用"><a class="header-anchor" href="#mdl-meta-data-lock-的作用"></a>MDL(Meta Data LocK)的作用</h2>
+<p>在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP/RENAME/ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989)</p>
+<p>master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到.</p>
+<p>slave： 在binlog里是以事务提交顺序记录的，DDL隐式提交，因此在备库先执行DDL，后执行事务trx，由于trx作用的表已经发生了改变，因此trx会执行失败。 在DDL时的主库DML压力越大，这个问题触发的可能性就越高</p>
+<p>在5.5引入了MDL（meta data lock）锁来解决在这个问题</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/trace-metadata-lock-procedure-using-gdb/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/trace-metadata-lock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/trace-metadata-lock/" itemprop="url">MySQL - 跟踪Metadata lock</a></h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T19:32:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
+<p>MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题：</p>
+<p><strong>问题1: 破坏事务隔离级别</strong> 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。</p>
+<p><strong>问题2: 破坏binlog的顺序</strong> 在对表的DML过程中，会因为其它session的DDL语句，导致binlog里的event顺序在备库执行的结果和主库不一致。</p>
+<p>从MySQL 5.5.3开始，MDL锁的持有周期变成了事务，解决了上面提到的两个问题，但在autocommit=off的情况下，也大大增加了阻塞的可能性。DBA对于阻塞的case，处理起来又比较麻烦，原因就是MDL锁的阻塞情况没有暴露明确的信息。</p>
+<p>从MySQL 5.7.6开始，可以通过performance schema来查询MDL锁的持有情况。</p>
+<p>在开始介绍5.7的跟踪Metadata lock之前， 小编还想讨论一下前面提到的这两个问题，在Oracle数据库中是如何处理的。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/trace-metadata-lock/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+    
+	  
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+	  
+    
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://xnerv.wang/what-innodb-mini-transation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -624,8 +1097,7 @@
 
       
         
-          <section class="post">
-<h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
+          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
 <p>在 <a href="https://github.com/alibaba/AliSQL/issues/68" target="_blank" rel="noopener">AliSQL</a> 上面有人提交了一个 bug，在使用主备的时候 service stop mysql 不能关闭主库，一直显示 shutting down mysql …，到底怎么回事呢，先来看一下 service stop mysql 是怎么停止数据库的。配置 MySQL 在系统启动时启动需要把 MYSQL_BASEDIR/support-files 目录下的脚本 mysql.sever 放到 /etc/init.d/ 目录下，脚本来控制 mysqld 的启动和停止。看一下脚本中的代码 ：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if test -s &quot;$mysqld_pid_file_path&quot;</span><br><span class="line">     then</span><br><span class="line">       mysqld_pid=`cat &quot;$mysqld_pid_file_path&quot;`</span><br><span class="line"></span><br><span class="line">       if (kill -0 $mysqld_pid 2&gt;/dev/null)</span><br><span class="line">       then</span><br><span class="line">         echo $echo_n &quot;Shutting down MySQL&quot;</span><br><span class="line">         kill $mysqld_pid</span><br><span class="line">         # mysqld should remove the pid file when it exits, so wait for it.</span><br><span class="line">         wait_for_pid removed &quot;$mysqld_pid&quot; &quot;$mysqld_pid_file_path&quot;; return_value=$?</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
 <p>实际上的关闭动作就是向 mysqld 进程发送一个 kill pid 的信号，也就是 TERM ， wait_for_pid 函数中就是不断检测 $MYSQL_DATADIR 下面的 pid 文件是否存在，并且打印 ‘.’，所以上述问题应该是 mysqld 没有正确处理接收到的信号。</p>
@@ -1431,457 +1903,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="3x3只眼（xnervwang）">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/portraits/nerv.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-
-    
-      <header class="post-header">
-
-      
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/introduction-of-some-popular-engine-storage-formats/" itemprop="url">一些流行引擎存储格式简介</a></h2>
-        
-		
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T20:47:00+08:00">
-                2018-03-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-        
-		  
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式及存储</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="概述"><a class="header-anchor" href="#概述"></a>概述</h2>
-<p>本文简要介绍了一些存储引擎存储结构，包括InnoDB, TokuDB, RocksDB, TiDB, CockroachDB, 供大家对比分析</p>
-<h2 id="innodb"><a class="header-anchor" href="#innodb"></a>InnoDB</h2>
-<p>InnoDB 底层存储结构为B+树，结构如下<br>
-<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/dd1413b4fed7c0a756ee70cba6610f98.png" alt="image.png"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/introduction-of-some-popular-engine-storage-formats/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-    
-	  
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-	  
-    
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/dynamo-implement/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="3x3只眼（xnervwang）">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/portraits/nerv.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-
-    
-      <header class="post-header">
-
-      
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/dynamo-implement/" itemprop="url">分布式键值存储 Dynamo 的实现原理</a></h2>
-        
-		
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T18:40:00+08:00">
-                2018-03-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-        
-		  
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式及存储</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在最近的一周时间里，一直都在研究和阅读 Amazon 的一篇论文 <a href="http://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf" target="_blank" rel="noopener">Dynamo: Amazon’s Highly Available Key-value Store</a>，论文中描述了 Amazon 的高可用分布式键值存储服务 Dynamo 的实现原理。</p>
-<p><img src="/assets/dynamo-implement/2017-10-24-dynamodb.png" alt="dynamodb"></p>
-<p>之前在阅读 Google 的 <a href="https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf" target="_blank" rel="noopener">Bigtable: A Distributed Storage System for Structured Data</a> 时写了一篇 <a href="https://draveness.me/bigtable-leveldb" target="_blank" rel="noopener">浅析 Bigtable 和 LevelDB 的实现</a> 文章分析了 Bigtable 的单机版 LevelDB 的实现原理；在研究 Dynamo 时，作者发现 Dynamo 虽然和 Bigtable 同为 NoSQL，但是它们的实现却有着很大的不同，最主要的原因来自不同的应用场景和不同的目的。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/dynamo-implement/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-    
-	  
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-	  
-    
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/bigtable-leveldb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="3x3只眼（xnervwang）">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/portraits/nerv.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-
-    
-      <header class="post-header">
-
-      
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/bigtable-leveldb/" itemprop="url">浅析 Bigtable 和 LevelDB 的实现</a></h2>
-        
-		
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T18:30:00+08:00">
-                2018-03-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-        
-		  
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式及存储/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式及存储</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在 2006 年的 OSDI 上，Google 发布了名为 <a href="https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf" target="_blank" rel="noopener">Bigtable: A Distributed Storage System for Structured Data</a> 的论文，其中描述了一个用于管理结构化数据的分布式存储系统 - Bigtable 的数据模型、接口以及实现等内容。</p>
-<p><img src="/assets/bigtable-leveldb/2017-08-12-leveldb-logo.png-1000width" alt="leveldb-logo"></p>
-<p>本文会先对 Bigtable 一文中描述的分布式存储系统进行简单的描述，然后对 Google 开源的 KV 存储数据库 <a href="https://github.com/google/leveldb" target="_blank" rel="noopener">LevelDB</a> 进行分析；LevelDB 可以理解为单点的 Bigtable 的系统，虽然其中没有 Bigtable 中与 tablet 管理以及一些分布式相关的逻辑，不过我们可以通过对 LevelDB 源代码的阅读增加对 Bigtable 的理解。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/bigtable-leveldb/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-    
-	  
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-	  
-    
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1926,7 +1952,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1948,7 +1974,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">134</span>
+                <span class="site-state-item-count">136</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

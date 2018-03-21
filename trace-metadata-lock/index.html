@@ -1,0 +1,998 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,MySQL,MDL," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="背景 MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题： 问题1: 破坏事务隔离级别 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。 问题2: 破坏binlog的顺序 在对表的">
+<meta name="keywords" content="转载,DBMS,MySQL,MDL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL - 跟踪Metadata lock">
+<meta property="og:url" content="http://xnerv.wang/trace-metadata-lock/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="背景 MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题： 问题1: 破坏事务隔离级别 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。 问题2: 破坏binlog的顺序 在对表的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-21T16:15:50.591Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL - 跟踪Metadata lock">
+<meta name="twitter:description" content="背景 MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题： 问题1: 破坏事务隔离级别 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。 问题2: 破坏binlog的顺序 在对表的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/trace-metadata-lock/"/>
+
+
+
+
+
+  <title>MySQL - 跟踪Metadata lock | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/trace-metadata-lock/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">MySQL - 跟踪Metadata lock</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T19:32:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
+<p>MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题：</p>
+<p><strong>问题1: 破坏事务隔离级别</strong> 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。</p>
+<p><strong>问题2: 破坏binlog的顺序</strong> 在对表的DML过程中，会因为其它session的DDL语句，导致binlog里的event顺序在备库执行的结果和主库不一致。</p>
+<p>从MySQL 5.5.3开始，MDL锁的持有周期变成了事务，解决了上面提到的两个问题，但在autocommit=off的情况下，也大大增加了阻塞的可能性。DBA对于阻塞的case，处理起来又比较麻烦，原因就是MDL锁的阻塞情况没有暴露明确的信息。</p>
+<p>从MySQL 5.7.6开始，可以通过performance schema来查询MDL锁的持有情况。</p>
+<p>在开始介绍5.7的跟踪Metadata lock之前， 小编还想讨论一下前面提到的这两个问题，在Oracle数据库中是如何处理的。</p>
+<a id="more"></a>
+<h2 id="oracle的处理方式"><a class="header-anchor" href="#oracle的处理方式"></a>Oracle的处理方式</h2>
+<p>首先，Oracle只实现了两种隔离级别，即read committed和serializable，我们来看下serializable级别下，怎么来处理问题1:</p>
+<p>先看如下的case:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">session 1:                                                 session 2:</span><br><span class="line"><span class="comment">--                                                         create table t1(id number);</span></span><br><span class="line"><span class="comment">--                                                         insert into t1 values(1);</span></span><br><span class="line"><span class="comment">--                                                         commit;</span></span><br><span class="line"><span class="keyword">SET</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> <span class="keyword">SERIALIZABLE</span>;              <span class="comment">--</span></span><br><span class="line">TEST/TEST@ORCL&gt;select * from t1;                           --</span><br><span class="line">        ID</span><br><span class="line"><span class="comment">----------</span></span><br><span class="line">         1</span><br><span class="line">1 row selected.</span><br><span class="line"><span class="comment">--                                                         alter table t1 add col number;</span></span><br><span class="line">TEST/TEST@ORCL&gt;select * from t1;                           --</span><br><span class="line"></span><br><span class="line">        ID        COL</span><br><span class="line"><span class="comment">---------- ----------</span></span><br><span class="line">         1</span><br><span class="line"><span class="comment">--                                                         alter table t1 add col1 number default 10;</span></span><br><span class="line">TEST/TEST@ORCL&gt;select * from t1;                           --</span><br><span class="line">        ID        COL       COL1</span><br><span class="line"><span class="comment">---------- ---------- ----------</span></span><br><span class="line">         1</span><br></pre></td></tr></table></figure>
+<p>可以看到，虽然session是serializable隔离级别，但并没有产生阻塞的情况，Oracle保证了session1的多次select查询的返回结果是一样的， 但t1表数据字典的变化是马上可见的，这个也是符合serializable的要求的，因为隔离级别只定义了数据的可见性，而没有定义数据字典的可见性。</p>
+<p>那MySQL能否不要MDL锁，来达到这样的效果？</p>
+<p>答案是否定的，因为Oracle是堆表，alter的操作只更改了数据字典，数据记录没有发生变化，纵使加了default值，也是在原记录上进行的update，完全可以使用scn号来构建一致性读版本，这样就不会产生阻塞。 而MySQL是IOT表，alter的过程进行了表重建，无法完成read view的构建。</p>
+<p>那我们再来看问题2，Oracle的处理方式:</p>
+<p>对于redo日志，Oracle的处理方式和InnoDB的处理方式一致，也就是当使用redo的时候，日志的写入并不和事务的提交与否有必然的关系，也不用和提交的顺序保持一致。这一点就和binlog区别开来，也就是物理日志是可以避免使用逻辑日志(binlog)带来的问题。</p>
+<p>MySQL如果要避免这两个问题，而不引入Metadata lock，可以有以下两个思路：</p>
+<ol>
+<li>DDL只更改数据字典，行记录的变更在原记录上进行，这样能够实现多版本，也就是我们常说的在线加字段；</li>
+<li>使用物理redo日志，避免使用binlog。</li>
+</ol>
+<p>这两种都会对现有的MySQL架构带来调整，仅供参考。</p>
+<p>下面我们回来看下对5.7 MDL的tracing。</p>
+<h2 id="mysql-5-7"><a class="header-anchor" href="#mysql-5-7"></a>MySQL 5.7</h2>
+<p>首先，打开metadata locks的tracing功能。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; UPDATE performance_schema.setup_consumers SET ENABLED = 'YES' WHERE NAME = 'global_instrumentation';</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">Rows matched: 1 Changed: 0 Warnings: 0</span><br><span class="line">mysql&gt; UPDATE performance_schema.setup_instruments SET ENABLED = 'YES' WHERE NAME = 'wait/lock/metadata/sql/mdl';</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">Rows matched: 1 Changed: 0 Warnings: 0</span><br></pre></td></tr></table></figure>
+<p>打开两个session，一个select，一个truncate。因为MDL锁的情况，select会阻塞truncate的操作。</p>
+<p>session 1: 操作如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; set session autocommit=0;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">mysql&gt; select @@autocommit, @@tx_isolation;</span><br><span class="line">+<span class="comment">--------------+----------------+</span></span><br><span class="line">| @@autocommit | @@tx_isolation |</span><br><span class="line">+<span class="comment">--------------+----------------+</span></span><br><span class="line">| 0 | READ-COMMITTED |</span><br><span class="line">+<span class="comment">--------------+----------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> t <span class="keyword">limit</span> <span class="number">1</span>;</span><br><span class="line">+<span class="comment">----+------+</span></span><br><span class="line">| id | val |</span><br><span class="line">+<span class="comment">----+------+</span></span><br><span class="line">| 1 | 1 |</span><br><span class="line">+<span class="comment">----+------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>session 2: 操作如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; truncate table t;</span><br></pre></td></tr></table></figure>
+<p>结果看到的就是session2被阻塞， 接下来check一下performance schema的信息：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from performance_schema.metadata_locks\G</span><br><span class="line">*************************** 1\. row ***************************</span><br><span class="line">OBJECT_TYPE: TABLE</span><br><span class="line">OBJECT_SCHEMA: test</span><br><span class="line">OBJECT_NAME: t</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140450128308592</span><br><span class="line">LOCK_TYPE: SHARED_READ</span><br><span class="line">LOCK_DURATION: TRANSACTION</span><br><span class="line">LOCK_STATUS: GRANTED</span><br><span class="line">SOURCE: sql_parse.cc:5585</span><br><span class="line">OWNER_THREAD_ID: 27</span><br><span class="line">OWNER_EVENT_ID: 17</span><br><span class="line">*************************** 2\. row ***************************</span><br><span class="line">OBJECT_TYPE: GLOBAL</span><br><span class="line">OBJECT_SCHEMA: NULL</span><br><span class="line">OBJECT_NAME: NULL</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140450195436144</span><br><span class="line">LOCK_TYPE: INTENTION_EXCLUSIVE</span><br><span class="line">LOCK_DURATION: STATEMENT</span><br><span class="line">LOCK_STATUS: GRANTED</span><br><span class="line">SOURCE: sql_base.cc:5224</span><br><span class="line">OWNER_THREAD_ID: 30</span><br><span class="line">OWNER_EVENT_ID: 8</span><br><span class="line">*************************** 3\. row ***************************</span><br><span class="line">OBJECT_TYPE: SCHEMA</span><br><span class="line">OBJECT_SCHEMA: test</span><br><span class="line">OBJECT_NAME: NULL</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140450195434272</span><br><span class="line">LOCK_TYPE: INTENTION_EXCLUSIVE</span><br><span class="line">LOCK_DURATION: TRANSACTION</span><br><span class="line">LOCK_STATUS: GRANTED</span><br><span class="line">SOURCE: sql_base.cc:5209</span><br><span class="line">OWNER_THREAD_ID: 30</span><br><span class="line">OWNER_EVENT_ID: 8</span><br><span class="line">*************************** 4\. row ***************************</span><br><span class="line">OBJECT_TYPE: TABLE</span><br><span class="line">OBJECT_SCHEMA: test</span><br><span class="line">OBJECT_NAME: t</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140450195434368</span><br><span class="line">LOCK_TYPE: EXCLUSIVE</span><br><span class="line">LOCK_DURATION: TRANSACTION</span><br><span class="line">LOCK_STATUS: PENDING</span><br><span class="line">SOURCE: sql_parse.cc:5585</span><br><span class="line">OWNER_THREAD_ID: 30</span><br><span class="line">OWNER_EVENT_ID: 8</span><br><span class="line">*************************** 5\. row ***************************</span><br><span class="line">OBJECT_TYPE: TABLE</span><br><span class="line">OBJECT_SCHEMA: performance_schema</span><br><span class="line">OBJECT_NAME: metadata_locks</span><br><span class="line">OBJECT_INSTANCE_BEGIN: 140450128262384</span><br><span class="line">LOCK_TYPE: SHARED_READ</span><br><span class="line">LOCK_DURATION: TRANSACTION</span><br><span class="line">LOCK_STATUS: GRANTED</span><br><span class="line">SOURCE: sql_parse.cc:5585</span><br><span class="line">OWNER_THREAD_ID: 27</span><br><span class="line">OWNER_EVENT_ID: 18</span><br><span class="line">5 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>如上所示，在t表上，持有一个SHARE_READ lock，而且还有一个EXCULSIVE lock请求是pending状态，也就是我们被阻塞的session 2。</p>
+<p>在5.7之前，我们可以通过show processlist，来查看MDL阻塞的情况，但无法获取session 1的信息:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT OBJECT_TYPE, OBJECT_SCHEMA, OBJECT_NAME, LOCK_TYPE, LOCK_STATUS, THREAD_ID, PROCESSLIST_ID, PROCESSLIST_INFO FROM performance_schema.metadata_locks INNER JOIN performance_schema.threads ON THREAD_ID = OWNER_THREAD_ID WHERE PROCESSLIST_ID &lt;&gt; CONNECTION_ID();</span><br><span class="line">+<span class="comment">-------------+---------------+-------------+---------------------+-------------+-----------+----------------+------------------+</span></span><br><span class="line">| OBJECT_TYPE | OBJECT_SCHEMA | OBJECT_NAME | LOCK_TYPE | LOCK_STATUS | THREAD_ID | PROCESSLIST_ID | PROCESSLIST_INFO |</span><br><span class="line">+<span class="comment">-------------+---------------+-------------+---------------------+-------------+-----------+----------------+------------------+</span></span><br><span class="line">| GLOBAL | NULL | NULL | INTENTION_EXCLUSIVE | GRANTED | 30 | 8 | <span class="keyword">truncate</span> <span class="keyword">table</span> t |</span><br><span class="line">| <span class="keyword">SCHEMA</span> | <span class="keyword">test</span> | <span class="literal">NULL</span> | INTENTION_EXCLUSIVE | GRANTED | <span class="number">30</span> | <span class="number">8</span> | <span class="keyword">truncate</span> <span class="keyword">table</span> t |</span><br><span class="line">| <span class="keyword">TABLE</span> | <span class="keyword">test</span> | t | EXCLUSIVE | PENDING | <span class="number">30</span> | <span class="number">8</span> | <span class="keyword">truncate</span> <span class="keyword">table</span> t |</span><br><span class="line">+<span class="comment">-------------+---------------+-------------+---------------------+-------------+-----------+----------------+------------------+</span></span><br><span class="line"><span class="number">3</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br><span class="line">mysql&gt; <span class="keyword">show</span> <span class="keyword">processlist</span>;</span><br><span class="line">+<span class="comment">----+------+-----------+------+---------+------+---------------------------------+------------------+</span></span><br><span class="line">| Id | User | Host | db | Command | Time | State | Info |</span><br><span class="line">+<span class="comment">----+------+-----------+------+---------+------+---------------------------------+------------------+</span></span><br><span class="line">| 5 | root | localhost | test | Query | 0 | starting | <span class="keyword">show</span> <span class="keyword">processlist</span> |</span><br><span class="line">| <span class="number">8</span> | root | localhost | <span class="keyword">test</span> | <span class="keyword">Query</span> | <span class="number">50</span> | Waiting <span class="keyword">for</span> <span class="keyword">table</span> metadata <span class="keyword">lock</span> | <span class="keyword">truncate</span> <span class="keyword">table</span> t |</span><br><span class="line">+<span class="comment">----+------+-----------+------+---------+------+---------------------------------+------------------+</span></span><br><span class="line"><span class="number">2</span> <span class="keyword">rows</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>接下来当事务提交了后，释放MDL锁再查询，就看不到MDL锁的信息了。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; commit;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line">mysql&gt; SELECT OBJECT_TYPE, OBJECT_SCHEMA, OBJECT_NAME, LOCK_TYPE, LOCK_STATUS, THREAD_ID, PROCESSLIST_ID, PROCESSLIST_INFO FROM performance_schema.metadata_locks INNER JOIN performance_schema.threads ON THREAD_ID = OWNER_THREAD_ID WHERE PROCESSLIST_ID &lt;&gt; CONNECTION_ID();</span><br><span class="line">Empty <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br><span class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> t;</span><br><span class="line">Empty <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>MySQL 5.7可以通过performance schema来检索MDL锁阻塞情况，方便DBA来诊断问题。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/trace-metadata-lock/">http://xnerv.wang/trace-metadata-lock/</a></strong><br>
+转载自：<a href="http://mysql.taobao.org/monthly/2015/10/02/" target="_blank" rel="noopener">跟踪Metadata lock</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/MDL/" rel="tag"># MDL</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/what-innodb-mini-transation/" rel="next" title="MySQL - InnoDB mini transation">
+                <i class="fa fa-chevron-left"></i> MySQL - InnoDB mini transation
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/trace-metadata-lock-procedure-using-gdb/" rel="prev" title="MySQL - 利用gdb跟踪MDL加锁过程">
+                MySQL - 利用gdb跟踪MDL加锁过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">136</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#oracle的处理方式"><span class="nav-text">Oracle的处理方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql-5-7"><span class="nav-text">MySQL 5.7</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>

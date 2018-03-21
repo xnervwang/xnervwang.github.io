@@ -1,0 +1,1047 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="google819a2e66056c8144" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转载,DBMS,MySQL,MDL,gdb," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="MDL(Meta Data LocK)的作用 在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP/RENAME/ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989) master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到. slave： 在">
+<meta name="keywords" content="转载,DBMS,MySQL,MDL,gdb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL - 利用gdb跟踪MDL加锁过程">
+<meta property="og:url" content="http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="MDL(Meta Data LocK)的作用 在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP/RENAME/ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989) master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到. slave： 在">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/9fef60e1111bdbc1e883646a85adeb67.png">
+<meta property="og:updated_time" content="2018-03-21T16:15:50.574Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL - 利用gdb跟踪MDL加锁过程">
+<meta name="twitter:description" content="MDL(Meta Data LocK)的作用 在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP/RENAME/ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989) master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到. slave： 在">
+<meta name="twitter:image" content="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/9fef60e1111bdbc1e883646a85adeb67.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: 'LU3YSW3VFD',
+      apiKey: 'fd59e76766280adc9a9ceb886d7918c8',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/"/>
+
+
+
+
+
+  <title>MySQL - 利用gdb跟踪MDL加锁过程 | XNERV SURVEYS</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-90038341-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">XNERV SURVEYS</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+        
+          <a href="/" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            开始吧
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+        
+          <a href="/categories" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类树
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+        
+          <a href="/archives" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+        
+          <a href="/tags" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签云
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-leetcode">
+        
+          <a href="//leetcode.xnerv.wang" rel="friend" target="_blank">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            LeetCode
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+        
+          <a href="/about" rel="section">
+        
+            
+               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于本站
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索全站
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="3x3只眼（xnervwang）">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/portraits/nerv.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+
+    
+      <header class="post-header">
+
+      
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">MySQL - 利用gdb跟踪MDL加锁过程</h2>
+        
+		
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T19:38:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+        
+		  
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="mdl-meta-data-lock-的作用"><a class="header-anchor" href="#mdl-meta-data-lock-的作用"></a>MDL(Meta Data LocK)的作用</h2>
+<p>在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP/RENAME/ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989)</p>
+<p>master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到.</p>
+<p>slave： 在binlog里是以事务提交顺序记录的，DDL隐式提交，因此在备库先执行DDL，后执行事务trx，由于trx作用的表已经发生了改变，因此trx会执行失败。 在DDL时的主库DML压力越大，这个问题触发的可能性就越高</p>
+<p>在5.5引入了MDL（meta data lock）锁来解决在这个问题</p>
+<a id="more"></a>
+<h2 id="mdl锁的类型"><a class="header-anchor" href="#mdl锁的类型"></a>MDL锁的类型</h2>
+<p>metadata lock也是一种锁。每个metadata lock都会定义锁住的对象，锁的持有时间和锁的类型</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>范围</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GLOBAL</td>
+<td>全局锁</td>
+<td>主要作用是防止DDL和写操作的过程中执行 set golbal_read_only =on 或flush tables with read lock;</td>
+</tr>
+<tr>
+<td>commit</td>
+<td>提交保护锁</td>
+<td>主要作用是执行flush tables with read lock后，防止已经开始在执行的写事务提交</td>
+</tr>
+<tr>
+<td>SCHEMA</td>
+<td>库锁</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>TABLE</td>
+<td>表锁</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>FUNCTION</td>
+<td>函数锁</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>PROCEDURE</td>
+<td>存储过程锁</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>TRIGGER</td>
+<td>触发器锁</td>
+<td>对象</td>
+</tr>
+<tr>
+<td>EVENT</td>
+<td>事件锁</td>
+<td>对象</td>
+</tr>
+</tbody>
+</table>
+<p>这些锁具有以下层级关系<br>
+<img src="http://ata2-img.cn-hangzhou.img-pub.aliyun-inc.com/9fef60e1111bdbc1e883646a85adeb67.png" alt="MDL_SCOPE.png"></p>
+<h2 id="mdl锁的简单示例"><a class="header-anchor" href="#mdl锁的简单示例"></a>MDL锁的简单示例</h2>
+<p>在实际工作中，最常见的MDL冲突就DDL的操作被没用提交的事务所阻塞。 我们下面通过一个具体的实例来演示DDL加MDL锁的过程。在这个实例中，利用gdb来跟踪DDL申请MDL锁的过程。</p>
+<p>会话1:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create table ti(id int primary key, c1 int, key(c1)) engine=InnoDB</span><br><span class="line">stats_auto_recalc=default;</span><br><span class="line">Query OK, 0 rows affected (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into ti values (1,1), (2,2);</span><br><span class="line">Query OK, 2 rows affected (0.03 sec)</span><br><span class="line">Records: 2  Duplicates: 0  Warnings: 0</span><br><span class="line"></span><br><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from ti;</span><br><span class="line">+<span class="comment">----+------+</span></span><br><span class="line">| id | c1   |</span><br><span class="line">+<span class="comment">----+------+</span></span><br><span class="line">|  1 |    1 |</span><br><span class="line">|  2 |    2 |</span><br><span class="line">+<span class="comment">----+------+</span></span><br><span class="line">2 rows in <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
+<p>再开启第二个会话,利用gdb来跟踪mysql加MDL的过程 会话2：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@localhost mysql]# ps -ef|grep mysql</span><br><span class="line">root      3336  2390  0 06:33 pts/2    00:00:01 /u02/mysql/bin/mysqld --basedir=/u02/mysql/ --datadir=/u02/mysql/data</span><br><span class="line">--plugin-dir=/u02/mysql//lib/plugin --user=root</span><br><span class="line">--log-error=/u02/mysql/tmp/error1.log --open-files-limit=10240</span><br><span class="line">--pid-file=/u02/mysql/tmp/mysql.pid</span><br><span class="line">--socket=/u02/mysql/tmp/mysql.sock --port=3306</span><br><span class="line"></span><br><span class="line">[root@localhost mysql]# gdb -p 3336</span><br><span class="line">----在GDB设置以下断点</span><br><span class="line">(gdb) b MDL_context::acquire_lock</span><br><span class="line">Breakpoint 1 at 0x730cab: file /u02/mysql-server-5.6/sql/mdl.cc, line 2187.</span><br><span class="line">(gdb) b lock_rec_lock</span><br><span class="line">Breakpoint 2 at 0xb5ef50: file /u02/mysql-server-5.6/storage/innobase/lock/lock0lock.cc, line 2296.</span><br><span class="line"></span><br><span class="line">(gdb) c</span><br><span class="line">Continuing.....</span><br></pre></td></tr></table></figure>
+<p>开启第三个会话</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; alter table ti stats_auto_recalc=1;</span><br><span class="line">这个操作被hang住</span><br></pre></td></tr></table></figure>
+<p>在会话2中执行下面的操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p mdl_request</span><br><span class="line">$1 = (MDL_request *) 0x7f697d1c3bd0</span><br><span class="line">(gdb) p *mdl_request</span><br><span class="line">$2 = &#123;</span><br><span class="line">type = MDL_INTENTION_EXCLUSIVE, duration = MDL_STATEMENT, next_in_list = 0x7f697002a560, prev_in_list = 0x7f697d1c3df8, ticket = 0x0, key = &#123;m_length = 3, m_db_name_length = 0,</span><br><span class="line">    m_ptr = &apos;\000&apos; &lt;repeats 20 times&gt;, &quot;0|\002p\000\000\001\000\060&lt;\034&#125;i\177\000\000&gt;\240\344\000\000\000\000\000\000\t\000pi\177\000\000\000\t\000pi\177\000\000`&gt;\034&#125;i\177\000\000V\312\344\000\000\000\000\000\240&gt;\034&#125;i\177\000\000\333\361\254\000b\001\000\000\a?\000\001&quot;, &apos;\000&apos; &lt;repeats 20 times&gt;, &quot;0|\002p\000\000\001\000\220&lt;\034&#125;i\177\000\000&gt;\240\344\000\000\000\000\000\340\236\002pi\177\000\000\333\361\254\000\000\000\000\000\a?\000\001&quot;, &apos;\000&apos; &lt;repeats 12 times&gt;&quot;\340, &gt;\034&#125;i\177\000\000\060|\002p\000\000\001\000\350\062\220\003\000\000\000\000\333\361\254\000\000\000\000\000$\226\363&quot;, &apos;\000&apos; &lt;repeats 14 times&gt;,</span><br><span class="line">&quot;?\034&#125;i\177\000\000\060|\002p\000\000\001\000\000=\034&#125;i\177\000\000&gt;\240\344\000\000\000\000\000\000&quot;...,</span><br><span class="line">static m_namespace_to_wait_state_name = &#123;</span><br><span class="line">&#123;m_key = 101,</span><br><span class="line">        m_name = 0xf125a2 &quot;Waiting for global read lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 102,</span><br><span class="line">	m_name = 0xf125c0 &quot;Waiting for schema metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 103,</span><br><span class="line">        m_name = 0xf125e8 &quot;Waiting for table metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 104,</span><br><span class="line">	m_name = 0xf12608 &quot;Waiting for stored function metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 105,</span><br><span class="line">        m_name = 0xf12638 &quot;Waiting for stored procedure metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 106,</span><br><span class="line">	m_name = 0xf12668 &quot;Waiting for trigger metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 107,</span><br><span class="line">        m_name = 0xf12690 &quot;Waiting for event metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 108,</span><br><span class="line">	m_name = 0xf126b0 &quot;Waiting for commit lock&quot;, m_flags = 0&#125;&#125;&#125;&#125;</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+<p>从上面的输出中，我只能看到申请了一个语句级别的MDL_INTENTION_EXCLUSIVE。并没有看到什么其他有意义的信息。我们继续gdb跟踪</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p *(mdl_request-&gt;next_in_list)</span><br><span class="line">$3 = &#123;type = MDL_INTENTION_EXCLUSIVE, duration = MDL_TRANSACTION, next_in_list = 0x7f697002a388, prev_in_list = 0x7f697d1c3bd8, ticket = 0x0, key = &#123;m_length = 7, m_db_name_length = 4,</span><br><span class="line">    m_ptr = &quot;\001test\000\000\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217\217&quot;,</span><br><span class="line">static m_namespace_to_wait_state_name = &#123;</span><br><span class="line">&#123;m_key = 101,</span><br><span class="line">        m_name = 0xf125a2 &quot;Waiting for global read lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 102,</span><br><span class="line">	m_name = 0xf125c0 &quot;Waiting for schema metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 103,</span><br><span class="line">        m_name = 0xf125e8 &quot;Waiting for table metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 104,</span><br><span class="line">	m_name = 0xf12608 &quot;Waiting for stored function metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 105,</span><br><span class="line">        m_name = 0xf12638 &quot;Waiting for stored procedure metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 106,</span><br><span class="line">	m_name = 0xf12668 &quot;Waiting for trigger metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 107,</span><br><span class="line">        m_name = 0xf12690 &quot;Waiting for event metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 108,</span><br><span class="line">	m_name = 0xf126b0 &quot;Waiting for commit lock&quot;, m_flags = 0&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的输出中，我们看到了需要在test（见输出中的 m_ptr = “\001test）数据库上加一把事务级的MDL_INTENTION_EXCLUSIVE锁。它并没有告诉我们最终的MDL会落在哪个对象上。我们继续跟踪</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$4 = &#123;type = MDL_SHARED_UPGRADABLE, duration = MDL_TRANSACTION, next_in_list = 0x0, prev_in_list = 0x7f697002a568, ticket = 0x0, key = &#123;m_length = 9, m_db_name_length = 4,</span><br><span class="line">    m_ptr = &quot;\002test\000ti&quot;, &apos;\000&apos; &lt;repeats 378 times&gt;,</span><br><span class="line">static m_namespace_to_wait_state_name = &#123;</span><br><span class="line">&#123;m_key = 101,</span><br><span class="line">	m_name = 0xf125a2 &quot;Waiting for global read lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 102,</span><br><span class="line">	m_name = 0xf125c0 &quot;Waiting for schema metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 103,</span><br><span class="line">	m_name = 0xf125e8 &quot;Waiting for table metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 104,</span><br><span class="line">        m_name = 0xf12608 &quot;Waiting for stored function metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 105,</span><br><span class="line">	m_name = 0xf12638 &quot;Waiting for stored procedure metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 106,</span><br><span class="line">        m_name = 0xf12668 &quot;Waiting for trigger metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 107,</span><br><span class="line">	m_name = 0xf12690 &quot;Waiting for event metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 108,</span><br><span class="line">        m_name = 0xf126b0 &quot;Waiting for commit lock&quot;, m_flags = 0&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的输出中，我们可以看出最终是要在test数据库的ti对象上加一把MDL_SHARED_UPGRADABLE锁。在做DDL时会先加MDL_SHARED_UPGRADABLE锁，然后升级到MDL_EXCLUSIVE锁</p>
+<p>我来执行下面的过程 会话1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; commit;</span><br><span class="line">Query OK, 0 rows affected (5.51 sec)</span><br></pre></td></tr></table></figure>
+<p>会话2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p *mdl_request</span><br><span class="line">$5 = &#123;type = MDL_EXCLUSIVE, duration = MDL_TRANSACTION, next_in_list = 0x20302000000, prev_in_list = 0x200000001, ticket = 0x0, key = &#123;m_length = 9, m_db_name_length = 4,</span><br><span class="line">    m_ptr = &quot;\002test\000ti\000\000\000\000@\031\220\003\000\000\000\000\333\361\254\000\000\000\000\000\260&lt;\034&#125;i\177\000\000\302\362\254\000\000\000\000\000\300&lt;\034&#125;i\177\000\000\060|\002pi\177\000\000\320&lt;\034&#125;i\177\000\000\360\236\344\000\000\000\000\000\000\t\000pi\177\000\000(&#125;\002pi\177\000\000\360&lt;\034&#125;i\177\000\000\234\312\344\000\000\000\000\000H\245\002pi\177\000\000\333\361\254\000\000\000\000\000\023\360\000\001&quot;, &apos;\000&apos; &lt;repeats 12 times&gt;, &quot;`S\005pi\177\000\000\060|\002p\000\000\001\000\060=\034&#125;i\177\000\000&gt;\240\344\000\000\000\000\000\000\t\000pi\177\000\000\000\t\000pi\177\000\000\200=\034&#125;i\177\000\000\231\310\344\000\000\000\000\000\240=\034&#125;i\177\000\000l-d0t\b\000\000H\344\000\001\000\000\000\000\023\360\000\001\000\000\000\000\226&quot;...,</span><br><span class="line">static m_namespace_to_wait_state_name = &#123;</span><br><span class="line">&#123;m_key = 101,</span><br><span class="line">	m_name = 0xf125a2 &quot;Waiting for global read lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 102,</span><br><span class="line">	m_name = 0xf125c0 &quot;Waiting for schema metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 103,</span><br><span class="line">        m_name = 0xf125e8 &quot;Waiting for table metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 104,</span><br><span class="line">	m_name = 0xf12608 &quot;Waiting for stored function metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 105,</span><br><span class="line">        m_name = 0xf12638 &quot;Waiting for stored procedure metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 106,</span><br><span class="line">	m_name = 0xf12668 &quot;Waiting for trigger metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 107,</span><br><span class="line">        m_name = 0xf12690 &quot;Waiting for event metadata lock&quot;, m_flags = 0&#125;,</span><br><span class="line">&#123;m_key = 108,</span><br><span class="line">	m_name = 0xf126b0 &quot;Waiting for commit lock&quot;, m_flags = 0&#125;&#125;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的输出中，我们看到了最终是在test.ti上申请了事务级别的MDL_EXCLUSIVE锁。</p>
+<p>会话3</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; alter table ti stats_auto_recalc=1;</span><br><span class="line">Query OK, 0 rows affected (22 min 58.99 sec)</span><br><span class="line">Records: 0  Duplicates: 0  Warnings: 0</span><br></pre></td></tr></table></figure>
+<h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
+<p>本例只是简单的演示了，在同一个事务的不同时期加的不同的MDL的锁。MYSQL中DDL的操作不属于事务操作的范围。这就给mysql主备基于语句级别同步带来了困难。mysql主备在同步的过程中，为了保证主备结构一致性，而引入了MDL机制。为了尽可能的降低MDL带来的影响。请在业务低谷的时候，执行DDL操作。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/">http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/</a></strong><br>
+转载自：<a href="http://mysql.taobao.org/monthly/2017/09/06/" target="_blank" rel="noopener">利用gdb跟踪MDL加锁过程</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/转载/" rel="tag"># 转载</a>
+          
+            <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+          
+            <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/MDL/" rel="tag"># MDL</a>
+          
+            <a href="/tags/gdb/" rel="tag"># gdb</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+    
+	  
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/trace-metadata-lock/" rel="next" title="MySQL - 跟踪Metadata lock">
+                <i class="fa fa-chevron-left"></i> MySQL - 跟踪Metadata lock
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/analysis-of-mdl-source-code-for-common-sql-statements/" rel="prev" title="MySQL - 常用SQL语句的MDL加锁源码分析">
+                MySQL - 常用SQL语句的MDL加锁源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+	  
+    
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+  <a class="jiathis_button_tsina"></a>
+  <a class="jiathis_button_tqq"></a>
+  <a class="jiathis_button_weixin"></a>
+  <a class="jiathis_button_cqq"></a>
+  <a class="jiathis_button_douban"></a>
+  <a class="jiathis_button_renren"></a>
+  <a class="jiathis_button_qzone"></a>
+  <a class="jiathis_button_kaixin001"></a>
+  <a class="jiathis_button_copy"></a>
+  <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank"></a>
+  <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+  var jiathis_config={
+    hideMore:false
+  }
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+      
+    </div>
+
+    <!--hr/>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+    <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    <hr/-->
+    </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/portraits/nerv.png"
+               alt="3x3只眼（xnervwang）" />
+          <p class="site-author-name" itemprop="name">3x3只眼（xnervwang）</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">136</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              我的其它博客
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://geeker.party" title="Geeker Party" target="_blank">Geeker Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://galgame.party" title="Galgame Party" target="_blank">Galgame Party</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://essay.xnerv.wang" title="Xnerv Essays" target="_blank">Xnerv Essays</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#mdl-meta-data-lock-的作用"><span class="nav-text">MDL(Meta Data LocK)的作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mdl锁的类型"><span class="nav-text">MDL锁的类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mdl锁的简单示例"><span class="nav-text">MDL锁的简单示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结"><span class="nav-text">小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">3x3只眼（xnervwang）</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://i.xnerv.wang">xnervwang</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  前往 -
+  <a class="theme-link" href="http://xnerv.wang">
+    XNERV SURVEYS
+  </a>
+</div>
+
+<span>God's in his heaven, All's right with the world.</span>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.1"></script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+
+</body>
+</html>
