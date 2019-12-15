@@ -10340,8 +10340,8 @@ Given <em>n</em> = 3, there are a total of 5 unique BST’s.</p>
       <tags>
         <tag>LeetCode with Python</tag>
         <tag>Medium Problems</tag>
-        <tag>Dynamic Programming</tag>
         <tag>Tree</tag>
+        <tag>Dynamic Programming</tag>
       </tags>
   </entry>
   <entry>
@@ -13897,8 +13897,8 @@ Reprinted from: <a href="https://stackoverflow.com/q/1984186" target="_blank" re
         <tag>Stack Overflow</tag>
         <tag>Memory Management</tag>
         <tag>Virtual Memory</tag>
-        <tag>Private bytes</tag>
         <tag>Working Set</tag>
+        <tag>Private bytes</tag>
       </tags>
   </entry>
   <entry>
@@ -15138,8 +15138,8 @@ isMatch(&quot;aab&quot;, &quot;c*a*b&quot;) → false
       <tags>
         <tag>LeetCode with Python</tag>
         <tag>String</tag>
-        <tag>Greedy</tag>
         <tag>Dynamic Programming</tag>
+        <tag>Greedy</tag>
         <tag>Hard Problems</tag>
         <tag>Backtracking</tag>
       </tags>
