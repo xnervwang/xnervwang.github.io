@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -61,7 +61,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;01&#x2F;Three-phase_commit_status.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;01&#x2F;two-generals-problems.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;01&#x2F;Transaction-Across-DataCenter.jpg">
-<meta property="og:updated_time" content="2018-03-21T16:15:53.470Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.408Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;01&#x2F;trade-off.jpg">
 
@@ -271,14 +271,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2014-01-19 08:00:00" itemprop="dateCreated datePublished" datetime="2014-01-19T08:00:00-08:00">2014-01-19</time>
+              <time title="创建时间：2014-01-20 00:00:00" itemprop="dateCreated datePublished" datetime="2014-01-20T00:00:00-08:00">2014-01-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:53" itemprop="dateModified" datetime="2018-03-21T09:15:53-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -381,7 +381,7 @@
 <p>看到这里，我相信你有很多很多的问题，你一定在思考2PC/3PC中各种各样的失败场景，<strong>你会发现Timeout是个非常难处理的事情，因为网络上的Timeout在很多时候让你无所事从，你也不知道对方是做了还是没有做。于是你好好的一个状态机就因为Timeout成了个摆设</strong>。</p>
 <p><strong>一个网络服务会有三种状态：1）Success，2）Failure，3）Timeout，第三个绝对是恶梦，尤其在你需要维护状态的时候</strong>。</p>
 <h2 id="two-generals-problem-两将军问题"><a class="header-anchor" href="#two-generals-problem-两将军问题"></a>Two Generals Problem（两将军问题）</h2>
-<p><a href="http://en.wikipedia.org/wiki/Two_Generals'_Problem" target="_blank" rel="noopener">Two Generals Problem</a> 两将军问题是这么一个思维性实验问题： 有两支军队，它们分别有一位将军领导，现在准备攻击一座修筑了防御工事的城市。这两支军队都驻扎在那座城市的附近，分占一座山头。一道山谷把两座山分隔开来，并且两位将军唯一的通信方式就是派各自的信使来往于山谷两边。不幸的是，这个山谷已经被那座城市的保卫者占领，并且存在一种可能，那就是任何被派出的信使通过山谷是会被捕。 请注意，虽然两位将军已经就攻击那座城市达成共识，但在他们各自占领山头阵地之前，并没有就进攻时间达成共识。两位将军必须让自己的军队同时进攻城市才能取得成功。因此，他们必须互相沟通，以确定一个时间来攻击，并同意就在那时攻击。如果只有一个将军进行攻击，那么这将是一个灾难性的失败。 这个思维实验就包括考虑他们如何去做这件事情。下面是我们的思考：</p>
+<p><a href="http://en.wikipedia.org/wiki/Two_Generals' target="_blank" rel="noopener"_Problem">Two Generals Problem</a> 两将军问题是这么一个思维性实验问题： 有两支军队，它们分别有一位将军领导，现在准备攻击一座修筑了防御工事的城市。这两支军队都驻扎在那座城市的附近，分占一座山头。一道山谷把两座山分隔开来，并且两位将军唯一的通信方式就是派各自的信使来往于山谷两边。不幸的是，这个山谷已经被那座城市的保卫者占领，并且存在一种可能，那就是任何被派出的信使通过山谷是会被捕。 请注意，虽然两位将军已经就攻击那座城市达成共识，但在他们各自占领山头阵地之前，并没有就进攻时间达成共识。两位将军必须让自己的军队同时进攻城市才能取得成功。因此，他们必须互相沟通，以确定一个时间来攻击，并同意就在那时攻击。如果只有一个将军进行攻击，那么这将是一个灾难性的失败。 这个思维实验就包括考虑他们如何去做这件事情。下面是我们的思考：</p>
 <p>1）第一位将军先发送一段消息“让我们在上午9点开始进攻”。然而，一旦信使被派遣，他是否通过了山谷，第一位将军就不得而知了。任何一点的不确定性都会使得第一位将军攻击犹豫，因为如果第二位将军不能在同一时刻发动攻击，那座城市的驻军就会击退他的军队的进攻，导致他的军对被摧毁。</p>
 <p>2）知道了这一点，第二位将军就需要发送一个确认回条：“我收到您的邮件，并会在9点的攻击。”但是，如果带着确认消息的信使被抓怎么办？所以第二位将军会犹豫自己的确认消息是否能到达。</p>
 <p>3）于是，似乎我们还要让第一位将军再发送一条确认消息——“我收到了你的确认”。然而，如果这位信使被抓怎么办呢？</p>
@@ -411,7 +411,7 @@
 <p>关于一些实例，你可以看一下Wikipedia中文中的“<a href="http://zh.wikipedia.org/zh/Paxos%E7%AE%97%E6%B3%95#.E5.AE.9E.E4.BE.8B" target="_blank" rel="noopener">Paxos样例</a>”一节，我在这里就不再多说了。对于Paxos算法中的一些异常示例，大家可以自己推导一下。你会发现基本上来说只要保证有半数以上的结点存活，就没有什么问题。</p>
 <p>多说一下，自从Lamport在1998年发表Paxos算法后，对Paxos的各种改进工作就从未停止，其中动作最大的莫过于2005年发表的<a href="http://research.microsoft.com/apps/pubs/default.aspx?id=64624" target="_blank" rel="noopener">Fast Paxos</a>。无论何种改进，其重点依然是在消息延迟与性能、吞吐量之间作出各种权衡。为了容易地从概念上区分二者，称前者Classic Paxos，改进后的后者为Fast Paxos。</p>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
-<p>下图来自：Google App Engine的co-founder Ryan Barrett在2009年的google i/o上的演讲《<a href="http://snarfed.org/transactions_across_datacenters_io.html" target="_blank" rel="noopener">Transaction Across DataCenter</a>》（视频： <a href="http://www.youtube.com/watch?v=srOgpXECblk" title="阿里旺旺无法确定该链接的安全性" target="_blank" rel="noopener">http://www.youtube.com/watch?v=srOgpXECblk</a>）</p>
+<p>下图来自：Google App Engine的co-founder Ryan Barrett在2009年的google i/o上的演讲《<a href="http://snarfed.org/transactions_across_datacenters_io.html" target="_blank" rel="noopener">Transaction Across DataCenter</a>》（视频： <a href="http://www.youtube.com/watch?v=srOgpXECblk" target="_blank" rel="noopener" title="阿里旺旺无法确定该链接的安全性">http://www.youtube.com/watch?v=srOgpXECblk</a>）</p>
 <p><img src="https://coolshell.cn/wp-content/uploads/2014/01/Transaction-Across-DataCenter.jpg" alt=""></p>
 <p>前面，我们说过，要想让数据有高可用性，就需要冗余数据写多份。写多份的问题会带来一致性的问题，而一致性的问题又会带来性能问题。从上图我们可以看到，我们基本上来说不可以让所有的项都绿起来，这就是著名的CAP理论：一致性，可用性，分区容忍性，你只可能要其中的两个。</p>
 <h2 id="nwr模型"><a class="header-anchor" href="#nwr模型"></a>NWR模型</h2>

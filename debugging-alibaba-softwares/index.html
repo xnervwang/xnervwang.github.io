@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -65,7 +65,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;debugging-alibaba-softwares&#x2F;6ba.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;debugging-alibaba-softwares&#x2F;8.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;debugging-alibaba-softwares&#x2F;9.jpg">
-<meta property="og:updated_time" content="2018-03-21T16:15:53.041Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.166Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;debugging-alibaba-softwares&#x2F;1.jpg">
 
@@ -275,14 +275,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2014-09-15 23:48:00" itemprop="dateCreated datePublished" datetime="2014-09-15T23:48:00-07:00">2014-09-15</time>
+              <time title="创建时间：2014-09-16 14:48:00" itemprop="dateCreated datePublished" datetime="2014-09-16T14:48:00-07:00">2014-09-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:53" itemprop="dateModified" datetime="2018-03-21T09:15:53-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -312,24 +312,24 @@
 <h2 id="谁在消耗电池？"><a class="header-anchor" href="#谁在消耗电池？"></a>谁在消耗电池？</h2>
 <p>人们对手机、笔记本电脑等移动设备的依赖越来越大。一旦电池用尽而又不能立刻充电，便可能把人急得双脚跳。面对类似情况，为了让笔记本电池多支撑一会儿，我会采取两项省电措施：一是把屏幕调暗，二是杀掉特别费电的软件。第一项容易理解，略去不谈。第二项的关键是如何找到高功耗软件。一种简单的方法是调出任务管理器，通过View菜单（Windows 8之前）或者在列表的标题行（Windows 8/8.1）调出图1所示的“选择列”对话框，然后将Page faults（缺页异常总次数）和PF Delta（自上次更新后缺页异常的新增次数，默认为每秒更新一次）两项选中。接下来分别按Page faults、PF Delta和CPU使用率指标对进程排序，找出这几项指标高的进程。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/1.jpg" alt="图1  任务管理器的选择列对话框" title="图1  任务管理器的选择列对话框">
+<img src="/assets/debugging-alibaba-softwares/1.jpg" alt="图1  任务管理器的选择列对话框" title="图1  任务管理器的选择列对话框" />
 </center>
 <p>为何选择Page faults来衡量软件对功耗的影响？虽然今天的计算机都配备了比较多的物理内存，但仍离不开虚拟内存技术，把暂时不用的数据放在外存中，当CPU访问这样的数据时，会报告缺页异常，让操作系统的内存管理器将数据从外存中读到物理内存，这个操作通常被称为Page In。物理内存是以页为单位来管理的，因此每次Page In的数据至少是一个页，通常为4KB。访问外存意味着系统总线和硬盘等存储设备的运作，在时间和功耗方面都是较大的开销，因此，Page faults常成为系统调优的一个重要指标。</p>
 <p>正是使用以上方法查找高耗电高软件时，Alipay引起了我的注意。图2是当时的屏幕截图，可以看到，任务管理器中的各个进程（任务）是按Page faults总数排列的，而位列前三的分别是AlipaySecSvc、AlipayBsm和TaobaoProtect，全是Alipay软件成员。它们导致的Page faults总数分别为四亿五千多万次、一亿三千多万次和八千多万次。假定每次Page fault触发的Page In数据都是4KB，那么它们促使系统Page In的数据量分别为大约1.8TB、500GB和300GB。</p>
 <p>另外，从PF Delta列来看，排名第一的AlipaySecSvc进程在最近一秒内就触发了2906次缺页异常。</p>
 <p>坦率说，这样的结果让我惊叹不已。通常排在前列的都是安全软件。而自从我的机器上有了Alipay软件后，它们总是可以轻松超越杀毒软件。图2中，第6名是系统窗口合成器，第4、5、7名都是安全软件。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/2.jpg" alt="图2  Alipay三个进程的Page faults总数垄断前三名" title="图2  Alipay三个进程的Page faults总数垄断前三名">
+<img src="/assets/debugging-alibaba-softwares/2.jpg" alt="图2  Alipay三个进程的Page faults总数垄断前三名" title="图2  Alipay三个进程的Page faults总数垄断前三名" />
 </center>
 <p>因为处理每次Page fault时要执行比较复杂的逻辑，所以高Page faults也常意味着较高的CPU使用率。在图2中，AlipaySecSvc进程使用的CPU总时间高达1小时20分32秒。今天的CPU速度惊人，很多“分量”轻的软件运行一天可能也用不上CPU几秒钟（大多被挂起）。尽管AlipaySecSvc的名字中也包含安全字样（Sec），但其CPU总时间如此高也着实离谱。简而言之，这个进程的分量重得惊人。</p>
 <h2 id="alipaysecsvc"><a class="header-anchor" href="#alipaysecsvc"></a>AlipaySecSvc</h2>
 <p>那么，如此重的AlipaySecSvc进程是做什么的呢？好奇心和职业精神都驱使我深入了解这个进程。打开系统服务控制台，找到AlipaySecSvc服务，查看其属性（如图3），可以看到它的全称（Alipay security service）、官方身份和在磁盘上的位置信息。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/3.jpg" alt="图3  AlipaySecSvc的服务属性" title="图3  AlipaySecSvc的服务属性">
+<img src="/assets/debugging-alibaba-softwares/3.jpg" alt="图3  AlipaySecSvc的服务属性" title="图3  AlipaySecSvc的服务属性" />
 </center>
 <p>根据图3中路径信息，可以在磁盘上找到Alipay目录（如图4），其下有三个子目录。根据布局可以推测，我的机器上已安装了Alipay的三个组件，分别是AliEditPlus、AlipayDHC和SafeTransaction，引起我们注意的AlipaySecSvc是AliEditPlus的一部分。看来，AliEditPlus绝不是孤军奋战，一个兵团已在我的电脑上安营扎寨了。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/4.jpg" alt="图4  Alipay软件的磁盘布局" title="图4  Alipay软件的磁盘布局">
+<img src="/assets/debugging-alibaba-softwares/4.jpg" alt="图4  Alipay软件的磁盘布局" title="图4  Alipay软件的磁盘布局" />
 </center>
 <p>图3中的描述信息声明了AlipaySecSvc服务的重要性，但同时也说明了它的职权范围是“电子支付”。既然如此，当用户未做支付操作时，AlipaySecSvc应该尽可能保持安静。但事实上，它却始终忙碌着，甚至连浏览器进程没有启动时也是如此，这便不正常了。</p>
 <h2 id="上调试器"><a class="header-anchor" href="#上调试器"></a>上调试器</h2>
@@ -340,22 +340,22 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**(27bc.1b30): Unknown exception – code 000006ba (first chance)**</span><br></pre></td></tr></table></figure>
 <p>看来是有真的异常（Windows系统的结构化异常SEH）发生。继续观察，WinDBG连续输出这样的信息，间隔不到一秒。根据经验，这个信息很有价值，可以作为突破口。轻按Ctrl+Break再将AlipaySecSvc断下，然后通过菜单Debug→Event Filters调出图5所示的调试事件过滤器对话框。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/5.jpg" alt="图5  WinDBG的调试事件过滤器对话框" title="图5  WinDBG的调试事件过滤器对话框">
+<img src="/assets/debugging-alibaba-softwares/5.jpg" alt="图5  WinDBG的调试事件过滤器对话框" title="图5  WinDBG的调试事件过滤器对话框" />
 </center>
 <p>因为信息输出的6ba异常不在WinDBG的常见异常列表中，所以点击Add按钮增加一个代码为0x6ba的异常。之后选中新增的项目，再点击Command按钮调出图6所示的过滤器关联命令对话框，并输入：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**.echo ********bang******;? @$tid;.ttime**</span><br></pre></td></tr></table></figure>
 <center>
-<img src="/assets/debugging-alibaba-softwares/6.jpg" alt="图6  过滤器命令" title="图6  过滤器命令">
+<img src="/assets/debugging-alibaba-softwares/6.jpg" alt="图6  过滤器命令" title="图6  过滤器命令" />
 </center>
 <p>执行如上操作，再恢复AlipaySecSvc运行，让其再走些步。这时我们看到屏幕上持续输出信息，如图7所示（此图为后补，与图1不属同一次调试）。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/7.jpg" alt="图7  持续不断的6ba异常" title="图7  持续不断的6ba异常">
+<img src="/assets/debugging-alibaba-softwares/7.jpg" alt="图7  持续不断的6ba异常" title="图7  持续不断的6ba异常" />
 </center>
 <p>在软件世界，一次异常就是一起爆炸事件。如此连续不断的爆炸必然会让CPU负担很重。</p>
 <h2 id="6ba异常"><a class="header-anchor" href="#6ba异常"></a>6ba异常</h2>
 <p>接下来的问题是为什么有如此多的6ba异常呢？Ctrl+Break断下，执行命令sxe 6ba告诉WinDBG再有6ba异常发生时立刻停下来。恢复运行后，果然很快又停下，位置正是6ba异常的发生现场：</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/6ba.jpg">
+<img src="/assets/debugging-alibaba-softwares/6ba.jpg" />
 </center>
 <p>看来是有人调用了著名的RaiseException API发起软件异常。是发生了什么矛盾，以至于要引爆炸弹呢？k一下看缘由吧，结果如图8所示。</p>
 <p>细看图8，关注本专栏的读者一定可以看出个“破绽”，符号不精确。是的，诚然老雷偷懒了，没有使用PDB号，只用了导出符号。但对于我们的分析，这样的信息足够了。因为其中包含了以下重要内容：</p>
@@ -367,7 +367,7 @@
 <p>有了这些信息，已没必要探究RPC检测到了何种意外，因为我们有了如下结论：AlipaySecSvc服务调用了一个依赖RPC机制的沉重API，而且API执行不顺利，导致了异常。</p>
 <p>根据前面的监视结果（见图7），6ba异常是反复发生的，说明这个沉重的过程也是在循环进行。对wtsapi32!WTSEnumerateSessionsW设置断点，果然反复命中，还不止一个线程命中断点，居然有多个线程在调用这个沉重的API和触发异常。从其中的线程ID来看，也有两个（6960和1032）。综合前面的分析，可以对AlipaySecSvc服务进程的躁动原因做出初步诊断：多个线程循环调用沉重的WTSEnumerateSessions API，而且执行时触发异常。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/8.jpg" alt="图8  追索爆炸原因" title="图8  追索爆炸原因">
+<img src="/assets/debugging-alibaba-softwares/8.jpg" alt="图8  追索爆炸原因" title="图8  追索爆炸原因" />
 </center>
 <p>对于性能问题，也可用WPT帮忙。它的全称是Windows Performance Toolkit，曾用名xPerf。安装完成后，先启动WPR（Windows Performance Recorder），让其开启系统中早已埋伏好的ETW（Event Tracing for Windows）事件，重现问题后，停止录制，WPR会把收集到的事件整理到一个庞大的etl文件中。最后再使用WPA（Windows Performance Analyzer）打开etl文件进行分析。</p>
 <p>详细介绍WPA的用法超出了本文的范围，这里只做简述。</p>
@@ -376,7 +376,7 @@
 <p>再观察图9中的详细数据，可以看到进程内部模块和函数一级的信息。WPA已根据模块的样本点数做过排序（点数越多，意味着占用CPU越多），内核模块排名第一，说明AlipaySecSvc进程做了多次系统调用，进一步还可发现有一个线程反复分配大堆块和调用NtQuerySystemInformation。</p>
 <p>展开函数一级的信息，可以看到占用CPU较多的函数。例如在kernel32.dll模块下，Process32­NextW赫然在列。这告诉我们，AlipaySecSvc除了调用沉重的WTSEnumerate­Sessions API外，还调用了另一个沉重的API Process32­Next。前者枚举系统中的所有登录会话，而后者枚举会话中的进程。据此，我们可以推测，AlipaySecSvc的循环中，先是枚举会话，然后再枚举会话中的每个进程。笔者多年前就分析过Process32Next API，得到的结论是，这个API与缺页异常密切相关，几乎每次调用，都会触发数百次的缺页异常。而我们正分析的AlipaySecSvc进程，有两个线程在以循环的方式反复调用这个API，其结果就是本文开头说的累计缺页异常数排名第一。</p>
 <center>
-<img src="/assets/debugging-alibaba-softwares/9.jpg" alt="图9  使用WPA分析CPU占用情况" title="图9  使用WPA分析CPU占用情况">
+<img src="/assets/debugging-alibaba-softwares/9.jpg" alt="图9  使用WPA分析CPU占用情况" title="图9  使用WPA分析CPU占用情况" />
 </center>
 <h2 id="api的分量"><a class="header-anchor" href="#api的分量"></a>API的分量</h2>
 <p>使用同样的方法分析缺页异常总数排名第二和第三的Alipaybsm（Browser Safe Monitor）以及TaobaoProtect，结果与此相似，或许它们三兄弟在共享循环调用沉重API的经典代码吧，也可能它们都出自一位同行之手。</p>

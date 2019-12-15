@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -61,7 +61,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;further-disscusion-of-pagerank-2&#x2F;4.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;further-disscusion-of-pagerank-2&#x2F;5.gif">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;further-disscusion-of-pagerank-2&#x2F;6.gif">
-<meta property="og:updated_time" content="2018-03-21T16:15:53.676Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;further-disscusion-of-pagerank-2&#x2F;1.gif">
 
@@ -271,14 +271,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2011-06-19 23:55:00" itemprop="dateCreated datePublished" datetime="2011-06-19T23:55:00-07:00">2011-06-19</time>
+              <time title="创建时间：2011-06-20 14:55:00" itemprop="dateCreated datePublished" datetime="2011-06-20T14:55:00-07:00">2011-06-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:53" itemprop="dateModified" datetime="2018-03-21T09:15:53-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -311,7 +311,7 @@
 <a id="more"></a>
 <p>Google PageRank取值范围是0<sub>10，为了叙述方便，我们使用0</sub>1的区间作为度量，这并不会影响我们对PageRank原理的剖析，并且在初始化的时候，我们假设所有网站的PageRank的值是均匀分布的。这意味着，如果有N个网站，那么每个网站的PageRank初始值都是1/N。现在假设有4个网站A、B、C、D，则它们的初始PageRank都是0.25，它们的链接关系如下：</p>
 <center>
-<img src="/assets/further-disscusion-of-pagerank-2/1.gif">
+<img src="/assets/further-disscusion-of-pagerank-2/1.gif" />
 </center>
 <p>则初始值PR(A) = PR(B) = PR© = PR(D) = 0.25，又因为B、C、D都有指向A的链接，因此，它们每人都为A贡献了0.25的PageRank值，重新计算A的PageRank值为：PR(A) = PR(B) + PR© + PR(D) = 0.75，由于B、C和D并没有外部链接指向它们，因此PR(B)、PR©、PR(D)在这次计算中将被赋值为0。反复套用PageRank的计算公式，来看一下，这种情况下PageRank的收敛性，在第二次迭代之后，所有的PageRank值就都是0了：</p>
 <table>
@@ -352,7 +352,7 @@
 <p>现在来看第个例子，假设网站B还有C链接，网站D上有其他三个网站的链接。对于B而言的话，它把自己的总价值分散投给了A和C，各占一半的PageRank，即0.125，C和D的情况同理。即一个网站投票给其它网站PageRank的值，需要除以它所链接到的网站总数。此时PageRank的计算公式为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PR(A) = PR(B) / 2 + PR(C) / 1 + PR(D) / 3</span><br><span class="line">PR(B) = PR(D) / 3</span><br><span class="line">PR(C) = PR(B) / 2 + PR(D) / 3</span><br><span class="line">PR(D) = 0</span><br></pre></td></tr></table></figure>
 <center>
-<img src="/assets/further-disscusion-of-pagerank-2/2.gif">
+<img src="/assets/further-disscusion-of-pagerank-2/2.gif" />
 </center>
 <table>
 <thead>
@@ -413,12 +413,12 @@
 <h2 id="二-pagerank算法的-黑洞效应"><a class="header-anchor" href="#二-pagerank算法的-黑洞效应"></a>二、PageRank算法的“黑洞效应”</h2>
 <p>为了讨论收敛性的问题，我们暂时抛开具体的网站，把问题做一个抽象化的描述，我们可以把网页之间的关联关系理解为是若干张有向图，图与图之间是互不连通的，那我们只考虑每一部分的收敛性，并不会影响其他部分的收敛性。我们考虑把边权值当作网站所传递的PageRank值，则对于任意一个顶点而言，其出边的权值之和必为1。</p>
 <center>
-<img src="/assets/further-disscusion-of-pagerank-2/3.gif">
+<img src="/assets/further-disscusion-of-pagerank-2/3.gif" />
 </center>
 <p>一个很显然的结论是，如果连通图中有一个顶点的入度为0，则经过有限次迭代之后，该连通图内的所有顶点的PageRank均为0，形象的说，这个顶点就像一个黑洞一样，把整体的PageRank值慢慢地“吸收”了。由于它不对外贡献任何PR值，所以整体的PR总和是在不断地减少，直到最终收敛到0。我把它称之为：PageRank的“黑洞效应”。至于说Google是如何防止这种情况的发生，毕竟一个网站没有外链是完全有可能的，我也尚未找到确切的答案。不过网上道是有人给出了一种解决办法：即如果一个网站没有外链，那么就假定该连通图内其余所有的网点都是它的外链，这样我们就避免了整体PageRank值被吸收的现象。</p>
 <p>当一个连通图内部每一个顶点入度均大于0时，不难看出，PR值在内部流通过程中，整体的PR值是守恒的。如果是存在一个顶点的入度为0呢？通过一次迭代，它的PR值就会变成0，而把它的那部分PR值贡献给了图中剩余的部分。所以，最终入度为0的顶点的PR值都将是0，而整体的PR仍然守恒。那么整体的PR值守恒就一定能够保证每个顶点的PR值最终会收敛吗？下面看一个简单的例子：</p>
 <center>
-<img src="/assets/further-disscusion-of-pagerank-2/4.gif">
+<img src="/assets/further-disscusion-of-pagerank-2/4.gif" />
 </center>
 <p>按照之前的迭代步骤，会得到一个迭代的结果表。这将是一个无限循环，且不会收敛的过程。</p>
 <table>
@@ -494,7 +494,7 @@
 推论3. 若{Xi}是不可约的非周期马氏链的平稳分布，则lim(n→∞)Pj(n) = Xi。</p>
 <p>上面的三个推论看不懂不要紧，找本《随机过程》的书就明白了，这里不再详细讨论了。既然问题得以转化，那么我们还计算一个实例，看看PageRank是如何工作的。假设这里有相互链接关系的7个HTML网页，并且HTML网页之间的链接关系闭合于这1~7个网页中，也即是说，除了这些网页之外，没有任何链接的出入。</p>
 <center>
-<img src="/assets/further-disscusion-of-pagerank-2/5.gif">
+<img src="/assets/further-disscusion-of-pagerank-2/5.gif" />
 </center>
 <p>那么我们可以很容易地将这个链接关系使用数学的方式表示出来。首先，分析链接的关系，列举出各个链接源的ID及其所链接的目标ID。<br>
 链接源I D 链接目标 ID</p>
@@ -511,7 +511,7 @@ X1 = 0.303514，X2 = 0.38286，X3 = 0.32396，X4 = 0.24297，X5 = 0.41231，X6 =
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">名次 PageRank   文件ID   发出链接ID  被链接ID</span><br><span class="line">  1     0.304     1       2,3,4,5,7   2,3,5,6</span><br><span class="line">  2     0.179     5       1,3,4,6     1,4,6,7</span><br><span class="line">  3     0.166     2       1           1,3,4</span><br><span class="line">  4     0.141     3       1,2         1,4,5</span><br><span class="line">  5     0.105     4       2,3,5       1,5</span><br><span class="line">  6     0.061     7       5           1</span><br><span class="line">  7     0.045     6       1,5          5</span><br></pre></td></tr></table></figure>
 <p>让我们详细地看一下。ID=1 的文件的 PageRank 是0.304，占据全体的三分之一，成为了第1位。特别需要说明的是，起到相当大效果的是从排在第3位的 ID=2 页面中得到了所有的 PageRank（0.166）数。ID=2页面有从3个地方过来的反向链接，而只有面向 ID=1页面的一个链接，因此（面向ID=1页面的）链接就得到了所有的 PageRank 数。不过，就因为 ID=1页面是正向链接和反向链接最多的页面，也可以理解它是最受欢迎的页面吧。</p>
 <center>
-<img src="/assets/further-disscusion-of-pagerank-2/6.gif">
+<img src="/assets/further-disscusion-of-pagerank-2/6.gif" />
 </center>
 <p>依据上图的PageRank值，我们实际地试着计算一下PageRank的收支，只要将自各页的流入量单纯相加即可。譬如 ID=1 的流入量为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ID=1的流入量＝(ID=2发出的Rank)+(ID=3发出的Rank) + (ID=5发出的Rank) + (ID=6发出的Rank) = 0.166 + 0.141 / 2 + 0.179 / 4 + 0.045 / 2 = 0.30375</span><br></pre></td></tr></table></figure>

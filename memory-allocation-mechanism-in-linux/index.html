@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -56,7 +56,7 @@
 <meta property="og:description" content="Each Linux process has its own dedicated address space dynamically translated into physical memory address space by the MMU (and the kernel) [1]. To each individual process, the view is as if it alone">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-mechanism-in-linux&#x2F;linux_malloc.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:52.837Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.070Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-mechanism-in-linux&#x2F;linux_malloc.png">
 
@@ -266,14 +266,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2014-09-19 09:00:00" itemprop="dateCreated datePublished" datetime="2014-09-19T09:00:00-07:00">2014-09-19</time>
+              <time title="创建时间：2014-09-20 00:00:00" itemprop="dateCreated datePublished" datetime="2014-09-20T00:00:00-07:00">2014-09-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:52" itemprop="dateModified" datetime="2018-03-21T09:15:52-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -300,7 +300,7 @@
       
         <p>Each Linux process has its own dedicated address space dynamically translated into physical memory address space by the MMU (and the kernel) [1]. To each individual process, the view is as if it alone has full access to the system’s physical memory [2]. More importantly, the address space of even a single process can be much larger than physical memory. However, the memory usage of each process is bounded with Linux resource limitation (via setrlimit()).</p>
 <center>
-<img src="/assets/memory-allocation-mechanism-in-linux/linux_malloc.png" alt="linux malloc">
+<img src="/assets/memory-allocation-mechanism-in-linux/linux_malloc.png" alt="linux malloc"/>
 </center>
 <a id="more"></a>
 <p>The space is divided into several parts, including text, data, heap and stack, etc. Stack and heap are the two parts we’ll talk about. At the time of creation, the system creates heap and stack segment for processes. While stack is the reserved memory as scratch space for thread execution, heap is memory set aside for dynamic allocation. <strong>Each thread gets a stack, while there’s typically only one heap for the application.</strong> The OS allocates the stack for each system-level thread when the thread is created, and the <strong>stack size is predetermined in creation</strong>. Typically, the OS is called by the language runtime to allocate the heap for the application. <strong>The heap size is set on application startup, but it can grow by calling allocators to request more memory from OS</strong>. [3]</p>

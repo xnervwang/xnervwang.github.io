@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -58,7 +58,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;lock-free-queue-Implementation&#x2F;lock-free-bicycle.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;lock-free-queue-Implementation&#x2F;lock-free-link.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;lock-free-queue-Implementation&#x2F;lock-free-array.jpg">
-<meta property="og:updated_time" content="2018-03-21T16:15:53.982Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.827Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;lock-free-queue-Implementation&#x2F;lock-free-bicycle.jpg">
 
@@ -268,14 +268,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2012-09-06 09:00:00" itemprop="dateCreated datePublished" datetime="2012-09-06T09:00:00-07:00">2012-09-06</time>
+              <time title="创建时间：2012-09-07 00:00:00" itemprop="dateCreated datePublished" datetime="2012-09-07T00:00:00-07:00">2012-09-07</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:53" itemprop="dateModified" datetime="2018-03-21T09:15:53-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -305,7 +305,7 @@
 <h2 id="关于cas等原子操作"><a class="header-anchor" href="#关于cas等原子操作"></a>关于CAS等原子操作</h2>
 <p>在开始说无锁队列之前，我们需要知道一个很重要的技术就是CAS操作——Compare &amp; Set，或是 Compare &amp; Swap，<strong>现在几乎所有的CPU指令都支持CAS的原子操作，X86下对应的是 CMPXCHG 汇编指令</strong>。有了这个原子操作，我们就可以用其来实现各种无锁（lock free）的数据结构。</p>
 <center>
-<img src="/assets/lock-free-queue-Implementation/lock-free-bicycle.jpg" alt="lock free bicycle">
+<img src="/assets/lock-free-queue-Implementation/lock-free-bicycle.jpg" alt="lock free bicycle"/>
 </center>
 <p>这个操作用C语言来描述就是下面这个样子：（代码来自<a href="http://en.wikipedia.org/wiki/Compare-and-swap" target="_blank" rel="noopener">Wikipedia的Compare And Swap</a>词条）意思就是说，看一看内存*reg里的值是不是oldval，如果是的话，则对其赋值newval。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">compare_and_swap</span> <span class="params">(<span class="keyword">int</span>* reg, <span class="keyword">int</span> oldval, <span class="keyword">int</span> newval)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> old_reg_val = *reg;</span><br><span class="line">  <span class="keyword">if</span> (old_reg_val == oldval)</span><br><span class="line">     *reg = newval;</span><br><span class="line">  <span class="keyword">return</span> old_reg_val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -352,7 +352,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DeQueue() <span class="comment">//出队列</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        p = head;</span><br><span class="line">        <span class="keyword">if</span> (p-&gt;next == <span class="literal">NULL</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> ERR_EMPTY_QUEUE;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">while</span>( CAS(head, p, p-&gt;next) != TRUE );</span><br><span class="line">    <span class="keyword">return</span> p-&gt;next-&gt;value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>我们可以看到，DeQueue的代码操作的是 head-&gt;next，而不是head本身。这样考虑是因为一个边界条件，我们需要一个dummy的头指针来解决链表中如果只有一个元素，head和tail都指向同一个结点的问题，这样EnQueue和DeQueue要互相排斥了。</strong></p>
 <center>
-<img src="/assets/lock-free-queue-Implementation/lock-free-link.jpg" alt="Lock-Free Queue(Link)">
+<img src="/assets/lock-free-queue-Implementation/lock-free-link.jpg" alt="Lock-Free Queue(Link)"/>
 </center>
 注：上图的tail正处于更新之前的装态。
 <h2 id="cas的aba问题"><a class="header-anchor" href="#cas的aba问题"></a>CAS的ABA问题</h2>
@@ -398,7 +398,7 @@
 </ol>
 <p>如下图所示：</p>
 <center>
-<img src="/assets/lock-free-queue-Implementation/lock-free-array.jpg" alt="Lock-Free Queue(Array)">
+<img src="/assets/lock-free-queue-Implementation/lock-free-array.jpg" alt="Lock-Free Queue(Array)"/>
 </center>
 <h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
 <p>以上基本上就是所有的无锁队列的技术细节，这些技术都可以用在其它的无锁数据结构上。</p>

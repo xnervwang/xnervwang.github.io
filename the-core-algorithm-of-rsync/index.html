@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -57,7 +57,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2012&#x2F;05&#x2F;rsync-algorithm.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2012&#x2F;05&#x2F;rsync-algorithm-result.jpg">
-<meta property="og:updated_time" content="2018-03-21T16:15:52.855Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.078Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2012&#x2F;05&#x2F;rsync-algorithm.jpg">
 
@@ -267,14 +267,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2012-05-16 09:00:00" itemprop="dateCreated datePublished" datetime="2012-05-16T09:00:00-07:00">2012-05-16</time>
+              <time title="创建时间：2012-05-17 00:00:00" itemprop="dateCreated datePublished" datetime="2012-05-17T00:00:00-07:00">2012-05-17</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:52" itemprop="dateModified" datetime="2018-03-21T09:15:52-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -299,7 +299,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><a href="http://en.wikipedia.org/wiki/Rsync" target="_blank" rel="noopener">rsync</a>是unix/linux下同步文件的一个高效算法，它能同步更新两处计算机的文件与目录，并适当利用查找文件中的不同块以减少数据传输。rsync中一项与其他大部分类似程序或协定中所未见的重要特性是镜像是只对有变更的部分进行传送。rsync可拷贝／显示目录属性，以及拷贝文件，并可选择性的压缩以及递归拷贝。rsync利用由<a href="http://en.wikipedia.org/wiki/Andrew_Tridgell" target="_blank" rel="noopener">Andrew Tridgell</a>发明的算法。这里不介绍其使用方法，只介绍其核心算法。我们可以看到，Unix下的东西，一个命令，一个工具都有很多很精妙的东西，怎么学也学不完，这就是<a href="https://coolshell.cn/articles/2322.html" title="Unix传奇(上篇)" target="_blank" rel="noopener">Unix的文化</a>啊。</p>
+        <p><a href="http://en.wikipedia.org/wiki/Rsync" target="_blank" rel="noopener">rsync</a>是unix/linux下同步文件的一个高效算法，它能同步更新两处计算机的文件与目录，并适当利用查找文件中的不同块以减少数据传输。rsync中一项与其他大部分类似程序或协定中所未见的重要特性是镜像是只对有变更的部分进行传送。rsync可拷贝／显示目录属性，以及拷贝文件，并可选择性的压缩以及递归拷贝。rsync利用由<a href="http://en.wikipedia.org/wiki/Andrew_Tridgell" target="_blank" rel="noopener">Andrew Tridgell</a>发明的算法。这里不介绍其使用方法，只介绍其核心算法。我们可以看到，Unix下的东西，一个命令，一个工具都有很多很精妙的东西，怎么学也学不完，这就是<a href="https://coolshell.cn/articles/2322.html" target="_blank" rel="noopener" title="Unix传奇(上篇)">Unix的文化</a>啊。</p>
 <p>本来不想写这篇文章的，因为原先发现有很多中文blog都说了这个算法，但是看了一下，发现这些中文blog要么翻译国外文章翻译地非常烂，要么就是介绍这个算法介绍得很乱让人看不懂，还有错误，误人不浅，所以让我觉得有必要写篇rsync算法介绍的文章。（当然，我成文比较仓促，可能会有一些错误，请指正）</p>
 <a id="more"></a>
 <h2 id="问题"><a class="header-anchor" href="#问题"></a>问题</h2>
@@ -309,7 +309,7 @@
 <p>rsync的算法如下：（<strong>假设我们同步源文件名为fileSrc，同步目的文件叫fileDst</strong>）</p>
 <p>1）<strong>分块Checksum算法</strong>。首先，我们会把fileDst的文件平均切分成若干个小块，比如每块512个字节（最后一块会小于这个数），然后对每块计算两个checksum，</p>
 <ul>
-<li>一个叫<a href="http://en.wikipedia.org/wiki/Rolling_hash" target="_blank" rel="noopener">rolling checksum</a>，是弱checksum，32位的checksum，其使用的是Mark Adler发明的<a href="http://en.wikipedia.org/wiki/Adler-32" title="Adler-32" target="_blank" rel="noopener">adler-32</a>算法，</li>
+<li>一个叫<a href="http://en.wikipedia.org/wiki/Rolling_hash" target="_blank" rel="noopener">rolling checksum</a>，是弱checksum，32位的checksum，其使用的是Mark Adler发明的<a href="http://en.wikipedia.org/wiki/Adler-32" target="_blank" rel="noopener" title="Adler-32">adler-32</a>算法，</li>
 <li>另一个是强checksum，128位的，以前用md4，现在用md5 hash算法。</li>
 </ul>
 <p>为什么要这样？因为若干年前的硬件上跑md4的算法太慢了，所以，我们需要一个快算法来鉴别文件块的不同，但是弱的adler32算法碰撞概率太高了，所以我们还要引入强的checksum算法以保证两文件块是相同的。<strong>也就是说，弱的checksum是用来区别不同，而强的是用来确认相同</strong>。（checksum的具体公式可以参看<a href="http://rsync.samba.org/tech_report/node3.html" target="_blank" rel="noopener">这篇文章</a>）</p>

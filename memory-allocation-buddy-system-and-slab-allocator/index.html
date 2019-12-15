@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -57,7 +57,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;buddy.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;slab.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:52.963Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.121Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;buddy.png">
 
@@ -267,14 +267,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2014-01-01 17:39:03" itemprop="dateCreated datePublished" datetime="2014-01-01T17:39:03-08:00">2014-01-01</time>
+              <time title="创建时间：2014-01-02 09:39:03" itemprop="dateCreated datePublished" datetime="2014-01-02T09:39:03-08:00">2014-01-02</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:52" itemprop="dateModified" datetime="2018-03-21T09:15:52-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -316,7 +316,7 @@
 <li>伙伴块的大小是相等的,并且第1块和第2块是伙伴,第三块和第四块是伙伴.以此类推.</li>
 </ol>
 <center>
-<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png" alt="buddy system">
+<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png" alt="buddy system"/>
 </center>
 <h3 id="伙伴算法分配内存"><a class="header-anchor" href="#伙伴算法分配内存"></a>伙伴算法分配内存</h3>
 <p>若申请的内存大小为n则将n向上取整为2的幂设次数为s,则需要分配s大小的内存块,定位大相应数组,</p>
@@ -342,7 +342,7 @@
 <p>Linux 所使用的 slab 分配器的基础是 Jeff Bonwick 为SunOS 操作系统首次引入的一种算法。Jeff的分配器是围绕对象缓存进行的。在内核中，会为有限的对象集（例如文件描述符和其他常见结构）分配大量内存。Jeff发现对内核中普通对象进行初始化所需的时间超过了对其进行分配和释放所需的时间。因此他的结论是不应该将内存释放回一个全局的内存池，而是将内存保持为针对特定目而初始化的状态。例如，如果内存被分配给了一个互斥锁，那么只需在为互斥锁首次分配内存时执行一次互斥锁初始化函数（mutex_init）即可。后续的内存分配不需要执行这个初始化函数，因为从上次释放和调用析构之后，它已经处于所需的状态中了。</p>
 <p>Linux slab分配器使用了这种思想和其他一些思想来构建一个在空间和时间上都具有高效性的内存分配器。</p>
 <center>
-<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/slab.png" alt="slab allocator">
+<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/slab.png" alt="slab allocator"/>
 </center>
 <p>图中给出了 slab结构的高层组织结构。在最高层是 cache_chain，这是一个 slab 缓存的链接列表。这对于 best-fit算法非常有用，可以用来查找最适合所需要的分配大小的缓存（遍历列表）。cache_chain 的每个元素都是一个 kmem_cache 结构的引用（称为一个 cache）。它定义了一个要管理的给定大小的对象池。</p>
 <p>每个缓存都包含了一个 slabs 列表，这是一段连续的内存块（通常都是页面）。存在3 种 slab：<br>

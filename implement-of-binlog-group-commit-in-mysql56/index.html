@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -58,7 +58,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;utialun.bj.bcebos.com&#x2F;resources&#x2F;1436082376.83.2pc.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;utialun.bj.bcebos.com&#x2F;resources&#x2F;1436082689.4.stage_queue.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;utialun.bj.bcebos.com&#x2F;resources&#x2F;1436088683.87.sync_stage.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:50.597Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:25.817Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;utialun.bj.bcebos.com&#x2F;resources&#x2F;1436082376.83.2pc.png">
 
@@ -268,14 +268,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-03-16 07:19:00" itemprop="dateCreated datePublished" datetime="2018-03-16T07:19:00-07:00">2018-03-16</time>
+              <time title="创建时间：2018-03-16 22:19:00" itemprop="dateCreated datePublished" datetime="2018-03-16T22:19:00-07:00">2018-03-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:50" itemprop="dateModified" datetime="2018-03-21T09:15:50-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:25" itemprop="dateModified" datetime="2019-12-15T12:03:25-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -311,7 +311,7 @@
 <p><strong>情况3：</strong> 如果MySQL在InnoDB执行Commit阶段Crash，和情况2类似，由于事务已经成功Prepare，并且存在Binlog文件中，InnoDB在崩溃恢复时，仍然会提交该事务，确保Binlog和InnoDB一致。</p>
 <p>MySQL在实现时，将mysql_bin_log作为2阶段提交的协调者，可以参考MySQL的代码：sql/handler.cc:ha_commit_trans。内部分别调用tc_log-&gt;prepare()和tc_log-&gt;commit()实现2阶段提交，这里的tc_log就是MySQL源码中的全局对象mysql_bin_log。</p>
 <p>伪代码如下：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ha_commit_trans()</span><br><span class="line">  --&gt; tc_log-&gt;prepare()</span><br><span class="line">        --&gt; ha_prepare_low()</span><br><span class="line">              <span class="keyword">for</span> () &#123;</span><br><span class="line">                ht-&gt;prepare() <span class="comment">//存储引擎 hton-&gt;prepare()</span></span><br><span class="line">              &#125;</span><br><span class="line">  --&gt; tc_log-&gt;commit()</span><br><span class="line">        --&gt; MYSQL_BINLOG::ordered_commit()<span class="comment">//做Group Commit</span></span><br><span class="line">              --&gt; MYSQL_BINLOG::process_commit_stage_queue() <span class="comment">//Group Commit的Commit阶段，会调用InnoDB提交</span></span><br><span class="line">                    --&gt; ha_commit_low()</span><br><span class="line">                          <span class="keyword">for</span> () &#123;</span><br><span class="line">                            ht-&gt;commit(); <span class="comment">//存储引擎 hton-&gt;commit()</span></span><br><span class="line">                          &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ha_commit_trans()</span><br><span class="line">  --&gt; tc_log-&gt;<span class="built_in">prepare</span>()</span><br><span class="line">        --&gt; ha_prepare_low()</span><br><span class="line">              <span class="keyword">for</span> () &#123;</span><br><span class="line">                ht-&gt;<span class="built_in">prepare</span>() <span class="comment">//存储引擎 hton-&gt;prepare()</span></span><br><span class="line">              &#125;</span><br><span class="line">  --&gt; tc_log-&gt;commit()</span><br><span class="line">        --&gt; MYSQL_BINLOG::ordered_commit()<span class="comment">//做Group Commit</span></span><br><span class="line">              --&gt; MYSQL_BINLOG::process_commit_stage_queue() <span class="comment">//Group Commit的Commit阶段，会调用InnoDB提交</span></span><br><span class="line">                    --&gt; ha_commit_low()</span><br><span class="line">                          <span class="keyword">for</span> () &#123;</span><br><span class="line">                            ht-&gt;commit(); <span class="comment">//存储引擎 hton-&gt;commit()</span></span><br><span class="line">                          &#125;</span><br></pre></td></tr></table></figure>
 <p>两阶段提交的参与者分别为：binlog_hton和innobase_hton，它们实现了MySQL的存储引擎接口。如果你再深入调研一下，就会发现binlog_hton在2阶段提交时，啥也没干。所有binlog操作都是由协调者mysql_bin_log干的，包括Group Commit，也都是在mysql_bin_log中实现的。下面我们就来分析一下，mysql_bin_log是如何做到Group Commit的，也就是上面的函数ordered_commit()。</p>
 <h2 id="实现"><a class="header-anchor" href="#实现"></a>实现</h2>
 <p>和Level DB的Group Commit类似，MySQL的Group Commit也是维护了一个队列，第一个进入队列的线程就是Leader，负责写binlog。其他的线程是Flower，Flower不需要操作，只需要等待完成的通知即可。但是如果只用一个队列的话，在Group Commit进行中的时候，后来的线程就得等待，还可以进一步优化，MySQL把这个过程分裂成了3个阶段：FLUSH_STAGE，SYNC_STAGE和COMMIT_STAGE。它们像流水线一样工作，每个阶段都会涉及一批事务，它们组成一个Group。可以这样理解，事务刚提交时，处于FLUSH阶段，同时处于FLUSH阶段的事务为一个队列，形成一个Group，只有队列的头，Leader在干活，FLUSH完成以后，Leader进入SYNC阶段（所有的Flower也都进入SYNC阶段）。这时，新提交的事务可以进入FLUSH阶段，它们又会产生一个新的Leader，如此不断的推进。每个阶段都需要一个队列，所以MySQL在Group Commit时，需要3个队列。如下图所示，队列通过thd-&gt;next_to_commit连接：</p>

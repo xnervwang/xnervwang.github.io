@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -60,7 +60,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;栈回退.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;异常捕获机制.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;异常抛出.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:54.240Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;函数栈框架.png">
 
@@ -270,14 +270,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-10-26 07:36:00" itemprop="dateCreated datePublished" datetime="2017-10-26T07:36:00-07:00">2017-10-26</time>
+              <time title="创建时间：2017-10-26 22:36:00" itemprop="dateCreated datePublished" datetime="2017-10-26T22:36:00-07:00">2017-10-26</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:54" itemprop="dateModified" datetime="2018-03-21T09:15:54-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -325,7 +325,7 @@
 <p>下面我们来看个具体例子：</p>
 <p>假设有 FuncA、FuncB 和 FuncC 三个函数，每个函数均接收两个整形值作为其参数。在某线程上的某一时间段内，FuncA 调用了 FuncB，而 FuncB 又调用了 FuncC。则，它们的栈框架看起来应该像这样：</p>
 <center>
-<img src="/assets/analysis-about-cpp-exception-implementation/函数栈框架.png" alt="函数栈框架">
+<img src="/assets/analysis-about-cpp-exception-implementation/函数栈框架.png" alt="函数栈框架"/>
 </center>
 图1 函数调用栈框架示例
 <p>正如上图所示的那样，随着函数被逐级调用，编译器会为每一个函数建立自己的栈框架，栈空间逐渐消耗。随着函数的逐级返回，该函数的栈框架也将被逐级销毁，栈空间得以逐步释放。顺便说一句，递归函数的嵌套调用深度通常也是取决于运行时栈空间的剩余尺寸。</p>
@@ -339,7 +339,7 @@
 </ol>
 <p>以上两者满足其一即可。为了能够成功地捕获异常和正确地完成栈回退（stack unwind），编译器必须要引入一些额外的数据结构和相应的处理机制。我们首先来看看引入了异常处理机制的栈框架大概是什么样子：</p>
 <center>
-<img src="/assets/analysis-about-cpp-exception-implementation/C++函数调用栈.png" alt="C++函数调用栈">
+<img src="/assets/analysis-about-cpp-exception-implementation/C++函数调用栈.png" alt="C++函数调用栈"/>
 </center>
 图2 C++函数调用栈框架示例
 <p>由图2可见，在每个 C++ 函数的栈框架中都多了一些东西。仔细观察的话，你会发现，多出来的东西正好是一个 EXP 类型的结构体。进一步分析就会发现，这是一个典型的单向链表式结构：</p>
@@ -356,7 +356,7 @@
 <p>受益于栈回退机制的引入，以及 C++ 类所支持的“资源申请即初始化”语意，使得我们终于能够彻底告别既不优雅也不安全的 setjmp/longjmp 调用，简便又安全地实现远程跳转了。我想这也是 C++ 异常处理机制在错误处理以外唯一一种合理的应用方式了。</p>
 <p>下面我们就来具体看看编译器是如何实现栈回退机制的：</p>
 <center>
-<img src="/assets/analysis-about-cpp-exception-implementation/栈回退.png" alt="栈回退">
+<img src="/assets/analysis-about-cpp-exception-implementation/栈回退.png" alt="栈回退"/>
 </center>
 图3 C++ 栈回退机制
 <p>图3中的“FuncUnWind”函数内，所有真实代码均以黑色和蓝色字体标示，编译器生成的代码则由灰色和橙色字体标明。此时，在图2里给出的 nStep 变量和 tblUnwind 成员作用就十分明显了。</p>
@@ -367,7 +367,7 @@
 <h2 id="异常捕获机制"><a class="header-anchor" href="#异常捕获机制"></a>异常捕获机制</h2>
 <p>一个异常被抛出时，就会立即引发 C++ 的异常捕获机制：</p>
 <center>
-<img src="/assets/analysis-about-cpp-exception-implementation/异常捕获机制.png" alt="异常捕获机制">
+<img src="/assets/analysis-about-cpp-exception-implementation/异常捕获机制.png" alt="异常捕获机制"/>
 </center>
 图4 C++ 异常捕获机制
 <p>在上一小节中，我们已经看到了 <code>nStep</code> 变量在跟踪对象构造、析构方面的作用。实际上 nStep 除了能够跟踪对象创建、销毁阶段以外，还能够标识当前执行点是否在 try 块中，以及（如果当前函数有多个 try 块的话）究竟在哪个 try 块中。这是通过在每一个 try 块的入口和出口各为 nStep 赋予一个唯一 ID 值，并确保 nStep 在对应 try 块内的变化恰在此范围之内来实现的。</p>
@@ -382,7 +382,7 @@
 <h2 id="异常的抛出"><a class="header-anchor" href="#异常的抛出"></a>异常的抛出</h2>
 <p>接下来讨论整个 C++ 异常处理机制中的最后一个环节，异常的抛出：</p>
 <center>
-<img src="/assets/analysis-about-cpp-exception-implementation/异常抛出.png" alt="异常抛出">
+<img src="/assets/analysis-about-cpp-exception-implementation/异常抛出.png" alt="异常抛出"/>
 </center>
 图5 C++ 异常抛出
 <p>在编译一段 C++ 代码时，编译器会将所有 throw 语句替换为其 C++ 运行时库中的某一指定函数，这里我们叫它 <code>__CxxRTThrowExp</code>（与本文提到的所有其它数据结构和属性名一样，在实际应用中它可以是任意名称）。该函数接收一个编译器认可的内部结构（我们叫它 <code>EXCEPTION</code> 结构）。这个结构中包含了待抛出异常对象的起始地址、用于销毁它的析构函数，以及它的 type_info 信息。对于没有启用 RTTI 机制（编译器禁用了 RTTI 机制或没有在类层次结构中使用虚表）的异常类层次结构，可能还要包含其所有基类的 type_info 信息，以便与相应的 catch 块进行匹配。</p>
@@ -424,8 +424,8 @@
 </tr>
 <tr>
 <td>异常的抛出、捕获和栈回退</td>
-<td>异常的抛出是一次 O(1) 级操作。在单个函数中进行捕获和栈回退也均为 O(1) 操作。<br><br>但异常捕获的总体成本为 O(m)，其中 m 等于当前函数调用栈中，从抛出异常的位置到达匹配 catch 块之间所经过的函数调用中，包含 try 块（即：定义了有效 tblTryBlocks[]）的函数个数。<br><br>栈回退的总成本为 O(n)，其中 n 等于当前函数调用栈中，从抛出异常的位置到达匹配 catch 块之间所经过的函数调用数。</td>
-<td>在异常处理结束前，需保存异常对象及其析构函数指针和相应的 type_info 信息。<br><br>具体根据对象尺寸、编译器选项（是否开启 RTTI）及异常捕获器的参数传递方式（传值或传址）等因素有较大变化。典型情况下小于 256 字节。</td>
+<td>异常的抛出是一次 O(1) 级操作。在单个函数中进行捕获和栈回退也均为 O(1) 操作。<br/><br/>但异常捕获的总体成本为 O(m)，其中 m 等于当前函数调用栈中，从抛出异常的位置到达匹配 catch 块之间所经过的函数调用中，包含 try 块（即：定义了有效 tblTryBlocks[]）的函数个数。<br/><br/>栈回退的总成本为 O(n)，其中 n 等于当前函数调用栈中，从抛出异常的位置到达匹配 catch 块之间所经过的函数调用数。</td>
+<td>在异常处理结束前，需保存异常对象及其析构函数指针和相应的 type_info 信息。<br/><br/>具体根据对象尺寸、编译器选项（是否开启 RTTI）及异常捕获器的参数传递方式（传值或传址）等因素有较大变化。典型情况下小于 256 字节。</td>
 </tr>
 </tbody>
 </table>

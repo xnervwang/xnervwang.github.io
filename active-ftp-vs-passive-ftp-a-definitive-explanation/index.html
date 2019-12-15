@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -57,7 +57,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;slacksite.com&#x2F;images&#x2F;ftp&#x2F;activeftp.gif">
 <meta property="og:image" content="http:&#x2F;&#x2F;slacksite.com&#x2F;images&#x2F;ftp&#x2F;passiveftp.gif">
-<meta property="og:updated_time" content="2018-03-21T16:15:54.486Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:27.044Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;slacksite.com&#x2F;images&#x2F;ftp&#x2F;activeftp.gif">
 
@@ -267,14 +267,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-02-19 22:34:00" itemprop="dateCreated datePublished" datetime="2018-02-19T22:34:00-08:00">2018-02-19</time>
+              <time title="创建时间：2018-02-20 14:34:00" itemprop="dateCreated datePublished" datetime="2018-02-20T14:34:00-08:00">2018-02-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:54" itemprop="dateModified" datetime="2018-03-21T09:15:54-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:27" itemprop="dateModified" datetime="2019-12-15T12:03:27-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -316,7 +316,7 @@
 </ul>
 <p>When drawn out, the connection appears as follows:</p>
 <center>
-<img src="http://slacksite.com/images/ftp/activeftp.gif" alt="Active FTP">
+<img src="http://slacksite.com/images/ftp/activeftp.gif" alt="Active FTP"/>
 </center>
 <p>In step 1, the client’s command port contacts the server’s command port and sends the command <code>PORT 1027</code>. The server then sends an ACK back to the client’s command port in step 2. In step 3 the server initiates a connection on its local data port to the data port the client specified earlier. Finally, the client sends an ACK back as shown in step 4.</p>
 <p>The main problem with active mode FTP actually falls on the client side. The FTP client doesn’t make the actual connection to the data port of the server–it simply tells the server what port it is listening on and the server connects back to the specified port on the client. From the client side firewall this appears to be an outside system initiating a connection to an internal client–something that is usually blocked.</p>
@@ -362,7 +362,7 @@ ftp&gt; <strong>quit</strong><br>
 </ul>
 <p>When drawn, a passive mode FTP connection looks like this:</p>
 <center>
-<img src="http://slacksite.com/images/ftp/passiveftp.gif" alt="Passive FTP">
+<img src="http://slacksite.com/images/ftp/passiveftp.gif" alt="Passive FTP"/>
 </center>
 <p>In step 1, the client contacts the server on the command port and issues the <code>PASV</code> command. The server then replies in step 2 with <code>PORT 2024</code>, telling the client which port it is listening to for the data connection. In step 3 the client then initiates the data connection from its data port to the specified server data port. Finally, the server sends back an ACK in step 4 to the client’s data port.</p>
 <p>While passive mode FTP solves many of the problems from the client side, it opens up a whole range of problems on the server side. The biggest issue is the need to allow any remote connection to high numbered ports on the server. Fortunately, many FTP daemons, including the popular WU-FTPD allow the administrator to specify a range of ports which the FTP server will use. See <a href="#appendix-1">Appendix 1</a> for more information.</p>
@@ -408,11 +408,11 @@ ftp&gt; <strong>quit</strong><br>
 <blockquote>
 <p><samp>Active FTP :<br>
 command : client &gt;1023 -&gt; server 21<br>
-data    : client &gt;1023 &lt;- server 20</samp></p>
+data    : client &gt;1023 &lt;- server 20</p>
 <p>Passive FTP :<br>
 command : client &gt;1023 -&gt; server 21<br>
 data    : client &gt;1024 -&gt; server &gt;1023<br>
-</p>
+</samp></p>
 </blockquote>
 <p>A quick summary of the pros and cons of active vs. passive FTP is also in order:</p>
 <p>Active FTP is beneficial to the FTP server admin, but detrimental to the client side admin. The FTP server attempts to make connections to random high ports on the client, which would almost certainly be blocked by a firewall on the client side. Passive FTP is beneficial to the client, but detrimental to the FTP server admin. The client will make both connections to the server, but one of them will be to a random high port, which would almost certainly be blocked by a firewall on the server side.</p>

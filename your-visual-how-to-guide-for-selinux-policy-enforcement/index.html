@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -73,7 +73,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;images&#x2F;life-uploads&#x2F;mls-enforcement_05_chigreyeating.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;images&#x2F;life-uploads&#x2F;mls-enforcement_03_chichoke.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;images&#x2F;life-uploads&#x2F;mls-enforcement_06_nocatchow.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:52.934Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;styles&#x2F;image-full-size&#x2F;public&#x2F;lead-images&#x2F;selinux_rules_lead_image.png?itok=N4TKqxei">
 
@@ -283,14 +283,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2013-11-12 08:00:00" itemprop="dateCreated datePublished" datetime="2013-11-12T08:00:00-08:00">2013-11-12</time>
+              <time title="创建时间：2013-11-13 00:00:00" itemprop="dateCreated datePublished" datetime="2013-11-13T00:00:00-08:00">2013-11-13</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:52" itemprop="dateModified" datetime="2018-03-21T09:15:52-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -325,7 +325,7 @@
 <p>Lets look a little further into the labels. The SELinux primary model or enforcement is called <em>type enforcement</em>. Basically this means we define the label on a process based on its type, and the label on a file system object based on its type.</p>
 <p><em>Analogy</em></p>
 <p>Imagine a system where we define types on objects like cats and dogs. A cat and dog are process types.</p>
-<p><em>*all cartoons by <a href="https://opensource.com/users/mairin" title="profile on Opensource.com" target="_blank" rel="noopener">Máirín Duffy</a></em></p>
+<p><em>*all cartoons by <a href="https://opensource.com/users/mairin" target="_blank" rel="noopener" title="profile on Opensource.com">Máirín Duffy</a></em></p>
 <p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_01_catdog.png" alt="Image showing a cartoon of a cat and dog."></p>
 <p>We have a class of objects that they want to interact with which we call food. And I want to add types to the food, <em>cat_food</em> and <em>dog_food</em>.</p>
 <p><img src="https://opensource.com/sites/default/files/images/life-uploads/type-enforcement_03_foods.png" alt="Cartoon Cat eating Cat Food and Dog eating Dog Food"></p>
@@ -359,8 +359,8 @@
 <p><img src="https://opensource.com/sites/default/files/images/life-uploads/mcs-enforcement_06_fido-no-spot-food.png" alt="Cartoon of Kernel (Penquin) holding leash to prevent Fido from eating spots dog food."></p>
 <p><em>Real world</em></p>
 <p>In computer systems we often have lots of processes all with the same access, but we want them separated from each other. We sometimes call this a <em>multi-tenant environment</em>. The best example of this is virtual machines. If I have a server running lots of virtual machines, and one of them gets hacked, I want to prevent it from attacking the other virtual machines and virtual machine images. But in a type enforcement system the KVM virtual machine is labeled <em>svirt_t</em> and the image is labeled <em>svirt_image_t</em>. We have rules that say <em>svirt_t</em> can read/write/delete content labeled <em>svirt_image_t</em>. With libvirt we implemented not only type enforcement separation, but also MCS separation. When libvirt is about to launch a virtual machine it picks out a random MCS label like <em>s0:c1,c2</em>, it then assigns the <em>svirt_image_t:s0:c1,c2</em> label to all of the content that the virtual machine is going to need to manage. Finally, it launches the virtual machine as <em>svirt_t:s0:c1,c2</em>. Then, the SELinux kernel controls that <em>svirt_t:s0:c1,c2</em> can not write to <em>svirt_image_t:s0:c3,c4</em>, even if the virtual machine is controled by a hacker and takes it over. Even if it is running as root.</p>
-<p>We use <a href="http://people.fedoraproject.org/~dwalsh/SELinux/Presentations/openshift_selinux.ogv" title="SELinux and OpenShift" target="_blank" rel="noopener">similar separation</a> in OpenShift. Each gear (user/app process)runs with the same SELinux type (openshift_t). Policy defines the rules controlling the access of the gear type and a unique MCS label to make sure one gear can not interact with other gears.</p>
-<p>Watch <a href="http://people.fedoraproject.org/~dwalsh/SELinux/Presentations/openshift_selinux.ogv" title="Fedora Project: Openshift gear becomes root" target="_blank" rel="noopener">this short video</a> on what would happen if an Openshift gear became root.</p>
+<p>We use <a href="http://people.fedoraproject.org/~dwalsh/SELinux/Presentations/openshift_selinux.ogv" target="_blank" rel="noopener" title="SELinux and OpenShift">similar separation</a> in OpenShift. Each gear (user/app process)runs with the same SELinux type (openshift_t). Policy defines the rules controlling the access of the gear type and a unique MCS label to make sure one gear can not interact with other gears.</p>
+<p>Watch <a href="http://people.fedoraproject.org/~dwalsh/SELinux/Presentations/openshift_selinux.ogv" target="_blank" rel="noopener" title="Fedora Project: Openshift gear becomes root">this short video</a> on what would happen if an Openshift gear became root.</p>
 <h3 id="mls-enforcement"><a class="header-anchor" href="#mls-enforcement"></a>MLS enforcement</h3>
 <p>Another form of SELinux enforcement, used much less frequently, is called Multi Level Security (MLS); it was developed back in the 60s and is used mainly in trusted operating systems like Trusted Solaris.</p>
 <p>The main idea is to control processes based on the level of the data they will be using. A <em>secret</em> process can not read <em>top secret</em> data.</p>

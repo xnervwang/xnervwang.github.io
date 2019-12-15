@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -84,7 +84,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;23-design-patterns-analysis&#x2F;27.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;23-design-patterns-analysis&#x2F;28.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;23-design-patterns-analysis&#x2F;29.jpg">
-<meta property="og:updated_time" content="2018-03-21T16:15:50.398Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:25.424Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;23-design-patterns-analysis&#x2F;1.jpg">
 
@@ -294,14 +294,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-11-03 21:31:00" itemprop="dateCreated datePublished" datetime="2017-11-03T21:31:00-07:00">2017-11-03</time>
+              <time title="创建时间：2017-11-04 12:31:00" itemprop="dateCreated datePublished" datetime="2017-11-04T12:31:00-07:00">2017-11-04</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:50" itemprop="dateModified" datetime="2018-03-21T09:15:50-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:25" itemprop="dateModified" datetime="2019-12-15T12:03:25-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -416,11 +416,11 @@
 每个具体工厂类可以创建多个具体产品类的实例，也就是创建的是一个产品线下的多个产品。</p>
 <p>区别：<br>
 工厂方法模式只有一个抽象产品类，而抽象工厂模式有多个。<br>
-工厂方法模式的具体工厂类只能创建一个具体产品类的实例，而抽象工厂模式可以创建多个。</p>
+工厂方法模式的具体工厂类只能创建一个具体产品类的实例，而抽象工厂模式可以创建多个。</pre></p>
 </blockquote>
 <blockquote>
 <p>工厂方法创建 “一种” 产品，他的着重点在于&quot;怎么创建&quot;，也就是说如果你开发，你的大量代码很可能围绕着这种产品的构造，初始化这些细节上面。也因为如此，类似的产品之间有很多可以复用的特征，所以会和模版方法相随。</p>
-<p>抽象工厂需要创建一些列产品，着重点在于&quot;创建哪些&quot;产品上，也就是说，如果你开发，你的主要任务是划分不同差异的产品线，并且尽量保持每条产品线接口一致，从而可以从同一个抽象工厂继承。</p>
+<p>抽象工厂需要创建一些列产品，着重点在于&quot;创建哪些&quot;产品上，也就是说，如果你开发，你的主要任务是划分不同差异的产品线，并且尽量保持每条产品线接口一致，从而可以从同一个抽象工厂继承。</pre></p>
 </blockquote>
 <blockquote>
 <p>对于java来说，你能见到的大部分抽象工厂模式都是这样的：<br>
@@ -429,7 +429,7 @@
 <p>这样A和B就是工厂，对应于抽象工厂；<br>
 每个工厂生产的鼠标和键盘就是产品，对应于工厂方法；</p>
 <p>用了工厂方法模式，你替换生成键盘的工厂方法，就可以把键盘从罗技换到微软。但是用了抽象工厂模式，你只要换家工厂，就可以同时替换鼠标和键盘一套。如果你要的产品有几十个，当然用抽象工厂模式一次替换全部最方便（这个工厂会替你用相应的工厂方法）</p>
-<p>所以说抽象工厂就像工厂，而工厂方法则像是工厂的一种产品生产线</p>
+<p>所以说抽象工厂就像工厂，而工厂方法则像是工厂的一种产品生产线</pre></p>
 </blockquote>
 <h4 id="3-单例模式-singleton"><a class="header-anchor" href="#3-单例模式-singleton"></a>3、单例模式（Singleton）</h4>
 <p>单例对象（Singleton）是一种常用的设计模式。在Java应用中，单例对象能保证在一个JVM中，该对象只有一个实例存在。这样的模式有几个好处：</p>

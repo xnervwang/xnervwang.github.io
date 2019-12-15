@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -59,7 +59,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;www.sqlshack.com&#x2F;wp-content&#x2F;uploads&#x2F;2017&#x2F;02&#x2F;word-image-60.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;www.sqlshack.com&#x2F;wp-content&#x2F;uploads&#x2F;2017&#x2F;02&#x2F;word-image-61.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;www.sqlshack.com&#x2F;wp-content&#x2F;uploads&#x2F;2017&#x2F;02&#x2F;word-image-62.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:50.461Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:25.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;www.sqlshack.com&#x2F;wp-content&#x2F;uploads&#x2F;2017&#x2F;02&#x2F;word-image-59.png">
 
@@ -269,14 +269,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-02-20 07:05:00" itemprop="dateCreated datePublished" datetime="2018-02-20T07:05:00-08:00">2018-02-20</time>
+              <time title="创建时间：2018-02-20 23:05:00" itemprop="dateCreated datePublished" datetime="2018-02-20T23:05:00-08:00">2018-02-20</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:50" itemprop="dateModified" datetime="2018-03-21T09:15:50-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:25" itemprop="dateModified" datetime="2019-12-15T12:03:25-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -317,19 +317,19 @@
 <p>The test instance that will use has16Gb of RAM in the Server and I have allocated 8Gb to SQL Server, by running the following query I can see the top 5 memory consumers by clerk type and see how much they are using.</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> TOP(<span class="number">5</span>) [<span class="keyword">type</span>] <span class="keyword">AS</span> [ClerkType],</span><br><span class="line"><span class="keyword">SUM</span>(pages_kb) / <span class="number">1024</span> <span class="keyword">AS</span> [SizeMb]</span><br><span class="line"><span class="keyword">FROM</span> sys.dm_os_memory_clerks <span class="keyword">WITH</span> (NOLOCK)</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> [<span class="keyword">type</span>]</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="keyword">SUM</span>(pages_kb) <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
 <center>
-<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-59.png">
+<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-59.png" />
 </center>
 <p>As I would expect the Buffer Pool is the largest consumer of memory within the instance with just over 4.5Gb allocated. The lock manager is next with just over 1Gb allocated for lock resources and the remaining clerks relate to allocations for the query plan. The CACHESTORE_OBJCP allocation refers to plans for stored procedures and functions. The CACHESTORE_SQLCP are plans not within those object types and refer to statements executed directly against SQL Server whilst the CACHESTORE_PHDR row shows algebrized trees for various objects.</p>
 <p>On a busy SQL Server this information is really useful for us to capture at regular intervals so we can closely monitor memory allocation under normal workloads. If we were to experience performance problems where we suspect memory pressure we can repeat the query to see if memory is being allocated differently.</p>
 <p>As an example here’s the same query taken when a full database consistency check is being ran against one of my test databases. We can see here that there’s a new memory clerk that is now in our top 5 allocations list, this particular clerk, SQLQERESERVATIONS is related to Memory Grant allocations within SQL Server.</p>
 <center>
-<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-60.png">
+<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-60.png" />
 </center>
 <p>Upon seeing the SQLQERESERVATIONS we can query the current memory grants using the sys.dm_exec_query_memory_grants DMV and by using the CROSS APPLY function to sys.dm_exec_sql_text we can return the query text that is associated with the process.</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> session_id, requested_memory_kb / <span class="number">1024</span> <span class="keyword">as</span> RequestedMemMb,</span><br><span class="line">granted_memory_kb / <span class="number">1024</span> <span class="keyword">as</span> GrantedMemMb, <span class="built_in">text</span></span><br><span class="line"><span class="keyword">FROM</span> sys.dm_exec_query_memory_grants qmg</span><br><span class="line"><span class="keyword">CROSS</span> <span class="keyword">APPLY</span> sys.dm_exec_sql_text(sql_handle)</span><br></pre></td></tr></table></figure>
 <p>The query returns the following single result and with only one process running we know the consistency check has had a direct effect on our memory allocations.</p>
 <center>
-<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-61.png">
+<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-61.png" />
 </center>
 <p>Here’s the query text:</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span> @BlobEater VARBINARY(<span class="number">8000</span>)</span><br><span class="line"><span class="keyword">SELECT</span> @BlobEater = CheckIndex (ROWSET_COLUMN_FACT_BLOB)</span><br><span class="line"><span class="keyword">FROM</span> &#123; IRowset <span class="number">0xF022EAB907000000</span> &#125;</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> ROWSET_COLUMN_FACT_KEY</span><br><span class="line">&gt;&gt; <span class="keyword">WITH</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span></span><br><span class="line">              ROWSET_COLUMN_FACT_KEY,</span><br><span class="line">              ROWSET_COLUMN_SLOT_ID,</span><br><span class="line">              ROWSET_COLUMN_COMBINED_ID,</span><br><span class="line">              ROWSET_COLUMN_FACT_BLOB</span><br><span class="line"><span class="keyword">OPTION</span> (<span class="keyword">ORDER</span> <span class="keyword">GROUP</span>)</span><br></pre></td></tr></table></figure>
@@ -338,7 +338,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> TOP <span class="number">5</span> DB_NAME(database_id) <span class="keyword">AS</span> [<span class="keyword">Database</span> <span class="keyword">Name</span>],</span><br><span class="line"><span class="keyword">COUNT</span>(*) * <span class="number">8</span>/<span class="number">1024.0</span> <span class="keyword">AS</span> [Cached <span class="keyword">Size</span> (MB)]</span><br><span class="line"><span class="keyword">FROM</span> sys.dm_os_buffer_descriptors <span class="keyword">WITH</span> (NOLOCK)</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> DB_NAME(database_id)</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> [Cached <span class="keyword">Size</span> (MB)] <span class="keyword">DESC</span> <span class="keyword">OPTION</span> (RECOMPILE);</span><br></pre></td></tr></table></figure>
 <p>Here are the results on a test instance:</p>
 <center>
-<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-62.png">
+<img src="https://www.sqlshack.com/wp-content/uploads/2017/02/word-image-62.png" />
 </center>
 <p>I like to record the results of this query at regular intervals taking note of database memory allocations at various points during the working day or when intensive activities or maintenance is being undertaken. The key is understanding how SQL is working so that once these baseline values have been captured we can compare back to them during troubleshooting to see if any databases are utilising (or have been allocated) memory differently.</p>
 <p>By capturing memory clerk and buffer descriptor usage we can build a picture of how SQL is working under normal workloads. It also means we have this information readily available to us should we need to highlight issues and the effect that they are having on the system.</p>

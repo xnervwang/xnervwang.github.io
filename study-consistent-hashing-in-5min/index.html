@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -62,7 +62,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;study-consistent-hashing-in-5min&#x2F;5.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;study-consistent-hashing-in-5min&#x2F;6.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;study-consistent-hashing-in-5min&#x2F;7.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:53.526Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.456Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;study-consistent-hashing-in-5min&#x2F;1.jpg">
 
@@ -272,14 +272,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2014-04-10 09:21:03" itemprop="dateCreated datePublished" datetime="2014-04-10T09:21:03-07:00">2014-04-10</time>
+              <time title="创建时间：2014-04-11 00:21:03" itemprop="dateCreated datePublished" datetime="2014-04-11T00:21:03-07:00">2014-04-11</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:53" itemprop="dateModified" datetime="2018-03-21T09:15:53-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -317,20 +317,20 @@
 <h2 id="环形hash空间"><a class="header-anchor" href="#环形hash空间"></a>环形Hash空间</h2>
 <p>按照常用的hash算法来将对应的key哈希到一个具有2<sup>32次方个桶的空间中，即0~(2</sup>32)-1的数字空间中。现在我们可以将这些数字头尾相连，想象成一个闭合的环形。如下图</p>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/1.jpg">
+<img src="/assets/study-consistent-hashing-in-5min/1.jpg"/>
 </center>
 <h3 id="把数据通过一定的hash算法处理后映射到环上"><a class="header-anchor" href="#把数据通过一定的hash算法处理后映射到环上"></a>把数据通过一定的hash算法处理后映射到环上</h3>
 <p>现在我们将object1、object2、object3、object4四个对象通过特定的Hash函数计算出对应的key值，然后散列到Hash环上。如下图：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Hash(object1) = key1；</span><br><span class="line">Hash(object2) = key2；</span><br><span class="line">Hash(object3) = key3；</span><br><span class="line">Hash(object4) = key4；</span><br></pre></td></tr></table></figure>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/2.jpg">
+<img src="/assets/study-consistent-hashing-in-5min/2.jpg"/>
 </center>
 <h3 id="将机器通过hash算法映射到环上"><a class="header-anchor" href="#将机器通过hash算法映射到环上"></a>将机器通过hash算法映射到环上</h3>
 <p>在采用一致性哈希算法的分布式集群中将新的机器加入，其原理是通过使用与对象存储一样的Hash算法将机器也映射到环中（一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值），然后以顺时针的方向计算，将所有对象存储到离自己最近的机器中。<br>
 假设现在有NODE1，NODE2，NODE3三台机器，通过Hash算法得到对应的KEY值，映射到环中，其示意图如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hash(NODE1) = KEY1;</span><br><span class="line">Hash(NODE2) = KEY2;</span><br><span class="line">Hash(NODE3) = KEY3;</span><br></pre></td></tr></table></figure>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/3.jpg">
+<img src="/assets/study-consistent-hashing-in-5min/3.jpg"/>
 </center>
 <p>通过上图可以看出对象与机器处于同一哈希空间中，这样按顺时针转动object1存储到了NODE1中，object3存储到了NODE2中，object2、object4存储到了NODE3中。在这样的部署环境中，hash环是不会变更的，因此，通过算出对象的hash值就能快速的定位到对应的机器中，这样就能找到对象真正的存储位置了。</p>
 <h2 id="机器的删除与添加"><a class="header-anchor" href="#机器的删除与添加"></a>机器的删除与添加</h2>
@@ -340,14 +340,14 @@
 <p>节点（机器）的删除<br>
 以上面的分布为例，如果NODE2出现故障被删除了，那么按照顺时针迁移的方法，object3将会被迁移到NODE3中，这样仅仅是object3的映射位置发生了变化，其它的对象没有任何的改动。如下图：</p>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/4.jpg">
+<img src="/assets/study-consistent-hashing-in-5min/4.jpg"/>
 </center>
 </li>
 <li>
 <p>节点（机器）的添加<br>
 如果往集群中添加一个新的节点NODE4，通过对应的哈希算法得到KEY4，并映射到环中，如下图：</p>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/5.jpg">
+<img src="/assets/study-consistent-hashing-in-5min/5.jpg"/>
 </center>
 <p>通过按顺时针迁移的规则，那么object2被迁移到了NODE4中，其它对象还保持这原有的存储位置。通过对节点的添加和删除的分析，一致性哈希算法在保持了单调性的同时，还是数据的迁移达到了最小，这样的算法对分布式集群来说是非常合适的，避免了大量数据迁移，减小了服务器的的压力。</p>
 </li>
@@ -357,11 +357,11 @@
 ——<font color="red">“虚拟节点”（ virtual node ）是实际节点（机器）在 hash 空间的复制品（ replica ），一实际个节点（机器）对应了若干个“虚拟节点”，这个对应个数也成为“复制个数”，“虚拟节点”在 hash 空间中以hash值排列。</font><br>
 以上面只部署了NODE1和NODE3的情况（NODE2被删除的图）为例，之前的对象在机器上的分布很不均衡，现在我们以2个副本（复制个数）为例，这样整个hash环中就存在了4个虚拟节点，最后对象映射的关系图如下：</p>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/6.png">
+<img src="/assets/study-consistent-hashing-in-5min/6.png"/>
 </center>
 <p>根据上图可知对象的映射关系：object1-&gt;NODE1-1，object2-&gt;NODE1-2，object3-&gt;NODE3-2，object4-&gt;NODE3-1。通过虚拟节点的引入，对象的分布就比较均衡了。那么在实际操作中，正真的对象查询是如何工作的呢？对象从hash到虚拟节点到实际节点的转换如下图：</p>
 <center>
-<img src="/assets/study-consistent-hashing-in-5min/7.png">
+<img src="/assets/study-consistent-hashing-in-5min/7.png"/>
 </center>
 <p>“虚拟节点”的hash计算可以采用对应节点的IP地址加数字后缀的方式。例如假设NODE1的IP地址为192.168.1.100。引入“虚拟节点”前，计算 cache A 的 hash 值：<br>
 Hash(“192.168.1.100”);<br>

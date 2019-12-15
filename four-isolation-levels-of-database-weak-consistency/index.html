@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -60,7 +60,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;3.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;4.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;5.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:50.681Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:25.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;1.png">
 
@@ -270,14 +270,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-02-19 03:21:00" itemprop="dateCreated datePublished" datetime="2018-02-19T03:21:00-08:00">2018-02-19</time>
+              <time title="创建时间：2018-02-19 19:21:00" itemprop="dateCreated datePublished" datetime="2018-02-19T19:21:00-08:00">2018-02-19</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:50" itemprop="dateModified" datetime="2018-03-21T09:15:50-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:25" itemprop="dateModified" datetime="2019-12-15T12:03:25-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -334,7 +334,7 @@
 <p>此时再次执行查询1中的select操作，我们发现查询结果跟第一次相同，所以这个叫做可重复读操作。但是可重复读操作并不是特定指两次读取的数据一模一样，Repeatable Read存在的一个问题是幻读，就是第二次读取的数据返回的条目数比第一次返回的条目数更多。</p>
 <p>比如在Repeatable Read隔离级别下，事务1第一次执行查询<code>select id from users where id&gt;1 and id &lt;10</code>，返回的结果是2，4，6，8。这个时候事务1没有提交，那么对2，4，6，8上面依然保持有S锁。此时事务2执行一次插入操作insert into user(id) valuse(3)，插入成功。此时再次执行事务1中的查询，那么返回结果就是2，<span style="color: #ff0000;">3</span>，4，6，8。这里的3就是因为幻读而出现的。因此可以得出结论：<strong><span style="color: #ff0000;">REPEATABLE READ隔离级别保证了在相同的查询条件下，同一个事务中的两个查询，第二次读取的内容肯定包换第一次读到的内容。</span></strong></p>
 <h2 id="serializable"><a class="header-anchor" href="#serializable"></a>SERIALIZABLE</h2>
-<p>SERIALIZABLE 是限制性最强的隔离级别，因为该级别<span style="color: #ff0000;"><strong>锁定整个范围的键</strong></span>，并一直持有锁，直到事务完成。该级别包括REPEATABLE READ，并增加了在事务完成之前，其他事务不能向事务已读取的范围<strong>插入新行</strong>的限制。比如，事务1读取了一系列满足搜索条件的行。事务2在执行SQL statement产生一行或者多行满足事务1搜索条件的行时会冲突，则事务2回滚。这时事务1再次读取了一系列满足相同搜索条件的行，第二次读取的结果和第一次读取的结果相同。</p>
+<p>SERIALIZABLE 是限制性最强的隔离级别，因为该级别<span style="color: #ff0000;"><strong>锁定整个范围的键</strong></span>，并一直持有锁，直到事务完成。该级别包括REPEATABLE READ，并增加了在事务完成之前，其他事务不能向事务已读取的范围<strong>插入新行</strong>的限制。比如，事务1读取了一系列满足搜索条件的行。事务2在执行SQL statement产生一行或者多行满足事务1搜索条件的行时会冲突，则事务2</span>回滚。这时事务1</span>再次读取了一系列满足相同搜索条件的行，第二次读取的结果和第一次读取的结果相同。</p>
 <h2 id="重复读与幻读"><a class="header-anchor" href="#重复读与幻读"></a>重复读与幻读</h2>
 <p>重复读是为了保证在一个事务中，相同查询条件下读取的数据值不发生改变，但是不能保证下次同样条件查询，结果记录数不会增加。</p>
 <p>幻读就是为了解决这个问题而存在的，他将这个查询范围都加锁了，所以就不能再往这个范围内插入数据，这就是SERIALIZABLE 隔离级别做的事情。</p>

@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="IOCP wiki  使用CreateIoCompletionPort函数创建IOCP，还可以把socket或文件句柄与IOCP关联起来。 一个线程，第一次调用GetQueuedCompletionStatus函数时，该线程变为关联了该IOCP的线程，直道下述三种情形之一发生：  该线程退出； 该线程调用GetQueuedCompletionStatus函数关联到其他的IOCP； 该IOCP被关闭">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-21T16:15:53.254Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:26.282Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/iocp-usage-and-inside/">
@@ -264,14 +264,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2017-10-22 06:40:00" itemprop="dateCreated datePublished" datetime="2017-10-22T06:40:00-07:00">2017-10-22</time>
+              <time title="创建时间：2017-10-22 21:40:00" itemprop="dateCreated datePublished" datetime="2017-10-22T21:40:00-07:00">2017-10-22</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:53" itemprop="dateModified" datetime="2018-03-21T09:15:53-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:26" itemprop="dateModified" datetime="2019-12-15T12:03:26-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -331,23 +331,17 @@
 <ol>
 <li>创建一个完成端口；</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; Port port = createIoCompletionPort(INVALID_HANDLE_VALUE, <span class="number">0</span>, <span class="number">0</span>, fixedThreadCount());</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Port port = createIoCompletionPort(INVALID_HANDLE_VALUE, <span class="number">0</span>, <span class="number">0</span>, fixedThreadCount());</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>创建一个线程 ThreadA；</li>
 <li>ThreadA 线程循环调用 GetQueuedCompletionStatus 方法来得到 I/O 操作结果，这个方法是一个阻塞方法；</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;  While(<span class="keyword">true</span>)&#123;</span><br><span class="line">&gt; 	 getQueuedCompletionStatus(port, ioResult);</span><br><span class="line">&gt;  &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">While(<span class="keyword">true</span>)&#123;</span><br><span class="line"> getQueuedCompletionStatus(port, ioResult);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol start="4">
 <li>主线程循环调用 accept 等待客户端连接上来；</li>
 <li>主线程 accept 返回新连接建立以后，把这个新的套接字句柄用 CreateIoCompletionPort 关联到完成端口，然后发出一个异步的 Read 或者 Write 调用，因为是异步函数，Read/Write 会马上返回，实际的发送或者接收数据的操作由操作系统去做。</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> &gt; <span class="keyword">if</span> (handle != <span class="number">0L</span>) &#123;</span><br><span class="line">&gt; 	 createIoCompletionPort(handle, port, key, <span class="number">0</span>);</span><br><span class="line">&gt;  &#125;</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (handle != <span class="number">0L</span>) &#123;</span><br><span class="line">	 createIoCompletionPort(handle, port, key, <span class="number">0</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <ol start="6">
 <li>主线程继续下一次循环，阻塞在 accept 这里等待客户端连接。</li>
 <li>操作系统完成 Read 或者 Write 的操作，把结果发到完成端口。</li>

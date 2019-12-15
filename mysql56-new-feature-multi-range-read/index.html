@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 4.0.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="mask-icon" href="/images/logo.svg" color="#222">
   <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
   <meta name="google-site-verification" content="google819a2e66056c8144">
@@ -57,7 +57,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003451kky2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003467T2Pp.png">
-<meta property="og:updated_time" content="2018-03-21T16:15:50.674Z">
+<meta property="og:updated_time" content="2019-12-15T20:03:25.930Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003451kky2.png">
 
@@ -267,14 +267,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2015-05-26 23:13:09" itemprop="dateCreated datePublished" datetime="2015-05-26T23:13:09-07:00">2015-05-26</time>
+              <time title="创建时间：2015-05-27 14:13:09" itemprop="dateCreated datePublished" datetime="2015-05-27T14:13:09-07:00">2015-05-27</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2018-03-21 09:15:50" itemprop="dateModified" datetime="2018-03-21T09:15:50-07:00">2018-03-21</time>
+                <time title="修改时间：2019-12-15 12:03:25" itemprop="dateModified" datetime="2019-12-15T12:03:25-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -313,7 +313,7 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第一步 先根据where条件中的辅助索引获取辅助索引与主键的集合，结果集为rest</span><br><span class="line">    <span class="keyword">select</span> key_column, pk_column <span class="keyword">from</span> tb <span class="keyword">where</span> key_column = x <span class="keyword">order</span> <span class="keyword">by</span> key_column</span><br><span class="line">第二步 将结果集rest放在buffer里面(<span class="string">`read_rnd_buffer_size`</span>大小直到buffer满了)，然后对结果集rest按照pk_column排序，得到结果集是rest_sort</span><br><span class="line">第三步 利用已经排序过的结果集，访问表中的数据，此时是顺序IO&lt;span <span class="keyword">style</span>=<span class="string">"color:#0000CC;"</span>&gt;.&lt;/span&gt;</span><br><span class="line">    <span class="keyword">select</span> non_key_column fromtb <span class="keyword">where</span> pk_column <span class="keyword">in</span> ( rest_sort )</span><br></pre></td></tr></table></figure>
 <p><img src="http://blog.itpub.net/attachment/201505/31/22664653_1433003467T2Pp.png" alt=""></p>
 <p>从图示MRR原理，<strong><u><span style="color:#E53333;">MySQL 将根据辅助索引获取的结果集根据主键进行排序，将乱序化为有序，可以用主键顺序访问基表，将随机读转化为顺序读，多页数据记录可一次性读入或根据此次的主键范围分次读入，以减少IO操作</span></u></strong>，提高查询效率。</p>
-<h2 id="三-相关参数-span"><a class="header-anchor" href="#三-相关参数-span"></a>三 相关参数</h2>
+<h2 id="三-相关参数-span"><a class="header-anchor" href="#三-相关参数-span"></a>三 相关参数</span></h2>
 <p>我们可以通过参数 optimizer_switch 的标记来控制是否使用MRR，当设置mrr=on时，表示启用MRR优化。mrr_cost_based 表示是否通过 cost base的方式来启用MRR.如果选择mrr=on,mrr_cost_based=off,则表示总是开启MRR优化。<br>
 参数read_rnd_buffer_size 用来控制键值缓冲区的大小。</p>
 <h2 id="四-案例介绍"><a class="header-anchor" href="#四-案例介绍"></a>四  案例介绍</h2>
