@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="前言 我们知道InnoDB的索引组织结构为Btree。通常情况下，我们需要根据查询条件，从根节点开始寻路到叶子节点，找到满足条件的记录。为了减少寻路开销，InnoDB本身做了几点优化。 首先，对于连续记录扫描，InnoDB在满足比较严格的条件时采用row cache的方式连续读取8条记录（并将记录格式转换成MySQL Format），存储在线程私有的row_prebuilt_t::fetch_ca">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-16T05:17:34.613Z">
+<meta property="og:updated_time" content="2019-12-16T05:21:18.242Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/">
@@ -271,7 +271,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:17:34" itemprop="dateModified" datetime="2019-12-15T21:17:34-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
