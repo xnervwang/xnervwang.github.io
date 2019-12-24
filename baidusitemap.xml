@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://xnerv.wang/thread-synchronization-and-atomic-operation/</loc>
+    <lastmod>2019-12-24</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/compile-windows-seafile-client/</loc>
+    <lastmod>2019-12-24</lastmod>
+  </url>  <url>
     <loc>https://xnerv.wang/tcp-model-knowledge-summary/</loc>
     <lastmod>2019-12-16</lastmod>
   </url>  <url>
@@ -71,9 +77,6 @@
     <lastmod>2019-12-16</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/acquire-and-release-semantics/</loc>
-    <lastmod>2019-12-16</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/thread-synchronization-and-atomic-operation/</loc>
     <lastmod>2019-12-16</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>

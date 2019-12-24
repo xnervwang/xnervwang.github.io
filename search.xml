@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>编译Windows版的Seafile客户端</title>
+    <url>/compile-windows-seafile-client/</url>
+    <content><![CDATA[<p>Seafile是国内少有的做的还不错的开源产品之一。相信很多朋友都经历过几年前的各大云盘厂商大战然后纷纷衰落的这个过程。金山快盘应该是我用过的个人觉得最好的一款云盘了，和Windows GUI的集成也非常完美。可惜现如今各大云盘不是停止运营了就是今非昔比了。因此与其每天提心吊胆地担心自己宝贵的“资源”是不是会被某度网盘封杀，作为码农的我们何不自己动手来搭建一个私有云盘。Seafile的UI是基于Qt，考虑到可移植性和跨平台兼容性，虽然不能像金山快盘那样拥有一些Windows上的特效，例如在托盘上查看当前在上传/下载哪些文件，以及上传/下载的进度。但优势是多平台，在Linux、安卓，iOS上都有相应的客户端。</p>
+<a id="more"></a>
+<p>Seafile官网只提供了Linux版本客户端的编译方法，并没有提供Windows版本的步骤。搜索了官方论坛，虽然有不少人提问问过，但是官方并没有给出回答。只能说国内的开源的文档还需要进一步完善，遮遮掩掩不算是真正的开源。<a href="http://www.ilovecpp.com/2018/06/25/seafile-compile/" target="_blank" rel="noopener">搭建seafile windows客户端的交叉编译环境</a>这篇文章给出了一种基于MinGW在Fedora上交叉编译Windows版本Seafile的方法。我曾尝试过在Ubuntu 18.04上重复这个步骤，但是因为一些packages的原因没能成功。不同的Linux发行版之间的package有一些区别。我也曾尝试过在Windows上的MinGW上交叉编译，但有一些packages死活找不到在Windows MinGW上对应的版本，而且编译时也有一些错误（Windows上的MinGW好像是跑在Cygwin上面的，也就是说Cygwin上的packages可能不全或者跟Fedora上有一些不同）。最终由于时间关系，我放弃了去弄清楚其中的原因，而是采用在Ubuntu上用docker安装Fedora镜像这种类似作弊的方法来重现这篇文章中的步骤。</p>
+<p>基于<a href="http://www.ilovecpp.com/2018/06/25/seafile-compile/" target="_blank" rel="noopener">搭建seafile windows客户端的交叉编译环境</a>这篇文章，我写了一些脚本来自动化整个编译流程以及打包流程，这些脚本我都放到了GitHub上：<a href="https://github.com/xnervwang/SeafileClientBuildTools" target="_blank" rel="noopener">xnervwang/SeafileClientBuildTools</a>。脚本分成两种，一种是在Host环境（例如我的Ubuntu）上执行的，一种是在docker实例中执行的。先介绍一下各个脚本的作用：</p>
+<ul>
+<li>
+<p><code>InitDockerVerification.sh</code>：这个脚本是在Host环境中执行的。会根据<code>Dockerfile</code>创建相应的Fedora docker image，并且在当前的Host目录创建三个文件夹：build, ms-build, ms-build64，分别用于存放编译出来的Linux版本的Seafile客户端，32位Windows客户端，64位Windows客户端。build, ms-build, ms-build64这三个目录会通过docker volume映射到docker实例内，从而便于docker实例和Host共享目录。</p>
+</li>
+<li>
+<p><code>Dockerfile</code>：<code>InitDockerVerification.sh</code>在创建docker image时会使用该文件。这个<code>Dockerfile</code>指定docker镜像在创建时，会git clone我的git repo <a href="https://github.com/xnervwang/SeafileClientBuildTools" target="_blank" rel="noopener">xnervwang/SeafileClientBuildTools</a>，然后运行其中的<code>InstallDevPackagesFedora.sh</code>安装编译所需要的一些packages。然后基于该docker镜像创建的docker实例会自动执行<code>DockerEntry.sh</code>。</p>
+</li>
+<li>
+<p><code>RunDockerVerification.sh</code>：创建docker实例并启动。</p>
+</li>
+<li>
+<p><code>DockerEntry.sh</code>：这个脚本被docker实例在启动时执行，会先更新本地的git repo，然后执行<code>OneKey.sh</code>。<code>OneKey.sh</code>会编译Linux版本的Seafile客户端，32位Windows客户端，64位Windows客户端。然后调用<code>ResolveDllDeps.py</code>这个脚本分别对三种客户端进行打包，打包后的产物分别位于build, ms-build, ms-build64这三个目录内。</p>
+</li>
+<li>
+<p><code>ResolveDllDeps.py</code>：这是我写的一个比较有意思的脚本。可以自动递归分析binary所依赖的所有.so动态链接库文件，然后将这些.so文件都复制到打包目录中，从而便于发布。需要注意的是编译出来的Seafile客户端还依赖于qt5/plugins/imageformats和qt5/plugins/platforms这两个插件目录，但是我的这个脚本却无法从Seafile客户端的可执行文件推导出这样的依赖关系。我推测可能这两个插件目录中的插件是通过dlopen的方式动态加载的，因此不能通过静态分析获得依赖关系。所以我将这连个目录中的.so也加入到了第一级的binary列表中。</p>
+</li>
+<li>
+<p><code>Makefile</code>：这个是在docker实例中，在<code>DockerEntry.sh</code>执行编译时所使用的的Makefile。</p>
+</li>
+<li>
+<p><code>Toolchain-cross-linux.i686.cmake/Toolchain-cross-linux.x86_64.cmake</code>：MinGW编译工具所使用的配置文件，分别用于32位/64位Windows客户端。</p>
+</li>
+<li>
+<p><code>DropDockerVerification.sh</code>：删除docker实例和相关的生成目录。</p>
+</li>
+</ul>
+<p>因此，基本的使用方法就是，首先基于<a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/" target="_blank" rel="noopener">docker官方文档</a>安装docker环境，然后git clone我的git repo，然后先执行<code>InitDockerVerification.sh</code>环境，然后以后就可以每次通过执行<code>RunDockerVerification.sh</code>来获取编译后的客户端，分别位于Host机器的build, ms-build, ms-build64这三个目录内。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/compile-windows-seafile-client/">http://xnerv.wang/compile-windows-seafile-client/</a></strong></p>
+]]></content>
+      <categories>
+        <category>分布式及存储</category>
+      </categories>
+      <tags>
+        <tag>分布式及存储</tag>
+        <tag>Seafile</tag>
+        <tag>MinGW</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>TCP模型知识点总结</title>
     <url>/tcp-model-knowledge-summary/</url>
     <content><![CDATA[<h2 id="协议格式"><a class="header-anchor" href="#协议格式"></a>协议格式</h2>
@@ -211,29 +257,21 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
     <url>/thread-synchronization-and-atomic-operation/</url>
     <content><![CDATA[<h2 id="volatile"><a class="header-anchor" href="#volatile"></a>volatile</h2>
 <ul>
-<li>
-<p>volatile使得代码每次在读写volatile变量时都需要从内存读写，而不能使用寄存器中缓存的值。并且也禁止编译器对volatible做编译优化。volatile本身并不是用于线程同步，也不保证原子读写（例如volatile a++这种需要几个指令才能完成的操作）。volatile主要用于access to memory mapped devices和variables in signal handlers and between setjmp and longjmp。C++标准禁止编译器reorder同一个线程内的volatile变量的读写，但不同线程则没有限制。non-volatile变量则有可能发生reorder（<a href="https://sites.google.com/site/kjellhedstrom2/stay-away-from-volatile-in-threaded-code" target="_blank" rel="noopener">Stay away from Volatile in threaded code?</a>）。</p>
-</li>
-<li>
-<p>而根据<a href="https://blog.csdn.net/dm_vincent/article/details/79604716" target="_blank" rel="noopener">为什么volatile++不是原子性的？</a>中的说法，volatile的读操作后会插入LoadLoad和LoadStore屏障，避免volatile读操作与后面的普通读写发生reorder。而volatile的写操作前会插入StoreLoad和StoreStore屏障，避免volatile写操作与后面的普通读写发生reorder（我不太确定这种说法的正确性，毕竟在wikipedia<a href="https://en.wikipedia.org/wiki/Volatile_(computer_programming)" target="_blank" rel="noopener">volatile (computer programming)</a>中并没有提到volatile会插入内存屏障，或者只有Java等语言才会这样做？）。</p>
-</li>
-<li>
-<p><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C" target="_blank" rel="noopener">内存屏障</a>中有提到</p>
+<li>volatile使得代码每次在读写volatile变量时都需要从内存读写，而不能使用寄存器中缓存的值。并且也禁止编译器对volatible做编译优化。volatile本身并不是用于线程同步，也不保证原子读写（例如volatile a++这种需要几个指令才能完成的操作）。volatile主要用于access to memory mapped devices和variables in signal handlers and between setjmp and longjmp。C++标准禁止编译器reorder同一个线程内的volatile变量的读写，但不同线程则没有限制。non-volatile变量则有可能发生reorder（<a href="https://sites.google.com/site/kjellhedstrom2/stay-away-from-volatile-in-threaded-code" target="_blank" rel="noopener">Stay away from Volatile in threaded code?</a>）。</li>
+<li>而根据<a href="https://blog.csdn.net/dm_vincent/article/details/79604716" target="_blank" rel="noopener">为什么volatile++不是原子性的？</a>中的说法，volatile的读操作后会插入LoadLoad和LoadStore屏障，避免volatile读操作与后面的普通读写发生reorder。而volatile的写操作前会插入StoreLoad和StoreStore屏障，避免volatile写操作与后面的普通读写发生reorder（我不太确定这种说法的正确性，毕竟在wikipedia<a href="https://en.wikipedia.org/wiki/Volatile_(computer_programming)" target="_blank" rel="noopener">volatile (computer programming)</a>中并没有提到volatile会插入内存屏障，或者只有Java等语言才会这样做？）。</li>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C" target="_blank" rel="noopener">内存屏障</a>中有提到
 <blockquote>
 <p>C与C++语言中，volatile关键字意图允许内存映射的I/O操作。这要求编译器对此的数据读写按照程序中的先后顺序执行，不能对volatile内存的读写重排序。因此关键字volatile并不保证是一个内存屏障。[4]<br>
 对于Visual Studio 2003，编译器保证对volatile的操作是有序的，但是不能保证处理器的乱序执行。因此，可以使用InterlockedCompareExchange或InterlockedExchange函数。<br>
 对于Visual Studio 2005及以后版本，编译器对volatile变量的读操作使用acquire semantics，对写操作使用release semantics。</p>
 </blockquote>
 </li>
-<li>
-<p>volatile跟const一样属于变量修饰符，因此也和const一样必须弄清楚修饰的是指针还是变量自身（或者甚至是第几级指针）。例如<code>uchar * volatile reg;</code>说明指针reg本身是volatile的，而<code>volatile uchar *reg;</code>说明*reg（也就是reg指向的变量）是volatile的。而且volatile也可以和const同时使用。</p>
-</li>
-<li>
-<p><a href="https://blog.csdn.net/hanchaoman/article/details/41116251" target="_blank" rel="noopener">volatile陷阱</a>一文中有提到几种volatile的陷阱和误用。</p>
-</li>
-<li>
-<p><a href="https://mcuoneclipse.com/2013/08/14/volatile-can-be-harmful/" target="_blank" rel="noopener">“Volatile” can be harmful…</a>中提到可以将函数参数标记为volatile避免编译器优化，从而便于debug。</p>
-</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>volatile跟const一样属于变量修饰符，因此也和const一样必须弄清楚修饰的是指针还是变量自身（或者甚至是第几级指针）。例如<code>uchar * volatile reg;</code>说明指针reg本身是volatile的，而<code>volatile uchar *reg;</code>说明*reg（也就是reg指向的变量）是volatile的。而且volatile也可以和const同时使用。</li>
+<li><a href="https://blog.csdn.net/hanchaoman/article/details/41116251" target="_blank" rel="noopener">volatile陷阱</a>一文中有提到几种volatile的陷阱和误用。</li>
+<li><a href="https://mcuoneclipse.com/2013/08/14/volatile-can-be-harmful/" target="_blank" rel="noopener">“Volatile” can be harmful…</a>中提到可以将函数参数标记为volatile避免编译器优化，从而便于debug。</li>
 </ul>
 <h2 id="临界区块-critical-section"><a class="header-anchor" href="#临界区块-critical-section"></a>临界区块（Critical section）</h2>
 <ul>

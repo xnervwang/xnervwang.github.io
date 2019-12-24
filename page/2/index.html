@@ -239,6 +239,96 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/mysql-index-condition-pushdown/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/mysql-index-condition-pushdown/" class="post-title-link" itemprop="url">MySQL - Index Condition Pushdown (ICP)</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-16 22:46:00" itemprop="dateCreated datePublished" datetime="2018-03-16T22:46:00-07:00">2018-03-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
+<p><a href="http://mysql.taobao.org/monthly/2015/11/07/" target="_blank" rel="noopener">上一篇文章</a> 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考<a href="https://dev.mysql.com/doc/refman/5.6/en/condition-pushdown-optimization.html" target="_blank" rel="noopener">这里</a>。</p>
+<h2 id="icp-测试"><a class="header-anchor" href="#icp-测试"></a>ICP 测试</h2>
+<p>首先，咱们来看一下打开 ICP 与关闭 ICP 之间的性能区别，以下是测试过程：</p>
+<p>准备数据：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> icp(<span class="keyword">id</span> <span class="built_in">int</span>, age <span class="built_in">int</span>, <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">30</span>), memo <span class="built_in">varchar</span>(<span class="number">600</span>)) <span class="keyword">engine</span>=<span class="keyword">innodb</span>;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> icp <span class="keyword">add</span> <span class="keyword">index</span> aind(age, <span class="keyword">name</span>, memo);</span><br><span class="line"><span class="comment">--let $i= 100000</span></span><br><span class="line">while ($i)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">--eval insert into icp values($i, 1, 'a$i', repeat('a$i', 100))</span></span><br><span class="line">  <span class="comment">--dec $i</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PS: MySQL 有一个叫profile的东东，可以用来监视 SQL 语句在各个阶段的执行情况，咱们可以使用这个工具来观察 SQL 语句在各个阶段的运行情况，关于 profile 的详细说明可以参考<a href="http://dev.mysql.com/doc/refman/5.7/en/show-profile.html" target="_blank" rel="noopener">官方文档</a>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mysql-index-condition-pushdown/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/introduction-of-innodb-transaction-lock/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,7 +361,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -361,7 +451,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -448,7 +538,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -536,7 +626,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -622,7 +712,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -708,7 +798,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -796,7 +886,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -885,7 +975,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -970,7 +1060,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
+                <time title="修改时间：2019-12-15 21:25:00" itemprop="dateModified" datetime="2019-12-15T21:25:00-08:00">2019-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1000,93 +1090,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/sql-server-buffer-management-reading-pages/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/" class="post-title-link" itemprop="url">Monitoring Memory Clerk and Buffer Pool Allocations in SQL Server</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-02-20 23:05:00" itemprop="dateCreated datePublished" datetime="2018-02-20T23:05:00-08:00">2018-02-20</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-15 21:21:18" itemprop="dateModified" datetime="2019-12-15T21:21:18-08:00">2019-12-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>The following article applies to SQL Server versions 2008 +</p>
-<p>Adequate memory is one of the most important factors for a well-functioning instance of SQL Server. By design SQL Server manages its own memory allocations via the SQLOS rather than having the servers Operating System perform this task.</p>
-<p>Therefore it’s safe to say that monitoring SQL Servers memory use is a very important administrative task and in this post I am going to show you how to use Dynamic Management Views to take a closer look at how SQL is using memory and how these benefit troubleshooting activities.</p>
-<p>Before we do that we need to see how much memory is on our server and how much is allocated to be used by SQL itself. This relates to the very first paragraph in this post, the difference between total memory and SQL memory is allocated to the operating system and how much that should be is really dependent on the total memory in the server. I have always started with a setting of 4Gb or 10% of the total memory, whichever is more and tested regularly.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1156,7 +1159,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">113</span>
+          <span class="site-state-item-count">114</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1169,7 +1172,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">142</span>
+        <span class="site-state-item-count">144</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
