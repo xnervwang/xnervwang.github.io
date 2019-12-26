@@ -58,7 +58,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;mingw-cygwin-summary-and-thinking&#x2F;mingw-gcc-dep.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;mingw-cygwin-summary-and-thinking&#x2F;mingw-bash-dep.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;mingw-cygwin-summary-and-thinking&#x2F;msys2-usr-gcc-dep.png">
-<meta property="og:updated_time" content="2019-12-26T06:51:09.563Z">
+<meta property="og:updated_time" content="2019-12-26T06:52:56.741Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;mingw-cygwin-summary-and-thinking&#x2F;mingw-gcc-dep.png">
 
@@ -269,7 +269,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-12-25 15:40:00 / 修改时间：22:51:09" itemprop="dateCreated datePublished" datetime="2019-12-25T15:40:00-08:00">2019-12-25</time>
+              <time title="创建时间：2019-12-25 15:40:00 / 修改时间：22:52:56" itemprop="dateCreated datePublished" datetime="2019-12-25T15:40:00-08:00">2019-12-25</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -302,7 +302,7 @@
 <h2 id="mingw和mingw-w64"><a class="header-anchor" href="#mingw和mingw-w64"></a>MinGW和MinGW-w64</h2>
 <p>MinGW（mingw32）据说更新太慢代码太老，因此另一帮人就新搞了一个MinGW-w64，据说老的MinGW不支持编译64位程序。不知道是不是这就意味着可以完全放弃掉MinGW而直接采用MinGW-x64？</p>
 <p>在安装MinGW时需要选择线程模型：posix或win32。从<a href="https://stackoverflow.com/questions/17242516/mingw-w64-threads-posix-vs-win32" target="_blank" rel="noopener">mingw-w64 threads: posix vs win32</a>看来，win32是在C++11之前MinGW-GCC搞的一套基于win32 threads模型的多线程库，而posix则是基于libwinpthreads，支持C++11的一些新的头文件。</p>
-<p>MinGW-w64可以安装在Windows上，可以安装在Linux上，甚至可以安装在Cygwin里。MinGW（mingw32）好像有另外一个相关项目<a href="http://www.mingw.org/wiki/linuxcrossmingw" target="_blank" rel="noopener">MinGW cross compiling environment</a>提供Linux安装，但感觉项目不是很活跃。并且从这篇<a href="https://mxe.cc/#history" target="_blank" rel="noopener">更新日志</a>，似乎作者已经放弃更新并转向MinGW-w64。</p>
+<p>MinGW-w64可以安装在Windows上，可以安装在Linux上，甚至可以安装在Cygwin里。MinGW（mingw32）好像有另外一个相关项目<a href="http://www.mingw.org/wiki/linuxcrossmingw" target="_blank" rel="noopener">MinGW cross compiling environment</a>提供Linux安装，但感觉项目不是很活跃。并且从这篇<a href="https://mxe.cc/#history" target="_blank" rel="noopener">更新日志</a>来看，似乎作者已经放弃更新并转向MinGW-w64。</p>
 <h2 id="msys"><a class="header-anchor" href="#msys"></a>MSYS</h2>
 <p>根据<a href="http://www.mingw.org/wiki/msys" target="_blank" rel="noopener">MinGW官网对于MSYS的描述</a>，MSYS是对MinGW的补充，提供了bash，make， gawk和grep等GNU工具来辅助编译。从网上可以找到的一些MinGW编译入门文章来看，完全可以在Windows cmd环境中调用MinGW的gcc命令行去编译基于MinGW的Windows程序，并不是一定需要在bash环境中进行，但是像bash脚本这种应该还是需要bash环境的。另外据说<a href="https://github.com/msys2/msys2/wiki/History" target="_blank" rel="noopener">MSYS是从Cygwin派生出来的分支</a>，本来我推测像MSYS中的gcc应该是运行在cygwin1.dll或者类似名字的dll模拟层上。但是检查了gcc的dll依赖关系：<br>
 <img src="/assets/mingw-cygwin-summary-and-thinking/mingw-gcc-dep.png" alt=""></p>
