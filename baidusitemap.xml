@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://xnerv.wang/compile-windows-seafile-client/</loc>
-    <lastmod>2019-12-24</lastmod>
+    <loc>https://xnerv.wang/mingw-cygwin-summary-and-thinking/</loc>
+    <lastmod>2019-12-26</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/tcp-model-knowledge-summary/</loc>
     <lastmod>2019-12-24</lastmod>
@@ -134,6 +134,9 @@
     <lastmod>2019-12-24</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/leveldb-analysis/</loc>
+    <lastmod>2019-12-24</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/compile-windows-seafile-client/</loc>
     <lastmod>2019-12-24</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/summary-of-distributed-theory-and-architecture/</loc>

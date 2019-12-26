@@ -239,6 +239,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/mingw-cygwin-summary-and-thinking/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/mingw-cygwin-summary-and-thinking/" class="post-title-link" itemprop="url">关于MinGW和Cygwin的一些个人总结和推测</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-25 15:40:00 / 修改时间：22:36:29" itemprop="dateCreated datePublished" datetime="2019-12-25T15:40:00-08:00">2019-12-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E8%AF%91%E5%99%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">编译器</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。</p>
+<h2 id="关于mingw和cygwin的关系"><a class="header-anchor" href="#关于mingw和cygwin的关系"></a>关于MinGW和Cygwin的关系</h2>
+<p>网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。</p>
+<p>从<a href="https://en.wikipedia.org/wiki/MinGW" target="_blank" rel="noopener">MinGW的维基百科</a>上看，Cygwin是提供一个模拟的POSIX层（cygwin1.dll）。我推测Cygwin也提供了一系列基于Cygwin的编译工具，在降需要移植的Linux代码在Cygwin上重新编译后，可以获得可以在Windows上直接运行的exe，而这个exe调用的还是POSIX风格的API，只不过这些API由cygwin1.dll提供模拟实现。而MinGW也提供了一系列编译工具，但MinGW-GCC是在编译时将代码中的POSIX API调用直接修改为对应的Windows API调用，从而不需要一个额外的dll转换层。需要额外提到的是，gcc的这种在编译时直接修改调用的API的行为不仅不少见，而且非常常见，在64位Linux上编译C++程序时，例如调用open这个函数，实际上在gcc编译后，调用的是libc中的open64函数，这个可以通过objdump导出外部依赖符号表来确认。另外就是，MinGW并不提供某些难以用Windows API实现的POSIX API，例如fork()，mmap()和ioctl()。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/mingw-cygwin-summary-and-thinking/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/compile-windows-seafile-client/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -356,7 +437,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -447,7 +528,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -542,7 +623,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -651,7 +732,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -739,7 +820,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -829,7 +910,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -929,7 +1010,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1016,7 +1097,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1049,100 +1130,6 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/mysql-introduction-innodb-adaptive-hash-index/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/what-set-names-does/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/what-set-names-does/" class="post-title-link" itemprop="url">MySQL - set names 都做了什么</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-16 22:50:00" itemprop="dateCreated datePublished" datetime="2018-03-16T22:50:00-07:00">2018-03-16</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
-<p>最近有同事问，set names 时会同时设置了3个session变量</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> character_set_client = charset_name;</span><br><span class="line"><span class="keyword">SET</span> character_set_results = charset_name;</span><br><span class="line"><span class="keyword">SET</span> character_set_connection = charset_name;</span><br></pre></td></tr></table></figure>
-<p>就从变量名字来看，character_set_client 是设置客户端相关的字符集，character_set_results 是设置返回结果相关的字符集，character_set_connection 这个就有点不太明白了，这个有啥用呢？</p>
-<h2 id="概念说明"><a class="header-anchor" href="#概念说明"></a>概念说明</h2>
-<p>通过<a href="http://dev.mysql.com/doc/refman/5.6/en/charset-connection.html" target="_blank" rel="noopener">官方文档</a>来看:</p>
-<ol>
-<li>character_set_client 是指客户端发送过来的语句的编码;</li>
-<li>character_set_connection 是指mysqld收到客户端的语句后，要转换到的编码；</li>
-<li>而 character_set_results 是指server执行语句后，返回给客户端的数据的编码。</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/what-set-names-does/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1212,20 +1199,20 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">144</span>
+        <span class="site-state-item-count">146</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

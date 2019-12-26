@@ -239,6 +239,90 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/how-does-a-mutex-work-what-does-it-cost/" class="post-title-link" itemprop="url">How does a mutex work? What does it cost?</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2011-12-16 00:00:00" itemprop="dateCreated datePublished" datetime="2011-12-16T00:00:00-08:00">2011-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index">
+                    <span itemprop="name">OS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Concurrent programming requires synchronization. We can’t have more than one thread accessing data at the same time; otherwise, we end up with a data race. The most common solution is to wrap the critical data access in a mutex. Mutexes are, of course, not free. A mutex can have a significant impact on the cost of the code we are writing. When used correctly we’ll barely notice the overhead. When misused it can cause a program to run worse in threaded mode than it would have single threaded!</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/how-does-a-mutex-work-what-does-it-cost/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,7 +355,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -357,7 +441,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -446,7 +530,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -537,7 +621,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -624,7 +708,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -711,7 +795,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -799,7 +883,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -891,7 +975,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1044,7 +1128,7 @@ Reprinted from: <a href="https://www.codeproject.com/Articles/184046/Spin-Lock-i
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1079,89 +1163,6 @@ Reprinted from: <a href="https://www.codeproject.com/Articles/184046/Spin-Lock-i
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/heapcreate-heapalloc-in-linux-private-allocator-for-linux/" class="post-title-link" itemprop="url">(Stack Overflow) HeapCreate, HeapAlloc in Linux, private allocator for Linux</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2010-05-21 08:43:00" itemprop="dateCreated datePublished" datetime="2010-05-21T08:43:00-07:00">2010-05-21</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="question"><a class="header-anchor" href="#question"></a>Question</h2>
-<p>In Windows, for very demanding applications, a programmer may use HeapCreate, HeapAlloc in order to better manage and control the allocation of memory- speed it up (aka private allocators). What is the equivalent in Linux c++ programming?</p>
-<h2 id="answer-by-psmears"><a class="header-anchor" href="#answer-by-psmears"></a>Answer by psmears</h2>
-<p>If you want to use your own private allocator, then use mmap() to map an amount of memory into your process, then you can use that memory as you like. Open a file descriptor to /dev/zero, and then use that as the ‘fildes’ parameter to mmap(). See man mmap for full details of the parameters to pass. In this respect mmap() plays the same role as HeapCreate().</p>
-<hr>
-<p><strong>Article link: <a href="http://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/">http://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</a></strong><br>
-Reprinted from: <a href="https://stackoverflow.com/q/2880639" target="_blank" rel="noopener">(StackOverflow) HeapCreate, HeapAlloc in Linux, private allocator for Linux</a></p>
-
       
     </div>
 
@@ -1226,20 +1227,20 @@ Reprinted from: <a href="https://stackoverflow.com/q/2880639" target="_blank" re
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">144</span>
+        <span class="site-state-item-count">146</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

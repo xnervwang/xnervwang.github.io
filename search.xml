@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>关于MinGW和Cygwin的一些个人总结和推测</title>
+    <url>/mingw-cygwin-summary-and-thinking/</url>
+    <content><![CDATA[<p>本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。</p>
+<h2 id="关于mingw和cygwin的关系"><a class="header-anchor" href="#关于mingw和cygwin的关系"></a>关于MinGW和Cygwin的关系</h2>
+<p>网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。</p>
+<p>从<a href="https://en.wikipedia.org/wiki/MinGW" target="_blank" rel="noopener">MinGW的维基百科</a>上看，Cygwin是提供一个模拟的POSIX层（cygwin1.dll）。我推测Cygwin也提供了一系列基于Cygwin的编译工具，在降需要移植的Linux代码在Cygwin上重新编译后，可以获得可以在Windows上直接运行的exe，而这个exe调用的还是POSIX风格的API，只不过这些API由cygwin1.dll提供模拟实现。而MinGW也提供了一系列编译工具，但MinGW-GCC是在编译时将代码中的POSIX API调用直接修改为对应的Windows API调用，从而不需要一个额外的dll转换层。需要额外提到的是，gcc的这种在编译时直接修改调用的API的行为不仅不少见，而且非常常见，在64位Linux上编译C++程序时，例如调用open这个函数，实际上在gcc编译后，调用的是libc中的open64函数，这个可以通过objdump导出外部依赖符号表来确认。另外就是，MinGW并不提供某些难以用Windows API实现的POSIX API，例如fork()，mmap()和ioctl()。</p>
+<a id="more"></a>
+<h2 id="mingw和mingw-w64"><a class="header-anchor" href="#mingw和mingw-w64"></a>MinGW和MinGW-w64</h2>
+<p>MinGW（mingw32）据说更新太慢代码太老，因此另一帮人就新搞了一个MinGW-w64，据说老的MinGW不支持编译64位程序。不知道是不是这就意味着可以完全放弃掉MinGW而直接采用MinGW-x64？</p>
+<h2 id="msys"><a class="header-anchor" href="#msys"></a>MSYS</h2>
+<p>根据<a href="http://www.mingw.org/wiki/msys" target="_blank" rel="noopener">MinGW官网对于MSYS的描述</a>，MSYS是对MinGW的补充，提供了bash，make， gawk和grep等GNU工具来辅助编译。从网上可以找到的一些MinGW编译入门文章来看，完全可以在Windows cmd环境中调用MinGW的gcc命令行去编译基于MinGW的Windows程序，并不是一定需要在bash环境中进行，但是像bash脚本这种应该还是需要bash环境的。另外据说<a href="https://github.com/msys2/msys2/wiki/History" target="_blank" rel="noopener">MSYS是从Cygwin派生出来的分支</a>，本来我推测像MSYS中的gcc应该是运行在cygwin1.dll或者类似名字的dll模拟层上。但是检查了gcc的dll依赖关系：<br>
+<img src="/assets/mingw-cygwin-summary-and-thinking/mingw-gcc-dep.png" alt=""></p>
+<p>发现MinGW上的gcc最终似乎是直接依赖于Windows的dlls，并没有类似cygwin1.dll的东西。这种有点奇怪了，难道这个gcc是通过Cygwin上的MinGW-GCC用自举（bootstrapping）的方式创建出来的？找到关于MinGW-x64有关自举编译的一篇文章<a href="https://sourceforge.net/p/mingw-w64/wiki2/Native%20Win64%20compiler/" target="_blank" rel="noopener">Creating a native Win64 compiler</a>，我怀疑MinGW是不是也是用的类似的自举编译gcc。</p>
+<p>但是再看bash的话，bash.exe却还是依赖于msys1.0.dll以及其它一些msys开头的dlls。猜测这些dlls应该就是类似于cygwin1.dll的模拟层。MinGW和MSYS是通过同一个安装程序来安装，推测由于gcc.exe属于MinGW，而bash.exe属于MSYS，而只有MSYS的工具才需要依赖msys相关的dlls。检查安装路径后果然发现，gcc.exe是在<code>C:\MinGW\bin</code>下面，而bash.exe是在<code>C:\MinGW\msys\1.0\bin</code>下面，印证了我的想法。<br>
+<img src="/assets/mingw-cygwin-summary-and-thinking/mingw-bash-dep.png" alt=""></p>
+<p>此外结合<a href="https://zh.wikipedia.org/wiki/MinGW" target="_blank" rel="noopener">MinGW的中文维基百科</a>和我自己的MinGW-w64安装经历，选择i686工具链时可以从DWARF和SJLJ这两种异常实现机制中二选一，而选择x86_64时需要从SEH和SJLJ中二选一。</p>
+<h2 id="msys2"><a class="header-anchor" href="#msys2"></a>MSYS2</h2>
+<p>回过头来再看看MSYS2。MSYS2似乎是配套MinGW-w64出现的，提供三种配置的模式：msys2，mingw64（使用mingw-w64 x86_64 toolchain工具链）和mingw32（使用mingw-w64 i686 toolchain工具链）。个人推测msys2模式编译出来的程序需要依赖msys2.0.dll，就像Cygwin下编译出来的程序一样。据说MSYS2相对于Cygwin的最大区别是移植了包管理工具Pacman。据说三种模式的主要区别是在$PATH中的搜索优先顺序不同，msys2只使用<code>usr\bin</code>下的工具，mingw64优先使用<code>mingw64\bin</code>下的工具，mingw32优先使用<code>mingw32\bin</code>下的工具。</p>
+<p>不像MinGW和MSYS可以通过同一个安装程序来安装，似乎MinGW-w64和MSYS2是可以分别安装的。我首先单独安装了MinGW-w64，看起来其中的gcc等工具也是直接依赖于Windows的dlls，并没有一个中间层dll。并且在安装的时候需要选择是用x86_64工具链还是i686工具链，以及异常的处理方式。这么看来安装MSYS2的话就可以同时拥有两种工具链了。安装MSYS2时并没有要求选择异常处理机制和所使用的线程库，根据<a href="https://sourceforge.net/p/mingw-w64/discussion/723797/thread/ef7d51a4/" target="_blank" rel="noopener">What’s the difference between Mingw-builds and Mingw packages in Msys2</a>这个帖子中的讨论，看起来</p>
+<blockquote>
+<p>MSYS2 only provides posix thread model, dwarf for i686, seh for x86_64</p>
+</blockquote>
+<p>使用Pacman直接安装的gcc依赖于msys2系列的dlls：<br>
+<img src="/assets/mingw-cygwin-summary-and-thinking/msys2-usr-gcc-dep.png" alt=""></p>
+<p>安装mingw-w64-i686-toolchain和mingw-w64-x86_64-toolchain则分别会在<code>mingw32\bin</code>和<code>mingw64\bin</code>目录下产生gcc.exe，并且只依赖于Windows dlls和libwinpthread-1.dll，看来这个就是MinGW-w64版本的gcc，可以生成不依赖于任何dll的Windows程序。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/mingw-cygwin-summary-and-thinking/">http://xnerv.wang/mingw-cygwin-summary-and-thinking/</a></strong></p>
+]]></content>
+      <categories>
+        <category>编译器</category>
+      </categories>
+      <tags>
+        <tag>MinGW</tag>
+        <tag>编译器</tag>
+        <tag>Cygwin</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>编译Windows版的Seafile客户端</title>
     <url>/compile-windows-seafile-client/</url>
     <content><![CDATA[<p>Seafile是国内少有的做的还不错的开源产品之一。相信很多朋友都经历过几年前的各大云盘厂商大战然后纷纷衰落的这个过程。金山快盘应该是我用过的个人觉得最好的一款云盘了，和Windows GUI的集成也非常完美。可惜现如今各大云盘不是停止运营了就是今非昔比了。因此与其每天提心吊胆地担心自己宝贵的“资源”是不是会被某度网盘封杀，作为码农的我们何不自己动手来搭建一个私有云盘。Seafile的UI是基于Qt，考虑到可移植性和跨平台兼容性，虽然不能像金山快盘那样拥有一些Windows上的特效，例如在托盘上查看当前在上传/下载哪些文件，以及上传/下载的进度。但优势是多平台，在Linux、安卓，iOS上都有相应的客户端。</p>
@@ -11713,8 +11751,8 @@ Reprinted from: <a href="https://stackoverflow.com/a/19830820" target="_blank" r
       <tags>
         <tag>转载</tag>
         <tag>C++</tag>
-        <tag>Programing</tag>
         <tag>Stack Overflow</tag>
+        <tag>Programing</tag>
       </tags>
   </entry>
   <entry>

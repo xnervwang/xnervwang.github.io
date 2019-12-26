@@ -239,6 +239,95 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/process-memory-layout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/process-memory-layout/" class="post-title-link" itemprop="url">进程内存布局</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-03-06 23:23:00" itemprop="dateCreated datePublished" datetime="2016-03-06T23:23:00-08:00">2016-03-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="进程的用户空间"><a class="header-anchor" href="#进程的用户空间"></a>进程的用户空间</h2>
+<p>Windows系统中，系统空间与用户空间的分界线为0x80000000,该地址以上为系统空间，以下为用户空间，各占2GB（默认情况下）。2GB的用户空间不是全部可访问的，它被划分成了以下几个部分：</p>
+<center>
+<img src="/assets/process-memory-layout/1.jpg" />
+</center>
+<p><strong>用户空间的两端各有64KB的隔离区，是不允许访问的。上端的隔离区将用户空间与系统空间隔离开，下端的隔离区就是我们编程时遇到的NULL，因此NULL实际所表示的区域不是一个地址</strong>，而是一个64KB的地址范围。这样，实际可访问的用户空间地址范围为0x10000-0x7ffeffff。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/process-memory-layout/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/version-control-and-usage-of-linux-shared-library/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,7 +360,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -357,7 +446,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -447,7 +536,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -531,7 +620,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -625,7 +714,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -709,7 +798,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -806,7 +895,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -893,7 +982,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:05" itemprop="dateModified" datetime="2019-12-24T12:28:05-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -977,7 +1066,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
+                <time title="修改时间：2019-12-24 12:32:50" itemprop="dateModified" datetime="2019-12-24T12:32:50-08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1006,92 +1095,6 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/coroutine-is-a-type-of-user-mode-thread/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/how-to-implement-a-malloc/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/how-to-implement-a-malloc/" class="post-title-link" itemprop="url">如何实现一个malloc</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2014-08-19 00:00:00" itemprop="dateCreated datePublished" datetime="2014-08-19T00:00:00-07:00">2014-08-19</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-24 12:28:06" itemprop="dateModified" datetime="2019-12-24T12:28:06-08:00">2019-12-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>任何一个用过或学过C的人对malloc都不会陌生。大家都知道malloc可以分配一段连续的内存空间，并且在不再使用时可以通过free释放掉。但是，许多程序员对malloc背后的事情并不熟悉，许多人甚至把malloc当做操作系统所提供的系统调用或C的关键字。实际上，malloc只是C的标准库中提供的一个普通函数，而且实现malloc的<strong>基本</strong>思想并不复杂，任何一个对C和操作系统有些许了解的程序员都可以很容易理解。</p>
-<p>这篇文章通过实现一个简单的malloc来描述malloc背后的机制。当然与现有C的标准库实现（例如glibc）相比，我们实现的malloc并不是特别高效，但是这个实现比目前真实的malloc实现要简单很多，因此易于理解。重要的是，这个实现和真实实现在基本原理上是一致的。</p>
-<p>这篇文章将首先介绍一些所需的基本知识，如操作系统对进程的内存管理以及相关的系统调用，然后逐步实现一个简单的malloc。为了简单起见，这篇文章将只考虑x86_64体系结构，操作系统为Linux。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/how-to-implement-a-malloc/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1161,20 +1164,20 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">114</span>
+          <span class="site-state-item-count">115</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">144</span>
+        <span class="site-state-item-count">146</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
