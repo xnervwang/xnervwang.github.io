@@ -4,6 +4,9 @@
     <loc>https://xnerv.wang/mingw-cygwin-summary-and-thinking/</loc>
     <lastmod>2019-12-26</lastmod>
   </url>  <url>
+    <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
+    <lastmod>2019-12-26</lastmod>
+  </url>  <url>
     <loc>https://xnerv.wang/tcp-model-knowledge-summary/</loc>
     <lastmod>2019-12-26</lastmod>
   </url>  <url>
@@ -319,10 +322,10 @@
     <loc>https://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
     <lastmod>2019-12-26</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
+    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
     <lastmod>2019-12-26</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
+    <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
     <lastmod>2019-12-26</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>

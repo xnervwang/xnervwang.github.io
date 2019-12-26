@@ -239,6 +239,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/something-about-static-library-mt-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/something-about-static-library-mt-md/" class="post-title-link" itemprop="url">静态库那些事儿/MT /MD</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-03-08 10:46:54" itemprop="dateCreated datePublished" datetime="2016-03-08T10:46:54-08:00">2016-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>单例模式是一种很简单常用的设计模式,常见的做法可能是这样:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Renderer&amp; <span class="title">getInstance</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Renderer renderer;</span><br><span class="line">    <span class="keyword">return</span> renderer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然,这个代码在不支持static local variable thread-safe init的编译器上,是没有办法保证线程安全的,c++11标准已经规定static local variable只会被初始化一次了,然而vs2013还没有实现,vs2015里才支持了这条标准.不过这条代码在我们的程序里只有一个线程访问,所以也就不存在线程安全的问题.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/something-about-static-library-mt-md/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/process-memory-layout/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,7 +357,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -360,7 +446,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -446,7 +532,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -536,7 +622,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -620,7 +706,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -714,7 +800,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -798,7 +884,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -895,7 +981,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -982,7 +1068,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1011,90 +1097,6 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/debugging-alibaba-softwares/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/coroutine-is-a-type-of-user-mode-thread/" class="post-title-link" itemprop="url">【协程原理】 - 协程不过是用户态的线程</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2014-09-10 00:00:00" itemprop="dateCreated datePublished" datetime="2014-09-10T00:00:00-07:00">2014-09-10</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:51:09" itemprop="dateModified" datetime="2019-12-25T22:51:09-08:00">2019-12-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
-                    <span itemprop="name">操作系统</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据的区域，相当于高级语言里的变量。但是有一个寄存器是特殊的，它存放了cpu当前正在执行的指令的内存地址(Instruction Register)。一个高级语言中的函数一般会被编译成指令存放在一段连续的内存空间中（data segment）。那么所谓函数执行到了第几行这样的信息其实就是保存在这个Instruction Register中的。另外一个很特殊的寄存器是Stack Register，它其中存放的内存地址指向的内存区域用于函数之间传递参数和返回值，以及存放一个函数内的局部变量。如果不考虑现代计算机cpu中各种各样其他存放中间结果的寄存器，理论上保存了Instruction Register（执行到哪儿了）和Stack Register（堆栈上的变量）就保存了一个函数的当前执行状态，分别是函数当前执行到了哪，以及这个函数局部变量所代表的当前state。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/coroutine-is-a-type-of-user-mode-thread/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1164,7 +1166,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">115</span>
+          <span class="site-state-item-count">116</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1177,7 +1179,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">146</span>
+        <span class="site-state-item-count">147</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
