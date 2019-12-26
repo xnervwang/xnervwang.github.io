@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="前言 MySQL5.5版本开始引入了MDL锁用来保护元数据信息，让MySQL能够在并发环境下多DDL、DML同时操作下保持元数据的一致性。本文用MySQL5.7源码分析了常用SQL语句的MDL加锁实现。 MDL锁粒度 MDL_key由namespace、db_name、name组成。 namespace包含：   GLOBAL。用于global read lock，例如FLUSH TABLES">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-26T06:36:28.395Z">
+<meta property="og:updated_time" content="2019-12-26T06:42:25.068Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">
@@ -271,7 +271,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:36:28" itemprop="dateModified" datetime="2019-12-25T22:36:28-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-25 22:42:25" itemprop="dateModified" datetime="2019-12-25T22:42:25-08:00">2019-12-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
