@@ -47,16 +47,16 @@
   };
 </script>
 
-  <meta name="description" content="##简介 经常听到有人说磁盘很慢、网络很卡，这都是站在人类的感知维度去表述的，比如拷贝一个文件到硬盘需要几分钟到几十分钟，够我去吃个饭啦；而从网络下载一部电影，有时候需要几个小时，我都可以睡一觉了。 最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同">
+  <meta name="description" content="简介 经常听到有人说磁盘很慢、网络很卡，这都是站在人类的感知维度去表述的，比如拷贝一个文件到硬盘需要几分钟到几十分钟，够我去吃个饭啦；而从网络下载一部电影，有时候需要几个小时，我都可以睡一觉了。 最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同层级">
 <meta name="keywords" content="性能瓶颈,CPU,内存访问,网络传输,分支预测,硬盘,SSD">
 <meta property="og:type" content="article">
 <meta property="og:title" content="让 CPU 告诉你硬盘和网络到底有多慢">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;how-slow-is-disk-and-network&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
-<meta property="og:description" content="##简介 经常听到有人说磁盘很慢、网络很卡，这都是站在人类的感知维度去表述的，比如拷贝一个文件到硬盘需要几分钟到几十分钟，够我去吃个饭啦；而从网络下载一部电影，有时候需要几个小时，我都可以睡一觉了。 最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同">
+<meta property="og:description" content="简介 经常听到有人说磁盘很慢、网络很卡，这都是站在人类的感知维度去表述的，比如拷贝一个文件到硬盘需要几分钟到几十分钟，够我去吃个饭啦；而从网络下载一部电影，有时候需要几个小时，我都可以睡一觉了。 最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同层级">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;how-slow-is-disk-and-network&#x2F;1.jpg">
-<meta property="og:updated_time" content="2019-12-28T08:41:56.017Z">
+<meta property="og:updated_time" content="2019-12-28T08:46:23.914Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;how-slow-is-disk-and-network&#x2F;1.jpg">
 
@@ -267,7 +267,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-12-28 00:29:00 / 修改时间：00:41:56" itemprop="dateCreated datePublished" datetime="2019-12-28T00:29:00-08:00">2019-12-28</time>
+              <time title="创建时间：2019-12-28 00:29:00 / 修改时间：00:46:23" itemprop="dateCreated datePublished" datetime="2019-12-28T00:29:00-08:00">2019-12-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -292,13 +292,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>##简介</p>
+        <h2 id="简介"><a class="header-anchor" href="#简介"></a>简介</h2>
 <p>经常听到有人说磁盘很慢、网络很卡，这都是站在人类的感知维度去表述的，比如拷贝一个文件到硬盘需要几分钟到几十分钟，够我去吃个饭啦；而从网络下载一部电影，有时候需要几个小时，我都可以睡一觉了。</p>
 <p>最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同层级之间的差异要比这张图大的多。这篇文章就让你站在 CPU 的角度看这个世界，说说到底它们有多慢。</p>
 <p>希望你看到看完这篇文章能明白两件事情：磁盘和网络真的很慢，性能优化是个复杂的系统性的活。</p>
 <p>注：所有的数据都是来自<a href="https://gist.github.com/hellerbarde/2843375" target="_blank" rel="noopener">这个地址</a>。所有的数据会因为机器配置不同，或者硬件的更新而有出入，但是不影响我们直觉的感受。如果对这些数据比较感兴趣，<a href="https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html" target="_blank" rel="noopener">这个网址</a>给出了不同年份一些指标的数值。</p>
 <a id="more"></a>
-<p>##数据</p>
+<h2 id="数据"><a class="header-anchor" href="#数据"></a>数据</h2>
 <ul>
 <li>
 <p>先来看看 CPU 的速度，就拿我的电脑来说，主频是 2.6G，也就是说每秒可以执行 2.6*10^9 个指令，每个指令只需要 0.38ns（现在很多个人计算机的主频要比这个高，配置比较高的能达到 3.0G+）。我们把这个时间当做基本单位 1s，因为 1s 大概是人类能感知的最小时间单位。<br>
@@ -448,7 +448,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-text">参考资料</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据"><span class="nav-text">数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-text">参考资料</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -3,13 +3,13 @@
   <entry>
     <title>让 CPU 告诉你硬盘和网络到底有多慢</title>
     <url>/how-slow-is-disk-and-network/</url>
-    <content><![CDATA[<p>##简介</p>
+    <content><![CDATA[<h2 id="简介"><a class="header-anchor" href="#简介"></a>简介</h2>
 <p>经常听到有人说磁盘很慢、网络很卡，这都是站在人类的感知维度去表述的，比如拷贝一个文件到硬盘需要几分钟到几十分钟，够我去吃个饭啦；而从网络下载一部电影，有时候需要几个小时，我都可以睡一觉了。</p>
 <p>最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同层级之间的差异要比这张图大的多。这篇文章就让你站在 CPU 的角度看这个世界，说说到底它们有多慢。</p>
 <p>希望你看到看完这篇文章能明白两件事情：磁盘和网络真的很慢，性能优化是个复杂的系统性的活。</p>
 <p>注：所有的数据都是来自<a href="https://gist.github.com/hellerbarde/2843375" target="_blank" rel="noopener">这个地址</a>。所有的数据会因为机器配置不同，或者硬件的更新而有出入，但是不影响我们直觉的感受。如果对这些数据比较感兴趣，<a href="https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html" target="_blank" rel="noopener">这个网址</a>给出了不同年份一些指标的数值。</p>
 <a id="more"></a>
-<p>##数据</p>
+<h2 id="数据"><a class="header-anchor" href="#数据"></a>数据</h2>
 <ul>
 <li>
 <p>先来看看 CPU 的速度，就拿我的电脑来说，主频是 2.6G，也就是说每秒可以执行 2.6*10^9 个指令，每个指令只需要 0.38ns（现在很多个人计算机的主频要比这个高，配置比较高的能达到 3.0G+）。我们把这个时间当做基本单位 1s，因为 1s 大概是人类能感知的最小时间单位。<br>
@@ -2579,9 +2579,9 @@ Reprinted from: <a href="https://www.sqlpassion.at/archive/2016/10/31/disabling-
         <tag>转载</tag>
         <tag>DBMS</tag>
         <tag>SQL Server</tag>
-        <tag>Transaction</tag>
         <tag>Row Lock</tag>
         <tag>Page Lock</tag>
+        <tag>Transaction</tag>
       </tags>
   </entry>
   <entry>
@@ -3689,8 +3689,8 @@ Reprinted from: <a href="http://elliot.land/post/implementing-your-own-transacti
       </categories>
       <tags>
         <tag>转载</tag>
-        <tag>MVCC</tag>
         <tag>DBMS</tag>
+        <tag>MVCC</tag>
         <tag>SQL Server</tag>
         <tag>Transaction</tag>
       </tags>
@@ -8102,8 +8102,8 @@ Reprinted from: <a href="https://www.mssqltips.com/sqlservertip/4591/ddl-command
         <tag>转载</tag>
         <tag>DBMS</tag>
         <tag>SQL Server</tag>
-        <tag>Oracle</tag>
         <tag>Transaction</tag>
+        <tag>Oracle</tag>
       </tags>
   </entry>
   <entry>
@@ -11859,8 +11859,8 @@ Reprinted from: <a href="https://stackoverflow.com/a/19830820" target="_blank" r
       <tags>
         <tag>转载</tag>
         <tag>C++</tag>
-        <tag>Programing</tag>
         <tag>Stack Overflow</tag>
+        <tag>Programing</tag>
       </tags>
   </entry>
   <entry>
