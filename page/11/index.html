@@ -239,6 +239,93 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/" class="post-title-link" itemprop="url">(Stack Overflow) SAVE TRANSACTION vs BEGIN TRANSACTION (SQL Server) how to nest transactions nicely</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-03-15 02:51:00" itemprop="dateCreated datePublished" datetime="2012-03-15T02:51:00-07:00">2012-03-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="question"><a class="header-anchor" href="#question"></a>Question</h2>
+<p>I have a stored procedure that needs to set a save point so that it can, under certain circumstances, undo everything it did and return an error code to the caller, or accept/commit it and return success to the caller. But I need it to work whether the caller has already started a transaction or not. The doc is extremely confusing on this subject. Here is what I think will work, but I’m not certain of all the ramifications.</p>
+<p>The thing is - this <code>Stored Procedure (SP)</code> is called by others. So I don’t know if they’ve started a transaction or not… Even if I require users to start a transaction to use my SP, I still have questions about the proper use of <code>Save Points</code> …</p>
+<p>My SP will test if a transaction is in progress, and if not, start one with <code>BEGIN TRANSACTION</code>. If a transaction is already in progress, it will instead create a save point with <code>SAVE TRANSACTION MySavePointName</code>, and save the fact this is what I did.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/application-of-mvcc-in-distributed-system/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,7 +358,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -369,7 +456,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -453,7 +540,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -539,7 +626,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -628,7 +715,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -719,7 +806,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -806,7 +893,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -893,7 +980,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -981,7 +1068,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1023,159 +1110,6 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251" target="_blank"
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/spin-lock-in-cpp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/spin-lock-in-cpp/" class="post-title-link" itemprop="url">Spin Lock in C++</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2011-05-09 00:00:00" itemprop="dateCreated datePublished" datetime="2011-05-09T00:00:00-07:00">2011-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <ul>
-<li><a href="/codes/LockFree.zip">Download source code - 8.28 KB</a></li>
-</ul>
-<h2 id="introduction"><a class="header-anchor" href="#introduction"></a>Introduction</h2>
-<p>If we use common synchronization primitives like mutexes and critical sections, then the following sequence of events occur between two threads that are looking to acquire a lock:</p>
-<ol>
-<li>Thread 1 acquires lock L and executes.</li>
-<li>T2 tries to acquire lock L, but it’s already held and therefore blocks incurring a context switch.</li>
-<li>T1 releases the lock L. This signals T2 and at lower level, this involves some sort of kernel transition.</li>
-<li>T2 wakes up and acquires the lock L incurring another context switch.</li>
-</ol>
-<p>So there are always at least two context switches when primitive synchronization objects are used. A spin lock can get away with expensive context switches and kernel transition.</p>
-<p>Most modern hardware supports atomic instructions and one of them is called ‘compare and swap’ (CAS). On Win32 systems, they are called interlocked operations. Using these interlocked functions, an application can compare and store a value in an atomic uninterruptible operation. With interlocked functions, it is possible to achieve lock freedom to save expensive context switches and kernel transitions which can be a bottleneck in a low latency application. On a multiprocessor machine, a spin lock (a kind of busy waiting) can avoid both of the above issues to save thousands of CPU cycles in context switches. However, the downside of using spin locks is that they become wasteful if held for a longer period of time, in which case they can prevent other threads from acquiring the lock and progressing. The implementation shown in this article is an effort to develop a general purpose spin lock.</p>
-<h2 id="algorithm"><a class="header-anchor" href="#algorithm"></a>Algorithm</h2>
-<p>A typical (or basic) spin lock acquire and release function would look something like below:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// acquire the lock</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lock</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> dest = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> exchange = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">int</span> compare = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">acquire</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        While(<span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(interlockedCompareExchange(&amp;dest, exchange, compare) == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// lock acquired</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// release the lock</span></span><br><span class="line">    <span class="function">Void <span class="title">release</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// lock released</span></span><br><span class="line">       dest = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
-<p>Here, thread T1 acquires the lock by calling the function <code>acquire()</code>. In this case, the value of <code>dest</code> would become 100. When thread T2 tries to acquire the lock, it will loop continuously (a.k.a. busy waiting) as the values of <code>dest</code> and <code>compare</code> are different and therefore the function <code>InterlockedCompareExchange</code> will fail. When T1 calls <code>release()</code>, it sets the value of <code>dest</code> to 0 and therefore allows T2 to acquire the lock. Because only those threads that <code>acquire()</code> will call <code>release()</code>, mutual exclusion is guaranteed.</p>
-<p>Above is a simple implementation of a spin lock. However, this implementation alone is not production fit because spinning consumes CPU cycles without doing any useful work, meaning that the thread spinning will still be scheduled on the processor until it is pre-empted. Another downside of spinning is that it will continuously access memory to re-evaluate the value of <code>dest</code> in the function <code>Interlockedxxx</code> and this also puts the pressure on bus communication.</p>
-<p>On a single processor machine, spin wait would be a total waste of CPU as another thread T2 wouldn’t even get scheduled until the spinning thread is switched by the kernel.</p>
-<p>So far this implementation isn’t good enough. A general purpose spin lock requires a bit more work in terms of falling back to true waiting in a worst case scenario when it spins for a longer period. Here are some of the points which must be considered:</p>
-<h4 id="yield-processor"><a class="header-anchor" href="#yield-processor"></a>Yield Processor</h4>
-<p>The Win32 function <code>YieldProcessor()</code> emits a ‘no operation’ instruction on processors. This makes the processor aware that the code is currently performing spin waits and will make the processor available to other logical processors in a hyper threading enabled processor so that the other logical processors can make progress.</p>
-<h4 id="switch-to-another-thread"><a class="header-anchor" href="#switch-to-another-thread"></a>Switch to Another Thread</h4>
-<p>Sometimes it is useful to force a context switch when a spinning thread has already consumed enough time spinning equivalent to its thread time slice allocated by the kernel. Here, it makes good sense to allow another thread to do useful work instead. The function <code>SwitchToThread()</code> relinquishes the calling thread’s time slice and runs another thread in the ready state. It returns <code>true</code> when a switch occurs, otherwise <code>false</code>.</p>
-<h4 id="sleeping"><a class="header-anchor" href="#sleeping"></a>Sleeping</h4>
-<p><code>SwitchToThread()</code> may not consider all threads on the system for execution, therefore it may be wise to sometimes call <code>Sleep()</code> or <code>Sleepex()</code>. Calling <code>Sleep()</code> with an argument of 0 is a good approach as it does not result in a context switch if there are no threads of equal priority in the ready state. <code>Sleep(0)</code> will result in a context switch if a higher priority thread is in ready state.</p>
-<h2 id="other-considerations"><a class="header-anchor" href="#other-considerations"></a>Other Considerations</h2>
-<p>A pure spin lock is only good enough when the lock is held for a very short period of time. Here the critical region may have not more than 10 instructions and practically even simple memory allocation or virtual calls or file I/O can take more than 10 instructions.</p>
-<p>Secondly, as mentioned above, it would wasteful to use spin locks when an application runs on a single processor.</p>
-<h2 id="sample-project-and-implementation"><a class="header-anchor" href="#sample-project-and-implementation"></a>Sample Project and Implementation</h2>
-<p>The sample project in C++ consists of a spin lock implementation considering the points stated above. It also has an implementation of Stack, Queue, and a thin Producer-Consumer class. I’ll only focus on then Spin Lock implementation here as the rest of it is easy to follow.</p>
-<p>The file <em>SpinLock.h</em> defines these constants:</p>
-<ul>
-<li><code>YIELD_ITERATION</code> set to 30 - What this means is that the thread spinning will spin for 30 iterations waiting for the lock to acquire before it calls <code>sleep(0)</code> to give an opportunity to other threads to progress.</li>
-<li><code>MAX_SLEEP_ITERATION</code> set to 40 - This means when the total iteration (or spin) count reaches 40, then it would force a context switch using the function <code>SwitchToThread()</code> in case another thread is in ready state.</li>
-</ul>
-<p>The struct <code>tSpinLock</code> acts as a lock object which is declared in the class whose objects are being synchronized. This object is then passed in the constructor to the object of <code>tScopedLock</code> which initializes (references) the lock object passed to it. The <code>tScopedLock()</code> constructor locks the object using the member function of the class <code>tSpinWait</code>. The destructor <code>~tScopedLock()</code> releases the lock.</p>
-<p>The <code>Lock()</code> function in the class <code>tSpinWait</code> has got a nested <code>while</code> loop. This is done on purpose. So if a thread is spinning to acquire the lock, it wouldn’t call <code>interlockedxxx()</code> with every iteration, rather it would be looping in the inner <code>while</code> loop. This hack avoids the system memory bus being overly busy due to continuous calls to the <code>interlockedxx</code> function.</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spin wait to acquire</span></span><br><span class="line"><span class="keyword">while</span>(LockObj.dest != LockObj.compare) &#123;</span><br><span class="line">    <span class="keyword">if</span>(HasThreasholdReached())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(m_iterations + YIELD_ITERATION &gt;= MAX_SLEEP_ITERATION)</span><br><span class="line">           Sleep(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span>(m_iterations &gt;= YIELD_ITERATION &amp;&amp; m_iterations &lt; MAX_SLEEP_ITERATION)</span><br><span class="line">           SwitchToThread();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Yield processor on multi-processor but if on single processor</span></span><br><span class="line">    <span class="comment">// then give other thread the CPU</span></span><br><span class="line">    m_iterations++;    <span class="keyword">if</span>(Helper::GetNumberOfProcessors() &gt; <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">       YieldProcessor(<span class="comment">/*no op*/</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; SwitchToThread(); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>The inner <code>while</code> loop just compares the value of <code>dest</code> and <code>compare</code> and if they are not equal, then it tries to acquire them using <code>interlockedxxx</code>. Depending on the iteration count, the thread is either put to sleep or switched. When the application is running on a single CPU, then it always forces a context switch.</p>
-<h2 id="test-results"><a class="header-anchor" href="#test-results"></a>Test Results</h2>
-<p>I tested the performance of this Spin Lock implementation by inserting 10000 integers into a queue from multiple threads (each thread inserting 10000 integers into the queue). I then replaced <code>SpinLock</code> with a Critical Section synchronization primitive in the code and ran the same tests. I ran all the tests on an Intel Core DUO CPU T9600 @ 2.80 GHz.</p>
-<p><img src="https://www.codeproject.com/KB/threads/Spin_Lock/Results.jpg" alt="Results.jpg"></p>
-<p>The <strong>x-axis</strong> is the number of threads and <strong>y-axis</strong> is the time taken in milliseconds. Both synchronization methods (spinlock and CS) showed close performance when the number of threads were 2 and 4. As the number of threads increased, critical section locking took more than double the time as compared to spin locks. Spin lock seemed to have scaled a lot better when contention increased due to the high number of threads. The time taken is calculated using <code>QueryPerformanceCounter</code> Win32 methods. However, I would suggest performing your own testing on the platform you intend to use.</p>
-<p>Here is the table with the results:</p>
-<colgroup><col width="64"><col width="149"><col width="177"></colgroup>
-| No. of Threads | Time taken (Spin lock) | Time taken (Critical Section) |
-| --- | --- | --- |
-| 2 |  | 6.6 | 7.14 |
-| 4 |  | 12.81 | 14.09 |
-| 6 |  | 16.01 | 46.37 |
-| 8 |  | 23.32 | 54.34 |
-| 10 |  | 26.21 | 74.76 |
-| 15 |  | 41.17 | 89.05 |
-| 20 |  | 47.63 | 116.82 |
-| 25 |  | 62.25 | 147.68 |
-| 30 |  | 64.37 | 169.17 |
-| 35 |  | 88.02 | 210.07 |
-| 40 |  | 93.99 | 296.32 |
-<h2 id="future-work"><a class="header-anchor" href="#future-work"></a>Future Work</h2>
-<ul>
-<li>Profiling the code on different platforms.</li>
-<li>Adding a couple more data structures to the project like associated arrays and hashtable.</li>
-</ul>
-<h2 id="conclusion"><a class="header-anchor" href="#conclusion"></a>Conclusion</h2>
-<p>This was an effort to develop a general purpose spin lock implementation. Pure spin locking isn’t a good option in all scenarios and therefore there is a need for an implementation which allows the spinning thread to be suspended by the kernel.</p>
-<h2 id="history"><a class="header-anchor" href="#history"></a>History</h2>
-<ul>
-<li>First draft.</li>
-<li>Revision 1 - Fixed a couple of typos.</li>
-<li>Revision 2 - Code is now re-entrant safe.</li>
-<li>Revision 3 - Lock release now uses <code>interlockedexchange</code>.</li>
-<li>Revision 4 - Added test results.</li>
-</ul>
-<hr>
-<p><strong>Article link: <a href="http://xnerv.wang/spin-lock-in-cpp/">http://xnerv.wang/spin-lock-in-cpp/</a></strong><br>
-Reprinted from: <a href="https://www.codeproject.com/Articles/184046/Spin-Lock-in-C" target="_blank" rel="noopener">Spin Lock in C++</a></p>
-
       
     </div>
 
@@ -1240,20 +1174,20 @@ Reprinted from: <a href="https://www.codeproject.com/Articles/184046/Spin-Lock-i
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">117</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-count">154</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

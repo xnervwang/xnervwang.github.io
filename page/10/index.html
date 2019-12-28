@@ -239,6 +239,105 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/when-does-windows-decide-to-pull-out-pages-from-working-set/" class="post-title-link" itemprop="url">(Stack Overflow) When does Windows decide to pull out pages from Working Set?</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2013-08-15 12:18:31" itemprop="dateCreated datePublished" datetime="2013-08-15T12:18:31-07:00">2013-08-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="question"><a class="header-anchor" href="#question"></a>Question</h2>
+<p>I am looking at the distribution of physical memory using the RAMMap tool by SysInternals. The distribution (see image below) shows</p>
+<ol>
+<li>7 GB in Free (Zeroed) memory list</li>
+<li>2 GB in Working Set list</li>
+<li>550 MB in Standby list</li>
+<li>125 MB in Modified list</li>
+</ol>
+<p><img src="/assets/when-does-windows-decide-to-pull-out-pages-from-working-set/1.jpg" alt=""></p>
+<p>I understand that when a process requires memory, Windows searches for memory in the lists in the order Free (Zeroed) -&gt; Standby -&gt; Modified. Hence, as long as we have Free page frames, everything should either be in the Working Set list or Free list.</p>
+<ol>
+<li>Is this assumption right?</li>
+<li>If so, why do we see 125 MB of pages in the Modified list?</li>
+<li>In general, when does Windows decide to pull out pages from Working set list to Modified/Standby list even when there is Free memory left?</li>
+</ol>
+<p>I am using Windows 7, with 4.0 GB of installed RAM, 3.5 GB being usable.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/when-does-windows-decide-to-pull-out-pages-from-working-set/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/virtual-function-and-virtual-table/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,7 +370,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -357,7 +456,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -442,7 +541,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -526,7 +625,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -612,7 +711,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -697,7 +796,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -782,7 +881,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -867,7 +966,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -953,7 +1052,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
+                <time title="修改时间：2019-12-26 00:38:41" itemprop="dateModified" datetime="2019-12-26T00:38:41-08:00">2019-12-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -993,93 +1092,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/google-3-gifts-gfs/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/" class="post-title-link" itemprop="url">(Stack Overflow) SAVE TRANSACTION vs BEGIN TRANSACTION (SQL Server) how to nest transactions nicely</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2012-03-15 02:51:00" itemprop="dateCreated datePublished" datetime="2012-03-15T02:51:00-07:00">2012-03-15</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-25 22:52:56" itemprop="dateModified" datetime="2019-12-25T22:52:56-08:00">2019-12-25</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="question"><a class="header-anchor" href="#question"></a>Question</h2>
-<p>I have a stored procedure that needs to set a save point so that it can, under certain circumstances, undo everything it did and return an error code to the caller, or accept/commit it and return success to the caller. But I need it to work whether the caller has already started a transaction or not. The doc is extremely confusing on this subject. Here is what I think will work, but I’m not certain of all the ramifications.</p>
-<p>The thing is - this <code>Stored Procedure (SP)</code> is called by others. So I don’t know if they’ve started a transaction or not… Even if I require users to start a transaction to use my SP, I still have questions about the proper use of <code>Save Points</code> …</p>
-<p>My SP will test if a transaction is in progress, and if not, start one with <code>BEGIN TRANSACTION</code>. If a transaction is already in progress, it will instead create a save point with <code>SAVE TRANSACTION MySavePointName</code>, and save the fact this is what I did.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1149,20 +1161,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-count">117</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-count">154</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
