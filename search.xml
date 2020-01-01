@@ -3689,8 +3689,8 @@ Reprinted from: <a href="http://elliot.land/post/implementing-your-own-transacti
       </categories>
       <tags>
         <tag>转载</tag>
-        <tag>DBMS</tag>
         <tag>MVCC</tag>
+        <tag>DBMS</tag>
         <tag>SQL Server</tag>
         <tag>Transaction</tag>
       </tags>
