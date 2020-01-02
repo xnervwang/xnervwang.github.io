@@ -48,7 +48,7 @@
 </script>
 
   <meta name="description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
-<meta name="keywords" content="转载,Linux,Heap,Memory Management,Buddy System,Slab Allocator">
+<meta name="keywords" content="转载,Heap,Linux,Memory Management,Buddy System,Slab Allocator">
 <meta property="og:type" content="article">
 <meta property="og:title" content="内存分配-----伙伴算法和slab算法">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;index.html">
@@ -57,7 +57,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;buddy.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;slab.png">
-<meta property="og:updated_time" content="2020-01-02T03:33:52.403Z">
+<meta property="og:updated_time" content="2020-01-02T04:09:00.421Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;buddy.png">
 
@@ -374,8 +374,8 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/Heap/" rel="tag"># Heap</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
               <a href="/tags/Buddy-System/" rel="tag"># Buddy System</a>
               <a href="/tags/Slab-Allocator/" rel="tag"># Slab Allocator</a>

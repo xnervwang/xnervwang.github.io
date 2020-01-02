@@ -58,7 +58,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;1.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;2.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;3.png">
-<meta property="og:updated_time" content="2020-01-02T04:09:00.344Z">
+<meta property="og:updated_time" content="2020-01-02T06:12:23.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;1.png">
 
@@ -294,7 +294,7 @@
 
       
         <p>与MySQL等开源数据库不同的是，PostgreSQL（PG）并不使用O_DIRECT来写data文件和log文件，而是依赖于OS缓存，并且强调在设置shared buffer在大小时不能过大，否则会造成过于频繁的swap而导致IO性能下降。这与MySQL等数据库的buffer pool size越大性能越好的指导原则是相反的。并且PG依赖于OS缓存的这一特性也给提供PostgreSQL云服务造成了很多问题。例如云服务要求multiple tenants资源隔离，也就是说跑在同一个VM上的多个PG servers相互之间不能互相影响，但共用OS缓存显然会造成资源竞争。不知道Docker是否可以进行OS缓存的资源隔离，但现阶段还还依赖于Service Fabric架构的Azure PG显然得自己解决这个问题，也因此造成了架构设计上不得不考虑OS缓存的隔离。</p>
-<p>在Google上搜索了相关文章，但大部分的文章都是类似一句“这个问题需要另开一篇文章来讲了，但网上有很多资源可以利用”或者“it also needs to use buffered I/O for a number of reasons”，但实际上我还没找到多少文章有详细论述为什么PG要设计成依赖于OS缓存，绝大多数都是如何tune shared buffer size，可能是我还没有找对地方。从<a href="http://www.interdb.jp/pg/pgsql02.html" target="_blank" rel="noopener">The Internals of PostgreSQL: Chapter 2 Process and Memory Architecture</a>这篇文章看来，与MySQL使用多线程或线程池和架构不同的是，PG使用的是多进程架构。多进程模型在Windows平台上会造成很大的性能问题，这暂且不提。但多进程之间是共用的shared buffer。既然如此，那就应该不是寄希望于OS缓存来便于多进程之间共享shared buffer吧。</p>
+<p>从<a href="http://www.interdb.jp/pg/pgsql02.html" target="_blank" rel="noopener">The Internals of PostgreSQL: Chapter 2 Process and Memory Architecture</a>这篇文章看来，与MySQL使用多线程或线程池和架构不同的是，PG使用的是多进程架构。多进程模型在Windows平台上会造成很大的性能问题，这暂且不提。但多进程之间是共用的shared buffer。既然如此，那就应该不是寄希望于OS缓存来便于多进程之间共享shared buffer吧。</p>
 <a id="more"></a>
 <p><img src="/assets/why-pg-uses-os-cache/1.png" alt=""></p>
 <p><img src="/assets/why-pg-uses-os-cache/2.png" alt=""></p>
