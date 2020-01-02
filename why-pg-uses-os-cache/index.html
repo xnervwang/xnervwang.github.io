@@ -58,7 +58,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;1.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;2.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;3.png">
-<meta property="og:updated_time" content="2020-01-02T03:33:52.325Z">
+<meta property="og:updated_time" content="2020-01-02T04:09:00.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;why-pg-uses-os-cache&#x2F;1.png">
 
@@ -300,8 +300,9 @@
 <p><img src="/assets/why-pg-uses-os-cache/2.png" alt=""></p>
 <p><a href="http://liuyangming.tech/10-2019/INNODB-vs-PgSQL-buffer.html" target="_blank" rel="noopener">PgSQL和MySQL的bufferpool探讨</a>这篇文章提出了一种猜想，认为由于PostgreSQL是诞生在实验室中，主要为了研究数据库内核原理，那么使用buffer io能够减少IO栈的代码开发，进而能够减少额外的debug。这种说法是有可能的、虽然PG的代码比MySQL的干净太多，MySQL的代码中经常有类似xxx_function，xxx_function2，another_xxx_function2这种奇怪的函数名字，而且毫无注释完全不明所以。但是PG很明显在工程化和成熟度上不如MySQL。文章中提到PG中有这么一段代码：</p>
 <p><img src="/assets/why-pg-uses-os-cache/3.png" alt=""></p>
-<p>也就是说PG依赖于OS缓存来减少日志归档和流复制中的文件IO读取次数。但这应该仅限于WAL xlog文件。对于shared buffer pool，是什么原因使得还需要保留这种double buffers的设计呢？</p>
-<p><a href="http://www.interdb.jp/pg/pgsql08.html" target="_blank" rel="noopener">The Internals of PostgreSQL: Chapter 8 Buffer Manager</a>提到可以参考<a href="https://www.postgresql.org/message-id/529E267F.4050700@agliodbs.com" target="_blank" rel="noopener">Why we are going to have to go DirectIO</a>这篇讨论和<a href="https://lwn.net/Articles/580542/" target="_blank" rel="noopener">Thread summary: the Linux kernel and PostgreSQL</a>这篇文章。目前看来，应该还是PG的storage layer实现上过于简陋，效率上存在很大的问题，不足以脱离OS缓存而独自运行。这也印证了<a href="http://liuyangming.tech/10-2019/INNODB-vs-PgSQL-buffer.html" target="_blank" rel="noopener">PgSQL和MySQL的bufferpool探讨</a>这篇文章的说法。<a href="https://madusudanan.com/blog/understanding-postgres-caching-in-depth/#OSCaching" target="_blank" rel="noopener">Understanding caching in Postgres - An in-depth guide</a>这里也提到，PG依赖于OS缓存来调度写请求，这恐怕也是PG storage layer本身缺乏相应调度机制的一种。</p>
+<p>也就是说PG依赖于OS缓存来减少日志归档和流复制中的文件IO读取次数。但这应该仅限于WAL xlog文件。对于shared buffer pool，是什么原因使得还需要保留这种double buffering的设计呢？</p>
+<p><a href="http://www.interdb.jp/pg/pgsql08.html" target="_blank" rel="noopener">The Internals of PostgreSQL: Chapter 8 Buffer Manager</a>提到可以参考<a href="https://www.postgresql.org/message-id/529E267F.4050700@agliodbs.com" target="_blank" rel="noopener">Why we are going to have to go DirectIO</a>这篇讨论和<a href="https://lwn.net/Articles/580542/" target="_blank" rel="noopener">Thread summary: the Linux kernel and PostgreSQL</a>这篇文章。目前看来，应该还是PG的storage layer实现上过于简陋，效率上存在很大的问题，不足以脱离OS缓存而独自运行。这也印证了<a href="http://liuyangming.tech/10-2019/INNODB-vs-PgSQL-buffer.html" target="_blank" rel="noopener">PgSQL和MySQL的bufferpool探讨</a>这篇文章的说法。<a href="https://madusudanan.com/blog/understanding-postgres-caching-in-depth/#OSCaching" target="_blank" rel="noopener">Understanding caching in Postgres - An in-depth guide</a>这里也提到，PG依赖于OS缓存来调度写请求，这恐怕也是PG storage layer本身缺乏相应调度机制的一种表现。</p>
+<p><a href="https://lwn.net/Articles/591723/" target="_blank" rel="noopener">PostgreSQL pain points</a>中也有提到flow fsync和double buffering等问题，看起来PG的developers依赖于Linux kernel提供相应的解决方案。我不知道这是否是一种正确的方向，毕竟这种与特定OS紧耦合的方案也就限制了PG在其它OS平台上运行的能力。但是考虑到现在PG本来就在Windows上跑得很差像个demo，如果PG本身的开发力量不够的话，也许这也算是一种解决方案吧。</p>
 <hr>
 <p><strong>本文地址：<a href="http://xnerv.wang/why-pg-uses-os-cache/">http://xnerv.wang/why-pg-uses-os-cache/</a></strong></p>
 
