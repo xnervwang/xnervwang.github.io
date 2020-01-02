@@ -239,6 +239,85 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/bigtable-leveldb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/bigtable-leveldb/" class="post-title-link" itemprop="url">浅析 Bigtable 和 LevelDB 的实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-16 18:30:00" itemprop="dateCreated datePublished" datetime="2018-03-16T18:30:00-07:00">2018-03-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在 2006 年的 OSDI 上，Google 发布了名为 <a href="https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf" target="_blank" rel="noopener">Bigtable: A Distributed Storage System for Structured Data</a> 的论文，其中描述了一个用于管理结构化数据的分布式存储系统 - Bigtable 的数据模型、接口以及实现等内容。</p>
+<p><img src="/assets/bigtable-leveldb/2017-08-12-leveldb-logo.png-1000width" alt="leveldb-logo"></p>
+<p>本文会先对 Bigtable 一文中描述的分布式存储系统进行简单的描述，然后对 Google 开源的 KV 存储数据库 <a href="https://github.com/google/leveldb" target="_blank" rel="noopener">LevelDB</a> 进行分析；LevelDB 可以理解为单点的 Bigtable 的系统，虽然其中没有 Bigtable 中与 tablet 管理以及一些分布式相关的逻辑，不过我们可以通过对 LevelDB 源代码的阅读增加对 Bigtable 的理解。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/bigtable-leveldb/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/leveldb-analysis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -936,85 +1015,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/four-isolation-levels-of-database-weak-consistency/" class="post-title-link" itemprop="url">数据库弱一致性四个隔离级别</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-02-19 19:21:00" itemprop="dateCreated datePublished" datetime="2018-02-19T19:21:00-08:00">2018-02-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>SQL-92标准中定义了四个隔离级别，这四个隔离级别在以前版本的SQL Server中即受到支持：</p>
-<h2 id="read-uncommitted"><a class="header-anchor" href="#read-uncommitted"></a>READ UNCOMMITTED</h2>
-<p>READ UNCOMMITTED是限制性最弱的隔离级别，因为该级别忽略其他事务放置的锁。使用READ UNCOMMITTED级别执行的事务，可以读取尚未由其他事务提交的修改后的数据值，这些行为称为“脏”读。这是因为<span style="color: #ff0000;"><strong>在Read Uncommitted级别下，读取数据不需要加S锁，这样就不会跟被修改的数据上的X锁冲突</strong></span>。比如，事务1修改一行，事务2在事务1提交之前读取了这一行。如果事务1回滚，事务2就读取了一行没有提交的数据，这样的数据我们认为是不存在的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/four-isolation-levels-of-database-weak-consistency/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1065,7 +1065,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1078,7 +1078,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">155</span>
+        <span class="site-state-item-count">157</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

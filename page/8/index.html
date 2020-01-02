@@ -239,6 +239,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/ddl-commands-in-transactions-in-sql-server-versus-oracle/" class="post-title-link" itemprop="url">DDL commands in Transactions in SQL Server versus Oracle</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-09 00:00:00" itemprop="dateCreated datePublished" datetime="2016-12-09T00:00:00-08:00">2016-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="problem"><a class="header-anchor" href="#problem"></a>Problem</h2>
+<p>Transactions are widely used in database development, especially when a database supports an application where a lot of correlated changes are needed. A transaction is a group of SQL statements that are all committed together (all changes done by these statements become a permanent part of the database) or none of these statements are committed (all these changes are rolled back). More often statements included in transaction are DML (Data Manipulation Language) statements, such as INSERT, UPDATE, DELETE and so on. But what about DDL (Data Definition Language) statements? Is it possible to include DDL commands such as CREATE, ALTER, DROP, etc., in a transaction? In this tip we are going to answer these questions for both - MS SQL Server and Oracle databases.</p>
+<h2 id="solution"><a class="header-anchor" href="#solution"></a>Solution</h2>
+<p>The approaches to use DDL commands within transactions are quite different in Microsoft SQL Server vs. Oracle. Let’s discuss this for each RDBMS separately.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/ddl-commands-in-transactions-in-sql-server-versus-oracle/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/cache-update-routines/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1051,96 +1131,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/two-ways-of-allocating-memory-brk-and-mmap/" class="post-title-link" itemprop="url">进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2014-09-23 11:31:56" itemprop="dateCreated datePublished" datetime="2014-09-23T11:31:56-07:00">2014-09-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
-                    <span itemprop="name">操作系统</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="如何查看进程发生缺页中断的次数？"><a class="header-anchor" href="#如何查看进程发生缺页中断的次数？"></a>如何查看进程发生缺页中断的次数？</h2>
-<p>用ps -o majflt,minflt -C program命令查看。<br>
-majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。<br>
-这两个数值表示一个进程自启动以来所发生的缺页中断的次数。</p>
-<h2 id="发成缺页中断后-执行了那些操作？"><a class="header-anchor" href="#发成缺页中断后-执行了那些操作？"></a>发成缺页中断后，执行了那些操作？</h2>
-<p>当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：</p>
-<ol>
-<li>检查要访问的虚拟地址是否合法</li>
-<li>查找/分配一个物理页</li>
-<li>填充物理页内容（读取磁盘，或者直接置0，或者啥也不干）</li>
-<li><strong>建立映射关系（虚拟地址到物理地址）</strong></li>
-</ol>
-<p>重新执行发生缺页中断的那条指令<br>
-如果第3步，需要读取磁盘，那么这次缺页中断就是majflt，否则就是minflt。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/two-ways-of-allocating-memory-brk-and-mmap/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1191,7 +1181,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1204,7 +1194,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">155</span>
+        <span class="site-state-item-count">157</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

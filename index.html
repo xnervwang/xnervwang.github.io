@@ -239,6 +239,84 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/why-pg-uses-os-cache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/why-pg-uses-os-cache/" class="post-title-link" itemprop="url">为什么PostgreSQL要使用OS缓存？</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-01-01 18:47:00" itemprop="dateCreated datePublished" datetime="2020-01-01T18:47:00-08:00">2020-01-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>与MySQL等开源数据库不同的是，PostgreSQL（PG）并不使用O_DIRECT来写data文件和log文件，而是依赖于OS缓存，并且强调在设置shared buffer在大小时不能过大，否则会造成过于频繁的swap而导致IO性能下降。这与MySQL等数据库的buffer pool size越大性能越好的指导原则是相反的。并且PG依赖于OS缓存的这一特性也给提供PostgreSQL云服务造成了很多问题。例如云服务要求multiple tenants资源隔离，也就是说跑在同一个VM上的多个PG servers相互之间不能互相影响，但共用OS缓存显然会造成资源竞争。不知道Docker是否可以进行OS缓存的资源隔离，但现阶段还还依赖于Service Fabric架构的Azure PG显然得自己解决这个问题，也因此造成了架构设计上不得不考虑OS缓存的隔离。</p>
+<p>在Google上搜索了相关文章，但大部分的文章都是类似一句“这个问题需要另开一篇文章来讲了，但网上有很多资源可以利用”或者“it also needs to use buffered I/O for a number of reasons”，但实际上我还没找到多少文章有详细论述为什么PG要设计成依赖于OS缓存，绝大多数都是如何tune shared buffer size，可能是我还没有找对地方。从<a href="http://www.interdb.jp/pg/pgsql02.html" target="_blank" rel="noopener">The Internals of PostgreSQL: Chapter 2 Process and Memory Architecture</a>这篇文章看来，与MySQL使用多线程或线程池和架构不同的是，PG使用的是多进程架构。多进程模型在Windows平台上会造成很大的性能问题，这暂且不提。但多进程之间是共用的shared buffer。既然如此，那就应该不是寄希望于OS缓存来便于多进程之间共享shared buffer吧。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/why-pg-uses-os-cache/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/google-50-tshirt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -984,89 +1062,6 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/trace-metadata-lock/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/trace-metadata-lock/" class="post-title-link" itemprop="url">MySQL - 跟踪Metadata lock</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-21 19:32:00" itemprop="dateCreated datePublished" datetime="2018-03-21T19:32:00-07:00">2018-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
-<p>MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题：</p>
-<p><strong>问题1: 破坏事务隔离级别</strong> 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。</p>
-<p><strong>问题2: 破坏binlog的顺序</strong> 在对表的DML过程中，会因为其它session的DDL语句，导致binlog里的event顺序在备库执行的结果和主库不一致。</p>
-<p>从MySQL 5.5.3开始，MDL锁的持有周期变成了事务，解决了上面提到的两个问题，但在autocommit=off的情况下，也大大增加了阻塞的可能性。DBA对于阻塞的case，处理起来又比较麻烦，原因就是MDL锁的阻塞情况没有暴露明确的信息。</p>
-<p>从MySQL 5.7.6开始，可以通过performance schema来查询MDL锁的持有情况。</p>
-<p>在开始介绍5.7的跟踪Metadata lock之前， 小编还想讨论一下前面提到的这两个问题，在Oracle数据库中是如何处理的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/trace-metadata-lock/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1117,7 +1112,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1130,7 +1125,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">155</span>
+        <span class="site-state-item-count">157</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
