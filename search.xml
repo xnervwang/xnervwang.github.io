@@ -10,6 +10,7 @@
 <p>在一个初创公司中经常是没有标准流程的效率更高，而在一个大公司中是有标准流程效率更高；</p>
 <p>在一个内容创作型的公司中，追随热点、快速响应的效率更高，而在一个产品研发型的公司中，做好计划、理清流程的效率更高；</p>
 <p>在一个业务稳定成熟的公司中，以KPI推动工作效率更高，而在一个业务快速创新的公司中，以OKR推动工作效率更高；</p>
+<a id="more"></a>
 <p>创始人能力强，开始时亲力亲为效率高，可是如果不能接下来把中层建立培养起来，公司发展效率就不会高；</p>
 <p>个别员工能力强，单兵作战效率高，可是如果不能把个体能力变为团队能力，团队战斗效率就不会高；</p>
 <p>事事靠老大拿主意，眼前完成任务效率高，可是如果不能让员工形成独立思考能力，老大累死也不会得到真正的效率；</p>
@@ -9416,6 +9417,7 @@ Reprinted from: <a href="http://iarchsys.com/?p=692" target="_blank" rel="noopen
 <p><img src="https:////images0.cnblogs.com/news/66372/201407/311846584158262.jpg" alt="BashrcGenerator"></p>
 <p>简单说就是个性化生成命令提示符，可将生成的代码写入到用户家目录的 .bashrc 或者可以设置全局变量文件/etc/profile 对所有用户生效。</p>
 <p>可参考：<a href="http://stackoverflow.com/questions/4133904/ps1-line-with-git-current-branch-and-colors" target="_blank" rel="noopener">http://stackoverflow.com/questions/4133904/ps1-line-with-git-current-branch-and-colors</a></p>
+<a id="more"></a>
 <h2 id="3-vim-adventures-com-通过-rpg-游戏练习-vim-使用"><a class="header-anchor" href="#3-vim-adventures-com-通过-rpg-游戏练习-vim-使用"></a>3. <a href="http://vim-adventures.com/" target="_blank" rel="noopener">Vim-adventures.com</a> 通过 RPG 游戏练习 VIM 使用</h2>
 <p><img src="https:////images0.cnblogs.com/news/66372/201407/311846586021207.jpg" alt="Vim-adventures"></p>
 <p>通过 RPG 游戏练习 VIM 编辑器的使用，使用h,j,k,l字符移动人物来获得新的命令能力和搜集钥匙，查看帮助可使用:help;赶脚这个非常 cool!</p>
