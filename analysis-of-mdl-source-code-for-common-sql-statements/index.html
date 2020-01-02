@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="前言 MySQL5.5版本开始引入了MDL锁用来保护元数据信息，让MySQL能够在并发环境下多DDL、DML同时操作下保持元数据的一致性。本文用MySQL5.7源码分析了常用SQL语句的MDL加锁实现。 MDL锁粒度 MDL_key由namespace、db_name、name组成。 namespace包含：   GLOBAL。用于global read lock，例如FLUSH TABLES">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-01T07:49:20.649Z">
+<meta property="og:updated_time" content="2020-01-01T07:51:13.917Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">
@@ -527,7 +527,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">117</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -540,7 +540,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-count">155</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -570,7 +570,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

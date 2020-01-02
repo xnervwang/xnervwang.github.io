@@ -239,6 +239,87 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/leveldb-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/leveldb-analysis/" class="post-title-link" itemprop="url">LevelDB 实现分析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-16 18:20:00" itemprop="dateCreated datePublished" datetime="2018-03-16T18:20:00-07:00">2018-03-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="leveldb-介绍"><a class="header-anchor" href="#leveldb-介绍"></a><a href="#LevelDB-%E4%BB%8B%E7%BB%8D" title="LevelDB 介绍"></a>LevelDB 介绍</h2>
+<p>LevelDB 是由 Google 开发的 key-value 非关系型数据库存储系统，是基于 LSM(Log-Structured-Merge Tree) 的典型实现，LSM 的原理是：当读写数据库时，首先纪录读写操作到 Op log 文件中，然后再操作内存数据库，当达到 checkpoint 时，则写入磁盘，同时删除相应的 Op log 文件，后续重新生成新的内存文件和 Op log 文件。</p>
+<p>LevelDB 内部采用了内存缓存机制，也就是在写数据库时，首先会存储在内存中，内存的存储结构采用了 skip list 结构，待达到 checkpoint 时，才进行落盘操作，保证了数据库的高效运转。</p>
+<h2 id="leveldb-总体架构"><a class="header-anchor" href="#leveldb-总体架构"></a><a href="#LevelDB-%E6%80%BB%E4%BD%93%E6%9E%B6%E6%9E%84" title="LevelDB 总体架构"></a>LevelDB 总体架构</h2>
+<p><img src="/assets/leveldb-analysis/TB1AMqNSXXXXXczXFXXXXXXXXXX-851-479.png" alt="resources structure"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/leveldb-analysis/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/understanding-six-lock-in-sql-server/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -934,85 +1015,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/" class="post-title-link" itemprop="url">The Tale of Two Evaluators: Understanding MASM and C++ Expression Evaluators in WinDbg </a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-02-19 18:09:00" itemprop="dateCreated datePublished" datetime="2018-02-19T18:09:00-08:00">2018-02-19</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/WinDbg/" itemprop="url" rel="index">
-                    <span itemprop="name">WinDbg</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Much like any powerful tool with a command line interface, the WinDBG expression syntax can sometimes seem quite cryptic. In the interest of trying to unlock the power of the command line interface, in this article we’re going to cover a fundamental WinDBG concept that is key to understanding those long, strange commands: the expression evaluators.</p>
-<p>As it turns out, there are two built in expression evaluators in WinDBG, the MASM evaluator and the C++ evaluator. In order to better understand the differences, we’ll first discuss the MASM evaluator in detail and then move on to the C++ evaluator.</p>
-<p>Please note that this article is not going to attempt to be definitive and list every possible operator or feature of the expression evaluators. We’re simply going to focus on what we find to be the most useful in the hopes of getting you started. However, once you’ve gotten your feet wet full details are available in the WinDBG documentation.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1063,7 +1065,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">117</span>
+          <span class="site-state-item-count">118</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1076,7 +1078,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-count">155</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1106,7 +1108,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

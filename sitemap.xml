@@ -2,821 +2,828 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://xnerv.wang/google-50-tshirt/</loc>
+    
+    <lastmod>2020-01-02T01:51:45.566Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
     
-    <lastmod>2020-01-01T07:49:20.854Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.089Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/tcp-model-knowledge-summary/</loc>
     
-    <lastmod>2020-01-01T07:49:20.852Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.086Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.850Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.082Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/mingw-cygwin-summary-and-thinking/</loc>
     
-    <lastmod>2020-01-01T07:49:20.848Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.080Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/virtual-function-and-virtual-table/</loc>
     
-    <lastmod>2020-01-01T07:49:20.847Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.078Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/how-to-implement-a-malloc/</loc>
     
-    <lastmod>2020-01-01T07:49:20.845Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.076Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/spin-lock-in-cpp/</loc>
     
-    <lastmod>2020-01-01T07:49:20.843Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
-    
-    <lastmod>2020-01-01T07:49:20.841Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.073Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/analysis-about-cpp-exception-implementation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.838Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.071Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
+    
+    <lastmod>2020-01-01T07:51:14.071Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/all-truths-about-python-encoding-problem/</loc>
     
-    <lastmod>2020-01-01T07:49:20.837Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.069Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/cpp-bean-knowledge/</loc>
     
-    <lastmod>2020-01-01T07:49:20.836Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.068Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
     
-    <lastmod>2020-01-01T07:49:20.833Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.065Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
     
-    <lastmod>2020-01-01T07:49:20.831Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.062Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
     
-    <lastmod>2020-01-01T07:49:20.830Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.060Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/16-useful-online-tools/</loc>
     
-    <lastmod>2020-01-01T07:49:20.828Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.059Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
     
-    <lastmod>2020-01-01T07:49:20.827Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.057Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/lock-free-queue-Implementation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.826Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.056Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/some-knowledge-points-learned-in-university/</loc>
     
-    <lastmod>2020-01-01T07:49:20.824Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.054Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
     
-    <lastmod>2020-01-01T07:49:20.820Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.051Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/process-memory-layout/</loc>
     
-    <lastmod>2020-01-01T07:49:20.818Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.049Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/understand-memory-barrier/</loc>
     
-    <lastmod>2020-01-01T07:49:20.816Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.047Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/</loc>
     
-    <lastmod>2020-01-01T07:49:20.812Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.043Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</loc>
     
-    <lastmod>2020-01-01T07:49:20.809Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.040Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/memory-barriers-are-like-source-control-perations/</loc>
     
-    <lastmod>2020-01-01T07:49:20.807Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.039Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</loc>
     
-    <lastmod>2020-01-01T07:49:20.806Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.037Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/acquire-and-release-semantics/</loc>
     
-    <lastmod>2020-01-01T07:49:20.804Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.035Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/thread-synchronization-and-atomic-operation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.803Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.034Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
     
-    <lastmod>2020-01-01T07:49:20.800Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.033Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
     
-    <lastmod>2020-01-01T07:49:20.798Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.031Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/further-disscusion-of-pagerank-4/</loc>
     
-    <lastmod>2020-01-01T07:49:20.795Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.030Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/further-disscusion-of-pagerank-2/</loc>
     
-    <lastmod>2020-01-01T07:49:20.793Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.028Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/further-disscusion-of-pagerank-1/</loc>
     
-    <lastmod>2020-01-01T07:49:20.792Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.026Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</loc>
     
-    <lastmod>2020-01-01T07:49:20.790Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.025Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/spv-spv-nodes-spv-purses/</loc>
     
-    <lastmod>2020-01-01T07:49:20.788Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.023Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/google-3-gifts-gfs/</loc>
     
-    <lastmod>2020-01-01T07:49:20.787Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.022Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/google-3-gifts-mapreduce/</loc>
     
-    <lastmod>2020-01-01T07:49:20.785Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.020Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/google-3-gifts-bigtable/</loc>
     
-    <lastmod>2020-01-01T07:49:20.784Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.018Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/cache-update-routines/</loc>
     
-    <lastmod>2020-01-01T07:49:20.781Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.016Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/bigtable-leveldb/</loc>
     
-    <lastmod>2020-01-01T07:49:20.780Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.015Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/study-consistent-hashing-in-5min/</loc>
     
-    <lastmod>2020-01-01T07:49:20.777Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.012Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/application-of-mvcc-in-distributed-system/</loc>
     
-    <lastmod>2020-01-01T07:49:20.776Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.011Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/dynamo-implement/</loc>
     
-    <lastmod>2020-01-01T07:49:20.775Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.010Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/transaction-processing-of-distributed-system/</loc>
     
-    <lastmod>2020-01-01T07:49:20.773Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.008Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</loc>
     
-    <lastmod>2020-01-01T07:49:20.771Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.006Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/the-google-file-system-paper-analysis/</loc>
     
-    <lastmod>2020-01-01T07:49:20.769Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.005Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/leveldb-analysis/</loc>
     
-    <lastmod>2020-01-01T07:49:20.768Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.004Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/compile-windows-seafile-client/</loc>
     
-    <lastmod>2020-01-01T07:49:20.767Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.002Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/summary-of-distributed-theory-and-architecture/</loc>
     
-    <lastmod>2020-01-01T07:49:20.765Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.001Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/something-about-static-library-mt-md/</loc>
     
-    <lastmod>2020-01-01T07:49:20.763Z</lastmod>
+    <lastmod>2020-01-01T07:51:14.000Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/release-memory-allocated-by-another-module/</loc>
     
-    <lastmod>2020-01-01T07:49:20.761Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.998Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/</loc>
     
-    <lastmod>2020-01-01T07:49:20.759Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.996Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</loc>
     
-    <lastmod>2020-01-01T07:49:20.756Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.993Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/</loc>
     
-    <lastmod>2020-01-01T07:49:20.755Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.992Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/iocp-usage-and-inside/</loc>
     
-    <lastmod>2020-01-01T07:49:20.753Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.989Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
     
-    <lastmod>2020-01-01T07:49:20.751Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.988Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
     
-    <lastmod>2020-01-01T07:49:20.750Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.985Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
     
-    <lastmod>2020-01-01T07:49:20.747Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.983Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/msdn-managing-heap-memory/</loc>
     
-    <lastmod>2020-01-01T07:49:20.743Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.981Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/msdn-heap-pleasures-and-pains/</loc>
     
-    <lastmod>2020-01-01T07:49:20.741Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.979Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/msdn-heap-functions/</loc>
     
-    <lastmod>2020-01-01T07:49:20.739Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.976Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</loc>
     
-    <lastmod>2020-01-01T07:49:20.738Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.975Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/comparing-memory-allocation-methods/</loc>
     
-    <lastmod>2020-01-01T07:49:20.734Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.973Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/debugging-baidu-pan/</loc>
     
-    <lastmod>2020-01-01T07:49:20.733Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.971Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/debugging-alibaba-softwares/</loc>
     
-    <lastmod>2020-01-01T07:49:20.731Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.970Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/</loc>
     
-    <lastmod>2020-01-01T07:49:20.729Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.968Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</loc>
     
-    <lastmod>2020-01-01T07:49:20.727Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.966Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/summary-of-orphan-process-and-zombie-process/</loc>
     
-    <lastmod>2020-01-01T07:49:20.726Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.965Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</loc>
     
-    <lastmod>2020-01-01T07:49:20.724Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.963Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</loc>
     
-    <lastmod>2020-01-01T07:49:20.722Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.961Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/</loc>
     
-    <lastmod>2020-01-01T07:49:20.721Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.960Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/special-features-of-linux-memory-management-mechanism/</loc>
     
-    <lastmod>2020-01-01T07:49:20.718Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.957Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/the-core-algorithm-of-rsync/</loc>
     
-    <lastmod>2020-01-01T07:49:20.692Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.956Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/memory-allocation-mechanism-in-linux/</loc>
     
-    <lastmod>2020-01-01T07:49:20.691Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.954Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/version-control-and-usage-of-linux-shared-library/</loc>
     
-    <lastmod>2020-01-01T07:49:20.690Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.953Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/linux-tty-pts-summary/</loc>
     
-    <lastmod>2020-01-01T07:49:20.688Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.951Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/linux-session-and-processgroup-summary/</loc>
     
-    <lastmod>2020-01-01T07:49:20.686Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.949Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</loc>
     
-    <lastmod>2020-01-01T07:49:20.682Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.947Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
     
-    <lastmod>2020-01-01T07:49:20.681Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.946Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/linux-process-kernel-and-file-system-summary/</loc>
     
-    <lastmod>2020-01-01T07:49:20.680Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.945Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
     
-    <lastmod>2020-01-01T07:49:20.678Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.943Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
     
-    <lastmod>2020-01-01T07:49:20.677Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.942Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
     
-    <lastmod>2020-01-01T07:49:20.676Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.941Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
     
-    <lastmod>2020-01-01T07:49:20.673Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.938Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
     
-    <lastmod>2020-01-01T07:49:20.672Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.937Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
     
-    <lastmod>2020-01-01T07:49:20.671Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.936Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
     
-    <lastmod>2020-01-01T07:49:20.669Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.935Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
     
-    <lastmod>2020-01-01T07:49:20.668Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.933Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
     
-    <lastmod>2020-01-01T07:49:20.667Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.932Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
     
-    <lastmod>2020-01-01T07:49:20.665Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.931Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
     
-    <lastmod>2020-01-01T07:49:20.663Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.930Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
     
-    <lastmod>2020-01-01T07:49:20.662Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.928Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
     
-    <lastmod>2020-01-01T07:49:20.661Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.927Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
     
-    <lastmod>2020-01-01T07:49:20.659Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.926Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</loc>
     
-    <lastmod>2020-01-01T07:49:20.658Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.924Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/read-committed-snapshot-isolation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.656Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.923Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/mysql-row-format/</loc>
     
-    <lastmod>2020-01-01T07:49:20.655Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.922Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</loc>
     
-    <lastmod>2020-01-01T07:49:20.654Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.920Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/trace-metadata-lock/</loc>
     
-    <lastmod>2020-01-01T07:49:20.652Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.919Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</loc>
     
-    <lastmod>2020-01-01T07:49:20.649Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.917Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/trace-metadata-lock-procedure-using-gdb/</loc>
     
-    <lastmod>2020-01-01T07:49:20.645Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.914Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/what-analysis-of-signal-processing-mechanism/</loc>
     
-    <lastmod>2020-01-01T07:49:20.644Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.912Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/what-set-names-does/</loc>
     
-    <lastmod>2020-01-01T07:49:20.642Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.911Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/what-innodb-mini-transation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.640Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.909Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/</loc>
     
-    <lastmod>2020-01-01T07:49:20.638Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.908Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/mysql-index-condition-pushdown/</loc>
     
-    <lastmod>2020-01-01T07:49:20.636Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.905Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</loc>
     
-    <lastmod>2020-01-01T07:49:20.633Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.904Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/lock-escalations/</loc>
     
-    <lastmod>2020-01-01T07:49:20.631Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.902Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
     
-    <lastmod>2020-01-01T07:49:20.629Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.901Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
     
-    <lastmod>2020-01-01T07:49:20.626Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.899Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
     
-    <lastmod>2020-01-01T07:49:20.625Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.898Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>
     
-    <lastmod>2020-01-01T07:49:20.621Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.896Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</loc>
     
-    <lastmod>2020-01-01T07:49:20.610Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.894Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
     
-    <lastmod>2020-01-01T07:49:20.608Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.892Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
     
-    <lastmod>2020-01-01T07:49:20.606Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.890Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
     
-    <lastmod>2020-01-01T07:49:20.604Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.889Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/23-design-patterns-analysis/</loc>
     
-    <lastmod>2020-01-01T07:49:20.591Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.878Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
     
-    <lastmod>2020-01-01T07:49:20.584Z</lastmod>
+    <lastmod>2020-01-01T07:51:13.873Z</lastmod>
     
   </url>
   
