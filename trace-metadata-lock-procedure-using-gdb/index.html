@@ -50,13 +50,13 @@
   <meta name="description" content="MDL(Meta Data LocK)的作用 在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP&#x2F;RENAME&#x2F;ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989) master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到. slave： 在">
 <meta name="keywords" content="转载,DBMS,MySQL,MDL,gdb">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL - 利用gdb跟踪MDL加锁过程">
+<meta property="og:title" content="MySQL - 利用gdb跟踪MDL加锁过程（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;trace-metadata-lock-procedure-using-gdb&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="MDL(Meta Data LocK)的作用 在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP&#x2F;RENAME&#x2F;ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989) master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到. slave： 在">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;ata2-img.cn-hangzhou.img-pub.aliyun-inc.com&#x2F;9fef60e1111bdbc1e883646a85adeb67.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.589Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:35.995Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;ata2-img.cn-hangzhou.img-pub.aliyun-inc.com&#x2F;9fef60e1111bdbc1e883646a85adeb67.png">
 
@@ -74,7 +74,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>MySQL - 利用gdb跟踪MDL加锁过程 | XNERV SURVEYS</title>
+  <title>MySQL - 利用gdb跟踪MDL加锁过程（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -256,7 +256,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          MySQL - 利用gdb跟踪MDL加锁过程
+          MySQL - 利用gdb跟踪MDL加锁过程（转载）
         </h2>
 
         <div class="post-meta">

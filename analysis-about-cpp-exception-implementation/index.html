@@ -50,7 +50,7 @@
   <meta name="description" content="在我几年前开始写《C++编码规范与指导》一文时，就已经规划着要加入这样一篇讨论 C++ 异常机制的文章了。没想到时隔几年以后才有机会把这个尾巴补完 :-)。 还是那句开场白：“在恰当的场合使用恰当的特性” 对每个称职的 C++ 程序员来说都是一个基本标准。想要做到这点，就必须要了解语言中每个特性的实现方式及其时空开销。异常处理由于涉及大量底层内容，向来是 C++ 各种高级机制中较难理解和透彻掌握的">
 <meta name="keywords" content="转载,编程语言,C++,C++异常">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++异常机制的实现方式和开销分析">
+<meta property="og:title" content="C++异常机制的实现方式和开销分析（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;analysis-about-cpp-exception-implementation&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="在我几年前开始写《C++编码规范与指导》一文时，就已经规划着要加入这样一篇讨论 C++ 异常机制的文章了。没想到时隔几年以后才有机会把这个尾巴补完 :-)。 还是那句开场白：“在恰当的场合使用恰当的特性” 对每个称职的 C++ 程序员来说都是一个基本标准。想要做到这点，就必须要了解语言中每个特性的实现方式及其时空开销。异常处理由于涉及大量底层内容，向来是 C++ 各种高级机制中较难理解和透彻掌握的">
@@ -60,7 +60,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;栈回退.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;异常捕获机制.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;异常抛出.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.790Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.143Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;analysis-about-cpp-exception-implementation&#x2F;函数栈框架.png">
 
@@ -78,7 +78,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>C++异常机制的实现方式和开销分析 | XNERV SURVEYS</title>
+  <title>C++异常机制的实现方式和开销分析（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -260,7 +260,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          C++异常机制的实现方式和开销分析
+          C++异常机制的实现方式和开销分析（转载）
         </h2>
 
         <div class="post-meta">

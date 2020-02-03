@@ -50,12 +50,12 @@
   <meta name="description" content="exe调用了cglover.dll中的一个导出类成员函数，是一个读取lua配置文件类，其中一个函数是读取int数组，并通知参数std::vector传递。 结果一出调用函数作用域，就挂调用，挂在std::vector的析构释放内存上~ 郁闷找不到原因，往床上一躺，突然想起关于很早以前就在游戏编程精粹上看到过exe释放dll分配的内存会有问题，但一直没明白为什么，也没有深究，应该是这个问题了。于是上">
 <meta name="keywords" content="转载,Windows,Heap,DLL,DLL Hell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个模块分配的内存由另外一个模块释放~引发的血案">
+<meta property="og:title" content="一个模块分配的内存由另外一个模块释放~引发的血案（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;release-memory-allocated-by-another-module&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="exe调用了cglover.dll中的一个导出类成员函数，是一个读取lua配置文件类，其中一个函数是读取int数组，并通知参数std::vector传递。 结果一出调用函数作用域，就挂调用，挂在std::vector的析构释放内存上~ 郁闷找不到原因，往床上一躺，突然想起关于很早以前就在游戏编程精粹上看到过exe释放dll分配的内存会有问题，但一直没明白为什么，也没有深究，应该是这个问题了。于是上">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.310Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.074Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/release-memory-allocated-by-another-module/">
@@ -72,7 +72,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>一个模块分配的内存由另外一个模块释放~引发的血案 | XNERV SURVEYS</title>
+  <title>一个模块分配的内存由另外一个模块释放~引发的血案（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -254,7 +254,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          一个模块分配的内存由另外一个模块释放~引发的血案
+          一个模块分配的内存由另外一个模块释放~引发的血案（转载）
         </h2>
 
         <div class="post-meta">

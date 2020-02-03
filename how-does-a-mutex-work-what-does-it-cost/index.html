@@ -50,12 +50,12 @@
   <meta name="description" content="Concurrent programming requires synchronization. We can’t have more than one thread accessing data at the same time; otherwise, we end up with a data race. The most common solution is to wrap the crit">
 <meta name="keywords" content="转载,OS,Mutex,Multi Threads">
 <meta property="og:type" content="article">
-<meta property="og:title" content="How does a mutex work? What does it cost?">
+<meta property="og:title" content="How does a mutex work? What does it cost?（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;how-does-a-mutex-work-what-does-it-cost&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="Concurrent programming requires synchronization. We can’t have more than one thread accessing data at the same time; otherwise, we end up with a data race. The most common solution is to wrap the crit">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.562Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.112Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">
@@ -72,7 +72,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>How does a mutex work? What does it cost? | XNERV SURVEYS</title>
+  <title>How does a mutex work? What does it cost?（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -254,7 +254,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          How does a mutex work? What does it cost?
+          How does a mutex work? What does it cost?（转载）
         </h2>
 
         <div class="post-meta">
@@ -323,8 +323,8 @@
 <p>There are a few points of interest when it comes to the cost of a mutex. The first most vital point is waiting time. Your threads should spend only a fraction of their time waiting on mutexes. If they are waiting too often, then you are losing concurrency. In a worst case scenario many threads always trying to lock the same mutex may result in performance worse than a single thread serving all requests. This isn’t a cost of the mutex itself, but a serious concern with concurrent programming.</p>
 <p>The overhead costs of a mutex relate to the test-and-set operation and the system call that implements a mutex. The test-and-set is likely a minuscule cost; being essential to concurrent processing the CPUs have a strong incentive to make it efficient. We’ve ignored another important instruction, however: the fence. This is used in all high-level mutexes and may have a higher cost than the test-and-set operation. Most costly however is the system call. Not only do you suffer the context switch overhead of the system call, the kernel now spends some time in its scheduling code.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</a></strong><br>
-Reprinted from: <a href="https://mortoray.com/2011/12/16/how-does-a-mutex-work-what-does-it-cost/" target="_blank" rel="noopener">How does a mutex work? What does it cost?</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</a></strong><br>
+转载自：<a href="https://mortoray.com/2011/12/16/how-does-a-mutex-work-what-does-it-cost/" target="_blank" rel="noopener">How does a mutex work? What does it cost?</a></p>
 
     </div>
 

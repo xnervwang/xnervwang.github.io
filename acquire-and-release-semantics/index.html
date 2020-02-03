@@ -50,7 +50,7 @@
   <meta name="description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
 <meta name="keywords" content="转载,OS,Memory Barrier">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Acquire and Release Semantics">
+<meta property="og:title" content="Acquire and Release Semantics（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;acquire-and-release-semantics&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
@@ -63,7 +63,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;acquire-and-release-semantics&#x2F;cpp11-fences.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;acquire-and-release-semantics&#x2F;cpp11-no-fences.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;acquire-and-release-semantics&#x2F;acq-rel-lock.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.555Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;acquire-and-release-semantics&#x2F;read-acquire.png">
 
@@ -81,7 +81,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>Acquire and Release Semantics | XNERV SURVEYS</title>
+  <title>Acquire and Release Semantics（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -263,7 +263,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          Acquire and Release Semantics
+          Acquire and Release Semantics（转载）
         </h2>
 
         <div class="post-meta">
@@ -349,8 +349,8 @@
 <p>Here, acquire and release semantics ensure that all modifications made while holding the lock will propagate fully to the next thread that obtains the lock. Every implementation of a lock, even one you <a href="http://preshing.com/20120226/roll-your-own-lightweight-mutex" target="_blank" rel="noopener">roll on your own</a>, should provide these guarantees. Again, it’s all about passing information reliably between threads, especially in a multicore or multiprocessor environment.</p>
 <p>In a followup post, I’ll show a <a href="http://preshing.com/20121019/this-is-why-they-call-it-a-weakly-ordered-cpu" target="_blank" rel="noopener">working demonstration</a> of C++11 code, running on real hardware, which can be plainly observed to break if acquire and release semantics are not used.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/acquire-and-release-semantics/">http://xnerv.wang/acquire-and-release-semantics/</a></strong><br>
-Reprinted from: <a href="http://preshing.com/20120913/acquire-and-release-semantics/" target="_blank" rel="noopener">Acquire and Release Semantics</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/acquire-and-release-semantics/">http://xnerv.wang/acquire-and-release-semantics/</a></strong><br>
+转载自：<a href="http://preshing.com/20120913/acquire-and-release-semantics/" target="_blank" rel="noopener">Acquire and Release Semantics</a></p>
 
     </div>
 

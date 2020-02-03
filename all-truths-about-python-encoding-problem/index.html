@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="Python的初学者（以及很多熟练工）相信都遇到过下面的运行时错误信息：  UnicodeDecodeError: ‘ASCII’ codec can’t decode byte 0xe4 in position 0: ordinal not in range(128)  然后百度一下发现说明这个问题的网页有一大把，基本无非是下面两种解决方案：  在Python文件的开头加一句#coding=ut">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.783Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.141Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/all-truths-about-python-encoding-problem/">
@@ -303,7 +303,7 @@
 <a id="more"></a>
 <h2 id="string与unicode-string"><a class="header-anchor" href="#string与unicode-string"></a>string与Unicode string</h2>
 <p>Python的编码问题一般只在Python2.x中存在，在Python3.x中则基本不会遇到这样的问题。根本原因在于Python2.x中存在两种字符串：string和Unicode string，两者都继承自basic string。</p>
-<p>string类似于C语言中的char*，或者C++中的std::string，本质上都是byte数组，本身不具备特定的encoding类型，而是由string的使用者决定的。例如向string中写入一个汉字，如果是UTF-8编码，则可能是三个char（或者更多），如果是GBK编码，则可能是两个char，但对于Python解释器，它并不清楚string用的是encoding，一切都是比特流。。。</p>
+<p>string类似于C语言中的char*，或者C++中的std::string，本质上都是byte数组，本身不具备特定的encoding类型，而是由string的使用者决定的。例如向string中写入一个汉字，如果是UTF-8编码，则可能是三个char（或者更多），如果是GBK编码，则可能是两个char，但对于Python解释器，它并不清楚string用的是encoding，一切都是bytes。。。</p>
 <p>而Unicode string则明确地存储了Unicode编码的字符串。在Python2.x中，<code>a1=&quot;abc&quot;;</code>，a1就是一个string（是什么编码还不确定，等下再谈）。而<code>a2=u&quot;abc&quot;;</code>，a2就是一个Unicode string。</p>
 <h2 id="c-c-中的文件编码和字符串编码"><a class="header-anchor" href="#c-c-中的文件编码和字符串编码"></a>C/C++中的文件编码和字符串编码</h2>
 <p>C/C++不仅仅是一种编程语言，更是一个深入了解计算机底层原理的窗口和机会，一个只会Java或者Python的程序员，是不能称之为一个真正意义上的程序员的（这跟月薪有没有上3w没有关系）。</p>
@@ -318,8 +318,7 @@
 <p>这句代码将<code>s</code>（string类型）重新编码为<code>gb18030</code>的格式（仍然是string类型）， Python会自动的先将<code>s</code>解码为<code>Unicode string类型</code>，然后再编码成<code>gb18030</code>。因为解码是Python自动进行的，我们没有指明解码方式，Python就会使用<code>sys.defaultencoding</code>指明的方式来解码。很多情况下<code>sys.defaultencoding</code>是ASCII，如果 s 不是这个类型就会出错。</p>
 <p>拿上面的情况来说，我的<code>sys.defaultencoding</code>是ASCII，而<code>s</code>的编码方式和文件的编码方式一致，是UTF-8的，所以出错了:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UnicodeDecodeError: <span class="string">'ascii'</span> codec can<span class="string">'t decode byte 0xe4 in position 0: ordinal not in range(128)</span></span><br></pre></td></tr></table></figure>
-<p>但是<code>sys.setdefaultencoding('utf8')</code>有的时候也会导致一些意想不到的问题，所以目前网上主流意见是不推荐使用 。。。。。。<br>
-<a href="https://anonbadger.wordpress.com/2015/06/16/why-sys-setdefaultencoding-will-break-code/" target="_blank" rel="noopener">Why sys.setdefaultencoding() will break code</a></p>
+<p>但是<code>sys.setdefaultencoding('utf8')</code>有的时候也会导致一些意想不到的问题，所以目前网上主流意见是不推荐使用 。例如这篇文章中提到使用<code>sys.setdefaultencoding</code>可能会遇到的一些问题：<a href="https://anonbadger.wordpress.com/2015/06/16/why-sys-setdefaultencoding-will-break-code/" target="_blank" rel="noopener">Why sys.setdefaultencoding() will break code</a></p>
 <p>在Python3.x中，编码的问题基本不存在了，也没有了sys.setsystemencoding。因为Python3.x取消了string，只有Unicode string，也避免了很多编码转换的问题。</p>
 <h2 id="关于-coding-utf-8"><a class="header-anchor" href="#关于-coding-utf-8"></a>关于<code>#coding:utf-8</code></h2>
 <p><code>#coding:utf-8</code>指引Python解释器如何读取整个py文件，有些IDE也会根据这个comment来自动决定保存格式及显示格式，应该与py文件的保存格式一致。</p>

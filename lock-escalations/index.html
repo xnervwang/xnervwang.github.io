@@ -50,7 +50,7 @@
   <meta name="description" content="In todays blog posting I want to talk about Lock Escalations in SQL Server. Lock Escalations are an optimization technique used by SQL Server to control the amount of locks that are held within the Lo">
 <meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Lock Escalations">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Lock Escalations">
+<meta property="og:title" content="Lock Escalations（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;lock-escalations&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="In todays blog posting I want to talk about Lock Escalations in SQL Server. Lock Escalations are an optimization technique used by SQL Server to control the amount of locks that are held within the Lo">
@@ -58,7 +58,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;www.sqlpassion.at&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;02&#x2F;LockHierarchy.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;www.sqlpassion.at&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;02&#x2F;WithoutLockEscalation.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;www.sqlpassion.at&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;02&#x2F;WithLockEscalation1.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.513Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:35.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;www.sqlpassion.at&#x2F;wp-content&#x2F;uploads&#x2F;2014&#x2F;02&#x2F;LockHierarchy.png">
 
@@ -76,7 +76,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>Lock Escalations | XNERV SURVEYS</title>
+  <title>Lock Escalations（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -258,7 +258,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          Lock Escalations
+          Lock Escalations（转载）
         </h2>
 
         <div class="post-meta">
@@ -319,8 +319,8 @@
 <p>Lock Escalation in SQL Server is mainly a nightmare. How will you delete more than 5.000 rows from a table without running into Lock Escalations? You can disable Lock Escalation temporarily, but you have to be very careful here. Another option (that I’m suggesting) is to make your <strong>DELETE</strong>/<strong>UPDATE</strong> statements in a loop as different, separate transactions: <strong>DELETE</strong>/<strong>UPDATE</strong> less than 5.000 rows, so that you can prevent Lock Escalations. As a very nice side-effect your huge, big transaction will be splitted into multiple smaller ones, which will also help you with Auto Growth issues that you maybe have with your transaction log.</p>
 <p>Thanks for reading</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/lock-escalations/">http://xnerv.wang/lock-escalations/</a></strong><br>
-Reprinted from: <a href="http://www.sqlpassion.at/archive/2014/02/25/lock-escalations/" target="_blank" rel="noopener">Lock Escalations</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/lock-escalations/">http://xnerv.wang/lock-escalations/</a></strong><br>
+转载自：<a href="http://www.sqlpassion.at/archive/2014/02/25/lock-escalations/" target="_blank" rel="noopener">Lock Escalations</a></p>
 
     </div>
 

@@ -50,7 +50,7 @@
   <meta name="description" content="LevelDB 介绍 LevelDB 是由 Google 开发的 key-value 非关系型数据库存储系统，是基于 LSM(Log-Structured-Merge Tree) 的典型实现，LSM 的原理是：当读写数据库时，首先纪录读写操作到 Op log 文件中，然后再操作内存数据库，当达到 checkpoint 时，则写入磁盘，同时删除相应的 Op log 文件，后续重新生成新的内存文件和">
 <meta name="keywords" content="转载,分布式及存储,LevelDB">
 <meta property="og:type" content="article">
-<meta property="og:title" content="LevelDB 实现分析">
+<meta property="og:title" content="LevelDB 实现分析（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;leveldb-analysis&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="LevelDB 介绍 LevelDB 是由 Google 开发的 key-value 非关系型数据库存储系统，是基于 LSM(Log-Structured-Merge Tree) 的典型实现，LSM 的原理是：当读写数据库时，首先纪录读写操作到 Op log 文件中，然后再操作内存数据库，当达到 checkpoint 时，则写入磁盘，同时删除相应的 Op log 文件，后续重新生成新的内存文件和">
@@ -62,7 +62,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;leveldb-analysis&#x2F;TB1C9DXSXXXXXcyXXXXXXXXXXXX-197-140.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;leveldb-analysis&#x2F;TB1X9qPSXXXXXbwXFXXXXXXXXXX-435-67.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;leveldb-analysis&#x2F;TB11UGqSXXXXXaEaXXXXXXXXXXX-819-359.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.352Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.079Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;leveldb-analysis&#x2F;TB1AMqNSXXXXXczXFXXXXXXXXXX-851-479.png">
 
@@ -80,7 +80,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>LevelDB 实现分析 | XNERV SURVEYS</title>
+  <title>LevelDB 实现分析（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -262,7 +262,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          LevelDB 实现分析
+          LevelDB 实现分析（转载）
         </h2>
 
         <div class="post-meta">

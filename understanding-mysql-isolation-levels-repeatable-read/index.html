@@ -50,7 +50,7 @@
   <meta name="description" content="Isolation levels are a rare subject in MySQL literature. The documentation provides a terse description and focuses mainly on locking issues, but does not discuss the semantics of each isolation level">
 <meta name="keywords" content="转载,DBMS,MySQL,Transaction,Isolation Level">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Understanding MySQL Isolation Levels: Repeatable-Read">
+<meta property="og:title" content="Understanding MySQL Isolation Levels: Repeatable-Read（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;understanding-mysql-isolation-levels-repeatable-read&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="Isolation levels are a rare subject in MySQL literature. The documentation provides a terse description and focuses mainly on locking issues, but does not discuss the semantics of each isolation level">
@@ -70,7 +70,7 @@
 <meta property="og:image" content="http:&#x2F;&#x2F;pythianblog.wpengine.com&#x2F;wp-content&#x2F;uploads&#x2F;13_session_b.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;pythianblog.wpengine.com&#x2F;wp-content&#x2F;uploads&#x2F;14_session_a.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;pythianblog.wpengine.com&#x2F;wp-content&#x2F;uploads&#x2F;15_session_a.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.767Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.010Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;pythianblog.wpengine.com&#x2F;wp-content&#x2F;uploads&#x2F;1_session_a.png">
 
@@ -88,7 +88,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>Understanding MySQL Isolation Levels: Repeatable-Read | XNERV SURVEYS</title>
+  <title>Understanding MySQL Isolation Levels: Repeatable-Read（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -270,7 +270,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          Understanding MySQL Isolation Levels: Repeatable-Read
+          Understanding MySQL Isolation Levels: Repeatable-Read（转载）
         </h2>
 
         <div class="post-meta">
@@ -354,8 +354,8 @@
 </ul>
 <p>The way MySQL implements Repeatable Read is not intuitive and, although it is required to support statement replication, can lead to some problems while running data modification and transfer to other tables in concurrent transactions. If your application can face these issues, you will need to modify your queries using <em>select … for update</em> statements and thus increase the number of locks in the database.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</a></strong><br>
-Reprinted from: <a href="https://blog.pythian.com/understanding-mysql-isolation-levels-repeatable-read/" target="_blank" rel="noopener">Understanding MySQL Isolation Levels: Repeatable-Read</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</a></strong><br>
+转载自：<a href="https://blog.pythian.com/understanding-mysql-isolation-levels-repeatable-read/" target="_blank" rel="noopener">Understanding MySQL Isolation Levels: Repeatable-Read</a></p>
 
     </div>
 

@@ -50,12 +50,12 @@
   <meta name="description" content="I’m sure it’s been drilled into your head by now that you have to free memory with the same allocator that allocated it. LocalAlloc matches LocalFree, GlobalAlloc matches GlobalFree, new[] matches del">
 <meta name="keywords" content="转载,Windows,Heap,DLL,DLL Hell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Allocating and freeing memory across module boundaries">
+<meta property="og:title" content="Allocating and freeing memory across module boundaries（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;allocating-and-freeing-memory-across-module-boundaries&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="I’m sure it’s been drilled into your head by now that you have to free memory with the same allocator that allocated it. LocalAlloc matches LocalFree, GlobalAlloc matches GlobalFree, new[] matches del">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.293Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.071Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/">
@@ -72,7 +72,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>Allocating and freeing memory across module boundaries | XNERV SURVEYS</title>
+  <title>Allocating and freeing memory across module boundaries（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -254,7 +254,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          Allocating and freeing memory across module boundaries
+          Allocating and freeing memory across module boundaries（转载）
         </h2>
 
         <div class="post-meta">
@@ -300,8 +300,8 @@
 <p>Another option is to wrap your preferred allocator inside exported functions that manage the allocation. This is the mechanism used by the NetApi family of functions. For example, the NetGroupEnum function allocates memory and returns it through the bufptr parameter. When the caller is finished with the memory, it frees it with the NetApiBufferFree function. In this manner, the memory allocation method is isolated from the caller. Internally, the NetApi functions might be using LocalAlloc or HeapAllocate or possibly even new and free. It doesn’t matter; as long as NetApiBufferFree frees the memory with the same allocator that NetGroupEnum used to allocate the memory in the first place.</p>
 <p>Although I personally prefer using a fixed external allocator, many people find it more convenient to use the wrapper technique. That way, they can use their favorite allocator throughout their module. Either way works. The point is that when memory leaves your DLL, the code you gave the memory to must know how to free it, even if it’s using a different compiler from the one that was used to build your DLL.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/">http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</a></strong><br>
-Reprinted from: <a href="https://blogs.msdn.microsoft.com/oldnewthing/20060915-04/?p=29723" target="_blank" rel="noopener">Allocating and freeing memory across module boundaries</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/">http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</a></strong><br>
+转载自：<a href="https://blogs.msdn.microsoft.com/oldnewthing/20060915-04/?p=29723" target="_blank" rel="noopener">Allocating and freeing memory across module boundaries</a></p>
 
     </div>
 

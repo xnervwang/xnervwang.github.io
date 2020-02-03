@@ -50,14 +50,14 @@
   <meta name="description" content="一 介绍 MySQL 5.6版本提供了很多性能优化的特性，其中之一就是 Multi-Range Read 多范围读(MRR) , 它的作用针对基于辅助&#x2F;第二索引的查询，减少随机IO，并且将随机IO转化为顺序IO，提高查询效率。 二 原理 在没有MRR之前,或者没有开启MRR特性时，MySQL 针对基于辅助索引的查询策略是这样的： 1select non_key_column from tb whe">
 <meta name="keywords" content="转载,DBMS,MySQL,Multi-Range Read">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【MySQL】MySQL5.6新特性之Multi-Range Read">
+<meta property="og:title" content="【MySQL】MySQL5.6新特性之Multi-Range Read（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;mysql56-new-feature-multi-range-read&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="一 介绍 MySQL 5.6版本提供了很多性能优化的特性，其中之一就是 Multi-Range Read 多范围读(MRR) , 它的作用针对基于辅助&#x2F;第二索引的查询，减少随机IO，并且将随机IO转化为顺序IO，提高查询效率。 二 原理 在没有MRR之前,或者没有开启MRR特性时，MySQL 针对基于辅助索引的查询策略是这样的： 1select non_key_column from tb whe">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003451kky2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003467T2Pp.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.806Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.015Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003451kky2.png">
 
@@ -75,7 +75,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>【MySQL】MySQL5.6新特性之Multi-Range Read | XNERV SURVEYS</title>
+  <title>【MySQL】MySQL5.6新特性之Multi-Range Read（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -257,7 +257,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          【MySQL】MySQL5.6新特性之Multi-Range Read
+          【MySQL】MySQL5.6新特性之Multi-Range Read（转载）
         </h2>
 
         <div class="post-meta">

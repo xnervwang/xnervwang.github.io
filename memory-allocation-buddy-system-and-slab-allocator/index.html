@@ -50,14 +50,14 @@
   <meta name="description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
 <meta name="keywords" content="转载,Heap,Linux,Memory Management,Buddy System,Slab Allocator">
 <meta property="og:type" content="article">
-<meta property="og:title" content="内存分配-----伙伴算法和slab算法">
+<meta property="og:title" content="内存分配-----伙伴算法和slab算法（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;buddy.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;slab.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.056Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;memory-allocation-buddy-system-and-slab-allocator&#x2F;buddy.png">
 
@@ -75,7 +75,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>内存分配-----伙伴算法和slab算法 | XNERV SURVEYS</title>
+  <title>内存分配-----伙伴算法和slab算法（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -257,7 +257,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          内存分配-----伙伴算法和slab算法
+          内存分配-----伙伴算法和slab算法（转载）
         </h2>
 
         <div class="post-meta">

@@ -50,12 +50,12 @@
   <meta name="description" content="前言 上一篇文章 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考这里。 ICP 测试 首先，咱们来看一下打开 ICP 与关闭 ICP 之">
 <meta name="keywords" content="转载,DBMS,MySQL,Index Condition Pushdown">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL - Index Condition Pushdown (ICP)">
+<meta property="og:title" content="MySQL - Index Condition Pushdown (ICP)（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;mysql-index-condition-pushdown&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="前言 上一篇文章 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考这里。 ICP 测试 首先，咱们来看一下打开 ICP 与关闭 ICP 之">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.537Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:35.986Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/mysql-index-condition-pushdown/">
@@ -72,7 +72,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>MySQL - Index Condition Pushdown (ICP) | XNERV SURVEYS</title>
+  <title>MySQL - Index Condition Pushdown (ICP)（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -254,7 +254,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          MySQL - Index Condition Pushdown (ICP)
+          MySQL - Index Condition Pushdown (ICP)（转载）
         </h2>
 
         <div class="post-meta">
@@ -338,8 +338,8 @@
 </ul>
 <p>PS: engine condition pushdown 是 NDB 使用的，其它引擎不支持。</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/mysql-index-condition-pushdown/">http://xnerv.wang/mysql-index-condition-pushdown/</a></strong><br>
-Reprinted from: <a href="http://mysql.taobao.org/monthly/2015/12/08/" target="_blank" rel="noopener">Index Condition Pushdown (ICP)</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/mysql-index-condition-pushdown/">http://xnerv.wang/mysql-index-condition-pushdown/</a></strong><br>
+转载自：<a href="http://mysql.taobao.org/monthly/2015/12/08/" target="_blank" rel="noopener">Index Condition Pushdown (ICP)</a></p>
 
     </div>
 

@@ -50,7 +50,7 @@
   <meta name="description" content="问题 最近项目中遇到了一个分布式系统的并发控制问题。该问题可以抽象为：某分布式系统由一个数据中心D和若干业务处理中心L1，L2 … Ln组成；D本质上是一个key-value存储，它对外提供基于HTTP协议的CRUD操作接口。L的业务逻辑可以抽象为下面3个步骤：  read: 根据keySet {k1, … kn}从D获取keyValueSet {k1:v1, … kn:vn} do: 根据key">
 <meta name="keywords" content="转载,分布式及存储,MVCC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="多版本并发控制(MVCC)在分布式系统中的应用">
+<meta property="og:title" content="多版本并发控制(MVCC)在分布式系统中的应用（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;application-of-mvcc-in-distributed-system&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="问题 最近项目中遇到了一个分布式系统的并发控制问题。该问题可以抽象为：某分布式系统由一个数据中心D和若干业务处理中心L1，L2 … Ln组成；D本质上是一个key-value存储，它对外提供基于HTTP协议的CRUD操作接口。L的业务逻辑可以抽象为下面3个步骤：  read: 根据keySet {k1, … kn}从D获取keyValueSet {k1:v1, … kn:vn} do: 根据key">
@@ -61,7 +61,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2012&#x2F;03&#x2F;0915535U3-1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;images.cnblogs.com&#x2F;cnblogs_com&#x2F;weidagang2046&#x2F;362318&#x2F;o_mvcc_3.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;coolshell.cn&#x2F;wp-content&#x2F;uploads&#x2F;2012&#x2F;03&#x2F;0915533324-2.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.402Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.089Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;images.cnblogs.com&#x2F;cnblogs_com&#x2F;weidagang2046&#x2F;362318&#x2F;o_conditional_update_1.PNG">
 
@@ -79,7 +79,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>多版本并发控制(MVCC)在分布式系统中的应用 | XNERV SURVEYS</title>
+  <title>多版本并发控制(MVCC)在分布式系统中的应用（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -261,7 +261,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          多版本并发控制(MVCC)在分布式系统中的应用
+          多版本并发控制(MVCC)在分布式系统中的应用（转载）
         </h2>
 
         <div class="post-meta">

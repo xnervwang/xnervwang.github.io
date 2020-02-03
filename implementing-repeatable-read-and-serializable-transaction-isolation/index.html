@@ -50,12 +50,12 @@
   <meta name="description" content="This article is part of a series. You do not have to read them in order but I will be referring to topics and explanations in previous articles:  Implementing Your Own Transactions With MVCC SQL Trans">
 <meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Isolation Level">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION">
+<meta property="og:title" content="IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;implementing-repeatable-read-and-serializable-transaction-isolation&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="This article is part of a series. You do not have to read them in order but I will be referring to topics and explanations in previous articles:  Implementing Your Own Transactions With MVCC SQL Trans">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.476Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:35.975Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/">
@@ -72,7 +72,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION | XNERV SURVEYS</title>
+  <title>IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -254,7 +254,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION
+          IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION（转载）
         </h2>
 
         <div class="post-meta">
@@ -354,8 +354,8 @@
 <p>Running the <a href="https://gist.github.com/elliotchance/21e31b8ffb18cbbca23b8031639e1c3f" target="_blank" rel="noopener">complete program</a> prints a table of results. The <font style="font-family: 'Courier New';">✔ means that it could replicate that kind of error (a little counterintuitive, I know):</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                  Dirty Repeat Phantom</span><br><span class="line">read uncommitted    ✔      ✔      ✔</span><br><span class="line">read committed      ✘      ✔      ✔</span><br><span class="line">repeatable read     ✘      ✘      ✔</span><br><span class="line">serializable        ✘      ✘      ✘</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/">http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</a></strong><br>
-Reprinted from: <a href="http://elliot.land/post/implementing-repeatable-read-and-serializable-transaction-isolation" target="_blank" rel="noopener">IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/">http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</a></strong><br>
+转载自：<a href="http://elliot.land/post/implementing-repeatable-read-and-serializable-transaction-isolation" target="_blank" rel="noopener">IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION</a></p>
 
     </div>
 

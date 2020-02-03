@@ -50,7 +50,7 @@
   <meta name="description" content="Image by : opensource.com We are celebrating the SELinux 10th year anversary this year. Hard to believe it. SELinux was first introduced in Fedora Core 3 and later in Red Hat Enterprise Linux 4. For">
 <meta name="keywords" content="Linux,SELinux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Your visual how-to guide for SELinux policy enforcement">
+<meta property="og:title" content="Your visual how-to guide for SELinux policy enforcement（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;your-visual-how-to-guide-for-selinux-policy-enforcement&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="Image by : opensource.com We are celebrating the SELinux 10th year anversary this year. Hard to believe it. SELinux was first introduced in Fedora Core 3 and later in Red Hat Enterprise Linux 4. For">
@@ -73,7 +73,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;images&#x2F;life-uploads&#x2F;mls-enforcement_05_chigreyeating.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;images&#x2F;life-uploads&#x2F;mls-enforcement_03_chichoke.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;images&#x2F;life-uploads&#x2F;mls-enforcement_06_nocatchow.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.046Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.043Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;opensource.com&#x2F;sites&#x2F;default&#x2F;files&#x2F;styles&#x2F;image-full-size&#x2F;public&#x2F;lead-images&#x2F;selinux_rules_lead_image.png?itok=N4TKqxei">
 
@@ -91,7 +91,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>Your visual how-to guide for SELinux policy enforcement | XNERV SURVEYS</title>
+  <title>Your visual how-to guide for SELinux policy enforcement（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -273,7 +273,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          Your visual how-to guide for SELinux policy enforcement
+          Your visual how-to guide for SELinux policy enforcement（转载）
         </h2>
 
         <div class="post-meta">
@@ -314,6 +314,7 @@
 <p>SElinux is a labeling system. Every process has a label. Every file/directory object in the operating system has a label. Even network ports, devices, and potentially hostnames have labels assigned to them. We write rules to control the access of a process label to an a object label like a file. We call this <em>policy</em>. The kernel enforces the rules. Sometimes this enforcement is called Mandatory Access Control (MAC).</p>
 <p>The owner of an object does not have discretion over the security attributes of a object. Standard Linux access control, owner/group + permission flags like rwx, is often called Discretionary Access Control (DAC). SELinux has no concept of UID or ownership of files. Everything is controlled by the labels. Meaning an SELinux system can be setup without an all powerful root process.</p>
 <p><strong>Note:</strong> _SELinux does not let you side step DAC Controls. SELinux is a parallel enforcement model. An application has to be allowed by BOTH SELinux and DAC to do certain activities. This can lead to confusion for administrators because the process gets Permission Denied. Administrators see Permission Denied means something is wrong with DAC, not SELinux labels.</p>
+<a id="more"></a>
 <h3 id="type-enforcement"><a class="header-anchor" href="#type-enforcement"></a>Type enforcement</h3>
 <p>Lets look a little further into the labels. The SELinux primary model or enforcement is called <em>type enforcement</em>. Basically this means we define the label on a process based on its type, and the label on a file system object based on its type.</p>
 <p><em>Analogy</em></p>
@@ -377,8 +378,8 @@ Of course, <em>dog:Greyhound</em> and <em>dog:Chihuahua</em> are still prevented
 <h3 id="conclusion"><a class="header-anchor" href="#conclusion"></a>Conclusion</h3>
 <p>SELinux is a powerful labeling system, controlling access granted to individual processes by the kernel. The primary feature of this is type enforcement where rules define the access allowed to a process is allowed based on the labeled type of the process and the labeled type of the object. Two additional controls have been added to separate processes with the same type from each other called MCS, total separtion from each other, and MLS, allowing for process domination.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/">http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</a></strong><br>
-Reprinted from: <a href="https://opensource.com/business/13/11/selinux-policy-guide" target="_blank" rel="noopener">Your visual how-to guide for SELinux policy enforcement</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/">http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</a></strong><br>
+转载自：<a href="https://opensource.com/business/13/11/selinux-policy-guide" target="_blank" rel="noopener">Your visual how-to guide for SELinux policy enforcement</a></p>
 
     </div>
 

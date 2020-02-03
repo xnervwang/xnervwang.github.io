@@ -50,7 +50,7 @@
   <meta name="description" content="如何查看进程发生缺页中断的次数？ 用ps -o majflt,minflt -C program命令查看。 majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。 这两个数值表示一个进程自启动以来所发生的缺页中断的次数。 发成缺页中断后，执行了那些操作？ 当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：  检查要访问的虚拟地址">
 <meta name="keywords" content="转载,操作系统,内存管理,进程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）">
+<meta property="og:title" content="进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;two-ways-of-allocating-memory-brk-and-mmap&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="如何查看进程发生缺页中断的次数？ 用ps -o majflt,minflt -C program命令查看。 majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。 这两个数值表示一个进程自启动以来所发生的缺页中断的次数。 发成缺页中断后，执行了那些操作？ 当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：  检查要访问的虚拟地址">
@@ -58,7 +58,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;two-ways-of-allocating-memory-brk-and-mmap&#x2F;1.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;two-ways-of-allocating-memory-brk-and-mmap&#x2F;2.jpg">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;two-ways-of-allocating-memory-brk-and-mmap&#x2F;3.jpg">
-<meta property="og:updated_time" content="2020-01-07T06:43:22.643Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.124Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;two-ways-of-allocating-memory-brk-and-mmap&#x2F;1.jpg">
 
@@ -76,7 +76,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存） | XNERV SURVEYS</title>
+  <title>进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -258,7 +258,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）
+          进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）（转载）
         </h2>
 
         <div class="post-meta">

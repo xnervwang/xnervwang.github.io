@@ -50,12 +50,12 @@
   <meta name="description" content="前言 InnoDB有两个非常重要的日志，undo log 和 redo log；通过undo log可以看到数据较早版本，实现MVCC，或回滚事务等功能；redo log用来保证事务持久性 本文以一条insert语句为线索介绍 mini transaction mini transaction 简介 mini transation 主要用于innodb redo log 和 undo log写入，">
 <meta name="keywords" content="转载,DBMS,MySQL,InnoDB,MTR">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL - InnoDB mini transation">
+<meta property="og:title" content="MySQL - InnoDB mini transation（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;what-innodb-mini-transation&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="前言 InnoDB有两个非常重要的日志，undo log 和 redo log；通过undo log可以看到数据较早版本，实现MVCC，或回滚事务等功能；redo log用来保证事务持久性 本文以一条insert语句为线索介绍 mini transaction mini transaction 简介 mini transation 主要用于innodb redo log 和 undo log写入，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.559Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:35.989Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/what-innodb-mini-transation/">
@@ -72,7 +72,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>MySQL - InnoDB mini transation | XNERV SURVEYS</title>
+  <title>MySQL - InnoDB mini transation（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -254,7 +254,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          MySQL - InnoDB mini transation
+          MySQL - InnoDB mini transation（转载）
         </h2>
 
         <div class="post-meta">
@@ -410,8 +410,8 @@
 <li>当设置为0时，事务提交不会触发redo写操作，而是留给后台线程每秒一次的刷盘操作，因此实例crash将最多丢失1秒钟内的事务</li>
 </ul>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/what-innodb-mini-transation/">http://xnerv.wang/what-innodb-mini-transation/</a></strong><br>
-Reprinted from: <a href="http://mysql.taobao.org/monthly/2017/10/03/" target="_blank" rel="noopener">InnoDB mini transation</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/what-innodb-mini-transation/">http://xnerv.wang/what-innodb-mini-transation/</a></strong><br>
+转载自：<a href="http://mysql.taobao.org/monthly/2017/10/03/" target="_blank" rel="noopener">InnoDB mini transation</a></p>
 
     </div>
 

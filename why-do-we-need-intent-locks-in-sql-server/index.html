@@ -50,13 +50,13 @@
   <meta name="description" content="I blogged 2 years ago about why we need UPDATE locks in SQL Server. Today I want to continue this discussion by talking about Intent Locks in SQL Server, and why they are needed. The Lock Hierarchy in">
 <meta name="keywords" content="转载,DBMS,SQL Server,Transaction,Intent Lock">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Why do we need Intent Locks in SQL Server?">
+<meta property="og:title" content="Why do we need Intent Locks in SQL Server?（转载）">
 <meta property="og:url" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;why-do-we-need-intent-locks-in-sql-server&#x2F;index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="I blogged 2 years ago about why we need UPDATE locks in SQL Server. Today I want to continue this discussion by talking about Intent Locks in SQL Server, and why they are needed. The Lock Hierarchy in">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;www.sqlpassion.at&#x2F;wp-content&#x2F;uploads&#x2F;2016&#x2F;04&#x2F;Picture1-2.png">
-<meta property="og:updated_time" content="2020-01-07T06:43:21.774Z">
+<meta property="og:updated_time" content="2020-02-03T07:30:36.011Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;www.sqlpassion.at&#x2F;wp-content&#x2F;uploads&#x2F;2016&#x2F;04&#x2F;Picture1-2.png">
 
@@ -74,7 +74,7 @@
   };
 </script>
 <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
-  <title>Why do we need Intent Locks in SQL Server? | XNERV SURVEYS</title>
+  <title>Why do we need Intent Locks in SQL Server?（转载） | XNERV SURVEYS</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
     <script>
@@ -256,7 +256,7 @@
       <header class="post-header">
 
         <h2 class="post-title" itemprop="name headline">
-          Why do we need Intent Locks in SQL Server?
+          Why do we need Intent Locks in SQL Server?（转载）
         </h2>
 
         <div class="post-meta">
@@ -312,8 +312,8 @@
 <p>Intent Locks are technically not needed by SQL Server, because they only indicate if there is some other specific Lock Type somewhere else within the Lock Hierarchy. But based on that fact SQL Server can check in a much more efficient way if an incompatible Lock exists somewhere else if you want to acquire a specific lock at the page or table level.</p>
 <p>Thanks for your time,</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/">http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</a></strong><br>
-Reprinted from: <a href="https://www.sqlpassion.at/archive/2016/05/16/why-do-we-need-intent-locks-in-sql-server/" target="_blank" rel="noopener">Why do we need Intent Locks in SQL Server?</a></p>
+<p><strong>本文地址：<a href="http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/">http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</a></strong><br>
+转载自：<a href="https://www.sqlpassion.at/archive/2016/05/16/why-do-we-need-intent-locks-in-sql-server/" target="_blank" rel="noopener">Why do we need Intent Locks in SQL Server?</a></p>
 
     </div>
 

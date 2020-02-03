@@ -289,7 +289,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>与MySQL等开源数据库不同的是，PostgreSQL（PG）并不使用O_DIRECT来写data文件和log文件，而是依赖于OS缓存，并且强调在设置shared buffer在大小时不能过大，否则会造成过于频繁的swap而导致IO性能下降。这与MySQL等数据库的buffer pool size越大性能越好的指导原则是相反的。并且PG依赖于OS缓存的这一特性也给提供PostgreSQL云服务造成了很多问题。例如云服务要求multiple tenants资源隔离，也就是说跑在同一个VM上的多个PG servers相互之间不能互相影响，但共用OS缓存显然会造成资源竞争。不知道Docker是否可以进行OS缓存的资源隔离，但现阶段还还依赖于Service Fabric架构的Azure PG显然得自己解决这个问题，也因此造成了架构设计上不得不考虑OS缓存的隔离。</p>
+          <p>与MySQL等开源数据库不同的是，PostgreSQL（PG）并不使用O_DIRECT来写data文件，而是依赖于OS缓存，并且强调在设置shared buffer在大小时不能过大，否则会造成过于频繁的swap而导致IO性能下降。这与MySQL等数据库的buffer pool size越大性能越好的指导原则是相反的。并且PG依赖于OS缓存的这一特性也给提供PostgreSQL云服务造成了很多问题。例如云服务要求multiple tenants资源隔离，也就是说跑在同一个VM上的多个PG servers相互之间不能互相影响，但共用OS缓存显然会造成资源竞争。不知道Docker是否可以进行OS缓存的资源隔离，但现阶段还还依赖于Service Fabric架构的Azure PG显然得自己解决这个问题，也因此造成了架构设计上不得不考虑OS缓存的隔离。</p>
 <p>从<a href="http://www.interdb.jp/pg/pgsql02.html" target="_blank" rel="noopener">The Internals of PostgreSQL: Chapter 2 Process and Memory Architecture</a>这篇文章看来，与MySQL使用多线程或线程池和架构不同的是，PG使用的是多进程架构。多进程模型在Windows平台上会造成很大的性能问题，这暂且不提。但多进程之间是共用的shared buffer。既然如此，那就应该不是寄希望于OS缓存来便于多进程之间共享shared buffer吧。</p>
           <!--noindex-->
             <div class="post-button">
@@ -332,7 +332,7 @@
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/google-50-tshirt/" class="post-title-link" itemprop="url">如果阿里月饼黑客事件发生在谷歌会怎样？前Google人亲述他抢了50件T-shirt的故事</a>
+            <a href="/google-50-tshirt/" class="post-title-link" itemprop="url">如果阿里月饼黑客事件发生在谷歌会怎样？前Google人亲述他抢了50件T-shirt的故事（转载）</a>
         </h2>
 
         <div class="post-meta">
@@ -415,7 +415,7 @@
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/how-slow-is-disk-and-network/" class="post-title-link" itemprop="url">让 CPU 告诉你硬盘和网络到底有多慢</a>
+            <a href="/how-slow-is-disk-and-network/" class="post-title-link" itemprop="url">让 CPU 告诉你硬盘和网络到底有多慢（转载）</a>
         </h2>
 
         <div class="post-meta">
@@ -898,7 +898,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/analysis-of-mdl-source-code-for-common-sql-statements/" class="post-title-link" itemprop="url">MySQL - 常用SQL语句的MDL加锁源码分析</a>
+            <a href="/analysis-of-mdl-source-code-for-common-sql-statements/" class="post-title-link" itemprop="url">MySQL - 常用SQL语句的MDL加锁源码分析（转载）</a>
         </h2>
 
         <div class="post-meta">
@@ -1000,7 +1000,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/trace-metadata-lock-procedure-using-gdb/" class="post-title-link" itemprop="url">MySQL - 利用gdb跟踪MDL加锁过程</a>
+            <a href="/trace-metadata-lock-procedure-using-gdb/" class="post-title-link" itemprop="url">MySQL - 利用gdb跟踪MDL加锁过程（转载）</a>
         </h2>
 
         <div class="post-meta">
