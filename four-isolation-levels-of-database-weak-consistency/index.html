@@ -60,7 +60,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;3.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;4.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;5.png">
-<meta property="og:updated_time" content="2020-02-03T07:30:36.016Z">
+<meta property="og:updated_time" content="2020-02-06T08:01:06.073Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;xnerv.wang&#x2F;assets&#x2F;four-isolation-levels-of-database-weak-consistency&#x2F;1.png">
 
@@ -338,6 +338,7 @@
 <li>在Repeatable Read级别下，读操作需要加S锁，但是在事务提交之前并不释放S锁，也就是必须等待事务执行完毕以后才释放S锁。</li>
 <li>在Serialize级别下，会在Repeatable Read级别的基础上，添加一个范围锁。保证一个事务内的两次查询结果完全一样，而不会出现第一次查询结果是第二次查询结果的子集。</li>
 </ol>
+<p>（xnerv：SQL Server的四种隔离级别的加锁区别应该都只针对READ操作，如果是INSERT或UPDATE，应该都会加X锁并持有到事务结束。可以假设有一个RU级别的事务A修改了一行数据，另一个RC级别的事务B尝试读取这行数据。如果事务A不加X锁，或者修改完后在事务结束前释放X锁，都会导致事务B在事务A提交前读取到新数据而违反RC原则。）</p>
 <hr>
 <p><strong>本文地址：<a href="http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/">http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</a></strong><br>
 转载自：<a href="http://www.cnblogs.com/xwdreamer/archive/2011/01/18/2297042.html" target="_blank" rel="noopener">数据库弱一致性四个隔离级别</a></p>

@@ -57,7 +57,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003451kky2.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003467T2Pp.png">
-<meta property="og:updated_time" content="2020-02-03T07:30:36.015Z">
+<meta property="og:updated_time" content="2020-02-06T08:01:06.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;blog.itpub.net&#x2F;attachment&#x2F;201505&#x2F;31&#x2F;22664653_1433003451kky2.png">
 
@@ -303,16 +303,16 @@
 <p><img src="http://blog.itpub.net/attachment/201505/31/22664653_1433003451kky2.png" alt=""></p>
 <p>由于MySQL存储数据的方式： 辅助索引的存储顺序并非与主键的顺序一致，从图中可以看出,根据辅助索引获取的主键来访问表中的数据会导致随机的IO . 不同主键不在同一个page 里面时必然导致多次IO 和随机读。</p>
 <p><strong>在使用MRR优化特性</strong>的情况下，MySQL 针对基于辅助索引的查询策略是这样的：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">第一步 先根据where条件中的辅助索引获取辅助索引与主键的集合，结果集为rest</span><br><span class="line">    <span class="keyword">select</span> key_column, pk_column <span class="keyword">from</span> tb <span class="keyword">where</span> key_column = x <span class="keyword">order</span> <span class="keyword">by</span> key_column</span><br><span class="line">第二步 将结果集rest放在buffer里面(<span class="string">`read_rnd_buffer_size`</span>大小直到buffer满了)，然后对结果集rest按照pk_column排序，得到结果集是rest_sort</span><br><span class="line">第三步 利用已经排序过的结果集，访问表中的数据，此时是顺序IO&lt;span <span class="keyword">style</span>=<span class="string">"color:#0000CC;"</span>&gt;.&lt;/span&gt;</span><br><span class="line">    <span class="keyword">select</span> non_key_column fromtb <span class="keyword">where</span> pk_column <span class="keyword">in</span> ( rest_sort )</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">第一步 先根据where条件中的辅助索引获取辅助索引与主键的集合，结果集为rest</span><br><span class="line">    <span class="keyword">select</span> key_column, pk_column <span class="keyword">from</span> tb <span class="keyword">where</span> key_column = x <span class="keyword">order</span> <span class="keyword">by</span> key_column</span><br><span class="line"></span><br><span class="line">第二步 将结果集rest放在buffer里面(<span class="string">`read_rnd_buffer_size`</span>大小直到buffer满了)，然后对结果集rest按照pk_column排序，得到结果集是rest_sort</span><br><span class="line"></span><br><span class="line">第三步 利用已经排序过的结果集，访问表中的数据，此时是顺序IO&lt;span <span class="keyword">style</span>=<span class="string">"color:#0000CC;"</span>&gt;.&lt;/span&gt;</span><br><span class="line">    <span class="keyword">select</span> non_key_column fromtb <span class="keyword">where</span> pk_column <span class="keyword">in</span> ( rest_sort )</span><br></pre></td></tr></table></figure>
 <p><img src="http://blog.itpub.net/attachment/201505/31/22664653_1433003467T2Pp.png" alt=""></p>
 <p>从图示MRR原理，<strong><u><span style="color:#E53333;">MySQL 将根据辅助索引获取的结果集根据主键进行排序，将乱序化为有序，可以用主键顺序访问基表，将随机读转化为顺序读，多页数据记录可一次性读入或根据此次的主键范围分次读入，以减少IO操作</span></u></strong>，提高查询效率。</p>
-<h2 id="三-相关参数-span"><a class="header-anchor" href="#三-相关参数-span"></a>三 相关参数</span></h2>
-<p>我们可以通过参数 optimizer_switch 的标记来控制是否使用MRR，当设置mrr=on时，表示启用MRR优化。mrr_cost_based 表示是否通过 cost base的方式来启用MRR.如果选择mrr=on,mrr_cost_based=off,则表示总是开启MRR优化。<br>
-参数read_rnd_buffer_size 用来控制键值缓冲区的大小。</p>
+<h2 id="三-相关参数"><a class="header-anchor" href="#三-相关参数"></a>三 相关参数</h2>
+<p>我们可以通过参数 optimizer_switch 的标记来控制是否使用MRR，当设置mrr=on时，表示启用MRR优化。mrr_cost_based 表示是否通过 cost base 的方式来启用MRR。如果选择mrr=on，mrr_cost_based=off，则表示总是开启MRR优化。<br>
+参数 read_rnd_buffer_size 用来控制键值缓冲区的大小。</p>
 <h2 id="四-案例介绍"><a class="header-anchor" href="#四-案例介绍"></a>四  案例介绍</h2>
 <p>当开启MRR时</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MySQL &gt; explain select * from tbl where tbl.key1 between 1000 and 2000;</span><br><span class="line">+<span class="comment">----+-------------+-------+-------+---------------+------+---------+------+------+-------------------------------------------+</span></span><br><span class="line">| id | select_type | table | type  | possible_keys | key  | key_len | ref  | rows | Extra                                     |</span><br><span class="line">+<span class="comment">----+-------------+-------+-------+---------------+------+---------+------+------+-------------------------------------------+</span></span><br><span class="line">| 1  | SIMPLE      | tbl   | range | key1          | key1 | 5       | NULL | 960  | Using index condition; Using MRR          |</span><br><span class="line">+<span class="comment">----+-------------+-------+-------+---------------+------+---------+------+------+-------------------------------------------+</span></span><br><span class="line">1 row in <span class="keyword">set</span> (<span class="number">0.03</span> sec)</span><br></pre></td></tr></table></figure>
-<h2 id="五-mrr的使用限"><a class="header-anchor" href="#五-mrr的使用限"></a>五 MRR的使用限</h2>
+<h2 id="五-mrr的使用限制"><a class="header-anchor" href="#五-mrr的使用限制"></a>五 MRR的使用限制</h2>
 <p>MRR 适用于以下两种情况。</p>
 <ul>
 <li>1 range access</li>
@@ -406,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-介绍"><span class="nav-text">一 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-原理"><span class="nav-text">二 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-相关参数-span"><span class="nav-text">三 相关参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-案例介绍"><span class="nav-text">四  案例介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-mrr的使用限"><span class="nav-text">五 MRR的使用限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-参考文章"><span class="nav-text">六  参考文章</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-介绍"><span class="nav-text">一 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-原理"><span class="nav-text">二 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-相关参数"><span class="nav-text">三 相关参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-案例介绍"><span class="nav-text">四  案例介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-mrr的使用限制"><span class="nav-text">五 MRR的使用限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-参考文章"><span class="nav-text">六  参考文章</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

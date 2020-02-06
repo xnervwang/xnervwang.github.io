@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://xnerv.wang/process-memory-layout/</loc>
-    <lastmod>2020-02-03</lastmod>
+    <loc>https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
+    <lastmod>2020-02-06</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
+    <lastmod>2020-02-06</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
+    <lastmod>2020-02-06</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</loc>
+    <lastmod>2020-02-06</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
+    <lastmod>2020-02-06</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
     <lastmod>2020-02-03</lastmod>
@@ -37,10 +49,10 @@
     <loc>https://xnerv.wang/cpp-bean-knowledge/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
+    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
@@ -62,6 +74,9 @@
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
+    <lastmod>2020-02-03</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/process-memory-layout/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/understand-memory-barrier/</loc>
@@ -136,10 +151,10 @@
     <loc>https://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/leveldb-analysis/</loc>
+    <loc>https://xnerv.wang/the-google-file-system-paper-analysis/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/the-google-file-system-paper-analysis/</loc>
+    <loc>https://xnerv.wang/leveldb-analysis/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/compile-windows-seafile-client/</loc>
@@ -166,10 +181,10 @@
     <loc>https://xnerv.wang/iocp-usage-and-inside/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
+    <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
+    <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
@@ -241,10 +256,10 @@
     <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
+    <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
+    <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
@@ -254,12 +269,6 @@
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
-    <lastmod>2020-02-03</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
-    <lastmod>2020-02-03</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
@@ -277,13 +286,13 @@
     <loc>https://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
+    <loc>https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
+    <lastmod>2020-02-03</lastmod>
+  </url>  <url>
     <loc>https://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</loc>
-    <lastmod>2020-02-03</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/read-committed-snapshot-isolation/</loc>
@@ -331,22 +340,13 @@
     <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
-    <lastmod>2020-02-03</lastmod>
-  </url>  <url>
     <loc>https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</loc>
-    <lastmod>2020-02-03</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
+    <loc>https://xnerv.wang/why-pg-uses-os-cache/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
-    <lastmod>2020-02-03</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/why-pg-uses-os-cache/</loc>
     <lastmod>2020-02-03</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
