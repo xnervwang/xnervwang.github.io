@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</loc>
-    <lastmod>2020-05-04</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/linux-xwindow-investigation/</loc>
+    <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</loc>
-    <lastmod>2020-05-04</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/tcp-model-knowledge-summary/</loc>
@@ -40,10 +34,10 @@
     <loc>https://xnerv.wang/cpp-bean-knowledge/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
+    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
@@ -58,16 +52,19 @@
     <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
+    <loc>https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</loc>
+    <lastmod>2020-05-04</lastmod>
+  </url>  <url>
     <loc>https://xnerv.wang/lock-free-queue-Implementation/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/some-knowledge-points-learned-in-university/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/process-memory-layout/</loc>
+    <loc>https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
+    <loc>https://xnerv.wang/process-memory-layout/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/understand-memory-barrier/</loc>
@@ -109,10 +106,10 @@
     <loc>https://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/google-3-gifts-gfs/</loc>
+    <loc>https://xnerv.wang/spv-spv-nodes-spv-purses/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/spv-spv-nodes-spv-purses/</loc>
+    <loc>https://xnerv.wang/google-3-gifts-gfs/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/google-3-gifts-mapreduce/</loc>
@@ -127,10 +124,10 @@
     <loc>https://xnerv.wang/bigtable-leveldb/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/application-of-mvcc-in-distributed-system/</loc>
+    <loc>https://xnerv.wang/study-consistent-hashing-in-5min/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/study-consistent-hashing-in-5min/</loc>
+    <loc>https://xnerv.wang/application-of-mvcc-in-distributed-system/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/dynamo-implement/</loc>
@@ -241,7 +238,7 @@
     <loc>https://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/linux-graphic-interface-and-remote-connection/</loc>
+    <loc>https://xnerv.wang/linux-xwindow-investigation/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
@@ -256,10 +253,10 @@
     <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
+    <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
+    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
@@ -274,10 +271,10 @@
     <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
+    <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
+    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
@@ -337,10 +334,10 @@
     <loc>https://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
+    <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
+    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>
@@ -365,6 +362,9 @@
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
+    <lastmod>2020-05-04</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/linux-graphic-interface-and-remote-connection/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>
 </urlset>
