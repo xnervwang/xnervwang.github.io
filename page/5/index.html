@@ -239,6 +239,88 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/snapshot-isolation-transaction-aborted-due-to-update-conflict/" class="post-title-link" itemprop="url">Snapshot isolation transaction aborted due to update conflict.（转载）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-29 23:34:00" itemprop="dateCreated datePublished" datetime="2018-01-29T23:34:00-08:00">2018-01-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="question"><a class="header-anchor" href="#question"></a>Question</h2>
+<p>To avoid deadlocks, we switched from ReadCommittedSnapshot isolation to SnapShot isolation for a SQL Server database at the database level and transaction level in the client code. Now, when two users perform concurrent operations on the database through the client, one of the clients get this error:</p>
+<p>“Snapshot isolation transaction aborted due to update conflict. You cannot use snapshot isolation to access table ‘dbo.cust_table’ directly or indirectly in database ‘cust_database’ to update, delete, or insert the row that has been modified or deleted by another transaction. Retry the transaction or change the isolation level for the update/delete statement.”</p>
+<p>What can we do to avoid deadlocks and update conflicts at the same time?</p>
+<p>(The same code with Oracle database and Oracle client works without any issues with the default Read Committed Snapshot isolation level)</p>
+<p>- SusmithaP</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/snapshot-isolation-transaction-aborted-due-to-update-conflict/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -967,87 +1049,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/format-specification-fields-printf-and-wprintf-functions/" class="post-title-link" itemprop="url">(MSDN) 格式规范语法：printf 和 wprintf 函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-11-18 21:33:00" itemprop="dateCreated datePublished" datetime="2017-11-18T21:33:00-08:00">2017-11-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>各种 <code>printf</code> 函数采用格式字符串和可选参数，并生成用于输出的格式化的字符序列。 格式字符串包含零个或多个指令，这些指令是用于输出的文本字符或描述如何在输出中设置参数格式的已编码的转换规范。 本主题介绍用于对格式字符串中的转换规范进行编码的语法。 有关这些函数的列表，请参阅<a href="stream-i-o">流 I/O</a>。</p>
-<p>一个转换规范由以下形式的可选和必需字段组成：</p>
-<p><strong>%</strong>[<a href="#flags"><em>标志</em></a>][<a href="#width"><em>宽度</em></a>][.<a href="#precision"><em>精度</em></a>][<a href="#size"><em>大小</em></a>]<a href="#type"><em>类型</em></a></p>
-<p>转换规范的每个字段都是一个用于指示特定的格式选项或转换说明符的字符或数字。 必填的类型字段指定要应用于参数的转换类型。 可选的标志、宽度和精度字段控制格式的其他方面（如前导空格或前导零、对齐方式和显示的精度）。 大小字段指定使用和转换的参数的大小。</p>
-<p>一个基本的转换规范仅包含百分号和一个类型字符。 例如，<code>%s</code> 指定一个字符串转换。 若要打印百分号字符，请使用 <code>%%</code>。 如果百分号后跟一个没有任何意义的字符作为格式字段，则将调用无效的参数处理程序。 有关详细信息，请参阅<a href="parameter-validation">参数验证</a>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/format-specification-fields-printf-and-wprintf-functions/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1098,7 +1099,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">122</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1111,7 +1112,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">161</span>
+        <span class="site-state-item-count">164</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

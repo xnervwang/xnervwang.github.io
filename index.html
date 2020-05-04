@@ -318,6 +318,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/linux-xwindow-investigation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/linux-xwindow-investigation/" class="post-title-link" itemprop="url">关于Linux X-Window的一些名词深究</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-05 23:25:00" itemprop="dateCreated datePublished" datetime="2020-05-05T23:25:00-07:00">2020-05-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>一直以来对X-Window、Xrdp、KDE、VNC等词半懂不懂，因此大致地调查了下。这篇文章包括了一些我自己的总结，因此可能有一些地方有不准确之处，敬请谅解。参考了<a href="http://cn.linux.vbird.org/linux_basic/0590xwindow_1.php" target="_blank" rel="noopener">http://cn.linux.vbird.org/linux_basic/0590xwindow_1.php</a>。</p>
+<p><strong>X-Window/X Protocol</strong>：在<a href="https://jin-yang.github.io/post/linux-xwindows-introduce.html" target="_blank" rel="noopener">XWindow 简介</a>中有比较好的解释，这其实是一套图形接口（协议）。不同于Windows已经将图形接口与操作系统完全融为一体的做法，Linux的图形接口是可选的。而X-Window就是这样的一种图形接口。这个图形接口是属于CS架构的（client/server）。X Server负责画面的绘制和显示，以及接收用户的输入并传到给X Client。X Client负责处理传递过来的用户输入并决定呈现数据，然后由X Server来进行绘制。这与通常的对于CS架构的理解是相反的，与用户直接沟通的其实是X Server。</p>
+<p>X-Window是一种协议，因此还需要具体的实现，例如Xfree86、Xorg，Xming和Xnest。</p>
+<p><strong>X11R6</strong>：X Protocol version 11 Release 6（X协议第11版第六次发行）。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/linux-xwindow-investigation/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -371,6 +451,9 @@
           <p>新买了一个Raspberry Pi 4 Model B，第一次使用树莓派，遇到一些问题，记录下来希望对自己和他人所有帮助。</p>
 <h2 id="买什么套装"><a class="header-anchor" href="#买什么套装"></a>买什么套装</h2>
 <p>虽然在我买的时候32GB款的树莓派4B税前价格是35刀，但是亚马逊上是不直接卖板子的，一些要捆绑一些配件像Micro SD卡、电源、散热片、Micro HDMI线啥的。众所周知美国这边的各种线卖的巨贵无比，国内淘宝9块9包邮的线，在这边可能就是20刀不包税。而像CanaKit等可以直接卖板子的网站，则一般需要6到7刀左右的邮费。最后我还是在亚马逊上买了一个包括电源和三块散热片的套装，税前45刀左右。</p>
+<p>树莓派4B的电源线是5V3A Type-C接口，我看了一下现在手机的充电线大多是5V2A这个样子，据说只要别接太多额外负载，手机充电线也是可以的。散热片不确定是否是必须的，我在不接散热片的情况下尽跑翻墙代理程序的时候在45摄氏度左右，但西雅图这边气温比较低，所以建议还是贴散热片比较保险。</p>
+<p>盒子的话淘宝20块就能买个很好的了，美国这边差不多20刀不包税。估计盒子会对散热造成一定负面影响，因此还是建议至少贴散热片。另外我一直在找有没有能装下一个2.5英寸或者3.5英寸硬盘的树莓派盒子，但是淘宝和亚马逊上都没有找到，移动硬盘只能单独放盒子外面，通过USB和树莓派连接在一起了。</p>
+<p>如果是把树莓派作为翻墙代理等服务器用途的话，Micro HDMI不是必须的，我下面会讲到怎么远程初始化树莓派。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/the-first-time-to-buy-and-use-raspberry-in-usa/#more" rel="contents">
@@ -949,94 +1032,6 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/thread-synchronization-and-atomic-operation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/thread-synchronization-and-atomic-operation/" class="post-title-link" itemprop="url">线程同步与原子操作</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2019-09-25 08:25:00" itemprop="dateCreated datePublished" datetime="2019-09-25T08:25:00-07:00">2019-09-25</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
-                    <span itemprop="name">操作系统</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="volatile"><a class="header-anchor" href="#volatile"></a>volatile</h2>
-<ul>
-<li>volatile使得代码每次在读写volatile变量时都需要从内存读写，而不能使用寄存器中缓存的值。并且也禁止编译器对volatible做编译优化。volatile本身并不是用于线程同步，也不保证原子读写（例如volatile a++这种需要几个指令才能完成的操作）。volatile主要用于access to memory mapped devices和variables in signal handlers and between setjmp and longjmp。C++标准禁止编译器reorder同一个线程内的volatile变量的读写，但不同线程则没有限制。non-volatile变量则有可能发生reorder（<a href="https://sites.google.com/site/kjellhedstrom2/stay-away-from-volatile-in-threaded-code" target="_blank" rel="noopener">Stay away from Volatile in threaded code?</a>）。</li>
-<li>而根据<a href="https://blog.csdn.net/dm_vincent/article/details/79604716" target="_blank" rel="noopener">为什么volatile++不是原子性的？</a>中的说法，volatile的读操作后会插入LoadLoad和LoadStore屏障，避免volatile读操作与后面的普通读写发生reorder。而volatile的写操作前会插入StoreLoad和StoreStore屏障，避免volatile写操作与后面的普通读写发生reorder（我不太确定这种说法的正确性，毕竟在wikipedia<a href="https://en.wikipedia.org/wiki/Volatile_(computer_programming)" target="_blank" rel="noopener">volatile (computer programming)</a>中并没有提到volatile会插入内存屏障，或者只有Java等语言才会这样做？）。</li>
-<li><a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C" target="_blank" rel="noopener">内存屏障</a>中有提到
-<blockquote>
-<p>C与C++语言中，volatile关键字意图允许内存映射的I/O操作。这要求编译器对此的数据读写按照程序中的先后顺序执行，不能对volatile内存的读写重排序。因此关键字volatile并不保证是一个内存屏障。[4]<br>
-对于Visual Studio 2003，编译器保证对volatile的操作是有序的，但是不能保证处理器的乱序执行。因此，可以使用InterlockedCompareExchange或InterlockedExchange函数。<br>
-对于Visual Studio 2005及以后版本，编译器对volatile变量的读操作使用acquire semantics，对写操作使用release semantics。</p>
-</blockquote>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/thread-synchronization-and-atomic-operation/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1087,7 +1082,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">122</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1100,7 +1095,7 @@ IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">161</span>
+        <span class="site-state-item-count">164</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

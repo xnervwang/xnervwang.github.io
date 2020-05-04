@@ -239,6 +239,83 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/overriding-the-virtual-table-in-a-cpp-object/" class="post-title-link" itemprop="url">Overriding the virtual table in a C++ object（转载）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-03 22:52:00" itemprop="dateCreated datePublished" datetime="2017-11-03T22:52:00-07:00">2017-11-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Yesterday I was discussing with a friend of mine about how polymorphism is implemented in C++, and that is, using a virtual table ( remember the “virtual” keyword in method definitions? ). A virtual table is, rawly speaking, just like an array of function pointers. Each created object with virtual methods needs a virtual table. So, where does the virtual table is stored?, I really don’t know, but I do know where I can find the address of the virtual table associated to an object ( at least in g++ 4.1.1 ), the first sizeof(void*) bytes of an object are used to store a pointer to the virtual table. With this knowledge, one could think that is possible to override the virtual table pointer of the object and call arbitrary functions, and yes, we can. Let’s see some fun code.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/overriding-the-virtual-table-in-a-cpp-object/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://xnerv.wang/linux-process-kernel-and-file-system-summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -959,92 +1036,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/cpp-bean-knowledge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/cpp-bean-knowledge/" class="post-title-link" itemprop="url">一些基础的C++豆知识</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2017-07-23 16:34:00" itemprop="dateCreated datePublished" datetime="2017-07-23T16:34:00-07:00">2017-07-23</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
-                    <span itemprop="name">编程语言</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="基础语法"><a class="header-anchor" href="#基础语法"></a>基础语法</h2>
-<ul>
-<li>由于C++的枚举不像C#中的枚举，其枚举类型名并不是标识符的一部分，因此经常可能发生命名冲突的问题，解决的方法有四个：在枚举元素名称前加限定前缀（如enum EnumFruit { EnumFruit_apple = 1 };），将枚举类型放在一个同名的命名空间中，或将枚举作为类的嵌套类型，或者使用C++11的enum class（<a href="https://stackoverflow.com/questions/14041711/whats-an-enum-class-and-why-should-i-care?noredirect=1&amp;lq=1" target="_blank" rel="noopener">What’s an enum class and why should I care?</a>）。</li>
-<li>struct和class的默认类继承方式都是private，这与struct的成员默认继承方式是public是不同的。</li>
-<li><code>#include_next &lt;filename.h&gt;</code>，include位于搜索路径中位于当前文件之后的文件filename.h。</li>
-<li>在vc中，inlucde的路径的反斜杠不需要转义，如<code>#include &quot;..\..\..\Global\Data\GlobalPreferencesMgr.h&quot;</code>。</li>
-<li>对于namespace中的函数或class的前置声明，必须同样也包括在相同的namespace中，而不能用class ::std::A这种写法。（<a href="https://stackoverflow.com/questions/2059665/why-cant-i-forward-declare-a-class-in-a-namespace-like-this" target="_blank" rel="noopener">Why can’t I forward-declare a class in a namespace like this?</a>）</li>
-<li>没有<code>&amp;&amp;=</code>，只有<code>&amp;=</code>。</li>
-<li>（-1 || 0） == 1，请想想为什么。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/cpp-bean-knowledge/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1095,7 +1086,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">121</span>
+          <span class="site-state-item-count">122</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1108,7 +1099,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">161</span>
+        <span class="site-state-item-count">164</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
