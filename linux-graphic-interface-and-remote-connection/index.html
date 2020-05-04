@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="XNERV SURVEYS">
 <meta property="og:description" content="一直以来对X-Window、Xrdp、KDE、VNC等词半懂不懂，因此大致地调查了下。这篇文章包括了一些我自己的总结，因此可能有一些地方有不准确之处，敬请谅解。参考了http:&#x2F;&#x2F;cn.linux.vbird.org&#x2F;linux_basic&#x2F;0590xwindow_1.php。 X-Window&#x2F;X Protocol：在XWindow 简介中有比较好的解释，这其实是一套图形接口（协议）。不同于Wi">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-04T07:59:13.547Z">
+<meta property="og:updated_time" content="2020-05-04T08:00:02.946Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://xnerv.wang/linux-graphic-interface-and-remote-connection/">
@@ -292,6 +292,7 @@
         <p>一直以来对X-Window、Xrdp、KDE、VNC等词半懂不懂，因此大致地调查了下。这篇文章包括了一些我自己的总结，因此可能有一些地方有不准确之处，敬请谅解。参考了<a href="http://cn.linux.vbird.org/linux_basic/0590xwindow_1.php" target="_blank" rel="noopener">http://cn.linux.vbird.org/linux_basic/0590xwindow_1.php</a>。</p>
 <p><strong>X-Window/X Protocol</strong>：在<a href="https://jin-yang.github.io/post/linux-xwindows-introduce.html" target="_blank" rel="noopener">XWindow 简介</a>中有比较好的解释，这其实是一套图形接口（协议）。不同于Windows已经将图形接口与操作系统完全融为一体的做法，Linux的图形接口是可选的。而X-Window就是这样的一种图形接口。这个图形接口是属于CS架构的（client/server）。X Server负责画面的绘制和显示，以及接收用户的输入并传到给X Client。X Client负责处理传递过来的用户输入并决定呈现数据，然后由X Server来进行绘制。这与通常的对于CS架构的理解是相反的，与用户直接沟通的其实是X Server。</p>
 <p>X-Window是一种协议，因此还需要具体的实现，例如Xfree86、Xorg，Xming和Xnest。</p>
+<a id="more"></a>
 <p><strong>X11R6</strong>：X Protocol version 11 Release 6（X协议第11版第六次发行）。</p>
 <p><strong>Window Manager（WM）</strong>：个人看法，每一个窗口程序可能就对应一个（或多个？）X Client，而WM就是管理这些窗口移动、窗口大小和重叠显示的管理程序，常见的WM有GNOME、KDE、XFCE。</p>
 <p><strong>远程连接</strong>：当你从另一台电脑上（主要是Windows）上想要通过图形化界面操作远程Linux时需要用到。常见的图形化远程连接协议是RDP和VNC。RDP在Windows上很常见，远程桌面用的就是RDP。RDP和VNC的区别可以参考<a href="https://blog.csdn.net/Cheese_pop/article/details/102958997" target="_blank" rel="noopener">VNC与RDP的区别</a>。VNC主要传图像，适用于瘦客户端。RDP主要传指令，适用于低速网络。此外微软还有一项针对RDP的增强技术RemoteFX。</p>

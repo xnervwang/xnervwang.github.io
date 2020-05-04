@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</loc>
+    <lastmod>2020-05-04</lastmod>
+  </url>  <url>
     <loc>https://xnerv.wang/linux-graphic-interface-and-remote-connection/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
@@ -25,10 +28,10 @@
     <loc>https://xnerv.wang/spin-lock-in-cpp/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
+    <loc>https://xnerv.wang/analysis-about-cpp-exception-implementation/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/analysis-about-cpp-exception-implementation/</loc>
+    <loc>https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/all-truths-about-python-encoding-problem/</loc>
@@ -46,16 +49,13 @@
     <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/16-useful-online-tools/</loc>
-    <lastmod>2020-05-04</lastmod>
-  </url>  <url>
     <loc>https://xnerv.wang/google-50-tshirt/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
+    <loc>https://xnerv.wang/16-useful-online-tools/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</loc>
+    <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/lock-free-queue-Implementation/</loc>
@@ -82,19 +82,19 @@
     <loc>https://xnerv.wang/memory-barriers-are-like-source-control-perations/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</loc>
+    <loc>https://xnerv.wang/acquire-and-release-semantics/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/acquire-and-release-semantics/</loc>
+    <loc>https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/thread-synchronization-and-atomic-operation/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
+    <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
+    <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/further-disscusion-of-pagerank-4/</loc>
@@ -115,16 +115,16 @@
     <loc>https://xnerv.wang/google-3-gifts-gfs/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/google-3-gifts-mapreduce/</loc>
-    <lastmod>2020-05-04</lastmod>
-  </url>  <url>
     <loc>https://xnerv.wang/google-3-gifts-bigtable/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/cache-update-routines/</loc>
+    <loc>https://xnerv.wang/google-3-gifts-mapreduce/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/bigtable-leveldb/</loc>
+    <lastmod>2020-05-04</lastmod>
+  </url>  <url>
+    <loc>https://xnerv.wang/cache-update-routines/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/study-consistent-hashing-in-5min/</loc>
@@ -223,10 +223,10 @@
     <loc>https://xnerv.wang/special-features-of-linux-memory-management-mechanism/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/the-core-algorithm-of-rsync/</loc>
+    <loc>https://xnerv.wang/memory-allocation-mechanism-in-linux/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/memory-allocation-mechanism-in-linux/</loc>
+    <loc>https://xnerv.wang/the-core-algorithm-of-rsync/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/version-control-and-usage-of-linux-shared-library/</loc>
@@ -268,10 +268,10 @@
     <loc>https://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
+    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
+    <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
@@ -280,10 +280,10 @@
     <loc>https://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
+    <loc>https://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
+    <loc>https://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
@@ -295,10 +295,10 @@
     <loc>https://xnerv.wang/read-committed-snapshot-isolation/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</loc>
+    <loc>https://xnerv.wang/mysql-row-format/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/mysql-row-format/</loc>
+    <loc>https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/trace-metadata-lock/</loc>
@@ -325,10 +325,10 @@
     <loc>https://xnerv.wang/mysql-index-condition-pushdown/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/lock-escalations/</loc>
+    <loc>https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</loc>
+    <loc>https://xnerv.wang/lock-escalations/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
@@ -349,10 +349,10 @@
     <loc>https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-pg-uses-os-cache/</loc>
+    <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
+    <loc>https://xnerv.wang/why-pg-uses-os-cache/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
