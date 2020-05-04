@@ -34,10 +34,10 @@
     <loc>https://xnerv.wang/cpp-bean-knowledge/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
+    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
@@ -241,10 +241,10 @@
     <loc>https://xnerv.wang/linux-xwindow-investigation/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
+    <loc>https://xnerv.wang/linux-process-kernel-and-file-system-summary/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/linux-process-kernel-and-file-system-summary/</loc>
+    <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
@@ -256,10 +256,10 @@
     <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
+    <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
+    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
@@ -271,10 +271,10 @@
     <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
+    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
-    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
+    <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
@@ -362,9 +362,6 @@
     <lastmod>2020-05-04</lastmod>
   </url>  <url>
     <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
-    <lastmod>2020-05-04</lastmod>
-  </url>  <url>
-    <loc>https://xnerv.wang/linux-graphic-interface-and-remote-connection/</loc>
     <lastmod>2020-05-04</lastmod>
   </url>
 </urlset>
