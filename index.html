@@ -289,7 +289,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>一直以来对X-Window、Xrdp、KDE、VNC等词半懂不懂，因此大致地调查了下。这篇文章包括了一些我自己的总结，因此可能有一些地方有不准确之处，敬请谅解。</p>
+          <p>一直以来对X-Window、Xrdp、KDE、VNC等词半懂不懂，因此大致地调查了下。这篇文章包括了一些我自己的总结，因此可能有一些地方有不准确之处，敬请谅解。参考了<a href="http://cn.linux.vbird.org/linux_basic/0590xwindow_1.php" target="_blank" rel="noopener">http://cn.linux.vbird.org/linux_basic/0590xwindow_1.php</a>。</p>
 <p><strong>X-Window/X Protocol</strong>：在<a href="https://jin-yang.github.io/post/linux-xwindows-introduce.html" target="_blank" rel="noopener">XWindow 简介</a>中有比较好的解释，这其实是一套图形接口（协议）。不同于Windows已经将图形接口与操作系统完全融为一体的做法，Linux的图形接口是可选的。而X-Window就是这样的一种图形接口。这个图形接口是属于CS架构的（client/server）。X Server负责画面的绘制和显示，以及接收用户的输入并传到给X Client。X Client负责处理传递过来的用户输入并决定呈现数据，然后由X Server来进行绘制。这与通常的对于CS架构的理解是相反的，与用户直接沟通的其实是X Server。</p>
 <p>X-Window是一种协议，因此还需要具体的实现，例如Xfree86、Xorg，Xming和Xnest。</p>
 <p><strong>X11R6</strong>：X Protocol version 11 Release 6（X协议第11版第六次发行）。</p>
