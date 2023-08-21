@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="如何查看进程发生缺页中断的次数？ 用ps -o majflt,minflt -C program命令查看。 majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。 这两个数值表示一个进程自启动以来所发生的缺页中断的次数。 发成缺页中断后，执行了那些操作？ 当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：  检查要访问的虚拟地址">
+<meta property="og:type" content="article">
+<meta property="og:title" content="进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）（转载）">
+<meta property="og:url" content="https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="如何查看进程发生缺页中断的次数？ 用ps -o majflt,minflt -C program命令查看。 majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。 这两个数值表示一个进程自启动以来所发生的缺页中断的次数。 发成缺页中断后，执行了那些操作？ 当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：  检查要访问的虚拟地址">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/two-ways-of-allocating-memory-brk-and-mmap/1.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/two-ways-of-allocating-memory-brk-and-mmap/2.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/two-ways-of-allocating-memory-brk-and-mmap/3.jpg">
+<meta property="article:published_time" content="2014-09-23T18:31:56.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:21.189Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="内存管理">
+<meta property="article:tag" content="进程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/two-ways-of-allocating-memory-brk-and-mmap/1.jpg">
+
+<link rel="canonical" href="https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          进程分配内存的两种方式--brk() 和mmap()（不涉及共享内存）（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2014-09-23 11:31:56" itemprop="dateCreated datePublished" datetime="2014-09-23T11:31:56-07:00">2014-09-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="如何查看进程发生缺页中断的次数？"><a class="header-anchor" href="#如何查看进程发生缺页中断的次数？"></a>如何查看进程发生缺页中断的次数？</h2>
+<p>用ps -o majflt,minflt -C program命令查看。<br>
+majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。<br>
+这两个数值表示一个进程自启动以来所发生的缺页中断的次数。</p>
+<h2 id="发成缺页中断后，执行了那些操作？"><a class="header-anchor" href="#发成缺页中断后，执行了那些操作？"></a>发成缺页中断后，执行了那些操作？</h2>
+<p>当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：</p>
+<ol>
+<li>检查要访问的虚拟地址是否合法</li>
+<li>查找/分配一个物理页</li>
+<li>填充物理页内容（读取磁盘，或者直接置0，或者啥也不干）</li>
+<li><strong>建立映射关系（虚拟地址到物理地址）</strong></li>
+</ol>
+<p>重新执行发生缺页中断的那条指令<br>
+如果第3步，需要读取磁盘，那么这次缺页中断就是majflt，否则就是minflt。</p>
+<a id="more"></a>
+<h2 id="内存分配的原理"><a class="header-anchor" href="#内存分配的原理"></a>内存分配的原理</h2>
+<p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：<strong>brk和mmap（不考虑共享内存）</strong>。</p>
+<ol>
+<li>brk是将数据段(.data)的最高地址指针_edata往高地址推；</li>
+<li>mmap是在进程的虚拟地址空间中（堆和栈中间，称为文件映射区域的地方）找一块空闲的虚拟内存。</li>
+</ol>
+<p>这两种方式分配的都是虚拟内存，没有分配物理内存。在第一次访问已分配的虚拟地址空间的时候，发生缺页中断，操作系统负责分配物理内存，然后建立虚拟内存和物理内存之间的映射关系。</p>
+<p>在标准C库中，提供了malloc/free函数分配释放内存，这两个函数底层是由brk，mmap，munmap这些系统调用实现的。</p>
+<h3 id="下面以一个例子来说明内存分配的原理："><a class="header-anchor" href="#下面以一个例子来说明内存分配的原理："></a>下面以一个例子来说明内存分配的原理：</h3>
+<p>情况一、malloc小于128k的内存，使用brk分配内存，将_edata往高地址推(只分配虚拟空间，不对应物理内存(因此没有初始化)，第一次读/写数据时，引起内核缺页中断，内核才分配对应的物理内存，然后虚拟地址空间建立映射关系)，如下图：</p>
+<center>
+<img src="/assets/two-ways-of-allocating-memory-brk-and-mmap/1.jpg" />
+</center>
+<ol>
+<li>
+<p>进程启动的时候，其（虚拟）内存空间的初始布局如图1所示。<br>
+其中，<strong>mmap内存映射文件是在堆和栈的中间</strong>（<a target="_blank" rel="noopener" href="http://xn--libc-2-9v9ii49d.2.93.so">例如libc-2.2.93.so</a>，其它数据文件等），为了简单起见，省略了内存映射文件。<br>
+_edata指针（glibc里面定义）指向数据段的最高地址。</p>
+</li>
+<li>
+<p>进程调用A=malloc(30K)以后，内存空间如图2：<br>
+malloc函数会调用brk系统调用，将_edata指针往高地址推30K，就完成虚拟内存分配。<br>
+你可能会问：只要把_edata+30K就完成内存分配了？<br>
+事实是这样的，_edata+30K只是完成虚拟地址的分配，A这块内存现在还是没有物理页与之对应的，等到进程第一次读写A这块内存的时候，发生缺页中断，这个时候，内核才分配A这块内存对应的物理页。也就是说，如果用malloc分配了A这块内容，然后从来不访问它，那么，A对应的物理页是不会被分配的。</p>
+</li>
+<li>
+<p>进程调用B=malloc(40K)以后，内存空间如图3。<br>
+情况二、malloc大于128k的内存，使用mmap分配内存，在堆和栈之间找一块空闲内存分配(对应独立内存，而且初始化为0)，如下图：</p>
+</li>
+</ol>
+<center>
+<img src="/assets/two-ways-of-allocating-memory-brk-and-mmap/2.jpg" />
+</center>
+<ol start="4">
+<li>
+<p>进程调用C=malloc(200K)以后，内存空间如图4：<br>
+默认情况下，malloc函数分配内存，如果请求内存大于128K（可由M_MMAP_THRESHOLD选项调节），那就不是去推_edata指针了，而是利用mmap系统调用，从堆和栈的中间分配一块虚拟内存。<br>
+这样子做主要是因为::<br>
+brk分配的内存需要等到高地址内存释放以后才能释放（例如，在B释放之前，A是不可能释放的，这就是内存碎片产生的原因，什么时候紧缩看下面），而mmap分配的内存可以单独释放。<br>
+当然，还有其它的好处，也有坏处，再具体下去，有兴趣的同学可以去看glibc里面malloc的代码了。</p>
+</li>
+<li>
+<p>进程调用D=malloc(100K)以后，内存空间如图5；</p>
+</li>
+</ol>
+<center>
+<img src="/assets/two-ways-of-allocating-memory-brk-and-mmap/3.jpg" />
+</center>
+<ol start="6">
+<li>
+<p>进程调用free©以后，C对应的虚拟内存和物理内存一起释放。</p>
+</li>
+<li>
+<p>进程调用free(B)以后，如图7所示：<br>
+B对应的虚拟内存和物理内存都没有释放，因为只有一个_edata指针，如果往回推，那么D这块内存怎么办呢？<br>
+当然，B这块内存，是可以重用的，如果这个时候再来一个40K的请求，那么malloc很可能就把B这块内存返回回去了。</p>
+</li>
+</ol>
+<p>8、进程调用free(D)以后，如图8所示：<br>
+B和D连接起来，变成一块140K的空闲内存。</p>
+<p>9、默认情况下：<br>
+当最高地址空间的空闲内存超过128K（可由M_TRIM_THRESHOLD选项调节）时，执行内存紧缩操作（trim）。在上一个步骤free的时候，发现最高地址空闲内存超过128K，于是内存紧缩，变成图9所示。</p>
+<h3 id="在了解了内存分配原理以后来看一个现象："><a class="header-anchor" href="#在了解了内存分配原理以后来看一个现象："></a>在了解了内存分配原理以后来看一个现象：</h3>
+<h4 id="现象"><a class="header-anchor" href="#现象"></a>现象</h4>
+<ol>
+<li>
+<p>压力测试过程中，发现被测对象性能不够理想，具体表现为：<br>
+进程的系统态CPU消耗20，用户态CPU消耗10，系统idle大约70</p>
+</li>
+<li>
+<p>用ps -o majflt,minflt -C program命令查看，发现majflt每秒增量为0，而minflt每秒增量大于10000。</p>
+</li>
+</ol>
+<h4 id="初步分析"><a class="header-anchor" href="#初步分析"></a>初步分析</h4>
+<p>majflt代表major fault，中文名叫大错误，minflt代表minor fault，中文名叫小错误。<br>
+这两个数值表示一个进程自启动以来所发生的缺页中断的次数。<br>
+当一个进程发生缺页中断的时候，进程会陷入内核态，执行以下操作：</p>
+<ol>
+<li>检查要访问的虚拟地址是否合法</li>
+<li>查找/分配一个物理页</li>
+<li>填充物理页内容(读取磁盘，或者直接置0，或者啥也不干)</li>
+<li>建立映射关系(虚拟地址到物理地址)</li>
+<li>重新执行发生缺页中断的那条指令</li>
+</ol>
+<p>如果第3步，需要读取磁盘，那么这次缺页中断就是majflt，否则就是minflt。<br>
+此进程minflt如此之高，一秒10000多次，不得不怀疑它跟进程内核态cpu消耗大有很大关系。</p>
+<h4 id="分析代码"><a class="header-anchor" href="#分析代码"></a>分析代码</h4>
+<p>查看代码，发现是这么写的：一个请求来，用malloc分配2M内存，请求结束后free这块内存。看日志，发现分配内存语句耗时10us，平均一条请求处理耗时1000us 。 原因已找到！<br>
+虽然分配内存语句的耗时在一条处理请求中耗时比重不大，但是这条语句严重影响了性能。要解释清楚原因，需要先了解一下内存分配的原理。</p>
+<h4 id="真相大白"><a class="header-anchor" href="#真相大白"></a>真相大白</h4>
+<p>说完内存分配的原理，那么被测模块在内核态cpu消耗高的原因就很清楚了：每次请求来都malloc一块2M的内存，默认情况下，malloc调用mmap分配内存，请求结束的时候，调用munmap释放内存。假设每个请求需要6个物理页，那么每个请求就会产生6个缺页中断，在2000的压力下，每秒就产生了10000多次缺页中断，这些缺页中断不需要读取磁盘解决，所以叫做minflt;缺页中断在内核态执行，因此进程的内核态cpu消耗很大。缺页中断分散在整个请求的处理过程中，所以表现为分配语句耗时(10us)相对于整条请求的处理时间(1000us)比重很小。</p>
+<h4 id="解决办法"><a class="header-anchor" href="#解决办法"></a>解决办法</h4>
+<ul>
+<li>将动态内存改为静态分配，或者启动的时候，用malloc为每个线程分配，然后保存在threaddata里面。但是，由于这个模块的特殊性，静态分配，或者启动时候分配都不可行。另外，Linux下默认栈的大小限制是10M，如果在栈上分配几M的内存，有风险。</li>
+<li>禁止malloc调用mmap分配内存，禁止内存紧缩。<br>
+在进程启动时候，加入以下两行代码：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mallopt(M_MMAP_MAX, <span class="number">0</span>); <span class="comment">// 禁止malloc调用mmap分配内存</span></span><br><span class="line">mallopt(M_TRIM_THRESHOLD, <span class="number">-1</span>); <span class="comment">// 禁止内存紧缩</span></span><br></pre></td></tr></table></figure>
+<p>效果：加入这两行代码以后，用ps命令观察，压力稳定以后，majlt和minflt都为0。进程的系统态cpu从20降到10。</p>
+<h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
+<p>可以用命令ps -o majflt minflt -C program来查看进程的majflt, minflt的值，这两个值都是累加值，从进程启动开始累加。在对高性能要求的程序做压力测试的时候，我们可以多关注一下这两个值。<br>
+　　如果一个进程使用了mmap将很大的数据文件映射到进程的虚拟地址空间，我们需要重点关注majflt的值，因为相比minflt，majflt对于性能的损害是致命的，随机读一次磁盘的耗时数量级在几个毫秒，而minflt只有在大量的时候才会对性能产生影响。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">http://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/yusiguyuan/article/details/39496057">进程分配内存的两种方式–brk() 和mmap()（不涉及共享内存）</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+              <a href="/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="tag"># 内存管理</a>
+              <a href="/tags/%E8%BF%9B%E7%A8%8B/" rel="tag"># 进程</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B%E5%8F%91%E7%94%9F%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD%E7%9A%84%E6%AC%A1%E6%95%B0%EF%BC%9F"><span class="nav-text">如何查看进程发生缺页中断的次数？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E6%88%90%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD%E5%90%8E%EF%BC%8C%E6%89%A7%E8%A1%8C%E4%BA%86%E9%82%A3%E4%BA%9B%E6%93%8D%E4%BD%9C%EF%BC%9F"><span class="nav-text">发成缺页中断后，执行了那些操作？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E5%8E%9F%E7%90%86"><span class="nav-text">内存分配的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E4%BB%A5%E4%B8%80%E4%B8%AA%E4%BE%8B%E5%AD%90%E6%9D%A5%E8%AF%B4%E6%98%8E%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-text">下面以一个例子来说明内存分配的原理：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E4%BA%86%E8%A7%A3%E4%BA%86%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%8E%9F%E7%90%86%E4%BB%A5%E5%90%8E%E6%9D%A5%E7%9C%8B%E4%B8%80%E4%B8%AA%E7%8E%B0%E8%B1%A1%EF%BC%9A"><span class="nav-text">在了解了内存分配原理以后来看一个现象：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8E%B0%E8%B1%A1"><span class="nav-text">现象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E6%AD%A5%E5%88%86%E6%9E%90"><span class="nav-text">初步分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E4%BB%A3%E7%A0%81"><span class="nav-text">分析代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9C%9F%E7%9B%B8%E5%A4%A7%E7%99%BD"><span class="nav-text">真相大白</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="nav-text">解决办法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-text">小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

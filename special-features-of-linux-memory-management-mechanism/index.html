@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="In this article, I am going to describe some general features and some specific ones of the memory management in Linux. It will be mainly on dynamic memory allocation and release, as well as the manag">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Special features of Linux memory management mechanism（转载）">
+<meta property="og:url" content="https://xnerv.wang/special-features-of-linux-memory-management-mechanism/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="In this article, I am going to describe some general features and some specific ones of the memory management in Linux. It will be mainly on dynamic memory allocation and release, as well as the manag">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/MemoryMS.png">
+<meta property="og:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/Buddy_all.png">
+<meta property="og:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/formula1.png">
+<meta property="og:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/formula2.png">
+<meta property="article:published_time" content="2014-12-01T00:27:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:19.822Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="Heap">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Memory Management">
+<meta property="article:tag" content="Buddy System">
+<meta property="article:tag" content="Slab Allocator">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/MemoryMS.png">
+
+<link rel="canonical" href="https://xnerv.wang/special-features-of-linux-memory-management-mechanism/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>Special features of Linux memory management mechanism（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/special-features-of-linux-memory-management-mechanism/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          Special features of Linux memory management mechanism（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2014-11-30 16:27:00" itemprop="dateCreated datePublished" datetime="2014-11-30T16:27:00-08:00">2014-11-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>In this article, I am going to describe some general features and some specific ones of the memory management in Linux. It will be mainly on dynamic memory allocation and release, as well as the management of the free memory. The article concerns the Linux kernel versions 2.6.X.</p>
+<a id="more"></a>
+<h2 id="Structure-of-the-Linux-memory-management"><a class="header-anchor" href="#Structure-of-the-Linux-memory-management"></a>Structure of the Linux memory management</h2>
+<p>The term “memory management” refers to the mechanisms implemented by an operating system to provide applications with memory-related services. These services include usage of virtual memory (utilizing of a hard disk or other non-RAM storage media to provide additional program memory), protected memory (exclusive access to a region of memory by a process), and shared memory (cooperative access to a region of memory by multiple processes).</p>
+<p>Memory management services in the Linux are built on a programming foundation that includes a peripheral device called <strong>Memory Management Unit (MMU)</strong>. MMU translates physical memory addresses to linear addresses used by the operating system, and requests a page fault interrupt, when the CPU tries to access memory that it is not entitled to.</p>
+<p>Not all processors have MMUs. Therefore, the <a target="_blank" rel="noopener" href="http://www.uclinux.org/index.html">uClinux distribution</a> (Linux for microcontrollers) supports a single address space of operation. This architecture lacks the protection provided by MMU but makes it possible for Linux to run on another class of processors.</p>
+<p>For further understanding of structure of the MM services, we need to know that a basic unit of memory under Linux is <strong>page</strong>, a non-overlapping region of contiguous memory. All available physical memory is organized into pages towards the end of the kernel’s boot process. Size of page depends on processor architecture. Processor designs often allow to have two or more, sometimes simultaneously, page sizes.</p>
+<p>Traditional page size used by Linux is 4096 bytes.</p>
+<p>But using memory pages “as is” is not very convenient. Often we need to allocate less than one memory page. There are such possibilities in Linux:</p>
+<ul>
+<li><strong>in the kernel</strong>, you can allocate one of the small kernel objects using slab allocator;</li>
+<li>you can allocate a memory block by kmalloc, but it will allocate only a block of the nearest bigger size that it has;</li>
+<li><strong>in the user mode</strong>, you can allocate any amount of memory using heap management functions implemented in Standard C Library;</li>
+<li>you can create your own heap manager on top of the Linux kernel system calls.</li>
+</ul>
+<p>To provide a simple interface for interaction with Memory Management Unit and perform such interaction in a portable way, in Linux, subsystem of allocating and releasing memory is split into three layers.  These layers are:</p>
+<ul>
+<li>The Slab Allocator</li>
+<li>The Zone Allocator</li>
+<li>The Buddy Allocator</li>
+</ul>
+<p>General scheme of all these layers interaction with user mode code and hardware looks as follows:</p>
+<p><img src="/assets/special-features-of-linux-memory-management-mechanism/MemoryMS.png" alt="MemoryMS"></p>
+<p>Figure 1. General scheme of the memory management in Linux</p>
+<p>Note that in Linux, most of programs directly or indirectly use heap manager of the GCC Standard C Library called glibc, but you still can write your own heap manager on top of the kernel system calls.</p>
+<p>As we can see on the Figure 1, user space allocation always leads to kernel allocation. Kernel allocates memory using the chain of three kernel allocators and maps allocated pages to the address space of the process, which has requested the allocation.</p>
+<h2 id="Kernel-mode-memory-management-services"><a class="header-anchor" href="#Kernel-mode-memory-management-services"></a>Kernel mode memory management services</h2>
+<p><strong>The Buddy Allocator</strong> is responsible for the management of the page allocations in the entire system. This code manages lists of physically contiguous pages and maps them into the MMU page tables to provide other kernel subsystems with the valid physical address ranges, when the kernel requests them (Physical to Virtual Address mapping is handled by a higher layer of the VM).</p>
+<p>The Buddy Allocator splits memory into pairs of 2n pages where n is in range from 0 to MAX_ORDER constant (defined in the header file &lt;linux/mmzone.h&gt;), and stores information about the free blocks of pages in the array of lists as follows:</p>
+<p><img src="/assets/special-features-of-linux-memory-management-mechanism/Buddy_all.png" alt="Buddy_all"></p>
+<p>Figure 2: Array of lists of memory pages in the Buddy Allocator</p>
+<p>Each list consists of free physically contiguous blocks of 2i memory pages, where <em>i</em> is a list number. Each of such blocks, except the block that consists of 1 page, can be split into two halves and used as 2 blocks of a half size.</p>
+<p>So if no entries exist in the requested list, an entry from the next upper list is broken into two separate clusters and one is returned to the caller while the other one is added to the next lower list.</p>
+<p>On the other hand, every two blocks of memory of the same size, which have common border (arranged in memory sequentially, from the standpoint of physical addresses), may be united into the single block of the bigger size. Such neighboring blocks are called <strong>Buddies</strong>.</p>
+<p>When allocation is returned to the Buddy Allocator, it checks if buddy of the allocation is free, and if it is so, Buddy Allocator unites them into the bigger block. This operation is repeated until no more block buddies are found.</p>
+<p>Also we should note that the Buddy Allocator can allocate only blocks of the size in pages that is equal to 2 raised to some power.</p>
+<p>The Buddy Allocator also interacts with the kernel threads kswapd and bdflush, which are responsible for the maintaining with the swap.</p>
+<p>Different ranges of physical pages may have different properties, for the purposes of the kernel. For example, Direct Memory Access can work only in specific range of physical addresses in the x86 architecture.  On the other hand PPC does not have this constraint.</p>
+<p>For handling such situation in a hardware, independent way <strong>the Zone Allocator</strong> was created.</p>
+<p>The Zone Allocator is used to allocate pages in the specified zone. Today Linux kernel is supporting three memory zones:</p>
+<ul>
+<li>DMA — This zone consists of memory accessible for direct memory operations of the legacy devices</li>
+<li>NORMAL — This zone includes memory addresses used by the kernel for internal data structures as well as other system and user space allocations.</li>
+<li>HIGHMEM — This zone includes all memory used exclusively for system allocations (file system buffers, user space allocations, etc).</li>
+</ul>
+<p>Note that the Zone Allocator also can manipulate only with memory pages.</p>
+<p>Since we often need to allocate objects that have size less than the size of a page, we need something to deal with the pages and allocate lesser chunks of memory for us.</p>
+<p>We know the sizes of the most objects that are often allocated in the kernel space, so we can create allocator that will receive pages of memory from the Zone Allocator and allocate small objects in these memory pages.  This subsystem is named <strong>the Slab Allocator (An Object-Caching Kernel Memory Allocator)</strong>.</p>
+<p>The Slab Allocator organizes memory in caches, one cache for each object type, e.g. inode_cache, dentry_cache, buffer_head, vm_area_struct.  Each cache consists of many slabs (usually one page long), and each slab contains multiple initialized objects.</p>
+<p>This means that the constructor of the objects is used only for newly allocated slabs and you should initialize object before release it to the Slab Allocator.</p>
+<p>Also the Slab Allocator makes it possible to allocate buffers of memory of one of the specially defined sizes. Such buffers can be got using kernel function kmalloc. You specify the size of allocation, and kmalloc will allocate block of the greater size, the nearest to the one you requested. Sizes of memory blocks, which can be allocated by kmalloc, are available in the header file <code>&lt;linux/kmalloc_sizes.h&gt;</code>.</p>
+<p>Also the kernel can allocate virtually contiguous memory (memory with contiguous virtual addresses, but not with contiguous physical addresses) using vmalloc function.</p>
+<h2 id="Special-aspects-of-the-linux-kernel-mechanisms-of-the-memory-management"><a class="header-anchor" href="#Special-aspects-of-the-linux-kernel-mechanisms-of-the-memory-management"></a>Special aspects of the linux kernel mechanisms of the memory management</h2>
+<h3 id="Why-Linux-developers-rarely-check-results-of-memory-allocation"><a class="header-anchor" href="#Why-Linux-developers-rarely-check-results-of-memory-allocation"></a>Why Linux developers rarely check results of memory allocation.</h3>
+<p>The short answer is: “Because of overcommit”.</p>
+<p>Under the default memory management strategy, malloc (and kmalloc, and vmalloc) always succeeds, even if the system has not enough memory to satisfy the request. The Linux kernel assumes that you’re not going to use all of the memory you asked for. Real allocation occurs only when you get access to the allocated memory, and if the system does not have enough free memory then it will run Out-of-memory (OOM) killer.  OOM killer will try to free some memory for you, killing other processes and releasing their memory or it will kill your process if it deems the task you are performing to have a lower priority.</p>
+<p>This approach leads to some performance gains for applications, which allocate a lot of memory but use only some part of it, since allocation of the swap pages will not be performed before the swap pages is used.</p>
+<p>But sometimes such approach is not good because of the chance to be killed by OOM killer at any moment. Fortunately, Linux allows to change default approach of the memory allocation and behavior of the system when the OOM event occurs.</p>
+<p>The overcommit policy is set via the sysctl <code>vm.overcommit_memory</code>.</p>
+<p>The Linux kernel supports the following overcommit handling modes associated with the values of the kernel parameter <code>vm.overcommit_memory</code>:</p>
+<ol start="0">
+<li>
+<p>Heuristic overcommit handling. Obvious overcommits of address space are refused. This type of handling is used for a typical system. It ensures a seriously wild allocation fails while allowing overcommit to reduce swap usage. Root is allowed to allocate a bit more memory in this mode. This type is set by default.</p>
+</li>
+<li>
+<p>Always overcommit. Appropriate for some scientific applications, which use a lot of memory.</p>
+</li>
+<li>
+<p>Don’t overcommit. The total address space commit for the system is not permitted to exceed swap + a configurable percentage (50% by default) of physical RAM. Depending on the percentage you use, in most situations, this means that a process will not be killed while accessing pages but will receive errors on memory allocation as appropriate.</p>
+</li>
+</ol>
+<p>The overcommit percentage is set via the sysctrl <code>vm.overcommit_ratio</code>.</p>
+<p>The current overcommit limit and amount committed can be viewed in /proc/meminfo as <code>CommitLimit</code> and <code>Committed_AS</code> respectively.</p>
+<h3 id="How-Out-of-memory-killer-mechanism-works"><a class="header-anchor" href="#How-Out-of-memory-killer-mechanism-works"></a>How Out-of-memory killer mechanism works</h3>
+<p>There are three strategies to handle Out-of-memory situation:</p>
+<ul>
+<li>Kill allocating process</li>
+<li>Kill some other process or processes to allow allocating process get the memory</li>
+<li>Stop the system and show message about kernel panic.</li>
+</ul>
+<p>The first and the third strategies are fairly simple unlike the second strategy. Let’s consider it in more detail.</p>
+<p>According to the second strategy, Linux will try to choose appropriate process to kill when it runs out of memory. “Appropriate” in this context means that:</p>
+<ul>
+<li>User will lose the minimum amount of work done</li>
+<li>System will recover a large amount of memory</li>
+<li>OOM killer don’t kill process that has not allocated a lot of memory</li>
+<li>OOM killer intends to kill the minimum number of processes (to kill just one process would be the best)</li>
+<li>OOM killer will kill the process the user expects it to kill</li>
+</ul>
+<p>In order to choose a process to kill, OOM killer calculates the value named <strong>Badness</strong>. Then it selects the process with the maximum Badness to be killed.  If the allocating process was chosen, OOM terminates its work. If some other process was chosen, OOM killer can be called more than once in case of previous run of the OOM killer did not free enough memory.</p>
+<p>Badness is calculated according to the next rules:</p>
+<ul>
+<li>Initial badness of the process A is the size of the virtual memory allocated for it plus a half of size of the virtual memory allocated to the child processes of the process A;</li>
+<li>Initial badness is divided by the square root of the CPU time consumed by the process A measured in tens of seconds;</li>
+<li>Result is divided by the root with index 4 of the run time of the process A measured in thousands of seconds.</li>
+<li>If the process A has “nice” greater than zero (priority is lower than normal), badness of the process A is multiplied by 2;</li>
+<li>If the process A was started with the root privileges, badness of the process A is divided by 4;</li>
+<li>If the process A performs raw IO, badness of the process A is divided by 4;</li>
+<li>If memory usage of the process A might not impact the memory available to the process, which has initiated OOM procedure, then badness of process A is divided by 8;</li>
+</ul>
+<p>We can write badness of the process A as the equation:</p>
+<p><img src="/assets/special-features-of-linux-memory-management-mechanism/formula1.png" alt="formula1"><br>
+<img src="/assets/special-features-of-linux-memory-management-mechanism/formula2.png" alt="formula2"></p>
+<p>Where:</p>
+<p><em>if_nice</em> can be either 1 or 2 according to the nice of the process (2 if nice &gt; 2 or 1 otherwise)<br>
+<em>if_root</em> can be 1 or 4 ( 4 if the process A  has root privileges or 1 otherwise  )<br>
+<em>if_raw_io</em> can be 1 or 4 ( 4 if process has capability to perform raw IO or 1 otherwise )<br>
+<em>if_memory_does_not_overlap</em> can be 1 or 8 ( 8 if the process A has no memory that can be allocated to the process, which has initiated OOM procedure).</p>
+<p>You can see the mechanism of the out-of-memory handler in the source file “/mm/oom_kill.c”  in the Linux kernel sources tree.</p>
+<p>You can tune OOM handling mechanism by setting values to such kernel parameters:</p>
+<p><code>vm.oom_dump_tasks</code></p>
+<p>This parameter enables a system-wide task dump (excluding kernel threads) to be produced when the kernel performs an OOM-killing and includes such information as pid, uid, tgid, vm size, rss, cpu, oom_adj score, and name.  It is helpful to determine why the OOM killer was invoked and to identify the process that caused it.</p>
+<p>If it is set to zero, this information is suppressed.</p>
+<p>If it is set to non-zero, this information is shown whenever the OOM killer actually kills a memory-hogging task.</p>
+<p>By default <code>vm.oom_dump_tasks</code> is set to 1;</p>
+<p><code>vm.oom_kill_allocating_task</code></p>
+<p>This parameter enables or disables killing the OOM-triggered task in out-of-memory situations.</p>
+<p>If this parameter is set to non-zero, the OOM killer simply kills the task that triggered the out-of-memory condition. It helps to avoid the resource-expensive tasklist scan and makes OOM killer very predictable.</p>
+<p>If it is set to zero, the OOM killer will scan through the entire tasklist and select a task on the basis of the badness calculation.</p>
+<p>By default <code>vm.oom_kill_allocating_task</code> is set to 0;</p>
+<p><code>vm.panic_on_oom</code></p>
+<p>If this kernel parameter is set to 1 the kernel panics occurs at out-of-memory situation. But, if a process is limited by nodes by mempolicy/cpusets, and those nodes get memory exhaustion status, one process may be killed by OOM killer. No kernel panic occurs in this case, because other memory nodes can be free.</p>
+<p>If this parameter is set to 2, the kernel panic is forced even in the above-mentioned situation. Even if OOM happens under the memory <code>cgroup</code>, the whole system panics.</p>
+<p>If this parameter is set to 0, the kernel will kill some processes when OOM happens.</p>
+<p>By default <code>vm.panic_on_oom</code> is set to 0;</p>
+<p>Note that <code>panic_on_oom</code> has higher priority than <code>oom_kill_allocating_task</code>.</p>
+<h2 id="Additional-links-and-literature"><a class="header-anchor" href="#Additional-links-and-literature"></a>Additional links and literature:</h2>
+<ul>
+<li>Anatomy of the Linux slab allocator <a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/linux/library/l-linux-slab-allocator/">http://www.ibm.com/developerworks/linux/library/l-linux-slab-allocator/</a></li>
+<li>Understanding Virtual Memory <a target="_blank" rel="noopener" href="http://www.redhat.com/magazine/001nov04/features/vm/">http://www.redhat.com/magazine/001nov04/features/vm/</a></li>
+<li>When Linux Runs Out of Memory  <a target="_blank" rel="noopener" href="http://linuxdevcenter.com/pub/a/linux/2006/11/30/linux-out-of-memory.html">http://linuxdevcenter.com/pub/a/linux/2006/11/30/linux-out-of-memory.html</a></li>
+<li>Andries Brouwer, The Linux kernel <a target="_blank" rel="noopener" href="http://www.win.tue.nl/~aeb/linux/lk/lk-9.html">http://www.win.tue.nl/~aeb/linux/lk/lk-9.html</a></li>
+<li>Ops monkey blog entry “Linux memory overcommit” <a target="_blank" rel="noopener" href="http://opsmonkey.blogspot.com/2007/01/linux-memory-overcommit.html">http://opsmonkey.blogspot.com/2007/01/linux-memory-overcommit.html</a></li>
+<li>Outline of the Linux Memory Management System <a target="_blank" rel="noopener" href="http://www.thehackademy.net/madchat/ebooks/Mem_virtuelle/linux-mm/vmoutline.html">http://www.thehackademy.net/madchat/ebooks/Mem_virtuelle/linux-mm/vmoutline.html</a></li>
+<li>Linux kernel documentation: sysctl/vm.txt and vm/overcommit-accounting</li>
+<li>Daniel P. Bovet Marco Cesati “Understanding the Linux Kernel”,  O’Reilly ISBN: 0-596-00002-2, 702 pages</li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/special-features-of-linux-memory-management-mechanism/">http://xnerv.wang/special-features-of-linux-memory-management-mechanism/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="https://www.apriorit.com/dev-blog/209-linux-memory-management">Special features of Linux memory management mechanism</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/Heap/" rel="tag"># Heap</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+              <a href="/tags/Buddy-System/" rel="tag"># Buddy System</a>
+              <a href="/tags/Slab-Allocator/" rel="tag"># Slab Allocator</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Structure-of-the-Linux-memory-management"><span class="nav-text">Structure of the Linux memory management</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kernel-mode-memory-management-services"><span class="nav-text">Kernel mode memory management services</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Special-aspects-of-the-linux-kernel-mechanisms-of-the-memory-management"><span class="nav-text">Special aspects of the linux kernel mechanisms of the memory management</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-Linux-developers-rarely-check-results-of-memory-allocation"><span class="nav-text">Why Linux developers rarely check results of memory allocation.</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-Out-of-memory-killer-mechanism-works"><span class="nav-text">How Out-of-memory killer mechanism works</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Additional-links-and-literature"><span class="nav-text">Additional links and literature:</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

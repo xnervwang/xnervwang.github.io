@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Download source code - 8.28 KB  Introduction If we use common synchronization primitives like mutexes and critical sections, then the following sequence of events occur between two threads that are l">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spin Lock in C++（转载）">
+<meta property="og:url" content="https://xnerv.wang/spin-lock-in-cpp/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Download source code - 8.28 KB  Introduction If we use common synchronization primitives like mutexes and critical sections, then the following sequence of events occur between two threads that are l">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.codeproject.com/KB/threads/Spin_Lock/Results.jpg">
+<meta property="article:published_time" content="2011-05-09T07:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:21.721Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Programing">
+<meta property="article:tag" content="spinlock">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.codeproject.com/KB/threads/Spin_Lock/Results.jpg">
+
+<link rel="canonical" href="https://xnerv.wang/spin-lock-in-cpp/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>Spin Lock in C++（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/spin-lock-in-cpp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          Spin Lock in C++（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2011-05-09 00:00:00" itemprop="dateCreated datePublished" datetime="2011-05-09T00:00:00-07:00">2011-05-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li><a href="/codes/LockFree.zip">Download source code - 8.28 KB</a></li>
+</ul>
+<h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
+<p>If we use common synchronization primitives like mutexes and critical sections, then the following sequence of events occur between two threads that are looking to acquire a lock:</p>
+<ol>
+<li>Thread 1 acquires lock L and executes.</li>
+<li>T2 tries to acquire lock L, but it’s already held and therefore blocks incurring a context switch.</li>
+<li>T1 releases the lock L. This signals T2 and at lower level, this involves some sort of kernel transition.</li>
+<li>T2 wakes up and acquires the lock L incurring another context switch.</li>
+</ol>
+<p>So there are always at least two context switches when primitive synchronization objects are used. A spin lock can get away with expensive context switches and kernel transition.</p>
+<p>Most modern hardware supports atomic instructions and one of them is called ‘compare and swap’ (CAS). On Win32 systems, they are called interlocked operations. Using these interlocked functions, an application can compare and store a value in an atomic uninterruptible operation. With interlocked functions, it is possible to achieve lock freedom to save expensive context switches and kernel transitions which can be a bottleneck in a low latency application. On a multiprocessor machine, a spin lock (a kind of busy waiting) can avoid both of the above issues to save thousands of CPU cycles in context switches. However, the downside of using spin locks is that they become wasteful if held for a longer period of time, in which case they can prevent other threads from acquiring the lock and progressing. The implementation shown in this article is an effort to develop a general purpose spin lock.</p>
+<h2 id="Algorithm"><a class="header-anchor" href="#Algorithm"></a>Algorithm</h2>
+<p>A typical (or basic) spin lock acquire and release function would look something like below:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// acquire the lock</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Lock</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">int</span> dest = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> exchange = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">int</span> compare = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">acquire</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        While(<span class="literal">true</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(interlockedCompareExchange(&amp;dest, exchange, compare) == <span class="number">0</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// lock acquired</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// release the lock</span></span><br><span class="line">    <span class="function">Void <span class="title">release</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// lock released</span></span><br><span class="line">       dest = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">.......</span><br></pre></td></tr></table></figure>
+<p>Here, thread T1 acquires the lock by calling the function <code>acquire()</code>. In this case, the value of <code>dest</code> would become 100. When thread T2 tries to acquire the lock, it will loop continuously (a.k.a. busy waiting) as the values of <code>dest</code> and <code>compare</code> are different and therefore the function <code>InterlockedCompareExchange</code> will fail. When T1 calls <code>release()</code>, it sets the value of <code>dest</code> to 0 and therefore allows T2 to acquire the lock. Because only those threads that <code>acquire()</code> will call <code>release()</code>, mutual exclusion is guaranteed.</p>
+<p>Above is a simple implementation of a spin lock. However, this implementation alone is not production fit because spinning consumes CPU cycles without doing any useful work, meaning that the thread spinning will still be scheduled on the processor until it is pre-empted. Another downside of spinning is that it will continuously access memory to re-evaluate the value of <code>dest</code> in the function <code>Interlockedxxx</code> and this also puts the pressure on bus communication.</p>
+<p>On a single processor machine, spin wait would be a total waste of CPU as another thread T2 wouldn’t even get scheduled until the spinning thread is switched by the kernel.</p>
+<p>So far this implementation isn’t good enough. A general purpose spin lock requires a bit more work in terms of falling back to true waiting in a worst case scenario when it spins for a longer period. Here are some of the points which must be considered:</p>
+<h4 id="Yield-Processor"><a class="header-anchor" href="#Yield-Processor"></a>Yield Processor</h4>
+<p>The Win32 function <code>YieldProcessor()</code> emits a ‘no operation’ instruction on processors. This makes the processor aware that the code is currently performing spin waits and will make the processor available to other logical processors in a hyper threading enabled processor so that the other logical processors can make progress.</p>
+<h4 id="Switch-to-Another-Thread"><a class="header-anchor" href="#Switch-to-Another-Thread"></a>Switch to Another Thread</h4>
+<p>Sometimes it is useful to force a context switch when a spinning thread has already consumed enough time spinning equivalent to its thread time slice allocated by the kernel. Here, it makes good sense to allow another thread to do useful work instead. The function <code>SwitchToThread()</code> relinquishes the calling thread’s time slice and runs another thread in the ready state. It returns <code>true</code> when a switch occurs, otherwise <code>false</code>.</p>
+<h4 id="Sleeping"><a class="header-anchor" href="#Sleeping"></a>Sleeping</h4>
+<p><code>SwitchToThread()</code> may not consider all threads on the system for execution, therefore it may be wise to sometimes call <code>Sleep()</code> or <code>Sleepex()</code>. Calling <code>Sleep()</code> with an argument of 0 is a good approach as it does not result in a context switch if there are no threads of equal priority in the ready state. <code>Sleep(0)</code> will result in a context switch if a higher priority thread is in ready state.</p>
+<h2 id="Other-Considerations"><a class="header-anchor" href="#Other-Considerations"></a>Other Considerations</h2>
+<p>A pure spin lock is only good enough when the lock is held for a very short period of time. Here the critical region may have not more than 10 instructions and practically even simple memory allocation or virtual calls or file I/O can take more than 10 instructions.</p>
+<p>Secondly, as mentioned above, it would wasteful to use spin locks when an application runs on a single processor.</p>
+<h2 id="Sample-Project-and-Implementation"><a class="header-anchor" href="#Sample-Project-and-Implementation"></a>Sample Project and Implementation</h2>
+<p>The sample project in C++ consists of a spin lock implementation considering the points stated above. It also has an implementation of Stack, Queue, and a thin Producer-Consumer class. I’ll only focus on then Spin Lock implementation here as the rest of it is easy to follow.</p>
+<p>The file <em>SpinLock.h</em> defines these constants:</p>
+<ul>
+<li><code>YIELD_ITERATION</code> set to 30 - What this means is that the thread spinning will spin for 30 iterations waiting for the lock to acquire before it calls <code>sleep(0)</code> to give an opportunity to other threads to progress.</li>
+<li><code>MAX_SLEEP_ITERATION</code> set to 40 - This means when the total iteration (or spin) count reaches 40, then it would force a context switch using the function <code>SwitchToThread()</code> in case another thread is in ready state.</li>
+</ul>
+<p>The struct <code>tSpinLock</code> acts as a lock object which is declared in the class whose objects are being synchronized. This object is then passed in the constructor to the object of <code>tScopedLock</code> which initializes (references) the lock object passed to it. The <code>tScopedLock()</code> constructor locks the object using the member function of the class <code>tSpinWait</code>. The destructor <code>~tScopedLock()</code> releases the lock.</p>
+<p>The <code>Lock()</code> function in the class <code>tSpinWait</code> has got a nested <code>while</code> loop. This is done on purpose. So if a thread is spinning to acquire the lock, it wouldn’t call <code>interlockedxxx()</code> with every iteration, rather it would be looping in the inner <code>while</code> loop. This hack avoids the system memory bus being overly busy due to continuous calls to the <code>interlockedxx</code> function.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// spin wait to acquire</span></span><br><span class="line"><span class="keyword">while</span>(LockObj.dest != LockObj.compare) &#123;</span><br><span class="line">    <span class="keyword">if</span>(HasThreasholdReached())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(m_iterations + YIELD_ITERATION &gt;= MAX_SLEEP_ITERATION)</span><br><span class="line">           Sleep(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">if</span>(m_iterations &gt;= YIELD_ITERATION &amp;&amp; m_iterations &lt; MAX_SLEEP_ITERATION)</span><br><span class="line">           SwitchToThread();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Yield processor on multi-processor but if on single processor</span></span><br><span class="line">    <span class="comment">// then give other thread the CPU</span></span><br><span class="line">    m_iterations++;    <span class="keyword">if</span>(Helper::GetNumberOfProcessors() &gt; <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">       YieldProcessor(<span class="comment">/*no op*/</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123; SwitchToThread(); &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The inner <code>while</code> loop just compares the value of <code>dest</code> and <code>compare</code> and if they are not equal, then it tries to acquire them using <code>interlockedxxx</code>. Depending on the iteration count, the thread is either put to sleep or switched. When the application is running on a single CPU, then it always forces a context switch.</p>
+<h2 id="Test-Results"><a class="header-anchor" href="#Test-Results"></a>Test Results</h2>
+<p>I tested the performance of this Spin Lock implementation by inserting 10000 integers into a queue from multiple threads (each thread inserting 10000 integers into the queue). I then replaced <code>SpinLock</code> with a Critical Section synchronization primitive in the code and ran the same tests. I ran all the tests on an Intel Core DUO CPU T9600 @ 2.80 GHz.</p>
+<p><img src="https://www.codeproject.com/KB/threads/Spin_Lock/Results.jpg" alt="Results.jpg"></p>
+<p>The <strong>x-axis</strong> is the number of threads and <strong>y-axis</strong> is the time taken in milliseconds. Both synchronization methods (spinlock and CS) showed close performance when the number of threads were 2 and 4. As the number of threads increased, critical section locking took more than double the time as compared to spin locks. Spin lock seemed to have scaled a lot better when contention increased due to the high number of threads. The time taken is calculated using <code>QueryPerformanceCounter</code> Win32 methods. However, I would suggest performing your own testing on the platform you intend to use.</p>
+<p>Here is the table with the results:</p>
+<colgroup><col width="64"><col width="149"><col width="177"></colgroup>
+| No. of Threads | Time taken (Spin lock) | Time taken (Critical Section) |
+| --- | --- | --- |
+| 2 |  | 6.6 | 7.14 |
+| 4 |  | 12.81 | 14.09 |
+| 6 |  | 16.01 | 46.37 |
+| 8 |  | 23.32 | 54.34 |
+| 10 |  | 26.21 | 74.76 |
+| 15 |  | 41.17 | 89.05 |
+| 20 |  | 47.63 | 116.82 |
+| 25 |  | 62.25 | 147.68 |
+| 30 |  | 64.37 | 169.17 |
+| 35 |  | 88.02 | 210.07 |
+| 40 |  | 93.99 | 296.32 |
+<h2 id="Future-Work"><a class="header-anchor" href="#Future-Work"></a>Future Work</h2>
+<ul>
+<li>Profiling the code on different platforms.</li>
+<li>Adding a couple more data structures to the project like associated arrays and hashtable.</li>
+</ul>
+<h2 id="Conclusion"><a class="header-anchor" href="#Conclusion"></a>Conclusion</h2>
+<p>This was an effort to develop a general purpose spin lock implementation. Pure spin locking isn’t a good option in all scenarios and therefore there is a need for an implementation which allows the spinning thread to be suspended by the kernel.</p>
+<h2 id="History"><a class="header-anchor" href="#History"></a>History</h2>
+<ul>
+<li>First draft.</li>
+<li>Revision 1 - Fixed a couple of typos.</li>
+<li>Revision 2 - Code is now re-entrant safe.</li>
+<li>Revision 3 - Lock release now uses <code>interlockedexchange</code>.</li>
+<li>Revision 4 - Added test results.</li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/spin-lock-in-cpp/">http://xnerv.wang/spin-lock-in-cpp/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="https://www.codeproject.com/Articles/184046/Spin-Lock-in-C">Spin Lock in C++</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/C/" rel="tag"># C++</a>
+              <a href="/tags/Programing/" rel="tag"># Programing</a>
+              <a href="/tags/spinlock/" rel="tag"># spinlock</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Algorithm"><span class="nav-text">Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Yield-Processor"><span class="nav-text">Yield Processor</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Switch-to-Another-Thread"><span class="nav-text">Switch to Another Thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sleeping"><span class="nav-text">Sleeping</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Other-Considerations"><span class="nav-text">Other Considerations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sample-Project-and-Implementation"><span class="nav-text">Sample Project and Implementation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Test-Results"><span class="nav-text">Test Results</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Future-Work"><span class="nav-text">Future Work</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#History"><span class="nav-text">History</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

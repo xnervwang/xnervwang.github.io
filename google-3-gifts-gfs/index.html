@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="题记：初学分布式文件系统，写篇博客加深点印象。GFS的特点是使用一堆廉价的商用计算机支撑大规模数据处理。 虽然&quot;The Google File System &quot; 是03年发表的老文章了，但现在仍被广泛讨论，其对后来的分布式文件系统设计具有指导意义。然而，作者在设计GFS时，是基于过去很多实验观察的，并提出了很多假设作为前提，这等于给出了一个GFS的应用场景。所以我们自己在设计分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谷歌技术&quot;三宝&quot;之谷歌文件系统（转载）">
+<meta property="og:url" content="https://xnerv.wang/google-3-gifts-gfs/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="题记：初学分布式文件系统，写篇博客加深点印象。GFS的特点是使用一堆廉价的商用计算机支撑大规模数据处理。 虽然&quot;The Google File System &quot; 是03年发表的老文章了，但现在仍被广泛讨论，其对后来的分布式文件系统设计具有指导意义。然而，作者在设计GFS时，是基于过去很多实验观察的，并提出了很多假设作为前提，这等于给出了一个GFS的应用场景。所以我们自己在设计分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/1.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/2.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/3.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/4.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/5.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/6.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/7.jpg">
+<meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/8.jpg">
+<meta property="article:published_time" content="2012-04-22T00:28:31.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:20.767Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="分布式及存储">
+<meta property="article:tag" content="Google">
+<meta property="article:tag" content="GFS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/1.jpg">
+
+<link rel="canonical" href="https://xnerv.wang/google-3-gifts-gfs/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>谷歌技术"三宝"之谷歌文件系统（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/google-3-gifts-gfs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          谷歌技术"三宝"之谷歌文件系统（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-04-21 17:28:31" itemprop="dateCreated datePublished" datetime="2012-04-21T17:28:31-07:00">2012-04-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式及存储</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>题记：初学分布式文件系统，写篇博客加深点印象。GFS的特点是使用一堆廉价的商用计算机支撑大规模数据处理。<br>
+虽然&quot;The Google File System &quot; 是03年发表的老文章了，但现在仍被广泛讨论，其对后来的分布式文件系统设计具有指导意义。然而，作者在设计GFS时，是基于过去很多实验观察的，并提出了很多假设作为前提，这等于给出了一个GFS的应用场景。所以我们自己在设计分布式系统时，一定要注意自己的应用场景是否和GFS相似，不能盲从GFS。</p>
+<p>GFS的主要假设如下：</p>
+<ol>
+<li>GFS的服务器都是普通的商用计算机，并不那么可靠，集群出现结点故障是常态。因此必须时刻监控系统的结点状态，当结点失效时，必须能检测到，并恢复之。</li>
+<li>系统存储适当数量的大文件。理想的负载是几百万个文件，文件一般都超过100MB，GB级别以上的文件是很常见的，必须进行有效管理。支持小文件，但不对其进行优化。</li>
+<li>负载通常包含两种读：大型的流式读（顺序读），和小型的随机读。前者通常一次读数百KB以上，后者通常在随机位置读几个KB。</li>
+<li>负载还包括很多连续的写操作，往文件追加数据（append）。文件很少会被修改，支持随机写操作，但不必进行优化。</li>
+<li>系统必须实现良好定义的语义，用于多客户端并发写同一个文件。同步的开销必须保证最小。</li>
+<li>高带宽比低延迟更重要，GFS的应用大多需要快速处理大量的数据，很少会严格要求单一操作的响应时间。</li>
+</ol>
+<p>从这些假设基本可以看出GFS期望的应用场景应该是大文件，连续读，不修改，高并发。国内的淘宝文件系统（TFS）就不一样，专门为处理小文件进行了优化。</p>
+<a id="more"></a>
+<h2 id="1-体系结构"><a class="header-anchor" href="#1-体系结构"></a>1 体系结构</h2>
+<p>GFS包括一个master结点（元数据服务器），多个chunkserver（数据服务器）和多个client（运行各种应用的客户端）。在可靠性要求不高的场景，client和chunkserver可以位于一个结点。图1是GFS的体系结构示意图，每一结点都是普通的Linux服务器，GFS的工作就是协调成百上千的服务器为各种应用提供服务。</p>
+<p><img src="/assets/google-3-gifts-gfs/1.jpg" alt=""></p>
+<ul>
+<li>chunkserver提供存储。GFS会将文件划分为定长数据块，每个数据块都有一个全局唯一不可变的id（chunk_handle），数据块以普通Linux文件的形式存储在chunkserver上，出于可靠性考虑，每个数据块会存储多个副本，分布在不同chunkserver。</li>
+<li>GFS master就是GFS的元数据服务器，负责维护文件系统的元数据，包括命名空间、访问控制、文件-块映射、块地址等，以及控制系统级活动，如垃圾回收、负载均衡等。</li>
+<li>应用需要链接client的代码，然后client作为代理与master和chunkserver交互。master会定期与chunkserver交流（心跳），以获取chunkserver的状态并发送指令。</li>
+</ul>
+<p>图1还描述了应用读取数据的流程。1.应用指定读取某个文件的某段数据，因为数据块是定长的，client可以计算出这段数据跨越了几个数据块，client将文件名和需要的数据块索引发送给master；2.master根据文件名查找命名空间和文件-块映射表，得到需要的数据块副本所在的地址，将数据块的id和其所有副本的地址反馈给client；3.client选择一个副本，联系chunkserver索取需要的数据；4.chunkserver返回数据给client。</p>
+<h2 id="2-数据的布局"><a class="header-anchor" href="#2-数据的布局"></a>2 数据的布局</h2>
+<p>GFS将文件条带化，按照类似RAID0的形式进行存储，可以提高聚合带宽。事实上，大多数分布式存储系统都会采取这种策略。GFS将文件按固定长度切分为数据块，master在创建一个新数据块时，会给每个数据块分配一个全局唯一且不可变的64位id。每个数据块以Linux文件的形式存储在chunkserver的本地文件系统里。</p>
+<p>GFS为数据块设置了一个很大的长度，64MB，这比传统文件系统的块长要大多了。大块长会带来很多好处：1.减少client和master的交互次数，因为读写同一个块只需要一次交互，在GFS假设的顺序读写负载的场景下特别有用；2.同样也减少了client和chunkserver的交互次数，降低TCP/IP连接等网络开销；3.减少了元数据的规模，因此master可以将元数据完全放在内存，这对于集中式元数据模型的GFS尤为重要。</p>
+<p>大数据块也有缺点。最大的缺点可能就是内部碎片了，不过考虑到文件一般都相当大，所以碎片也只存在于文件的最后一个数据块。还有一个缺点不是那么容易看出来，由于小文件可能只有少量数据块，极端情况只有一个，那么当这个小文件是热点文件时，存储该文件数据块的chunkserver可能会负载过重。不过正如前面所说，小文件不在GFS的优化范围。</p>
+<p>为了提高数据的可靠性和并发性，每一个数据块都有多个副本。当客户端请求一个数据块时，master会将所有副本的地址都通知客户端，客户端再择优（距离最短等）选择一个副本。一个典型的GFS集群可能有数百台服务器，跨越多个子网，因此在考虑副本的放置时，不仅要考虑机器级别的错误，还要考虑整个子网瘫痪了该怎么办。将副本分布到多个子网去，还可以提高系统的聚合带宽。因此创建一个数据块时，主要考虑几个因素：1.优先考虑存储利用率低于平均水平的结点；2.限制单个结点同时创建副本的数量；3.副本尽量跨子网。</p>
+<h2 id="3-元数据服务"><a class="header-anchor" href="#3-元数据服务"></a>3 元数据服务</h2>
+<p>GFS是典型的集中式元数据服务，所有的元数据都存放在一个master结点内。元数据主要包括三种：文件和数据块的命名空间，文件-数据块映射表，数据块的副本位置。所有的元数据都是放在内存里的。</p>
+<p>前两种元数据会被持久化到本地磁盘中，以操作日志的形式。操作日志会记录下这两种元数据的每一次关键变化，因此当master宕机，就可以根据日志恢复到某个时间点。日志的意义还在于，它提供了一个时间线，用于定义操作的先后顺序，文件、数据块的版本都依赖于这个时间顺序。</p>
+<p>数据块的副本位置则没有持久化，因为动辄数以百计的chunkserver是很容易出错的，因此只有chunkserver对自己存储的数据块有绝对的话语权，而master上的位置信息很容易因为结点失效等原因而过时。取而代之的方法是，master启动时询问每个chunkserver的数据块情况，而且chunkserver在定期的心跳检查中也会汇报自己存储的部分数据块情况。</p>
+<p>GFS物理上没有目录结构，也不支持链接操作，使用一张表来映射文件路径名和元数据。</p>
+<h2 id="4-缓存和预取"><a class="header-anchor" href="#4-缓存和预取"></a>4 缓存和预取</h2>
+<p>GFS的客户端和chunkserver都不会缓存任何数据，这是因为GFS的典型应用是顺序访问大文件，不存在时间局部性。空间局部性虽然存在，但是数据集一般很大，以致没有足够的空间缓存。</p>
+<p>我们知道集中式元数据模型的元数据服务器容易成为瓶颈，应该尽量减少客户端与元数据服务器的交互。因此GFS设计了元数据缓存。client需要访问数据时，先询问master数据在哪儿，然后将这个数据地址信息缓存起来，之后client对该数据块的操作都只需直接与chunkserver联系了，当然缓存的时间是有限的，过期作废。</p>
+<p>master还会元数据预取。因为空间局部性是存在，master可以将逻辑上连续的几个数据块的地址信息一并发给客户端，客户端缓存这些元数据，以后需要时就可以不用找master的麻烦了。</p>
+<h2 id="5-出错了肿么办"><a class="header-anchor" href="#5-出错了肿么办"></a>5 出错了肿么办</h2>
+<p>引用：“We treat component failures as the norm rather than the exception.&quot;<br>
+分布式系统整体的可靠性是至关重要的。GFS集群使用的都是普通的商用计算机，而且机器的数量众多，设备故障经常出现，如何处理结点失效的问题是GFS最大的挑战。</p>
+<h3 id="5-1-完整性"><a class="header-anchor" href="#5-1-完整性"></a>5.1 完整性</h3>
+<p>GFS使用数以千计的磁盘，磁盘出错导致数据被破坏时有发生，我们可以用其它副本来恢复数据，但首先必须能检测出错误。chunksever会使用校验和来检测错误数据。每一个块（chunk）都被划分为64KB的单元（block），每个block对应一个32位的校验和。校验和与数据分开存储，内存有一份，然后以日志的形式在磁盘备一份。<br>
+chunkserver在发送数据之前会核对数据的校验和，防止错误的数据传播出去。如果校验和与数据不匹配，就返回错误，并且向master反映情况。master会开始克隆副本的操作，完成后就命令该chunkserver删除非法副本。</p>
+<h3 id="5-2-一致性"><a class="header-anchor" href="#5-2-一致性"></a>5.2 一致性</h3>
+<p>一致性指的是master的元数据和chunkserver的数据是否一致，多个数据块副本之间是否一致，多个客户端看到的数据是否一致。</p>
+<p>先来看看元数据一致性。GFS的命名空间操作是原子性的，并且用日志记录下操作顺序。虽然GFS没有目录结构，但是仍然有一颗逻辑的目录树，树的每个结点都有自己的读写锁，每个元数据操作都需要获得一系列的锁，应该是写锁会阻塞其它的锁，而读锁只阻塞写锁而不阻塞读锁。比如/home/user “目录” 正在创建快照，需要获得/home的读锁和/home/user的写锁，这时如果想创建文件/home/user/foo会被阻塞，因为需要获得/home、/home/user的读锁以及/home/user/foo的写锁，快照会阻塞创建操作获取/home/user的读锁。如果是在一个有传统目录树结构的文件系统里，创建一个文件需要修改父目录的数据，因此需要获得父目录的写锁。这种锁机制允许在一个目录里并发修改数据（如并发创建文件等），这在传统文件系统里是不允许的。</p>
+<p><img src="/assets/google-3-gifts-gfs/2.jpg" alt=""></p>
+<p>再来看看GFS是如何并发写（write）的，GFS必须将对数据块的修改同步到每一个副本。考虑一下多个应用同时修改同一数据块的情况，我们必须为修改操作定义统一的时序，不然多个副本会出现不一致的情况，那么定义时序由谁做呢？还记得前面提到的元数据缓存么，为了减少master的负担，client在获得副本位置后就不再和master交互，所以必然需要选出一个master代理来完成这个任务。事实上GFS采用了租约（lease）的机制，master会将租约授权给某个副本，称为primary，由这个primary来确定数据修改的顺序，其它副本照做就是。</p>
+<p>图2是写操作的控制流和数据流：</p>
+<ol>
+<li>client需要更新一个数据块，询问master谁拥有该数据块的租约（谁是primary）；</li>
+<li>master将持有租约的primary和其它副本的位置告知client，client缓存之；</li>
+<li>client向所有副本传输数据，这里副本没有先后顺序，根据网络拓扑情况找出最短路径，数据从client出发沿着路径流向各个chunkserver，这个过程采用流水线（网络和存储并行）。chunkserver将数据放到LRU缓存；</li>
+<li>一旦所有的副本都确定接受数据，client向primary发送写请求，primary为这个前面接受到的数据分配序列号（primary为所有的写操作分配连续的序列号表示先后顺序），并且按照顺序执行数据更新；</li>
+<li>primary将写请求发送给其它副本，每个副本都按照primary确定的顺序执行更新；</li>
+<li>其它副本向primary汇报操作情况；</li>
+<li>primary回复client操作情况，任何副本错误都导致此次请求失败，并且此时副本处于不一致状态（写操作完成情况不一样）。client会尝试几次3到7的步骤，实在不行就只能重头来过了。</li>
+</ol>
+<p>如果一个写请求太大了或者跨越了chunk，GFS的client会将其拆分为多个写请求，每个写请求都遵循上述过程，但是可能和其它应用的写操作交叉在一起。所以这些写操作共享的数据区域就可能包含几个写请求的碎片（就是下文提到的undefined状态）。</p>
+<p>GFS还提供另一种写操作append record，append只在文件的尾部以record为单位（为了避免内部碎片，record一般不会很大）写入数据。append是原子性的，GFS保证将数据顺序地写到文件尾部至少一次。append record的流程和图2类似，只是在primary有点区别，GFS必须保证一个record存储在一个chunk内，所以当primary判断当前chunk无足够空间时，就通知所有副本将chunk填充，然后汇报失败，client会申请创建新chunk并重新执行一次append record操作。如果该chunk大小合适，primary会将数据写到数据块的尾部，然后通知其它副本将数据写到一样的偏移。任何副本append失败，各个副本会处于不一致状态（完成或未完成），这时primary必然是成功写入的（不然就没有4以后的操作了）。客户端重试append record操作时，因为primary的chunk长度已经变化了，primary就必须在新的偏移写入数据，而其它副本也是照做。这就导致上一个失败的偏移位置，各个副本处于不一致状态，应用必须自己区分record正确与否，我称这为无效数据区。</p>
+<p><img src="/assets/google-3-gifts-gfs/3.jpg" alt=""></p>
+<p>表1说明了GFS的一致性保证，明白write和append操作后就容易理解了。consistent指的是多个副本之间是完全一致的；defined指的是副本数据修改后不仅一致而且client能看到其修改的数据全貌。</p>
+<ul>
+<li>成功的连续write是已定义的，各个副本数据一致；</li>
+<li>成功的并发write能保证一致性性，即各个副本是一样的，但数据并不一定如用户所期望，如前所述，多个用户的修改可能交错在一起；</li>
+<li>失败的write操作，使得副本之间不一致，而且数据undefined，不同client可能看到不同的数据（注意区别defined、undefined数据的方法）；</li>
+<li>成功的append操作，不管是顺序还是并发都是defined，因为GFS保证了append是原子性的（atomically at least once）。有效数据区确实是defined的，但是失败append操作留下的无效数据区可能会有不一致的情况，所以中间可能零散分布着不一致的数据。</li>
+</ul>
+<p>如上所述，在primary的协调下，能保证并发write的一致性。但还有一些可能会导致数据不一致，比如chunkserver宕机错过了数据更新，这时就会出现新旧版本的数据，GFS为每个数据块分配版本来解决这个问题。master每次授权数据块租约给primary之前，都会增加数据块的版本号，并且通知所有副本更新版本号。客户端需要读数据时当然会根据这个版本号来判断副本的数据是否最新。</p>
+<h2 id="5-3-可用性"><a class="header-anchor" href="#5-3-可用性"></a>5.3 可用性</h2>
+<p>为了保证数据的可用性，GFS为每个数据块存储了多个副本，在数据的布局里有介绍，这里主要关注下元数据的可用性。</p>
+<p>GFS是典型的集中式元数据模型，一个元数据服务器承担了巨大的压力，不仅有性能的问题，还有单点故障问题。master为了能快速从故障中恢复过来，采用了log和checkpoint技术，log记录了元数据的每一次变化。用咱们备份的话来说，checkpoint就相当于一次全量备份，log相当于连续数据保护，master宕机后，就先恢复到checkpoint，然后根据log恢复到最新状态。每次创建一个新的checkpoint，log就可以清空，这有效控制了log的大小。</p>
+<p>这还不够，如果master完全坏了肿么办？GFS设置了“影子”服务器，master将日志备份到影子上，影子按照日志把元数据与master同步。如果master悲剧了，我们还有影子。平时正常工作时，影子可以分担一部分元数据访问工作，当然不提供直接的写操作。</p>
+<h2 id="6-测试"><a class="header-anchor" href="#6-测试"></a>6 测试</h2>
+<h3 id="6-1-模拟"><a class="header-anchor" href="#6-1-模拟"></a>6.1 模拟</h3>
+<p><img src="/assets/google-3-gifts-gfs/4.jpg" alt=""></p>
+<p>实验的网络拓扑图大概就是这样。集群包括一个master和它的两个影子，16个chunkserver，16个client，和两个HP交换机。两个交换机之间是1Gbps的链路，结点与交换机的链路是100Mbps。聚合带宽的理论上限是125MB/s，而单个client的理论带宽上限是12.5MB/s。</p>
+<p><img src="/assets/google-3-gifts-gfs/5.jpg" alt=""></p>
+<p>实验一：N个client同时随机各自读取1GB数据。<br>
+图3(a)，x轴是N，y轴是聚合带宽，上面一条线是理论值，下面一条线是实际值。当N=1时，吞吐率是10MB/s，达到了理论值的80%。当N=16时，吞吐率是94MB/s，达到理论值的75%。此时瓶颈可能是在chunkserver，因为client数量很多，同时读一个chunkserver的概率很大。</p>
+<p>实验二：N个client同时写N个不同文件，各自连续写1GB。<br>
+图3(b)。理论值上限是67MB/s（The limit plateaus at 67 MB/s because we need to write each byte to 3 of the 16 chunkservers,<br>
+each with a 12.5 MB/s input connection），这个理论值我没有看明白是怎么算的。当N=1，吞吐率是6.3MB/s，达到极限的一半，主要的瓶颈是数据在副本之间传递。N=16时，聚合带宽为35MB/s（每个client有2.2MB/s），达到极限的一半，这里chunkserver同时接受多个请求的情况比读更严重，因为得写3个副本。写比期望的要慢。</p>
+<p>实验三：N个client同时向一个文件append record。<br>
+图3©。理论上限值是一台chunkserver的带宽，即12.5MB/s。当N=1时，吞吐率有6.0MB/s。当N=16时，下降到4.8MB/s。这可能是因为拥塞。</p>
+<h2 id="6-2-现实"><a class="header-anchor" href="#6-2-现实"></a>6.2 现实</h2>
+<p>文章里还介绍了两个真实集群的使用情况，cluster A and B。</p>
+<p><img src="/assets/google-3-gifts-gfs/6.jpg" alt=""></p>
+<p>表2是两个集群的情况。A和B都有数百个chunkserver，存储利用率很高，冗余度是3，所以实际存储的数据是18TB和52TB。文件数相当，dead file是需要删除的文件，但还没被垃圾回收（GFS会为删除的文件保留三天才回收空间）。B的块数更多，意味着文件更大，不过A和B的文件平均都只有1到2个块。chunkserver的元数据主要是block（64KB）的校验和（4 Bytes），以及数据块的版本信息。master的元数据（文件和数据块的名字，文件-数据块映射，块位置等）相当小，平均每个文件只有100B元数据，大部分是用于存储文件名。平均下来，每个服务器有50~100MB的元数据。</p>
+<h2 id="7-胡说八道"><a class="header-anchor" href="#7-胡说八道"></a>7 胡说八道</h2>
+<p>画了个全分布式元数据模型。</p>
+<p><img src="/assets/google-3-gifts-gfs/7.jpg" alt=""></p>
+<p>这估计是最简单的，命名空间被划分为几个区域，master各管各的。为了可靠性，每个master做几个副本。映射方法可以是文件名计算哈希取模，好的哈希函数可以使文件随机分布，负载比较均衡。当然扩展性不是很好，加入新的结点，所有文件得重新映射。而且冗余度只能靠机器堆了，不能软件控制。</p>
+<p><img src="/assets/google-3-gifts-gfs/8.jpg" alt=""></p>
+<p>又构思了个复杂点的。将文件映射到r(&lt;=N)个master，利用参数r控制冗余度，当r=N时就变成全对等元数据集群。这个模型需要r个不同的哈希函数，为了减少开销，可以用两个函数模拟多个函数。比如有随机性很好的f(x)和g(x)函数，我们用式子f(x)+i*g(x)来模拟，其中i为非负整数。当我们处理文件x时，就用前面式子求出r个不同的位置（有冲突的概率，实际可能不止计算r次）。<br>
+胡说八道，切勿当真；如有雷同，纯属巧合。</p>
+<h2 id="参考文献："><a class="header-anchor" href="#参考文献："></a>参考文献：</h2>
+<p>[1] The Google File System.</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/google-3-gifts-gfs/">http://xnerv.wang/google-3-gifts-gfs/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/opennaive/article/details/7483523">谷歌技术&quot;三宝&quot;之谷歌文件系统</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/" rel="tag"># 分布式及存储</a>
+              <a href="/tags/Google/" rel="tag"># Google</a>
+              <a href="/tags/GFS/" rel="tag"># GFS</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-text">1 体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E7%9A%84%E5%B8%83%E5%B1%80"><span class="nav-text">2 数据的布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%85%83%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1"><span class="nav-text">3 元数据服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%BC%93%E5%AD%98%E5%92%8C%E9%A2%84%E5%8F%96"><span class="nav-text">4 缓存和预取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%87%BA%E9%94%99%E4%BA%86%E8%82%BF%E4%B9%88%E5%8A%9E"><span class="nav-text">5 出错了肿么办</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%AE%8C%E6%95%B4%E6%80%A7"><span class="nav-text">5.1 完整性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">5.2 一致性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%8F%AF%E7%94%A8%E6%80%A7"><span class="nav-text">5.3 可用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E6%B5%8B%E8%AF%95"><span class="nav-text">6 测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E6%A8%A1%E6%8B%9F"><span class="nav-text">6.1 模拟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E7%8E%B0%E5%AE%9E"><span class="nav-text">6.2 现实</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%E8%83%A1%E8%AF%B4%E5%85%AB%E9%81%93"><span class="nav-text">7 胡说八道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%EF%BC%9A"><span class="nav-text">参考文献：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

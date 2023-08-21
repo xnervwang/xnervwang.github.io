@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Randy KathMicrosoft Developer Network Technology Group Created: February 9, 1993 Abstract Determining which function or set of functions to use for managing memory in your application is difficult wit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(MSDN) Managing Memory-Mapped Files">
+<meta property="og:url" content="https://xnerv.wang/msdn-managing-memory-mapped-files/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Randy KathMicrosoft Developer Network Technology Group Created: February 9, 1993 Abstract Determining which function or set of functions to use for managing memory in your application is difficult wit">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-memory-mapped-files/1.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-memory-mapped-files/2.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-memory-mapped-files/3.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-memory-mapped-files/4.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-memory-mapped-files/5.gif">
+<meta property="article:published_time" content="2017-11-14T06:33:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:20.193Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Heap">
+<meta property="article:tag" content="MSDN">
+<meta property="article:tag" content="Memory Management">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/msdn-managing-memory-mapped-files/1.gif">
+
+<link rel="canonical" href="https://xnerv.wang/msdn-managing-memory-mapped-files/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>(MSDN) Managing Memory-Mapped Files | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/msdn-managing-memory-mapped-files/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          (MSDN) Managing Memory-Mapped Files
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-13 22:33:00" itemprop="dateCreated datePublished" datetime="2017-11-13T22:33:00-08:00">2017-11-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Randy KathMicrosoft Developer Network Technology Group</p>
+<p>Created: February 9, 1993</p>
+<h2 id="Abstract"><a class="header-anchor" href="#Abstract"></a>Abstract</h2>
+<p>Determining which function or set of functions to use for managing memory in your application is difficult without a solid understanding of how each group of functions works and the overall impact they each have on the operating system. In an effort to simplify these decisions, this technical article focuses on the use of the memory-mapped file functions in Windows: the functions that are available, the way they are used, and the impact their use has on operating system resources. The following topics are discussed in this article:</p>
+<ul>
+<li>Introduction to managing memory in Windows operating systems</li>
+<li>What are memory-mapped files?</li>
+<li>How are memory-mapped files implemented?</li>
+<li>Sharing memory with memory-mapped files</li>
+<li>Using memory-mapped file functions</li>
+</ul>
+<p>In addition to this technical article, a sample application called ProcessWalker is included on the Microsoft Developer Network CD. This sample application is useful for exploring the behavior of memory-mapped files in a process, and it provides several useful implementation examples.</p>
+<a id="more"></a>
+<h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
+<p>This is one of three related technical articles—“Managing Virtual Memory,” “Managing Memory-Mapped Files,” and “Managing Heap Memory”—that explain how to manage memory in applications for Windows. In each article, this introduction identifies the basic memory components in the Windows API programming model and indicates which article to reference for specific areas of interest.</p>
+<p>The first version of the Windows operating system introduced a method of managing dynamic memory based on a single <em>global heap</em>, which all applications and the system share, and multiple, private <em>local heaps</em>, one for each application. Local and global memory management functions were also provided, offering extended features for this new memory management system. More recently, the Microsoft C run-time (CRT) libraries were modified to include capabilities for managing these heaps in Windows using native CRT functions such as <strong>malloc</strong> and <strong>free</strong>. Consequently, developers are now left with a choice—learn the new application programming interface (API) provided as part of Windows or stick to the portable, and typically familiar, CRT functions for managing memory in applications written for Windows.</p>
+<p>Window offers three groups of functions for managing memory in applications: memory-mapped file functions, heap memory functions, and virtual-memory functions.</p>
+<p><img src="/assets/msdn-managing-memory-mapped-files/1.gif" alt=""></p>
+<p><strong>Figure 1. The Windows API provides different levels of memory management for versatility in application programming.</strong></p>
+<p>In all, six sets of memory management functions exist in Windows, as shown in Figure 1, all of which were designed to be used independently of one another. So which set of functions should you use? The answer to this question depends greatly on two things: the type of memory management you want and how the functions relevant to it are implemented in the operating system. In other words, are you building a large database application where you plan to manipulate subsets of a large memory structure? Or maybe you’re planning some simple dynamic memory structures, such as linked lists or binary trees? In both cases, you need to know which functions offer the features best suited to your intention and exactly how much of a resource hit occurs when using each function.</p>
+<p>Table 1 categorizes the memory management function groups and indicates which of the three technical articles in this series describes each group’s behavior. Each technical article emphasizes the impact these functions have on the system by describing the behavior of the system in response to using the functions.</p>
+<p><strong>Table 1. Various Memory Management Functions Available</strong></p>
+<table>
+<thead>
+<tr>
+<th>Memory set</th>
+<th>System resource affected</th>
+<th>Related technical article</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual memory functions</td>
+<td>A process’s virtual address space<br/>System pagefile<br/>System memory<br/>Hard disk space</td>
+<td>“Managing Virtual Memory”</td>
+</tr>
+<tr>
+<td>Memory-mapped file functions</td>
+<td>A process’s virtual address space<br/>System pagefile<br/>Standard file I/O<br/>System memory<br/>Hard disk space</td>
+<td>“Managing Memory-Mapped Files”</td>
+</tr>
+<tr>
+<td>Heap memory functions</td>
+<td>A process’s virtual address space<br/>System memory<br/>Process heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+<tr>
+<td>Global heap memory functions</td>
+<td>A process’s heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+<tr>
+<td>Local heap memory functions</td>
+<td>A process’s heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+<tr>
+<td>C run-time reference library</td>
+<td>A process’s heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+</tbody>
+</table>
+<p>Each technical article discusses issues surrounding the use of Windows-specific functions.</p>
+<h2 id="What-Are-Memory-Mapped-Files"><a class="header-anchor" href="#What-Are-Memory-Mapped-Files"></a>What Are Memory-Mapped Files?</h2>
+<p>Memory-mapped files (MMFs) offer a unique memory management feature that allows applications to access files on disk in the same way they access dynamic memory—through pointers. With this capability you can map a view of all or part of a file on disk to a specific range of addresses within your process’s address space. And once that is done, accessing the content of a memory-mapped file is as simple as dereferencing a pointer in the designated range of addresses. So, writing data to a file can be as simple as assigning a value to a dereferenced pointer as in:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*pMem = <span class="number">23</span>;</span><br></pre></td></tr></table></figure>
+<p>Similarly, reading from a specific location within the file is simply:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nTokenLen = *pMem;</span><br></pre></td></tr></table></figure>
+<p>In the above examples, the pointer <em>pMem</em> represents an arbitrary address in the range of addresses that have been mapped to a view of a file. Each time the address is referenced (that is, each time the pointer is dereferenced), the memory-mapped file is the actual memory being addressed.</p>
+<blockquote>
+<p><strong>Note</strong>While memory-mapped files offer a way to read and write directly to a file at specific locations, the actual action of reading/writing to the disk is handled at a lower level. Consequently, data is not actually transferred at the time the above instructions are executed. Instead, much of the file input/output (I/O) is cached to improve general system performance. You can override this behavior and force the system to perform disk transactions immediately by using the memory-mapped file function <strong>FlushViewOfFile</strong> explained later.</p>
+</blockquote>
+<h2 id="What-Do-Memory-Mapped-Files-Have-to-Offer"><a class="header-anchor" href="#What-Do-Memory-Mapped-Files-Have-to-Offer"></a>What Do Memory-Mapped Files Have to Offer?</h2>
+<p>One advantage to using MMF I/O is that the system performs all data transfers for it in 4K pages of data. Internally all pages of memory are managed by the virtual-memory manager (VMM). It decides when a page should be paged to disk, which pages are to be freed for use by other applications, and how many pages each application can have out of the entire allotment of physical memory. Since the VMM performs all disk I/O in the same manner—reading or writing memory one page at a time—it has been optimized to make it as fast as possible. Limiting the disk read and write instructions to sequences of 4K pages means that several smaller reads or writes are effectively cached into one larger operation, reducing the number of times the hard disk read/write head moves. Reading and writing pages of memory at a time is sometimes referred to as <em>paging</em> and is common to virtual-memory management operating systems.</p>
+<p>Another advantage to using MMF I/O is that all of the actual I/O interaction now occurs in RAM in the form of standard memory addressing. Meanwhile, disk paging occurs periodically in the background, transparent to the application. While no gain in performance is observed when using MMFs for simply reading a file into RAM, other disk transactions can benefit immensely. Say, for example, an application implements a flat-file database file structure, where the database consists of hundreds of sequential records. Accessing a record within the file is simply a matter of determining the record’s location (a byte offset within the file) and reading the data from the file. Then, for every update, the record must be written to the file in order to save the change. For larger records, it may be advantageous to read only part of the record into memory at a time as needed. Unfortunately, though, each time a new part of the record is needed, another file read is required. The MMF approach works a little differently. When the record is first accessed, the entire 4K page(s) of memory containing the record is read into memory. All subsequent accesses to that record deal directly with the page(s) of memory in RAM. No disk I/O is required or enforced until the file is later closed or flushed.</p>
+<blockquote>
+<p><strong>Note</strong>During normal system paging operations, memory-mapped files can be updated periodically. If the system needs a page of memory that is occupied by a page representing a memory-mapped file, it may free the page for use by another application. If the page was dirty at the time it was needed, the act of writing the data to disk will automatically update the file at that time. (A dirty page is a page of data that has been written to, but not saved to, disk; for more information on types of virtual-memory pages, see “The Virtual-Memory Manager in Windows NT” on the Developer Network CD.)</p>
+</blockquote>
+<p>The flat-file database application example is useful in pointing out another advantage of using memory-mapped files. MMFs provide a mechanism to map portions of a file into memory as needed. This means that applications now have a way of getting to a small segment of data in an extremely large file without having to read the entire file into memory first. Using the above example of a large flat-file database, consider a database file housing 1,000,000 records of 125 bytes each. The file size necessary to store this database would be 1,000,000 * 125 = 125,000,000 bytes. To read a file that large would require an extremely large amount of memory. With MMFs, the entire file can be opened (but at this point no memory is required for reading the file) and a view (portion) of the file can be mapped to a range of addresses. Then, as mentioned above, each page in the view is read into memory only when addresses within the page are accessed.</p>
+<h2 id="How-Are-They-Implemented"><a class="header-anchor" href="#How-Are-They-Implemented"></a>How Are They Implemented?</h2>
+<p>Since Windows NT is a page-based virtual-memory system, memory-mapped files represent little more than an extension of an existing, internal memory management component. Essentially all applications in Windows NT are represented in their entirety by one or more files on disk and a subset of those files resident in random access memory (RAM) at any given time. For example, each application has an executable file that represents pages of executable code and resources for the application. These pages are swapped into and out of RAM, as they are needed, by the operating system. When a page of memory is no longer needed, the operating system relinquishes control over the page on behalf of the application that owns it and frees it for use by another. When that page becomes needed again, it is re-read from the executable file on disk. This is called backing the memory with a file, in this case, the executable file. Similarly, when a process starts, pages of memory are used to store static and dynamic data for that application. Once committed, these pages are backed by the system pagefile, similar to the way the executable file is used to back the pages of code. Figure 2 is a graphical representation of how pages of code and data are backed on the hard disk.</p>
+<p><img src="/assets/msdn-managing-memory-mapped-files/2.gif" alt=""></p>
+<p><strong>Figure 2. Memory used to represent pages of code in processes for Windows NT are backed directly by the application’s executable module while memory used for pages of data are backed by the system pagefile.</strong></p>
+<p>Treating both code and data in the same manner paves the way for propagating this functionality to a level where applications can use it, too—which is what Windows does through memory-mapped files.</p>
+<h3 id="Shared-Memory-in-Windows-NT"><a class="header-anchor" href="#Shared-Memory-in-Windows-NT"></a>Shared Memory in Windows NT</h3>
+<p>Both code and data are treated the same way in Windows NT—both are represented by pages of memory and both have their pages backed by a file on disk. The only real difference is the file by which they are backed—code by the executable image and data by the system pagefile. Because of this, memory-mapped files are also able to provide a mechanism for sharing data between processes. By extending the memory-mapped file capability to include portions of the system pagefile, applications are able to share data that is backed by the pagefile. Shown in Figure 3, each application simply maps a view of the same portion of the pagefile, making the same pages of memory available to each application.</p>
+<p><img src="/assets/msdn-managing-memory-mapped-files/3.gif" alt=""></p>
+<p><strong>Figure 3. Processes share memory by mapping independent views of a common region in the system pagefile.</strong></p>
+<p>Windows NT’s tight security system prevents processes from directly sharing information among each other, but MMFs provide a mechanism that works with the security system. In order for one process to share data with another via MMFs, each process must have common access to the file. This is achieved by giving the MMF object a name that both processes use to open the file.</p>
+<p>Internally, a shared section of the pagefile translates into pages of memory that are addressable by more than one process. To do this, Windows NT uses an internal resource called a prototype page-table entry (PPTE). PPTEs enable more than one process to address the same physical page of memory. A PPTE is a system resource, so their availability and security is controlled by the system alone. This way processes can share data and still exist on a secure operating system. Figure 4 indicates how PPTEs are used in Windows NT’s virtual addressing scheme.</p>
+<p><img src="/assets/msdn-managing-memory-mapped-files/4.gif" alt=""></p>
+<p><strong>Figure 4. Prototype page-table entries are the mechanism that permits pages of memory to be shared among processes.</strong></p>
+<p>One of the best ways to use an MMF for sharing data is to use it in a DLL (dynamic-link library). The PortTool application serves as a useful illustration. PortTool uses a DLL to provide its porting functionality and relies on the main application for the user interface. The reason for this is simple: Other applications can then also use the DLL functionality. That is, other editors that are programmable can import the porting functionality. Because it is entirely feasible for PortTool to be running while another editor that imports the PortTool DLL is also running, it is best to economize system resources as much as possible between the applications. PortTool does this by using an MMF for sharing the porting information with both processes. Otherwise, both applications would be required to load their own set of porting information while running at the same time, a waste of system resources. The PortTool code demonstrates sharing memory via an MMF in a DLL.</p>
+<h2 id="Using-Memory-Mapped-File-Functions"><a class="header-anchor" href="#Using-Memory-Mapped-File-Functions"></a>Using Memory-Mapped File Functions</h2>
+<p>Memory-mapped file functions can be thought of as second cousins to the virtual-memory management functions in Windows. Like the virtual-memory functions, these functions directly affect a process’s address space and pages of physical memory. No overhead is required to manage the file views, other than the basic virtual-memory management that exists for all processes. These functions deal in reserved pages of memory and committed addresses in a process. The entire set of memory-mapped file functions are:</p>
+<ul>
+<li><strong>CreateFileMapping</strong></li>
+<li><strong>OpenFileMapping</strong></li>
+<li><strong>MapViewOfFile</strong></li>
+<li><strong>MapViewOfFileEx</strong></li>
+<li><strong>UnmapViewOfFile</strong></li>
+<li><strong>FlushViewOfFile</strong></li>
+<li><strong>CloseHandle</strong></li>
+</ul>
+<p>Each of these functions is individually discussed below, along with code examples that demonstrate their use.</p>
+<h3 id="Creating-a-File-Mapping"><a class="header-anchor" href="#Creating-a-File-Mapping"></a>Creating a File Mapping</h3>
+<p>To use a memory-mapped file, you start by creating a memory-mapped file object. The act of creating an MMF object has very little impact on system resources. It does not affect your process’s address space, and no virtual memory is allocated for the object (other than for the internal resources that are necessary in representing the object). One exception, however, is that, if the MMF object represents shared memory, an adequate portion of the system pagefile is reserved for use by the MMF during the creation of the object.</p>
+<p>The <strong>CreateFileMapping</strong> function is used to create the file-mapping object as demonstrated in the example listed below, a portion of PMEM.C, the source module from the ProcessWalker sample application.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDM_MMFCREATENEW:</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">char</span>    szTmpFile[<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Create temporary file for mapping. */</span></span><br><span class="line">    GetTempPath (<span class="number">256</span>, szTmpFile);</span><br><span class="line">    GetTempFileName (szTmpFile,</span><br><span class="line">                     <span class="string">&quot;PW&quot;</span>,</span><br><span class="line">                     <span class="number">0</span>,</span><br><span class="line">                     MMFiles[wParam-IDM_MMFCREATE].szMMFile);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* If file created, continue to map file. */</span></span><br><span class="line">    <span class="keyword">if</span> ((MMFiles[wParam-IDM_MMFCREATE].hFile =</span><br><span class="line">           CreateFile (MMFiles[wParam-IDM_MMFCREATE].szMMFile,</span><br><span class="line">                       GENERIC_WRITE | GENERIC_READ,</span><br><span class="line">                       FILE_SHARE_WRITE,</span><br><span class="line">                       <span class="literal">NULL</span>,</span><br><span class="line">                       CREATE_ALWAYS,</span><br><span class="line">                       FILE_ATTRIBUTE_TEMPORARY,</span><br><span class="line">                       <span class="literal">NULL</span>)) != (HANDLE)INVALID_HANDLE_VALUE)</span><br><span class="line">        <span class="keyword">goto</span> MAP_FILE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> IDM_MMFCREATEEXIST:</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">char</span>   szFilePath[MAX_PATH];</span><br><span class="line">    OFSTRUCT   of;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Get existing filename for mapfile. */</span></span><br><span class="line">    *szFilePath = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (!GetFileName (hWnd, szFilePath, <span class="string">&quot;*&quot;</span>))</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* If file opened, continue to map file. */</span></span><br><span class="line">    <span class="keyword">if</span> ((MMFiles[wParam-IDM_MMFCREATE].hFile =</span><br><span class="line">            (HANDLE)OpenFile (szFilePath, &amp;of, OF_READWRITE)) !=</span><br><span class="line">                (HANDLE)HFILE_ERROR)</span><br><span class="line">        <span class="keyword">goto</span> MAP_FILE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> IDM_MMFCREATE:</span><br><span class="line">    <span class="comment">/* Associate shared memory file handle value. */</span></span><br><span class="line">    MMFiles[wParam-IDM_MMFCREATE].hFile = (HANDLE)<span class="number">0xffffffff</span>;</span><br><span class="line"></span><br><span class="line">MAP_FILE:</span><br><span class="line">    <span class="comment">/* Create 20MB file mapping. */</span></span><br><span class="line">    <span class="keyword">if</span> (!(MMFiles[wParam-IDM_MMFCREATE].hMMFile =</span><br><span class="line">        CreateFileMapping (MMFiles[wParam-IDM_MMFCREATE].hFile,</span><br><span class="line">                           <span class="literal">NULL</span>,</span><br><span class="line">                           PAGE_READWRITE,</span><br><span class="line">                           <span class="number">0</span>,</span><br><span class="line">                           <span class="number">0x01400000</span>,</span><br><span class="line">                           <span class="literal">NULL</span>)))</span><br><span class="line">        &#123;</span><br><span class="line">        ReportError (hWnd);</span><br><span class="line">        <span class="keyword">if</span> (MMFiles[wParam-IDM_MMFCREATE].hFile)</span><br><span class="line">            &#123;</span><br><span class="line">            CloseHandle (MMFiles[wParam-IDM_MMFCREATE].hFile);</span><br><span class="line">            MMFiles[wParam-IDM_MMFCREATE].hFile = <span class="literal">NULL</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">break</span>; <span class="comment">/* from IDM_MMFCREATE */</span></span><br></pre></td></tr></table></figure>
+<p>In the sample code above, three cases are demonstrated. They represent creating a memory-mapped file by first creating a temporary disk file, creating a memory-mapped file from an existing file, and creating a memory-mapped file out of part of the system pagefile. In case IDM_MMFCREATENEW, a temporary file is created first, before the memory-mapped file. For case IDM_MMFCREATEEXIST, the File Open dialog is used to retrieve a filename, and that file is then opened before the memory-mapped file is created. In the third case, IDM_MMFCREATE, the memory-mapped file is created either using the system pagefile or using one of the standard files created in the two earlier cases.</p>
+<p>Notice that the <strong>CreateFileMapping</strong> function need only be called once for all three different cases. The first parameter to the <strong>CreateFileMapping</strong> function, <em>hFile</em>, is used to supply the handle to the file that is to be memory-mapped. If the system pagefile is to be used, the value 0xFFFFFFFF must be specified instead. In the above examples, a structure is used to represent both the standard file and memory-mapped file information. In the example above, the <em>hMMFile</em> field in the structure <em>MMFiles[wParam-IDM_MMFCREATE]</em> is either 0xFFFFFFFF (its default value), or it is the value of the file handle retrieved in either of the earlier cases.</p>
+<p>In all three cases, the memory-mapped file is specified to be 20 MB (0x01400000) in size, regardless of the size of any files created or opened for mapping. The fourth and fifth parameters, <em>dwMaximumSizeHigh</em> and <em>dwMaximumSizeLow</em>, are used to indicate the size of the file mapping. If these parameters indicate a specific size for the memory-mapped file when memory mapping a file other than the pagefile, the file on disk is fitted to this new size—whether larger or smaller makes no difference. As an alternative, when memory mapping a file on disk, you can set the size parameters to 0. In this case, the memory-mapped file will be the same size as the original disk file. When mapping a section of the pagefile, you must specify the size of the memory-mapped file.</p>
+<p>The second parameter to the <strong>CreateFileMapping</strong> function, <em>lpsa</em>, is used to supply a pointer to a <strong>SECURITY_ATTRIBUTES</strong> structure. Since memory-mapped files are an object, they have the same security attributes that can be applied to every other object. A NULL value indicates that no security attributes are relevant to your use of the memory-mapped file.</p>
+<p>The third parameter, <em>fdwProtect</em>, is used to indicate the type of protection to place on the entire memory-mapped file. You can use this parameter to protect the memory-mapped file from writes by specifying PAGE_READONLY or to permit read and write access with PAGE_READWRITE.</p>
+<p>One other parameter of interest is the <em>lpszMapName</em> parameter, which can be used to give the MMF object a name. In order to open a handle to an existing file-mapping object, the object must be named. All that is required of the name is a simple string that is not already being used to identify another object in the system.</p>
+<h3 id="Obtaining-a-File-Mapping-Object-Handle"><a class="header-anchor" href="#Obtaining-a-File-Mapping-Object-Handle"></a>Obtaining a File-Mapping Object Handle</h3>
+<p>In order to map a view of a memory-mapped file, all you need is a valid handle to the MMF object. You can obtain a valid handle in one of several ways: by creating the object as described above, by opening the object with the <strong>OpenFileMapping</strong> function, by inheriting the object handle, or by duplicating the handle.</p>
+<h4 id="Opening-a-memory-mapped-file-object"><a class="header-anchor" href="#Opening-a-memory-mapped-file-object"></a>Opening a memory-mapped file object</h4>
+<p>To open a file-mapping object, the object must have been given a name during the creation of the object. A name uniquely identifies the object to this and other processes that wish to share the MMF object. The following portion of code from PORT.C shows how to open a file-mapping object by name.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Load name for file-mapping object. */</span></span><br><span class="line">LoadString (hDLL, IDS_MAPFILENAME, szMapFileName, MAX_PATH);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* After first process initializes, port data. */</span></span><br><span class="line"><span class="keyword">if</span> ((hMMFile = OpenFileMapping (FILE_MAP_WRITE,</span><br><span class="line">                                FALSE,</span><br><span class="line">                                szMapFileName)))</span><br><span class="line">    <span class="comment">/* Exit now since initialization was already performed by</span></span><br><span class="line"><span class="comment">       another process. */</span></span><br><span class="line">     <span class="keyword">return</span> TRUE;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Retrieve path and file for ini file. */</span></span><br><span class="line"><span class="keyword">if</span> (!GetIniFile (hDLL, szIniFilePath))</span><br><span class="line">    <span class="keyword">return</span> FALSE;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Test for ini file existence and get length of file. */</span></span><br><span class="line"><span class="keyword">if</span> ((<span class="keyword">int</span>)(hFile = (HANDLE)OpenFile (szIniFilePath,</span><br><span class="line">                                    &amp;of,</span><br><span class="line">                                    OF_READ)) == <span class="number">-1</span>)</span><br><span class="line">    <span class="keyword">return</span> FALSE;</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">    nFileSize = GetFileSize (hFile, <span class="literal">NULL</span>);</span><br><span class="line">    CloseHandle (hFile);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Allocate a segment of the swap file for shared memory 2*Size</span></span><br><span class="line"><span class="comment">   of ini file. */</span></span><br><span class="line"><span class="keyword">if</span> (!(hMMFile = CreateFileMapping ((HANDLE)<span class="number">0xFFFFFFFF</span>,</span><br><span class="line">                                    <span class="literal">NULL</span>,</span><br><span class="line">                                    PAGE_READWRITE,</span><br><span class="line">                                    <span class="number">0</span>,</span><br><span class="line">                                    nFileSize * <span class="number">2</span>,</span><br><span class="line">                                    szMapFileName)))</span><br><span class="line">    <span class="keyword">return</span> FALSE;</span><br></pre></td></tr></table></figure>
+<p>The <strong>OpenFileMapping</strong> function requires only three arguments, the most important of these being the name of the object. As shown in the example, the name is simply a unique string. If the string is not unique to the system, the MMF object will not be created. Once the object exists, however, the name is guaranteed for the life of the object.</p>
+<p>Also, note in the above example that the MMF object is opened first, possibly before the object has been created. This logic relies on the fact that, if the object does not already exist, the <strong>OpenFileMapping</strong> function will fail. This is useful in a DLL where the DLL’s initialization code is called repeatedly, once for every process that attaches to it.</p>
+<p>The sample from PORT.C above occurs in the DLL’s initialization code that is called every time a DLL gets attached to another process. The first time it is called, the <strong>OpenFileMapping</strong> function fails because the object does not already exist. The logic, then, continues execution until it reaches the <strong>CreateFileMapping</strong> function, and it is there that the object is first created. Immediately after initially creating the object, the PortTool code initializes the data in the file mapping by writing porting-specific information to the memory-mapped file. To do this, the memory-mapped file is created with PAGE_READWRITE protection. All subsequent calls to the DLL’s initialization function result in the <strong>OpenFileMapping</strong> function successfully returning a valid object handle. This way the DLL does not need to keep track of which process is the first to attach to the DLL.</p>
+<p>Note that for every process that attaches to the DLL, the object name is retrieved from the same source—a string from the DLL’s resource string table. Since the DLL is able to retrieve the object name from its own resource string table, the name is global to all processes, yet no process is actually aware of the name used. The DLL is able to effectively encapsulate this functionality while at the same time providing the benefit of shared memory to each process that attaches to the DLL.</p>
+<p>The PortTool example presents a useful context for sharing memory. Yet, keep in mind that any file on disk could have been used in the same way. If an application were to implement some database services to several other applications, it could set up memory-mapped files using basic disk files, instead of the pagefile, and share that information in the same way. And as the first code listing illustrates, a temporary file could be used to share data instead of the pagefile.</p>
+<h4 id="Inheriting-and-duplicating-memory-mapped-file-object-handles"><a class="header-anchor" href="#Inheriting-and-duplicating-memory-mapped-file-object-handles"></a>Inheriting and duplicating memory-mapped file object handles</h4>
+<p>Ordinarily, for two processes to share a memory-mapped file, they must both be able to identify it by name. An exception to this is child processes, which can inherit their parent’s handles. Most objects in Windows can be explicitly targeted for inheritance or not. (Some objects are not inheritable, such as GDI object handles.) When creating an MMF object, a Boolean field in the optional <strong>SECURITY_ATTRIBUTES</strong> structure can be used to designate whether the handle is to be inheritable or not. If the MMF object handle is designated as inheritable, any child processes of the process that created the object can access the object through the same handle as their parent.</p>
+<p>Literally, this means the child process can access the object by supplying the same handle value as the parent. Communicating that handle to the child process is another concern. The child process is still another process after all, having its own address space, so the handle variable itself is not transferable. Either some interprocess communication (IPC) mechanism or the command line can be used to communicate handle values to child processes.</p>
+<p>Further, the <strong>DuplicateHandle</strong> function is provided to offer more control as to when handles can be inherited and not. This function can be used to create a duplicate handle of the original and can be used to change the inheritance state of the handle. An application can invoke this function to change an MMF object handle state to inheritable before passing the handle along to a child process, or it can do the opposite—it can take an inheritable handle and preserve it from being inherited.</p>
+<h3 id="Viewing-Part-of-a-Memory-Mapped-File"><a class="header-anchor" href="#Viewing-Part-of-a-Memory-Mapped-File"></a>Viewing Part of a Memory-Mapped File</h3>
+<p>Once obtained, the handle to the memory-mapped file object is used to map views of the file to your process’s address space. Views can be mapped and unmapped at will while the MMF object exists. When a view of the file is mapped, system resources are finally allocated. A contiguous range of addresses, large enough to span the size of the file view, are now committed in your process’s address space. Yet, even though the addresses have been committed for the file view, physical pages of memory are still only committed on a demand basis when using the memory. So, the only way to allocate a page of physical memory for a committed page of addresses in your memory-mapped file view is to generate a page fault for that page. This is done automatically the first time you read or write to any address in the page of memory.</p>
+<p>To map a view of a memory-mapped file, use either the <strong>MapViewOfFile</strong> or the <strong>MapViewOfFileEx</strong> function. With both of these functions, a handle to a memory-mapped file object is a required parameter. The following example shows how the PortTool sample application implements this function.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Map a view of this file for writing. */</span></span><br><span class="line">lpMMFile = (<span class="keyword">char</span> *)MapViewOfFile (hMMFile,</span><br><span class="line">                                  FILE_MAP_WRITE,</span><br><span class="line">                                  <span class="number">0</span>,</span><br><span class="line">                                  <span class="number">0</span>,</span><br><span class="line">                                  <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>In this example, the entire file is mapped, so the final three parameters are less meaningful. The first parameter specifies the file-mapping object handle. The second parameter indicates the access mode for the view of the file. This can be FILE_MAP_READ, FILE_MAP_WRITE, or FILE_MAP_ALL_ACCESS, provided the protection on the file-mapping object permits it. If the object is created with PAGE_READWRITE protection, all of these access types are available. If, on the other hand, the file is created with PAGE_READONLY protection, the only access type available is FILE_MAP_READ. This allows the object creator control over how the object can be viewed.</p>
+<p>The second and third parameters are used to indicate the low and high halves, respectively, of a 64-bit offset into the memory-mapped file. This offset from the start of the memory-mapped file is where the view is to begin. The final parameter indicates how much of the file is to be viewed. This parameter can be set to 0 to indicate that the entire file is to be mapped. In that case, the 64-bit offset value is ignored.</p>
+<p>The function returns a pointer to the location in the process’s address space where the file view has been mapped. This is an arbitrary location in your process, depending on where the contiguous range of addresses are available. If you want to map the file view to a specific set of addresses in your process, the <strong>MapViewOfFileEx</strong> function provides this capability. This function simply adds an additional parameter, <em>lpvBase</em>, to indicate the location in your process to map the view. The return value to <strong>MapViewOfFileEx</strong> is the same value as <em>lpvBase</em> if the function is successful; otherwise, it is NULL. Similarly, for <strong>MapViewOfFile</strong> the return value is NULL if the function fails.</p>
+<p>Multiple views of the same file-mapping object can coexist and overlap each other as shown in Figure 5.</p>
+<p><img src="/assets/msdn-managing-memory-mapped-files/5.gif" alt=""></p>
+<p><strong>Figure 5. Memory-mapped file objects permit multiple, overlapped views of the file from one or more processes at the same time.</strong></p>
+<p>Notice that multiple views of a memory-mapped file can overlap, regardless of what process maps them. In a single process with overlapping views, you simply end up with two or more virtual addresses in a process that refer to the same location in physical memory. So, it’s possible to have several PTEs referencing the same page frame. Remember, each page of a shared memory-mapped file is represented by only one physical page of memory. To view that page of memory, a process needs a page directory entry and page-table entry to reference the page frame.</p>
+<p>There are two ways in which needing only one physical page of memory for a shared page benefits applications in the system. First, there is an obvious savings of resources because both processes share both the physical page of memory and the page of hard disk storage used to back the memory-mapped file. Second, there is only one set of data, so all views are always coherent with one another. This means that changes made to a page in the memory-mapped file via one process’s view are automatically reflected in a common view of the memory-mapped file in another process. Essentially, Windows NT is not required to do any special bookkeeping to ensure the integrity of data to both applications.</p>
+<h3 id="Unmapping-a-View-of-a-Memory-Mapped-File"><a class="header-anchor" href="#Unmapping-a-View-of-a-Memory-Mapped-File"></a>Unmapping a View of a Memory-Mapped File</h3>
+<p>Once a view of the memory-mapped file has been mapped, the view can be unmapped at any time by calling the <strong>UnmapViewOfFile</strong> function. As you can see below, there is nothing tricky about this function. Simply supply the one parameter that indicates the base address, where the view of the file begins in your process</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Load tokens for APIS section. */</span></span><br><span class="line">LoadString (hDLL, IDS_PORTAPIS, szSection, MAX_PATH);</span><br><span class="line"><span class="keyword">if</span> (!LoadSection (szIniFilePath,</span><br><span class="line">                  szSection,</span><br><span class="line">                  PT_APIS,</span><br><span class="line">                  &amp;nOffset,</span><br><span class="line">                  lpMMFile))</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="comment">/* Clean up memory-mapped file. */</span></span><br><span class="line">        UnmapViewOfFile (lpMMFile);</span><br><span class="line">        CloseHandle (hMMFile);</span><br><span class="line">        <span class="keyword">return</span> FALSE;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>As mentioned above, you can have multiple views of the same memory-mapped file, and they can overlap. But what about mapping two identical views of the same memory-mapped file? After learning how to unmap a view of a file, you could come to the conclusion that it would not be possible to have two identical views in a single process because their base address would be the same, and you wouldn’t be able to distinguish between them. This is not true. Remember that the base address returned by either the <strong>MapViewOfFile</strong> or the <strong>MapViewOfFileEx</strong> function is not the base address of the file view. Rather, it is the base address in your process where the view begins. So mapping two identical views of the same memory-mapped file will produce two views having different base addresses, but nonetheless identical views of the same portion of the memory-mapped file.</p>
+<p>The point of this little exercise is to emphasize that every view of a single memory-mapped file object is always mapped to a unique range of addresses in the process. The base address will be different for each view. For that reason the base address of a mapped view is all that is required to unmap the view.</p>
+<h3 id="Flushing-Views-of-Files"><a class="header-anchor" href="#Flushing-Views-of-Files"></a>Flushing Views of Files</h3>
+<p>An important feature for memory-mapped files is the ability to write any changes to disk immediately if necessary. This feature is provided through the <strong>FlushViewOfFile</strong> function. Changes made to a memory-mapped file through a view of the file, other than the system pagefile, are automatically written to disk when the view is unmapped or when the file-mapping object is deleted. Yet, if an application needs to force the changes to be written immediately, <strong>FlushViewOfFile</strong> can be used for that purpose.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Force changes to disk immediately. */</span></span><br><span class="line">FlushViewOfFile (lpMMFile, nMMFileSize);</span><br></pre></td></tr></table></figure>
+<p>The example listed above flushes an entire file view to disk. In doing so, the system only writes the dirty pages to disk. Since the Windows NT virtual-memory manager automatically tracks changes made to pages, it is a simple matter for it to enumerate all dirty pages in a range of addresses, writing them to disk. The range of addresses is formed by taking the base address of the file view supplied by the first parameter to the <strong>FlushViewOfFile</strong> function as the starting point and extending to the size supplied by the second parameter, <em>cbFlush</em>. The only requirement is that the range be within the bounds of a single file view.</p>
+<h3 id="Releasing-a-Memory-Mapped-File"><a class="header-anchor" href="#Releasing-a-Memory-Mapped-File"></a>Releasing a Memory-Mapped File</h3>
+<p>Like most other objects, a memory-mapped file object is closed by calling the <strong>CloseHandle</strong> function. It is not necessary to unmap all views of the memory-mapped file before closing the object. As mentioned above, dirty pages are written to disk before the object is freed. To close a memory-mapped file, call the <strong>CloseHandle</strong> function, which supplies the memory-mapped file object handle for the function parameter.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Close memory-mapped file. */</span></span><br><span class="line">CloseHandle (hMMFile);</span><br></pre></td></tr></table></figure>
+<p>It is worth noting that closing a memory-mapped file does nothing more than free the object. If the memory-mapped file represents a file on disk, the file must still be closed using standard file I/O functions. Also, if you create a temporary file explicitly for use as a memory-mapped file as in the initial ProcessWalker example, you are responsible for removing the temporary file yourself. To illustrate what the entire cleanup process may look like, consider the following example from the ProcessWalker sample application.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> IDM_MMFFREE:</span><br><span class="line"><span class="keyword">case</span> IDM_MMFFREENEW:</span><br><span class="line"><span class="keyword">case</span> IDM_MMFFREEEXIST:</span><br><span class="line">    &#123;</span><br><span class="line">    HCURSOR    hOldCursor;</span><br><span class="line">    OFSTRUCT   of;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Put hourglass cursor up. */</span></span><br><span class="line">    hOldCursor = (HCURSOR)SetClassLong (hWnd, GCL_HCURSOR, <span class="number">0</span>);</span><br><span class="line">    SetCursor (LoadCursor (<span class="number">0</span>, IDC_WAIT));</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Release memory-mapped file and associated file if any. */</span></span><br><span class="line">    CloseHandle (MMFiles[wParam-IDM_MMFFREE].hMMFile);</span><br><span class="line">    MMFiles[wParam-IDM_MMFFREE].hMMFile = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (MMFiles[wParam-IDM_MMFFREE].hFile)</span><br><span class="line">        &#123;</span><br><span class="line">        CloseHandle (MMFiles[wParam-IDM_MMFFREE].hFile);</span><br><span class="line">        MMFiles[wParam-IDM_MMFFREE].hFile = <span class="literal">NULL</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* If temporary file, delete here. */</span></span><br><span class="line">    <span class="keyword">if</span> (wParam == IDM_MMFFREENEW)</span><br><span class="line">        &#123;</span><br><span class="line">        OpenFile (MMFiles[wParam-IDM_MMFFREE].szMMFile,</span><br><span class="line">                  &amp;of,</span><br><span class="line">                  OF_DELETE);</span><br><span class="line">        *(MMFiles[wParam-IDM_MMFFREE].szMMFile) = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Replace wait cursor with old cursor. */</span></span><br><span class="line">    SetClassLong (hWnd, GCL_HCURSOR, (LONG)hOldCursor);</span><br><span class="line">    SetCursor (hOldCursor);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure>
+<p>In this example, the memory-mapped file can be one of three types: the system pagefile, a temporary file, or an existing file on disk. If the file is the system pagefile, the memory-mapped file object is simply closed, and no additional cleanup is necessary. If the memory-mapped file is mapped from an existing file, that file is closed right after closing the memory-mapped file. If the memory-mapped file is a mapping of a temporary file, it is no longer needed and is deleted using standard file I/O immediately after closing the temporary file handle, which cannot occur until after closing the memory-mapped file object handle.</p>
+<h2 id="Conclusion"><a class="header-anchor" href="#Conclusion"></a>Conclusion</h2>
+<p>Memory-mapped files provide unique methods for managing memory in the Windows application programming interface. They permit an application to map its virtual address space directly to a file on disk. Once a file has been memory-mapped, accessing its content is reduced to dereferencing a pointer.</p>
+<p>A memory-mapped file can also be mapped by more than one application simultaneously. This represents the only mechanism for two or more processes to directly share data in Windows NT. With memory-mapped files, processes can map a common file or portion of a file to unique locations in their own address space. This technique preserves the integrity of private address spaces for all processes in Windows NT.</p>
+<p>Memory-mapped files are also useful for manipulating large files. Since creating a memory mapping file consumes few physical resources, extremely large files can be opened by a process and have little impact on the system. Then, smaller portions of the file called “views” can be mapped into the process’s address space just before performing I/O.</p>
+<p>There are many techniques for managing memory in applications for Windows. Whether you need the benefits of memory sharing or simply wish to manage virtual memory backed by a file on disk, memory-mapped file functions offer the support you need.</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/msdn-managing-memory-mapped-files/">http://xnerv.wang/msdn-managing-memory-mapped-files/</a></strong><br>
+Reprinted from: <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms810613.aspx">(MSDN) Managing Memory-Mapped Files</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+              <a href="/tags/Heap/" rel="tag"># Heap</a>
+              <a href="/tags/MSDN/" rel="tag"># MSDN</a>
+              <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-Are-Memory-Mapped-Files"><span class="nav-text">What Are Memory-Mapped Files?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-Do-Memory-Mapped-Files-Have-to-Offer"><span class="nav-text">What Do Memory-Mapped Files Have to Offer?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-Are-They-Implemented"><span class="nav-text">How Are They Implemented?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Shared-Memory-in-Windows-NT"><span class="nav-text">Shared Memory in Windows NT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-Memory-Mapped-File-Functions"><span class="nav-text">Using Memory-Mapped File Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Creating-a-File-Mapping"><span class="nav-text">Creating a File Mapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Obtaining-a-File-Mapping-Object-Handle"><span class="nav-text">Obtaining a File-Mapping Object Handle</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Opening-a-memory-mapped-file-object"><span class="nav-text">Opening a memory-mapped file object</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Inheriting-and-duplicating-memory-mapped-file-object-handles"><span class="nav-text">Inheriting and duplicating memory-mapped file object handles</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Viewing-Part-of-a-Memory-Mapped-File"><span class="nav-text">Viewing Part of a Memory-Mapped File</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unmapping-a-View-of-a-Memory-Mapped-File"><span class="nav-text">Unmapping a View of a Memory-Mapped File</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flushing-Views-of-Files"><span class="nav-text">Flushing Views of Files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Releasing-a-Memory-Mapped-File"><span class="nav-text">Releasing a Memory-Mapped File</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-text">Conclusion</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Ruediger Asche Microsoft Developer Network Technology Group Created: July 15, 1993 Abstract This article discusses objects and handles under Microsoft® Windows™ version 3.1 and Windows NT™. The terms">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(MSDN) Give Me a Handle, and I&#39;ll Show You an Object">
+<meta property="og:url" content="https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Ruediger Asche Microsoft Developer Network Technology Group Created: July 15, 1993 Abstract This article discusses objects and handles under Microsoft® Windows™ version 3.1 and Windows NT™. The terms">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-give-me-a-handle-and-i-ll-show-you-an-object/1.gif">
+<meta property="article:published_time" content="2017-11-14T22:09:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:20.104Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="MSDN">
+<meta property="article:tag" content="Memory Management">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/msdn-give-me-a-handle-and-i-ll-show-you-an-object/1.gif">
+
+<link rel="canonical" href="https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>(MSDN) Give Me a Handle, and I'll Show You an Object | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          (MSDN) Give Me a Handle, and I'll Show You an Object
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-14 14:09:00" itemprop="dateCreated datePublished" datetime="2017-11-14T14:09:00-08:00">2017-11-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Ruediger Asche<br>
+Microsoft Developer Network Technology Group</p>
+<p>Created: July 15, 1993</p>
+<h2 id="Abstract"><a class="header-anchor" href="#Abstract"></a>Abstract</h2>
+<p>This article discusses objects and handles under Microsoft® Windows™ version 3.1 and Windows NT™. The terms <em>objects</em> and <em>handles</em> have different meanings in each operating system and imply a variety of relationships between objects and their corresponding handles. This article elaborates on the differences between the way components of Windows NT treat objects as opposed to the way Windows 3.1 treats them, with particular emphasis on shareability issues.</p>
+<a id="more"></a>
+<h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
+<p><em>You got a smile so bright,<br>
+You know you could have been a candle.<br>
+I’m holding you so tight,<br>
+You know you could have been a handle.</em></p>
+<p><em>Smokey Robinson, “The Way You Do the Things You Do”</em></p>
+<p>One of the masterpieces of contemporary American literature, <em>Webster’s New World Dictionary</em> (Paperback Edition), defines a handle as “that part of a tool, etc., by which it is held or lifted.” Now, is this a precise definition or what? What on earth is <em>etc</em>.? By intuitive knowledge, we know that <em>etc</em>. can cover anything from toothbrushes to tennis rackets to cookware. While I leave it up to the imagination of the reader to figure out what Smokey Robinson wanted to hold or lift, I will tell you right away what we will be handling in this article: objects.</p>
+<p><em>Object</em> is one of the major buzzwords of today’s computer reality. You find objects everywhere, from object-oriented languages to object linking and embedding. Microsoft® Windows™ has used the term <em>Object</em> for a long time to describe several very different things. To further confuse the issue, things that are not explicitly labeled as objects behave the same way as some objects do.</p>
+<p>Windows NT™ is essentially an object-centered operating system and has a very definite notion of what an object is. Unfortunately, Windows NT’s idea of an object is not related at all to the concept that 16-bit Windows has of an object; as a result, when writing a Win32®-based application for Windows NT, you will need to deal with even more “object types,” which will make the confusion about objects potentially even greater. This article untangles the different meanings of the term <em>Object</em> and the related term <em>handle</em>, and makes you aware of potential incompatibilities between applications written for Windows version 3.1 and for Win32.</p>
+<p>We display the entire object and handle layout of Windows NT in the Appendix at the end of this article. Please refer to it as necessary as you read this article.</p>
+<p>One more note: For the sake of this discussion, we will entirely leave out C++ and Microsoft Foundation Class Library objects. Although some Foundation class objects are directly mapped to objects provided by the operating system, the way Foundation class objects are referenced, maintained, and protected is exclusively a compiler issue. In this article we will focus on objects that are provided and maintained on the operating system level.</p>
+<p>This article is not meant to be a supplement to the documentation of Windows NT. All that is described herein applies to version 3.1 of Windows NT and may change in future versions of the operating system. Please be aware that applications written for the Win32 API are meant to be portable between all platforms that support this API, and any assumptions about a particular implementation (such as the relationships between handles and objects as described in this article) will break applications that operate under such assumptions.</p>
+<h2 id="Objects-in-16-Bit-Windows"><a class="header-anchor" href="#Objects-in-16-Bit-Windows"></a>Objects in 16-Bit Windows</h2>
+<p>The idea of an object that Windows 3.1 introduced was roughly “something that is accessed through a handle.” In Windows 3.1, you create the object—a process that returns a magic cookie called a handle—and subsequently use the handle to access the object. This ensures that the actual implementation of the object can be changed without affecting the application.</p>
+<p>If you have used objects and handles exactly like this, you are well off, and you will find that you will need to change almost nothing when porting your application from Windows 3.1 to 32-bit Windows NT. However, many developers for Windows 3.1 made assumptions about the relationship between handles and their objects—sometimes they had to because application programming interfaces (APIs) were missing for certain operations. Such assumptions will break applications under Windows NT.</p>
+<p>Maybe you have used <strong>GlobalHandle</strong> to retrieve the handle of any given address and subsequently use the handle to reallocate the object? Works like a charm under 16-bit Windows. Maybe you have extracted the HIWORD of a given pointer and converted it into a handle, or peeked into memory without doing a <strong>GlobalLock</strong> using that handle? Maybe you were bold, retrieving the base of the local descriptor table and looking at descriptors by using the handle as an offset into the table? Beware, it’s these kinds of things that will leave you with major redesign work when you try to port your application.</p>
+<p>Such things used to work under 16-bit Windows, mainly due to two widely known facts:</p>
+<ul>
+<li>First, objects under 16-bit Windows generally fall into two categories: objects that are stored in GDI’s and USER’s local heaps, and objects that are allocated from the global heap (that is, Windows internally calls <strong>GlobalAlloc</strong> to allocate memory for that object).</li>
+<li>Second, the handles that belong to global heap objects are, in fact, selectors to those global memory segments, which implies an immediate relationship between the handle and its memory location.</li>
+</ul>
+<p>For example, there is no API under Windows 3.1 that returns the size of a resource, given its handle. No problem; because resources are allocated from the global heap, you can eventually use all of the global heap functions to party on the resources. You can call <strong>GlobalPageLock</strong> if, for whatever reason, you wish to permanently lock the resource; you can call <strong>GlobalSize</strong> to figure out its current size; you can <strong>GlobalRealloc</strong> it if you wish to dynamically change its size; and you can even <strong>GlobalLock</strong> it to write to or read from the resource data directly.</p>
+<p>The entities that are explicitly labeled as objects under Windows 3.1 are GDI and USER objects. GDI objects are brushes, pens, bitmaps, fonts, palettes, and regions; USER objects are window classes, atoms, menus, and windows. Handles for those objects are, in fact, pointers into the default data segments of the GDI and USER modules, respectively. A relationship between the handles and the objects is implied in that the handles, when converted to pointers into USER’s and GDI’s default data segment, point to data structures that describe the objects internally.</p>
+<p>Unfortunately, the API sets that treat those objects are fairly inconsistent. Although the <strong>Create_xxx_</strong> and corresponding <strong>DeleteObject</strong> APIs were originally designed to provide a uniform <strong>Create/<strong>Use</strong>/Delete</strong> sandwich for all GDI object types, not even palettes could be incorporated into the paradigm when they were introduced with Windows 3.0; <strong>SelectObject</strong> will not work on them. On the other hand, walking GDI’s local heap will reveal that palettes are stored in there the same way as brushes, pens, bitmaps, fonts, device contexts, and regions are; thus, although they are stored internally the same way, they have different operations that work on them.</p>
+<p>One of the corollaries of the design of Windows 3.1 is that all objects are globally accessible. Because only one local descriptor table (LDT) is being used for all Windows-based applications, all global handles (that is, selectors) can be used by all applications and DLLs; and because all GDI and USER objects are references into the globally accessible GDI and USER default data segments, they can be seen and used by all applications as well.</p>
+<p>This implementation detail is widely used by many applications, be it explicitly (for example, in order to share memory) or implicitly (for example, in order to enumerate windows or fonts). One of the unfortunate consequences of this design is that any application can (deliberately or inadvertently) modify or possibly destroy objects that belong to other applications. There is no protection mechanism against these kinds of practices. (“The Way We Used to Do the Things We Did.”)</p>
+<h2 id="Object-Management-Under-Windows-NT"><a class="header-anchor" href="#Object-Management-Under-Windows-NT"></a>Object Management Under Windows NT</h2>
+<p>Windows NT has a rather precise and orthogonal idea of what an object is. Windows NT has an API set that works on all kinds of objects; handles are maintained by the executive via a consistent mechanism that allows for secure access to objects, supports synchronization, and rejects attempts to delete objects that are still in use.</p>
+<p>The objects that Windows NT knows about are processes, threads, files (including devices that look like files, such as communication devices, mail slots, or pipes), file mappings (or sections, as they are labeled on the executive level), events, semaphores, and mutexes. All of those object types have certain properties in common that we will elaborate on a bit later.</p>
+<p>You can see that none of the things that Windows 3.1 calls objects (hereafter called “old objects”) are covered by the term <em>objects</em> in Windows NT. The equivalents of Windows 3.1 “old objects” are not implemented on the executive level under Windows NT, so next we’ll look a little bit more closely at how the Win32 subsystem implements “old objects.” In other words, a window or a brush or a pen does not have anything to do with a Windows NT object, and the Windows NT executive would be totally clueless if it were passed a handle to one of those objects.</p>
+<h3 id="How-the-Subsystem-Realizes-Windows-GDI-Objects"><a class="header-anchor" href="#How-the-Subsystem-Realizes-Windows-GDI-Objects"></a>How the Subsystem Realizes Windows GDI Objects</h3>
+<p>Let us begin with GDI objects. Under Windows 3.1, GDI objects are stored in GDI’s default data segment. They are designed to be global; that is, one application can create an object and pass it on to another application. There is no ownership of GDI objects in 16-bit Windows; thus, one application can destroy a GDI object that you created in another application.</p>
+<p>Under Windows NT, GDI objects are stored in the client part of the Win32 subsystem’s GDI module. That means that any GDI object is valid only in the context of the application that created it. However, consider this: Create an object and pass its handle to another application. Let this other application call <strong>SelectObject</strong> on that newly created object, and the call may succeed! However, nothing might happen; or instead of a brush, a pen might be selected into the device context! What is happening?</p>
+<p>Well, what happens here is that handles to GDI objects are internally implemented as offsets into a handle table that resides on the client side of the Win32 subsystem. (Remember that the Win32 client is a DLL that resides in a Win32-based application’s address space and is called by the application.) In other words, handle tables are kept on a per-process basis, but they are not process-tagged. That means that a handle to an object that belongs to process A might coincidentally look like a valid handle in process B’s context. Thus, a call to <strong>SelectObject</strong> from B might succeed, but B will actually have selected a totally different object into its device context—or worse, the right one. Selecting the right object may be worse because the objects might coincidentally be the same, so you think it works, but the application will behave weirdly later on. So, do not pass handles to GDI objects between applications; they have totally different meanings in different processes.</p>
+<p>Actually, the picture is even more complex than that. Because all applications share the same physical output device, maintaining a device context cannot be left up to the client alone. Any output call will eventually end up in the server, and thus, the server has to know about its clients’ device contexts as well as their GDI objects. The subsystem divides the representation of the GDI object (including the device context) between the client and the server. For efficiency’s sake, as much work as possible is done by the client—in most cases, for example, a call to <strong>SelectObject</strong> will not make it to the server; the client will simply update an internal data structure. As soon as the server does the drawing, it knows how to retrieve and realize the objects on the client’s side.</p>
+<p>The GDI part of the Win32 subsystem has a handle manager of its own through which all accesses to GDI objects go. This is also true for USER, as we will see later. A handle to a GDI object is, in fact, made up of two components: One part encodes the offset into an object table that resides in the client part of the subsystem, and one part is a uniqueness identifier. This identifier changes—as the name implies—whenever a handle is recycled and is stored both as part of the object and as part of the handle.</p>
+<p>Validating an object involves, among other things, matching the unique part of the handle against the value in the object. If a handle is recycled, the new handle returned is different from the one that belonged to the destroyed object with the same table index. This mechanism is used to make sure that stray pointers or previously deleted object handles that are passed into a function that works on an object do not reference wrong objects. If the validation fails, an error 6, INVALID_HANDLE, is generated.</p>
+<p>In future versions of Windows NT, it may well be that this implementation detail changes. Although a handle will most likely still be composed of two 16-bit components for compatibility reasons, the interpretation of the “uniqueness” part may change due to performance considerations.</p>
+<p>You might wonder now why you don’t see the INVALID_HANDLE error when you pass a GDI object handle between applications in error. The reason is that initially the “uniqueness” value is the same for all handles in all address spaces; objects become unique only after the handle is recycled. Thus, two valid objects in different processes may very well have the same “uniqueness” value. “The Way We Do the Things We Do?” You betcha.</p>
+<p>The downside of this implementation is that it cuts down on the number of available handles. A handle has the size of a DWORD—that is, it’s 32 bits. Thus, a maximum of 232 or 4 GB of objects can be theoretically addressed by a handle. Currently, the two components of the handle—the table index and the uniqueness identifier—take up 16 bits of the handle each, such that theoretically a maximum of 64K (216) of GDI objects could be accessed per process, but the maximum size of the client’s handle table is currently hardcoded to 16K of entries.</p>
+<h3 id="And-Now-for-Something-Completely-Different-USER-Objects"><a class="header-anchor" href="#And-Now-for-Something-Completely-Different-USER-Objects"></a>And Now for Something Completely Different: USER Objects</h3>
+<p>The story of USER objects is different from GDI’s story. Under Windows 3.1, the definition of <em>Object</em> covers both objects internal to USER’s default data segment (windows, window classes, menus, and so on) and resources that are actually allocated from the global heap. Windows NT still maintains both object types in the USER module, but because there is no global heap anymore as there was in Windows 3.1, resources behave a little bit differently.</p>
+<p>One of the main goals in the implementation of the USER part of Windows NT’s Win32 subsystem was compatibility. Under Windows 3.1, an application has a high degree of control over USER-maintained objects. For example, through the <strong>EnumWindows</strong> function, an application for Windows 3.1 can get access to all top-level windows in the system; with the window handle, the menu of an application can be modified, messages can be monitored, device contexts obtained, and so on. In order for Windows NT to maintain this degree of control, USER objects are maintained on the server side of the Win32 subsystem, and the functions that access the objects (such as <strong>DrawIcon</strong>) need to do more work. For example, if the object were located on the client side, accessing it would mainly be a task of translating the handle into a pointer, but in the USER implementation, memory in the server process must be referenced.</p>
+<p>Just like its GDI counterpart, the Windows NT USER component keeps a handle manager that works pretty much like the one described in the GDI discussion, but the object tables are maintained on the server side of the subsystem, and therefore the object limit is global. Currently, it is 64K entries.</p>
+<h4 id="Resources"><a class="header-anchor" href="#Resources"></a>Resources</h4>
+<p>The good news is that under Windows NT, resources are not handled differently from the other USER objects at all. Under Windows 3.<em>x</em>, the local heaps of USER and GDI turned out to be severe system bottlenecks for object-intensive applications. If you have worked with 16-bit Windows intensively, chances are that at more than one point you have seen the free system resources decreasing severely when you worked with large menus or many windows. Windows 3.1 somewhat widened that bottleneck by making menus resources instead of objects within USER’s default data segment. Windows NT implements all USER objects orthogonally.</p>
+<p>From the user’s point of view, the major differences between resources and other objects is that at times resources need to be accessed directly, without using the API functions that operate on them. (This holds especially true for user-defined “raw” resources.)</p>
+<p>There are actually two different ways to access resources under Windows NT—one in which the resource resides in the server process and one in which it resides in the client. To exemplify the first case, let’s assume your application calls <strong>LoadIcon</strong> and passes the returned handle on to application B, which then calls <strong>DrawIcon</strong> on that handle. Guess what? Works fine. Just like under Windows 3.1. This seems to be strange at first glance because the two applications have disjoint address spaces, so how can the target application see something that the source application loaded?</p>
+<p>Note that you cannot do much more with that handle. In particular, you cannot get your hands on the memory that describes the icon because the handle has no meaning whatsoever to either your application or application B. It is a handle local to the server part of the Win32 subsystem. <strong>DrawIcon</strong> eventually executes in the server part as well, and thus it knows how to interpret the handle. In this case, the icon is a real object in the strict sense of the word: The handle is a true magic cookie without any meaning to anyone except for the operations that are allowed on it (such as <strong>DrawIcon</strong>).</p>
+<p>As a side effect of this modular approach, using this technique to access resources is fairly limited. You cannot modify the resource or look at its memory. (We will look at ways to work around this in a second.) Also, there is no way for the subsystem to determine if the object is in use by anybody but the process that owns it. In our example, the subsystem cannot know if somebody is using the icon, so as soon as your application terminates, the icon is gone from the server subsystem address space, and a subsequent attempt to call <strong>DrawIcon</strong> on it will return with an error code of ERROR_INVALID_CURSOR_HANDLE. Do not be confused about “CURSOR” in that error message—as far as USER32 is concerned, icons and cursors are basically the same; internally, they are represented as the same data structures.</p>
+<p>So how does one share resources among processes? Well, the bad news is that there is no easy way for applications to share resources dynamically at run time so that a change in the resource that one application makes appears in the other application. Aside from using the <strong>CopyIcon</strong>, <strong>CopyAcceleratorTable</strong>, and <strong>CopyCursor</strong> functions, which are especially designed to create local copies of resources, the best one can do about this is to have one application map an image of the other application’s executable into its own memory space, locate the resource in the image, and party on it. To aid this process, the <strong>LoadResource</strong> API family has been modified for Windows NT.</p>
+<p>If application HAND wants to access a resource in application FOOT, it needs to use the <strong>LoadLibrary</strong>, <strong>FindResource</strong>, and <strong>LoadResource</strong> APIs as described in the Win32 API Help file under the documentation for <strong>FindResource</strong>. If you want to permanently change resources in the target executable file, you should use the <strong>UpdateResource</strong>, <strong>BeginUpdateResource</strong>, and <strong>EndUpdateResource</strong> APIs.</p>
+<p>The trick here is that <strong>LoadLibrary</strong> will map the executable file into the address space of the process that calls it and return a pointer to that image. All that <strong>FindResource</strong> and <strong>LoadResource</strong> do is examine the executable header in that image, figure out where within the image the resource is located, and return a pointer to the resource image.</p>
+<p>The part that will probably confuse you here is that <strong>LoadLibrary</strong> also works on .EXE files. Under Windows 3.1, if you load an executable file, it will execute right away, whereas a DLL will linger in memory until it is called. <strong>LoadLibrary</strong>, <strong>LoadModule</strong>, and <strong>WinExec</strong> are very closely interrelated under Windows 3.1, but they are totally different under Windows NT, where <strong>LoadLibrary</strong> basically maps the executable file into the process’s address space. <strong>LoadLibrary</strong> also executes the DLL entry point routine when a library is loaded, but it does not execute anything when an application is loaded. The return value from <strong>WinExec</strong>, which is a stripped-down version of <strong>CreateProcess</strong>, is a handle to a Windows NT executive object, whereas an instance handle, the value returned from <strong>LoadLibrary</strong>, is a virtual pointer.</p>
+<h3 id="Win32-Kernel-Objects"><a class="header-anchor" href="#Win32-Kernel-Objects"></a>Win32 Kernel Objects</h3>
+<p>The preceding discussion on virtual pointers leads us right into the remaining category of objects in the Win32 subsystem—kernel objects. Now, here we run into a terminology problem: Under Windows 3.1, the component that is responsible for memory management and system services is called the “kernel.” Unfortunately, the same term is used for the component in Windows NT that executes in privileged mode at the lowest level. Windows NT renames the part of the Win32 subsystem that corresponds to the kernel in Windows 3.1 as the “base.” Thus, this section does not really deal with kernel objects, but with base objects. Most of the objects that you access through the base are, in fact, native Windows NT objects, which we will discuss in the following section.</p>
+<p>The only entity that the kernel component of Windows 3.1 dubs an object is a memory object from which a number of other object types derive, such as modules or instances; in the rest of this section, we will look at these in more detail and see how those are implemented in Windows NT.</p>
+<p>Let us elaborate on the last statement of the preceding section a little bit more. Windows 3.1 knows instance handles, task handles, and module handles. Instance handles are, in fact, selectors of the default data segments of the application instance. (This fact is sometimes used to change the data segment so that an operation can work on the default data segment of a different application—an ugly practice, but it works.) The task handle is the selector of a global memory block that contains task-specific parameters (such as the input queue that is associated with the task). The module handle is the selector of a global memory block that contains a modified version of the executable header associated with the module. (This memory block is also known as the module database.)</p>
+<p>For applications in Windows 3.1, there is only one module database in the system for all instances of the application, whereas both the task database and the default data segment exist separately for each instance of the application. The <strong>GetModuleHandle</strong> API returns the handle (selector) of the module database, whereas a call to <strong>GetWindowWord</strong> with GWW_HINSTANCE passed as the second parameter returns the instance handle, and the <strong>GetCurrentTask</strong> API returns the task database handle. For other applications, the <strong>TaskFirst</strong>/<strong>TaskNext</strong> Toolhelp API functions can be employed to retrieve the task database handles.</p>
+<p>For more information on modules, tasks, and instances under Windows 3.1, please consult the Knowledge Base articles Q76676, “Differences Between Task Handles and Instance Handles,” and Q78327, “HANDLEs Returned by GetModuleHandle and LoadLibrary,” as well as Bob Gunderson’s technical article “Modules, Instances, and Tasks.”!Alink(Knowledge Base, MSDN™ Library)</p>
+<p>Windows NT does not use task databases or module databases anymore, and the default data segment is built on top of an application’s virtual address space. The <em>hInstance</em> value that is being passed to an application upon startup is basically the same as the value returned from <strong>LoadLibrary</strong>: a virtual address in the application’s address space that contains the memory-mapped image of the executable file. Incidentally, <strong>GetModuleHandle</strong>(NULL) returns the same value. It is fairly easy to confuse this value with a process handle, which is something totally different (namely, a native Windows NT object) and cannot be used interchangeably with those virtual pointers.</p>
+<p>The remaining kernel object type is the <em>heap object type</em>, which we’ll look at now. As Randy Kath’s technical article <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms810603.aspx">“Managing Heap Memory in Win32”</a> outlines, the Windows NT heap memory manager resides on top of the virtual memory manager; that is, a heap is essentially a chunk of virtual memory that consists of the heap itself and some administrative information that is used to maintain it. The handle returned from the <strong>HeapCreate</strong> API is essentially the virtual address of this memory chunk, and a call to <strong>HeapAlloc</strong> will look into the administration header and return a pointer to the memory chunk. You should never attempt to write to a memory location that belongs to the heap header because it would seriously confuse the heap manager. Also, due to the very nature of disjoint address spaces, one application’s local heap is of no relevance to other applications.</p>
+<p>Because heap handles are virtual pointers, and no record is kept of the local heaps allocated by the base part of the Win32 subsystem, there is really no limit on the number of heaps you can theoretically allocate, except for the limits that the executive imposes on the number of virtual memory chunks that an application can use. For details on virtual memory management, please refer to Randy Kath’s technical articles <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms810616.aspx">“The Virtual-Memory Manager in Windows NT”</a> and <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms810627.aspx">“Managing Virtual Memory in Win32.”</a> It is worthwhile mentioning here, however, that you cannot allocate more than 32K of virtual memory blocks in any process because the virtual address space of a process is limited to 2 GB, and the minimum size for each allocation is 64K; thus, the maximum number of allocations that can be made is 2G/64K, or 32K of virtual memory blocks.</p>
+<p>Note that this is different from the number of allocations that can be drawn from heaps. Because heaps themselves are virtual memory blocks, you cannot create more than 32K-worth of heaps per application, but from a given heap, you can allocate as many memory blocks as you want to.</p>
+<h3 id="Native-Windows-NT-Objects"><a class="header-anchor" href="#Native-Windows-NT-Objects"></a>Native Windows NT Objects</h3>
+<p>We will now look at <em>native objects</em> in Windows NT. As Helen Custer describes in depth in <em>Inside Windows NT</em> (Microsoft Press, 1993), the object manager is an integral and central part of Windows NT. It is responsible for accepting and processing requests to create, access, and destroy objects—both from a process and from the executive. Some of the objects that Windows NT knows about are not directly visible to applications, such as driver objects or symbolic link objects, but internally they work in exactly the same way as the aforementioned objects. In <em>Inside Windows NT</em>, these invisible objects are called <em>kernel objects</em>, as opposed to <em>executive objects</em>.</p>
+<p>We have already enumerated the native Windows NT objects that are visible to Win32 applications: processes, threads, files, file mappings, events, semaphores, and mutexes. We will not elaborate too much on these here because Chapter Three of <em>Inside Windows NT</em> already gives a comprehensive overview of these objects and how to use them. The worthwhile aspects to mention about them are the following:</p>
+<ul>
+<li>They can attain a signaled state so that you can call <strong>WaitForSingleObject</strong> or <strong>WaitForMultipleObjects</strong> on them.</li>
+<li>You can use <strong>DuplicateHandle</strong> to access the object from inside other processes. (Some restrictions apply! Refer to the Win32 API Help file for details.)</li>
+<li>The Windows NT executive keeps a reference count for each object and removes the object only after the last handle is closed.</li>
+<li>Access to the objects is monitored by the security subsystem. (I will cover “security and how you can make use of it” in a future article.)</li>
+<li>Most objects can be optionally named so that other processes can access them by name if security allows.</li>
+</ul>
+<p>Handles to executive objects are always associated with a particular process—this statement does not always hold true for kernel objects; for example, objects that describe the drivers for bootable hard drives must exist before the system has started up. The association of handles to processes is the reason you cannot use an existing handle to access an object from another process; you need to either obtain another handle using <strong>DuplicateHandle</strong> to create a handle table entry for the same object in another process or open an object by name in the other process.</p>
+<p>Unlike the handles that are maintained by the Win32 USER and GDI subsystem components, handles to native objects under Windows NT are not unique; that is, upon destruction of an object, the corresponding handle may be recycled and will look exactly like the handle to the destroyed object. There is one unintuitive consequence of this implementation: Process IDs under Windows NT are actually handles into a dummy system table—that is, a table that does not associate its handles with any objects. If you create a process and store its ID away, then after termination of the process, the ID may be recycled for other types of global objects. You therefore cannot use process IDs to uniquely identify processes.</p>
+<p>Finally, there is no hardcoded limit on the number of entries a handle table can have. A handle table maintained by the executive may grow dynamically if necessary; thus, the number of handles that can be allocated per process depends only on the memory available on your machine. (Note that Windows NT may further limit this number on a per-user basis by reducing the user’s quota on nonpageable memory.)</p>
+<h2 id="Conclusion"><a class="header-anchor" href="#Conclusion"></a>Conclusion</h2>
+<p>We have discussed several types of objects and their handles under Windows NT, and how they relate to corresponding object types under Windows 3.1. The most important result from this discussion is that any assumption about the implementation of objects and the meaning of handles is very likely to break code compatibility between platforms and should, therefore, be avoided. Another important point to mention is that the shareability of an object between processes is a matter of the implementation of the operating system and varies from object type to object type and from operating system to operating system. The table below lists the object types discussed in this article, as well as their locations and their shareability.</p>
+<p>From the point of view of implementation, a handle under Windows NT is always realized in one of two categories:</p>
+<ul>
+<li>An offset into a table that is being maintained by either the executive or a subsystem component.</li>
+<li>A virtual address in the address space of a process.<br>
+The concept that makes this implementation possible is the memory-mapped file (or section object). Whereas Windows 3.1 needs to copy data from an executable file into main memory to build code segments or load resources, Windows NT only needs to create a memory-mapped file object that is backed by the executable file instead of the system pagefile. Thus, a resource can be retrieved by calculating a pointer into the memory-mapped file object that represents the executable. The USER part of the Win32 subsystem uses this technique to implement both methods of resource access: A call to <strong>LoadIcon</strong>, for example, will map the executable into the server’s address space so that a subsequent call to <strong>DrawIcon</strong> will retrieve the icon data from the memory-mapped image, whereas <strong>LoadLibrary</strong> maps the executable into the client’s address space so that <strong>FindResource</strong> and <strong>LoadResource</strong> will retrieve the data from there (which is why resources retrieved this way will not have any meaning to other processes).</li>
+</ul>
+<p>Also, it is important to emphasize the disjoint API sets that are available for the different types of objects. You cannot call <strong>DeleteObject</strong> on a resource or an executive object; conversely, <strong>CloseHandle</strong> will fail on GDI objects and resources. A good way to look at it is to classify each type of object as a member of something one could call an “object type class,” a category of objects that are roughly characterized by being maintained by the same component of Windows NT. Following this approach, there are the following object type classes in Windows NT:</p>
+<ul>
+<li>Executive objects (processes, threads, sections, file objects, events, semaphores, and mutexes)</li>
+<li>Win32 GDI objects (pens, brushes, fonts, palettes, regions, device contexts, bitmap headers)</li>
+<li>Win32 USER objects
+<ul>
+<li>WIN32 resources (accelerator tables, bitmap resources, dialog box templates, font resources, menu resources, raw data resources, string table entries, message table entries, cursors/icons)</li>
+<li>Other USER objects (windows, menus)</li>
+</ul>
+</li>
+<li>Win32 base objects (heaps)</li>
+</ul>
+<p><strong>Summary of Object Properties</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Executive objects</th>
+<th>Win32 base objects</th>
+<th>Win32 GDI objects</th>
+<th>Win32 USER objects</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shareable</td>
+<td>Via APIs (<strong>DuplicateHandle</strong> or <strong>Open_xxx_</strong>)</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Validated</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes, by uniqueness</td>
+<td>Yes, by uniqueness</td>
+</tr>
+<tr>
+<td>Limit</td>
+<td>Only by physical memory</td>
+<td>32K of heaps</td>
+<td>16K per process</td>
+<td>64K systemwide (including resources and internal types</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note</strong>Shareable indicates whether an object of that type can be accessed by several processes. Validated indicates whether the handle protects the object against invalid access to it, possibly due to an invalid handle.</p>
+</blockquote>
+<h2 id="Appendix"><a class="header-anchor" href="#Appendix"></a>Appendix</h2>
+<p>In this diagram, three processes are running in a particular Windows NT session—the Win32 subsystem server process and two clients (that is, Win32-based applications). Note that by design of Windows NT, all processes’ virtual addresses over 2 GB are mapped globally (that is, are mapped to the same physical addresses in all processes).</p>
+<p><img src="/assets/msdn-give-me-a-handle-and-i-ll-show-you-an-object/1.gif" alt=""></p>
+<p>Use these notes to interpret the numbers in the diagram:</p>
+<ol>
+<li>An instance handle is a pointer to the image of an executable file in a client process.</li>
+<li>A resource handle as obtained by <strong>FindResource</strong> and <strong>LoadResource</strong> is a pointer to that process within the image.</li>
+<li>A handle returned from <strong>VirtualAlloc</strong> or <strong>HeapCreate</strong> is a pointer to the beginning of the memory block in the client’s address space.</li>
+<li>A handle returned from <strong>HeapAlloc</strong> is a pointer into the chunk of memory allocated by 3.</li>
+<li>A GDI handle is a relative offset into a table located in the client’s address space.</li>
+<li>A USER handle is a relative offset into a table located in the server’s address space.</li>
+<li>A handle to a native Windows NT object is a relative offset into a table located in system space. There are several of those tables—one per process and a few tables maintained by the system.</li>
+<li>A USER object itself is located in the server’s address space.</li>
+<li>In the case of resources, 8 still holds true, but just as in 2, the resource is referenced through a memory-mapped image of the file that holds the executable, only the image resides in the server’s address space this time. This is the scenario you encounter, for example, when calling <strong>LoadIcon</strong>.</li>
+<li>The data structures that describe native Windows NT objects reside in system address space. Depending on the object type, part of the object may also be located in a process’s address space. (This holds true, for example, for section objects.)</li>
+<li>The data that describes a GDI object resides in the client’s address space. Please also observe the restriction mentioned earlier in this article under “How the Subsystem Realizes Window GDI Objects.”</li>
+</ol>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/">http://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</a></strong><br>
+Reprinted from: <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms810501.aspx">(MSDN) Give Me a Handle, and I’ll Show You an Object</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+              <a href="/tags/MSDN/" rel="tag"># MSDN</a>
+              <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Objects-in-16-Bit-Windows"><span class="nav-text">Objects in 16-Bit Windows</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-Management-Under-Windows-NT"><span class="nav-text">Object Management Under Windows NT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#How-the-Subsystem-Realizes-Windows-GDI-Objects"><span class="nav-text">How the Subsystem Realizes Windows GDI Objects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#And-Now-for-Something-Completely-Different-USER-Objects"><span class="nav-text">And Now for Something Completely Different: USER Objects</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Resources"><span class="nav-text">Resources</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Win32-Kernel-Objects"><span class="nav-text">Win32 Kernel Objects</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Native-Windows-NT-Objects"><span class="nav-text">Native Windows NT Objects</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-text">Conclusion</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Appendix"><span class="nav-text">Appendix</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

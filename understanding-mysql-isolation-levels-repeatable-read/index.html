@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Isolation levels are a rare subject in MySQL literature. The documentation provides a terse description and focuses mainly on locking issues, but does not discuss the semantics of each isolation level">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Understanding MySQL Isolation Levels: Repeatable-Read（转载）">
+<meta property="og:url" content="https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Isolation levels are a rare subject in MySQL literature. The documentation provides a terse description and focuses mainly on locking issues, but does not discuss the semantics of each isolation level">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/1_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/2_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/3_session_b.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/4_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/5_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/6_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/7_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/8_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/9_session_b.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/10_session_a-1.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/11_session_a-1.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/12_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/13_session_b.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/14_session_a.png">
+<meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/15_session_a.png">
+<meta property="article:published_time" content="2018-01-30T07:21:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:19.346Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="DBMS">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Transaction">
+<meta property="article:tag" content="Isolation Level">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://pythianblog.wpengine.com/wp-content/uploads/1_session_a.png">
+
+<link rel="canonical" href="https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>Understanding MySQL Isolation Levels: Repeatable-Read（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          Understanding MySQL Isolation Levels: Repeatable-Read（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-29 23:21:00" itemprop="dateCreated datePublished" datetime="2018-01-29T23:21:00-08:00">2018-01-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Isolation levels are a rare subject in MySQL literature. The documentation provides a terse description and focuses mainly on locking issues, but does not discuss the semantics of each isolation level. This is not only a problem that affects MySQL documentation but also the SQL standard itself.</p>
+<p>Both the lack of documentation and the absence of a deeper description of the expected behavior in the SQL standard make <em>isolation levels</em> a topic that is more assumed than known by database administrators and developers. In this blog post, I aim to help you understand how the default isolation level in MySQL works and show you some surprising facts about it.</p>
+<p>But first let’s see how isolation levels are described in the standard: “The transaction isolation level of a SQL-transaction defines the degree to which the operations on SQL-data, or schemas in that SQL-transaction are affected by the effects of and can affect operations on SQL-data or schemas in concurrent SQL-transactions”. To put it in plain words, isolation levels define how concurrent transactions interact while modifying data.</p>
+<p>MySQL uses <strong>Repeatable-read</strong> as the default level. In the standard, this level forbids <em>dirty reads</em> (non committed data) and <em>non repeatable reads</em> (executing the same query twice should return the same values) and allows <em>phantom</em> reads (new rows are visible). But MySQL implements it in a different way. Let’s see how it is implemented with some examples.</p>
+<a id="more"></a>
+<h2 id="MySQL-Repeatable-Read-tests"><a class="header-anchor" href="#MySQL-Repeatable-Read-tests"></a>MySQL Repeatable-Read tests</h2>
+<p>We create two connections against a MySQL server. We will call them <strong>Session Blue</strong> and <strong>Session Red</strong> (The fact that these are the colors of <a target="_blank" rel="noopener" href="https://www.fcbarcelona.com">FC Barcelona</a> is purely coincidental). In Session Blue we will create the database <em>isolation</em> and the table <em>repeatable_read</em>, both will be required for this test.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/1_session_a.png" alt="Create database isolation and table repeatable_read"></p>
+<h3 id="No-phantom-reads…-only-phantom-writes"><a class="header-anchor" href="#No-phantom-reads…-only-phantom-writes"></a>No phantom reads… only phantom writes!</h3>
+<p>We start a transaction, verify current isolation level by checking the value of the variable <strong>tx_isolation</strong>, and retrieve the contents of <em>repeatable_read</em> table, this way we create a snapshot of that table for the whole transaction.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/2_session_a.png" alt="Start transaction, check tx_isolation value and retrieve table contents"></p>
+<p>Now we move to Session Red and insert two rows into the table. We commit the transaction to make sure data is updated.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/3_session_b.png" alt="In a different session we insert two rows into the table"></p>
+<p>Next we check what data is retrieved in Session Blue.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/4_session_a.png" alt="The first session, as expected, is not able to see the data inserted in the previous step."></p>
+<p>As we can see, <em>repeatable-read</em> in MySQL avoids <em>Phantom Reads</em>, as rows are not retrieved. This is more restrictive than the standard description of the isolation level. But, what happens if we try to update the table contents? Our intuition is that we should not update any rows.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/5_session_a.png" alt="But I'm able to update the added rows."></p>
+<p>Surprise! The update command tells us that one row matched and one row was changed. Let’s select table contents to view what is happening.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/6_session_a.png" alt="Now we see only the rows modified in the table."></p>
+<p>We see just one row, the row that was modified by the update executed before. This is quite unexpected and counter-intuitive as the table never had one single row committed; we inserted and committed two rows. We are seeing a view of the table that never existed. As expected, when we commit, we see both rows, the one we modified and the other that was inserted before in Session Red.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/7_session_a.png" alt="When we commit, we can see all the data."></p>
+<h3 id="More-phantom-writes"><a class="header-anchor" href="#More-phantom-writes"></a>More phantom writes!</h3>
+<p>Now we will begin another transaction and retrieve table contents. We retrieve table contents to create a snapshot (probably we should call it a version) of the table.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/8_session_a.png" alt="We start a new transaction and retrieve table contents."></p>
+<p>Back in Session Red, we will run a transaction to update the contents of the table. Note: <em>Phantom reads</em> only affect new rows, not the ones already existing.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/9_session_b.png" alt="We update one of the existing rows in another session."></p>
+<p>Let’s find what Session Blue retrieves and what can update.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/10_session_a-1.png" alt="Updates do not honor the values retrieved, but the values modified in a different session."></p>
+<p>Initially, we see the table unchanged. But no rows matched when we try to update the table using the data we retrieved in the select. We see one row with value “modified” for the <em>text</em> column, but the update finds no rows. When we update the table using a column value that was not modified by any transaction, in this case <em>id</em>, then we are able to proceed. Now we see the new value for the <em>text</em> column.</p>
+<h3 id="WYSINWYW-What-you-see-is-NOT-what-you-write"><a class="header-anchor" href="#WYSINWYW-What-you-see-is-NOT-what-you-write"></a>WYSINWYW (What you see is NOT what you write)</h3>
+<p>We will return our table to the original values and we will create an additional table required for the next test.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/11_session_a-1.png" alt="We rebuild the table with the original values and create one more table."></p>
+<p>As usual we start a new transaction and we retrieve table contents to create the snapshot.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/12_session_a.png" alt="Once again we start a transaction and retrieve table contents."></p>
+<p>Now we go back to Session Red to update the contents of the whole table.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/13_session_b.png" alt="In another session, we modify table data."></p>
+<p>Returning to Session Blue, we “clone” the contents of the table <em>repeatable_read</em> to <em>repeatable_read_copy</em> table using an <em>insert into … select</em> statement. After that we retrieve the values of both tables using a select.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/14_session_a.png" alt="We do an insert as select to copy the table results and we find that rows are written with the modified values"></p>
+<p>The values of rows inserted into the copy table using an <em>insert into … as select</em> is <strong>different</strong> than the values of rows retrieved using a regular <em>select</em> statement. Once we commit the transaction, as expected, we are able to see the modified data in the original table too.</p>
+<p><img src="http://pythianblog.wpengine.com/wp-content/uploads/15_session_a.png" alt="Results now are as expected"></p>
+<h2 id="Conclusions"><a class="header-anchor" href="#Conclusions"></a>Conclusions</h2>
+<p>After these tests, we have found about MySQL implementation of <em>Repeatable-read</em> isolation level:</p>
+<ul>
+<li>When using just select statements is even more restrictive than SQL Standard, as <em>Phantom Reads</em> do not happen. Besides the snapshot is used for all tables and all rows, as we find while we use a <em>mysqldump with –single-transaction</em>.</li>
+<li>When the transaction modifies data, the behavior is a mix of <em>Repeatable-read</em> (rows not modified are not visible) and <em>Read committed</em> (modified rows are visible). We cannot say that this is not the standard as these situations are not described in it and do not fit in the three concurrency phenomena: <em>Dirty Read, Non-repeatable Read and Phantom Read</em>.</li>
+<li>When the transaction writes new data based on existing data, it uses the committed data, instead of the snapshot retrieved previously. This is valid both for modified and new rows, mimicking <em>Read committed</em> behavior.</li>
+</ul>
+<p>The way MySQL implements Repeatable Read is not intuitive and, although it is required to support statement replication, can lead to some problems while running data modification and transfer to other tables in concurrent transactions. If your application can face these issues, you will need to modify your queries using <em>select … for update</em> statements and thus increase the number of locks in the database.</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="https://blog.pythian.com/understanding-mysql-isolation-levels-repeatable-read/">Understanding MySQL Isolation Levels: Repeatable-Read</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/Transaction/" rel="tag"># Transaction</a>
+              <a href="/tags/Isolation-Level/" rel="tag"># Isolation Level</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-Repeatable-Read-tests"><span class="nav-text">MySQL Repeatable-Read tests</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#No-phantom-reads%E2%80%A6-only-phantom-writes"><span class="nav-text">No phantom reads… only phantom writes!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#More-phantom-writes"><span class="nav-text">More phantom writes!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WYSINWYW-What-you-see-is-NOT-what-you-write"><span class="nav-text">WYSINWYW (What you see is NOT what you write)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusions"><span class="nav-text">Conclusions</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

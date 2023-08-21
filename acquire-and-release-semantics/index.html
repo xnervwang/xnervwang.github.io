@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Acquire and Release Semantics（转载）">
+<meta property="og:url" content="https://xnerv.wang/acquire-and-release-semantics/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Generally speaking, in lock-free programming, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operat">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/read-acquire.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/write-release.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/acq-rel-barriers.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/platform-fences.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/analogy-small.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/cpp11-fences.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/cpp11-no-fences.png">
+<meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/acq-rel-lock.png">
+<meta property="article:published_time" content="2012-09-13T07:00:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:21.012Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="OS">
+<meta property="article:tag" content="Memory Barrier">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/read-acquire.png">
+
+<link rel="canonical" href="https://xnerv.wang/acquire-and-release-semantics/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>Acquire and Release Semantics（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/acquire-and-release-semantics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          Acquire and Release Semantics（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2012-09-13 00:00:00" itemprop="dateCreated datePublished" datetime="2012-09-13T00:00:00-07:00">2012-09-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OS/" itemprop="url" rel="index">
+                    <span itemprop="name">OS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <div class="entry-content">
+<p>Generally speaking, in <a target="_blank" rel="noopener" href="http://preshing.com/20120612/an-introduction-to-lock-free-programming">lock-free programming</a>, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operatively from one thread to another. Acquire and release semantics are crucial for the latter: reliable passing of information between threads. In fact, I would venture to guess that incorrect or missing acquire and release semantics is the <code>#1</code> type of lock-free programming error.</p>
+<a id="more"></a>
+<p>In this post, I’ll demonstrate various ways to achieve acquire and release semantics in C++. I’ll touch upon the C++11 atomic library standard in an introductory way, so you don’t already need to know it. And to be clear from the start, the information here pertains to lock-free programming <em>without</em> <a target="_blank" rel="noopener" href="http://preshing.com/20120612/an-introduction-to-lock-free-programming#sequential-consistency">sequential consistency</a>. We’re dealing directly with memory ordering in a multicore or multiprocessor environment.</p>
+<p>Unfortunately, the terms <em>acquire and release semantics</em> appear to be in even worse shape than the term <em>lock-free</em>, in that the more you scour the web, the more seemingly contradictory definitions you’ll find. Bruce Dawson offers a couple of good definitions (credited to Herb Sutter) about halfway through <a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/windows/desktop/ee418650.aspx">this white paper</a>. I’d like to offer a couple of definitions of my own, staying close to the principles behind C++11 atomics:</p>
+<blockquote>
+<p><strong>Acquire semantics</strong> is a property that can only apply to operations that <strong>read</strong> from shared memory, whether they are <a target="_blank" rel="noopener" href="http://preshing.com/20120612/an-introduction-to-lock-free-programming#atomic-rmw">read-modify-write</a> operations or plain loads. The operation is then considered a <strong>read-acquire</strong>. Acquire semantics prevent memory reordering of the read-acquire with any read or write operation that <strong>follows</strong> it in program order.<br>
+<img src="/assets/acquire-and-release-semantics/read-acquire.png" alt="read acquire "><br>
+<strong>Release semantics</strong> is a property that can only apply to operations that <strong>write</strong> to shared memory, whether they are read-modify-write operations or plain stores. The operation is then considered a <strong>write-release</strong>. Release semantics prevent memory reordering of the write-release with any read or write operation that <strong>precedes</strong> it in program order.<br>
+<img src="/assets/acquire-and-release-semantics/write-release.png" alt="write release"></p>
+</blockquote>
+<p>Once you digest the above definitions, it’s not hard to see that acquire and release semantics can be achieved using simple combinations of the memory barrier types I <a target="_blank" rel="noopener" href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations">described at length in my previous post</a>. The barriers must (somehow) be placed <em>after</em> the read-acquire operation, but <em>before</em> the write-release. <em>[Update: Please note that these barriers are technically more strict than what’s required for acquire and release semantics on a single memory operation, but they do achieve the desired effect.]</em></p>
+<center>
+<img src="/assets/acquire-and-release-semantics/acq-rel-barriers.png" alt="acq rel barriers"/>
+</center>
+<p>What’s cool is that neither acquire nor release semantics requires the use of a <code>#StoreLoad</code> barrier, which is often a more expensive memory barrier type. For example, on PowerPC, the <code>lwsync</code> (short for “lightweight sync”) instruction acts as all three <code>#LoadLoad</code>, <code>#LoadStore</code> and <code>#StoreStore</code> barriers at the same time, yet is less expensive than the <code>sync</code> instruction, which includes a <code>#StoreLoad</code> barrier.</p>
+<h2 id="With-Explicit-Platform-Specific-Fence-Instructions"><a class="header-anchor" href="#With-Explicit-Platform-Specific-Fence-Instructions"></a>With Explicit Platform-Specific Fence Instructions</h2>
+<p>One way to obtain the desired memory barriers is by issuing explicit fence instructions. Let’s start with a simple example. Suppose we’re coding for PowerPC, and <code>__lwsync()</code> is a compiler intrinsic function that emits the <code>lwsync</code> instruction. Since <code>lwsync</code> provides so many barrier types, we can use it in the following code to establish either acquire or release semantics as needed. In Thread 1, the store to <code>Ready</code> turns into a write-release, and in Thread 2, the load from <code>Ready</code> becomes a read-acquire.</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/platform-fences.png" alt="platform fences"/>
+</center>
+<p>If we let both threads run and find that <code>r1 == 1</code>, that serves as confirmation that the value of <code>A</code> assigned in Thread 1 was passed successfully to Thread 2. As such, we are guaranteed that <code>r2 == 42</code>. In my previous post, I already <a target="_blank" rel="noopener" href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations">gave a lengthy analogy</a> for <code>#LoadLoad</code> and <code>#StoreStore</code> to illustrate how this works, so I won’t rehash that explanation here.</p>
+<center>
+<a target="_blank" rel="noopener" href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations"><img src="/assets/acquire-and-release-semantics/analogy-small.png" alt="analogy small"/></a>
+</center>
+<p>In formal terms, we say that the store to <code>Ready</code> <em>synchronized-with</em> the load. I’ve written a separate post about <em>synchronizes-with</em> <a target="_blank" rel="noopener" href="http://preshing.com/20130823/the-synchronizes-with-relation">here</a>. For now, suffice to say that for this technique to work in general, the acquire and release semantics must apply to the same variable – in this case, <code>Ready</code> – and both the load and store must be atomic operations. Here, <code>Ready</code> is a simple aligned <code>int</code>, so the operations are already atomic on PowerPC.</p>
+<h2 id="With-Fences-in-Portable-C-11"><a class="header-anchor" href="#With-Fences-in-Portable-C-11"></a>With Fences in Portable C++11</h2>
+<p>The above example is compiler- and processor-specific. One approach for supporting multiple platforms is to convert the code to C++11. All C++11 identifiers exist in the <code>std</code> namespace, so to keep the following examples brief, let’s assume the statement <code>using namespace std;</code> was placed somewhere earlier in the code.</p>
+<p>C++11’s atomic library standard defines a portable function <code>atomic_thread_fence()</code> that takes a single argument to specify the type of fence. There are several possible values for this argument, but the values we’re most interested in here are <code>memory_order_acquire</code> and <code>memory_order_release</code>. We’ll use this function in place of <code>__lwsync()</code>.</p>
+<p>There’s one more change to make before this example is complete. On PowerPC, we knew that both operations on <code>Ready</code> were atomic, but we can’t make that assumption about every platform. To ensure atomicity on all platforms, we’ll change the type of <code>Ready</code> from <code>int</code> to <code>atomic&lt;int&gt;</code>. I know, it’s kind of a silly change, considering that aligned loads and stores of <code>int</code> are already atomic on every modern CPU that exists today. I’ll write more about this in the post on <a target="_blank" rel="noopener" href="http://preshing.com/20130823/the-synchronizes-with-relation"><em>synchronizes-with</em></a>, but for now, let’s do it for the warm fuzzy feeling of 100% correctness in theory. No changes to <code>A</code> are necessary.</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/cpp11-fences.png" alt="cpp11 fences"/>
+</center>
+<p>The <code>memory_order_relaxed</code> arguments above mean “ensure these operations are atomic, but don’t impose any ordering constraints/memory barriers that aren’t already there.”</p>
+<p>Once again, both of the above <code>atomic_thread_fence()</code> calls can be (and hopefully are) implemented as <code>lwsync</code> on PowerPC. Similarly, they could both emit a <code>dmb</code> instruction on ARM, which I believe is at least as effective as PowerPC’s <code>lwsync</code>. On x86/64, both <code>atomic_thread_fence()</code> calls can simply be implemented as <a target="_blank" rel="noopener" href="http://preshing.com/20120625/memory-ordering-at-compile-time">compiler barriers</a>, since <em>usually</em>, every load on x86/64 already implies acquire semantics and every store implies release semantics. This is why x86/64 is often said to be <a target="_blank" rel="noopener" href="http://preshing.com/20120930/weak-vs-strong-memory-models">strongly ordered</a>.</p>
+<h2 id="Without-Fences-in-Portable-C-11"><a class="header-anchor" href="#Without-Fences-in-Portable-C-11"></a>Without Fences in Portable C++11</h2>
+<p>In C++11, it’s possible to achieve acquire and release semantics on <code>Ready</code> without issuing explicit fence instructions. You just need to specify memory ordering constraints directly on the operations on <code>Ready</code>:</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/cpp11-no-fences.png" alt="cpp11 no fences"/>
+</center>
+<p>Think of it as rolling each fence instruction into the operations on <code>Ready</code> themselves. <em>[Update: Please note that this form is <a target="_blank" rel="noopener" href="http://preshing.com/20131125/acquire-and-release-fences-dont-work-the-way-youd-expect">not exactly the same</a> as the version using standalone fences; technically, it’s less strict.]</em> The compiler will emit any instructions necessary to obtain the required barrier effects. In particular, on Itanium, each operation can be easily implemented as a single instruction: <code>ld.acq</code> and <code>st.rel</code>. Just as before, <code>r1 == 1</code> indicates a <em>synchronizes-with</em> relationship, serving as confirmation that <code>r2 == 42</code>.</p>
+<p>This is actually the preferred way to express acquire and release semantics in C++11. In fact, the <code>atomic_thread_fence()</code> function used in the previous example was <a target="_blank" rel="noopener" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2633.html">added relatively late</a> in the creation of the standard.</p>
+<h2 id="Acquire-and-Release-While-Locking"><a class="header-anchor" href="#Acquire-and-Release-While-Locking"></a>Acquire and Release While Locking</h2>
+<p>As you can see, none of the examples in this post took advantage of the <code>#LoadStore</code> barriers provided by acquire and release semantics. Really, only the <code>#LoadLoad</code> and <code>#StoreStore</code> parts were necessary. That’s just because in this post, I chose a simple example to let us focus on API and syntax.</p>
+<p>One case in which the <code>#LoadStore</code> part becomes essential is when using acquire and release semantics to implement a (mutex) lock. In fact, this is where the names come from: acquiring a lock implies acquire semantics, while releasing a lock implies release semantics! All the memory operations in between are contained inside a nice little barrier sandwich, preventing any undesireable memory reordering across the boundaries.</p>
+<center>
+<img src="/assets/acquire-and-release-semantics/acq-rel-lock.png" alt="acq rel lock"/>
+</center>
+<p>Here, acquire and release semantics ensure that all modifications made while holding the lock will propagate fully to the next thread that obtains the lock. Every implementation of a lock, even one you <a target="_blank" rel="noopener" href="http://preshing.com/20120226/roll-your-own-lightweight-mutex">roll on your own</a>, should provide these guarantees. Again, it’s all about passing information reliably between threads, especially in a multicore or multiprocessor environment.</p>
+<p>In a followup post, I’ll show a <a target="_blank" rel="noopener" href="http://preshing.com/20121019/this-is-why-they-call-it-a-weakly-ordered-cpu">working demonstration</a> of C++11 code, running on real hardware, which can be plainly observed to break if acquire and release semantics are not used.</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/acquire-and-release-semantics/">http://xnerv.wang/acquire-and-release-semantics/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://preshing.com/20120913/acquire-and-release-semantics/">Acquire and Release Semantics</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/OS/" rel="tag"># OS</a>
+              <a href="/tags/Memory-Barrier/" rel="tag"># Memory Barrier</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#With-Explicit-Platform-Specific-Fence-Instructions"><span class="nav-text">With Explicit Platform-Specific Fence Instructions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#With-Fences-in-Portable-C-11"><span class="nav-text">With Fences in Portable C++11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Without-Fences-in-Portable-C-11"><span class="nav-text">Without Fences in Portable C++11</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Acquire-and-Release-While-Locking"><span class="nav-text">Acquire and Release While Locking</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

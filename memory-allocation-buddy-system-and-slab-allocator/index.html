@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存分配-----伙伴算法和slab算法（转载）">
+<meta property="og:url" content="https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="内存管理问题 内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题): 内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并. 解决方法:  小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法) 伙伴算法. slab">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png">
+<meta property="og:image" content="https://xnerv.wang/assets/memory-allocation-buddy-system-and-slab-allocator/slab.png">
+<meta property="article:published_time" content="2014-01-02T17:39:03.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:19.905Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="Heap">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Memory Management">
+<meta property="article:tag" content="Buddy System">
+<meta property="article:tag" content="Slab Allocator">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png">
+
+<link rel="canonical" href="https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>内存分配-----伙伴算法和slab算法（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          内存分配-----伙伴算法和slab算法（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2014-01-02 09:39:03" itemprop="dateCreated datePublished" datetime="2014-01-02T09:39:03-08:00">2014-01-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="内存管理问题"><a class="header-anchor" href="#内存管理问题"></a>内存管理问题</h2>
+<p>内存碎片大小和管理内存碎片的效率问题(即空间和时间效率的问题):<br>
+内存碎片是指当回收一块内存时,一般将内存直接放入free链表中,由于内存越分配越小,内存块就会特别多而且特别小,当需要一块大的内存块的时候无法找到.原因就在于回收内存的时候,不能把相邻两块可用内存合并.</p>
+<p>解决方法:</p>
+<ol>
+<li>小块内存单独分配,大块内存有系统自动分配.(nginx和stl就是使用这种方法)</li>
+<li>伙伴算法.</li>
+<li>slab算法.</li>
+</ol>
+<a id="more"></a>
+<h2 id="伙伴算法"><a class="header-anchor" href="#伙伴算法"></a>伙伴算法</h2>
+<ol>
+<li>将空闲页面分为m个组,第1组存储2<sup>0个单位的内存块,第2组存储2</sup>1个单位的内存块,第3组存储2<sup>2个单位的内存块,第4组存储2</sup>3个单位的内存块,以此类推.直到m组.</li>
+<li>每个组是一个链表,用于连接同等大小的内存块.</li>
+<li>伙伴块的大小是相等的,并且第1块和第2块是伙伴,第三块和第四块是伙伴.以此类推.</li>
+</ol>
+<center>
+<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/buddy.png" alt="buddy system"/>
+</center>
+<h3 id="伙伴算法分配内存"><a class="header-anchor" href="#伙伴算法分配内存"></a>伙伴算法分配内存</h3>
+<p>若申请的内存大小为n则将n向上取整为2的幂设次数为s,则需要分配s大小的内存块,定位大相应数组,</p>
+<ol>
+<li>如果该数组有剩余内存块,则分配出去.</li>
+<li>若没有剩余内存块就沿数组向上查找,然后再将该内存块分割出来s并将剩余的内存块放入相应大小的数组中.</li>
+</ol>
+<p>例如分配5大小的内存块<br>
+-----------&gt;定位到大小为8的链表中 --------&gt;若该链表中之中没有空余元素,则定位到16的链表中,16中有剩余元素,则取出该元素,并分割出大小为8的内存块供用户使用,然后将剩余的8连接到大小为8的数组中.</p>
+<h3 id="伙伴算法的内存合并"><a class="header-anchor" href="#伙伴算法的内存合并"></a>伙伴算法的内存合并</h3>
+<p>当用户用完内存后会归还,然后根据该内存块实际大小(向上取整为2的幂)归入链表中,在归入之前,</p>
+<ol>
+<li>我们还要检测他的伙伴内存块是否空闲,</li>
+<li>如果空闲就合并在一起,合并后转到1,继续执行.</li>
+<li>若果不是空闲的就直接归入链表中.</li>
+</ol>
+<p>一般来说,伙伴算法实现中会用位图记录内存块是否被使用,用于伙伴内存的合并.</p>
+<h3 id="伙伴算法的特点"><a class="header-anchor" href="#伙伴算法的特点"></a>伙伴算法的特点</h3>
+<p>显而易见,伙伴算法会浪费大量的内存,(如果需要大小为9的内存块必须分配大小为16的内存块).而优点也是明显的,分配和合并算法都很简单易行.但是,当分配和回收较快的时候,例如分配大小为9的内存块,此时分配16,然后又回收,即合并伙伴内存块,这样会造成不必要的cpu浪费,应该设置链表中内存块的低潮个数,即当链表中内存块个数小于某个值的时候,并不合并伙伴内存块,只要当高于低潮个数的时候才合并.</p>
+<h2 id="slab算法"><a class="header-anchor" href="#slab算法"></a>slab算法</h2>
+<p>一般来说,伙伴算法的改进算法用于操作系统分配和回收内存,而且内存块的单位较大,利于Linux使用的伙伴算法以页为单位.对于小块内存的分配和回收,伙伴算法就显得有些得不偿失了.</p>
+<p>对于小块内存,一般采用slab算法,或者叫做slab机制.</p>
+<p>Linux 所使用的 slab 分配器的基础是 Jeff Bonwick 为SunOS 操作系统首次引入的一种算法。Jeff的分配器是围绕对象缓存进行的。在内核中，会为有限的对象集（例如文件描述符和其他常见结构）分配大量内存。Jeff发现对内核中普通对象进行初始化所需的时间超过了对其进行分配和释放所需的时间。因此他的结论是不应该将内存释放回一个全局的内存池，而是将内存保持为针对特定目而初始化的状态。例如，如果内存被分配给了一个互斥锁，那么只需在为互斥锁首次分配内存时执行一次互斥锁初始化函数（mutex_init）即可。后续的内存分配不需要执行这个初始化函数，因为从上次释放和调用析构之后，它已经处于所需的状态中了。</p>
+<p>Linux slab分配器使用了这种思想和其他一些思想来构建一个在空间和时间上都具有高效性的内存分配器。</p>
+<center>
+<img src="/assets/memory-allocation-buddy-system-and-slab-allocator/slab.png" alt="slab allocator"/>
+</center>
+<p>图中给出了 slab结构的高层组织结构。在最高层是 cache_chain，这是一个 slab 缓存的链接列表。这对于 best-fit算法非常有用，可以用来查找最适合所需要的分配大小的缓存（遍历列表）。cache_chain 的每个元素都是一个 kmem_cache 结构的引用（称为一个 cache）。它定义了一个要管理的给定大小的对象池。</p>
+<p>每个缓存都包含了一个 slabs 列表，这是一段连续的内存块（通常都是页面）。存在3 种 slab：<br>
+<strong>slabs_full</strong>: 完全分配的slab<br>
+<strong>slabs_partial</strong>: 部分分配的slab<br>
+<strong>slabs_empty</strong>: 空slab，或者没有对象被分配</p>
+<p>slab 列表中的每个 slab都是一个连续的内存块（一个或多个连续页），它们被划分成一个个对象。这些对象是从特定缓存中进行分配和释放的基本元素。注意 slab 是 slab分配器进行操作的最小分配单位，因此如果需要对 slab 进行扩展，这也就是所扩展的最小值。通常来说，每个 slab 被分配为多个对象。</p>
+<p>由于对象是从 slab 中进行分配和释放的，因此单个 slab 可以在 slab列表之间进行移动。例如，当一个 slab中的所有对象都被使用完时，就从slabs_partial 列表中移动到 slabs_full 列表中。当一个 slab完全被分配并且有对象被释放后，就从 slabs_full 列表中移动到slabs_partial 列表中。当所有对象都被释放之后，就从 slabs_partial 列表移动到 slabs_empty 列表中。</p>
+<h3 id="slab背后的动机"><a class="header-anchor" href="#slab背后的动机"></a>slab背后的动机</h3>
+<p>与传统的内存管理模式相比， slab缓存分配器提供了很多优点。首先，内核通常依赖于对小对象的分配，它们会在系统生命周期内进行无数次分配。slab缓存分配器通过对类似大小的对象进行缓存而提供这种功能，从而避免了常见的碎片问题。slab分配器还支持通用对象的初始化，从而避免了为同一目而对一个对象重复进行初始化。最后，slab分配器还可以支持硬件缓存对齐和着色，这允许不同缓存中的对象占用相同的缓存行，从而提高缓存的利用率并获得更好的性能。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/u013009575/article/details/17751147">内存分配-----伙伴算法和slab算法</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/Heap/" rel="tag"># Heap</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+              <a href="/tags/Buddy-System/" rel="tag"># Buddy System</a>
+              <a href="/tags/Slab-Allocator/" rel="tag"># Slab Allocator</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E9%97%AE%E9%A2%98"><span class="nav-text">内存管理问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%99%E4%BC%B4%E7%AE%97%E6%B3%95"><span class="nav-text">伙伴算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%99%E4%BC%B4%E7%AE%97%E6%B3%95%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="nav-text">伙伴算法分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%99%E4%BC%B4%E7%AE%97%E6%B3%95%E7%9A%84%E5%86%85%E5%AD%98%E5%90%88%E5%B9%B6"><span class="nav-text">伙伴算法的内存合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%99%E4%BC%B4%E7%AE%97%E6%B3%95%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-text">伙伴算法的特点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#slab%E7%AE%97%E6%B3%95"><span class="nav-text">slab算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#slab%E8%83%8C%E5%90%8E%E7%9A%84%E5%8A%A8%E6%9C%BA"><span class="nav-text">slab背后的动机</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

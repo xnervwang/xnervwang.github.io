@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Randy Kath Microsoft Developer Network Technology Group Created: April 3, 1993 Abstract Determining which function or set of functions to use for managing memory in your application is difficult witho">
+<meta property="og:type" content="article">
+<meta property="og:title" content="(MSDN) Managing Heap Memory">
+<meta property="og:url" content="https://xnerv.wang/msdn-managing-heap-memory/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="Randy Kath Microsoft Developer Network Technology Group Created: April 3, 1993 Abstract Determining which function or set of functions to use for managing memory in your application is difficult witho">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/1.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/2.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/3.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/4.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/5.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/6.gif">
+<meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/7.gif">
+<meta property="article:published_time" content="2017-11-14T06:18:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:20.170Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Heap">
+<meta property="article:tag" content="MSDN">
+<meta property="article:tag" content="Memory Management">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xnerv.wang/assets/msdn-managing-heap-memory/1.gif">
+
+<link rel="canonical" href="https://xnerv.wang/msdn-managing-heap-memory/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>(MSDN) Managing Heap Memory | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/msdn-managing-heap-memory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          (MSDN) Managing Heap Memory
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-13 22:18:00" itemprop="dateCreated datePublished" datetime="2017-11-13T22:18:00-08:00">2017-11-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Randy Kath<br>
+Microsoft Developer Network Technology Group</p>
+<p>Created: April 3, 1993</p>
+<h2 id="Abstract"><a class="header-anchor" href="#Abstract"></a>Abstract</h2>
+<p>Determining which function or set of functions to use for managing memory in your application is difficult without a solid understanding of how each group of functions works and the overall impact they each have on the operating system. In an effort to simplify these decisions, this technical article focuses on the use of heaps in Windows: the functions that are available, the way they are used, and the impact their use has on operating system resources. The following topics are discussed:</p>
+<ul>
+<li>The purpose of heaps</li>
+<li>General heap behavior</li>
+<li>The two types of heaps</li>
+<li>Global and local memory functions</li>
+<li>Heap memory functions</li>
+<li>Overhead on heap memory allocations</li>
+<li>Summary and recommendations</li>
+</ul>
+<p>In addition to this technical article, a sample application called ProcessWalker is included on the Microsoft Developer Network CD. This sample application explores the behavior of heap memory functions in a process, and it provides several useful implementation examples.</p>
+<a id="more"></a>
+<h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
+<p>This is one of three related technical articles—“Managing Virtual Memory,” “Managing Memory-Mapped Files,” and “Managing Heap Memory”—that explain how to manage memory using the Windows API (application programming interface). This introduction identifies the basic memory components in the programming model and indicates which article to reference for specific areas of interest.</p>
+<p>The first version of the Microsoft® Windows™ operating system introduced a method of managing dynamic memory based on a single <em>global heap</em>, which all applications and the system share, and multiple, private <em>local heaps</em>, one for each application. Local and global memory management functions were also provided, offering extended features for this new memory management system. More recently, the Microsoft C run-time (CRT) libraries were modified to include capabilities for managing these heaps in Windows using native CRT functions such as <strong>malloc</strong> and <strong>free</strong>. Consequently, developers are now left with a choice—learn the new API provided as part of Windows version 3.1 or stick to the portable, and typically familiar, CRT functions for managing memory in applications written for 16-bit Windows.</p>
+<p>Windows offers three groups of functions for managing memory in applications: memory-mapped file functions, heap memory functions, and virtual memory functions.</p>
+<p><img src="/assets/msdn-managing-heap-memory/1.gif" alt=""></p>
+<p><strong>Figure 1. The Windows API provides different levels of memory management for versatility in application programming.</strong></p>
+<p>Six sets of memory management functions exist in Windows, as shown in Figure 1, all of which were designed to be used independently of one another. So which set of functions should you use? The answer to this question depends greatly on two things: the type of memory management you want, and how the functions relevant to it are implemented in the operating system. In other words, are you building a large database application where you plan to manipulate subsets of a large memory structure? Or maybe you’re planning some simple dynamic memory structures, such as linked lists or binary trees? In both cases, you need to know which functions offer the features best suited to your intention and exactly how much of a resource hit occurs when using each function.</p>
+<p>The following table categorizes the memory management function groups and indicates which of the three technical articles in this series describes each group’s behavior. Each technical article emphasizes the impact these functions have on the system by describing the behavior of the system in response to using the functions.</p>
+<table>
+<thead>
+<tr>
+<th>Memory set</th>
+<th>System resource affected</th>
+<th>Related technical article</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virtual memory functions</td>
+<td>A process’s virtual address space<br/>System pagefile<br/>System memory<br/>Hard disk space</td>
+<td>“Managing Virtual Memory”</td>
+</tr>
+<tr>
+<td>Memory-mapped file functions</td>
+<td>A process’s virtual address space<br/>System pagefile<br/>Standard file I/O<br/>System memory<br/>Hard disk space</td>
+<td>“Managing Memory-Mapped Files”</td>
+</tr>
+<tr>
+<td>Heap memory functions</td>
+<td>A process’s virtual address space<br/>System memory<br/>Process heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+<tr>
+<td>Global heap memory functions</td>
+<td>A process’s heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+<tr>
+<td>Local heap memory functions</td>
+<td>A process’s heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+<tr>
+<td>C run-time reference library</td>
+<td>A process’s heap resource structure</td>
+<td>“Managing Heap Memory”</td>
+</tr>
+</tbody>
+</table>
+<p>Each technical article discusses issues surrounding the use of Windows-specific functions.</p>
+<h2 id="The-Purpose-of-Heaps"><a class="header-anchor" href="#The-Purpose-of-Heaps"></a>The Purpose of Heaps</h2>
+<p>The Windows subsystem on Windows NT provides high-level memory management functions that make it easy for applications to build dynamic data structures, provide compatibility with previous versions of Windows, and create buffers and temporary placeholders for system functions. These memory management functions return handles and pointers to blocks of memory that are allocated at run time and managed by an entity called the <em>heap</em>. The heap’s primary function is to efficiently manage the memory and address space of a process for an application.</p>
+<p>A tall order, considering the heap has absolutely no idea what the application intends to do with its memory and address space. Yet the heap manages to provide a robust set of functions that allow developers to overlook some of the finer details of system resources (such as the difference between reserved, free, and committed memory) so that they can turn their attention to the more important task at hand, that of implementing their applications.</p>
+<p>In Windows NT, heaps provide a smaller granularity for the size of the smallest allocatable chunk of memory than the virtual memory management functions do. Applications typically need to allocate a specific number of bytes to fulfill a parameter request or to act as a temporary buffer. For example, when loading a string resource with the <strong>LoadString</strong> function, an application passes a pointer to a buffer that receives the string resource. The size of the buffer must be large enough to hold the string and a null terminator. Without the heap manager, applications would be forced to use the virtual memory management functions, which allocate a minimum of one page of memory at a time.</p>
+<h2 id="General-Heap-Behavior"><a class="header-anchor" href="#General-Heap-Behavior"></a>General Heap Behavior</h2>
+<p>While the heap does provide support for managing smaller chunks of memory, it is itself nothing more than a chunk of memory implemented in the Windows NT virtual memory system. Consequently, the techniques that the heap uses to manage memory are based on the virtual memory management functions available to the heap. Evidence of this is found in the way heaps manifest themselves in a process, if only we could observe this behavior…</p>
+<p>The ProcessWalker (PW) sample application explores each of the components within a process, including all of its heaps. PW identifies the heaps in a process and shows the amount of reserved and committed memory associated with a particular heap. As with all other regions of memory in a process, the smallest region of committed memory within a heap is one page (4096 bytes).</p>
+<p>This does not mean that the smallest amount of memory that can be allocated in a heap is 4096 bytes; rather, the heap manager commits pages of memory as needed to satisfy specific allocation requests. If, for example, an application allocates 100 bytes via a call to <strong>GlobalAlloc</strong>, the heap manager allocates a 100-byte chunk of memory within its committed region for this request. If there is not enough committed memory available at the time of the request, the heap manager simply commits another page to make the memory available.</p>
+<p>Ideally, then, if an application repetitively allocates 100-byte chunks of memory, the heap will commit an additional page of memory every forty-first request (40 * 100 bytes = 4000 bytes). Upon the forty-first request for a chunk of 100 bytes, the heap manager realizes there is not enough committed memory to satisfy the request, so it commits another page of memory and then completes the requested allocation. In this way, the heap manager is responsible for managing the virtual memory environment completely transparent of the application.</p>
+<p>In reality, though, the heap manager requires additional memory for managing the memory in the heap. So instead of allocating only 100 bytes as requested, it also allocates some space for managing each particular chunk of memory. The type of memory and the size of the allocation determine the size of this additional memory. I’ll discuss these issues later in this article.</p>
+<h2 id="The-two-Types-of-Heaps"><a class="header-anchor" href="#The-two-Types-of-Heaps"></a>The two Types of Heaps</h2>
+<p>Every process in Windows has one heap called the <em>default heap</em>. Processes can also have as many other <em>dynamic heaps</em> as they wish, simply by creating and destroying them on the fly. The system uses the default heap for all global and local memory management functions, and the C run-time library uses the default heap for supporting <strong>malloc</strong> functions. The heap memory functions, which indicate a specific heap by its handle, use dynamic heaps. The behavior of dynamic heaps is discussed in the “Heap Memory API” section later in this article.</p>
+<p>The default and dynamic heaps are basically the same thing, but the default heap has the special characteristic of being identifiable as the default. This is how the C run-time library and the system identify which heap to allocate from. The <strong>GetProcessHeap</strong> function returns a handle to the default heap for a process. Since functions such as <strong>GlobalAlloc</strong> or <strong>malloc</strong> are executed within the context of the thread that called them, they can simply call <strong>GetProcessHeap</strong> to retrieve a handle to the default heap, and then manage memory accordingly.</p>
+<h3 id="Managing-the-Default-Heap"><a class="header-anchor" href="#Managing-the-Default-Heap"></a>Managing the Default Heap</h3>
+<p>Both default and dynamic heaps have a specific amount of reserved and committed memory regions associated with them, but they behave differently with respect to these limits. The default heap’s reserved and committed memory region sizes are designated when the application is linked. Each application carries this information about itself within its executable image information. You can view this information by dumping header information for the executable image. For example, type the following command at a Windows NT command prompt (PWALK.EXE is used here to complete the example; you will need to substitute your own path and executable file):</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">link32 -dump -headers d:\samples\walker\pwalk.exe</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">OPTIONAL HEADER VALUES</span><br><span class="line">     10B magic #</span><br><span class="line">    2.29 linker version</span><br><span class="line">    B000 size of code</span><br><span class="line">   1E800 size of initialized data</span><br><span class="line">     600 size of uninitialized data</span><br><span class="line">   18470 address of entry point</span><br><span class="line">   10000 base of code</span><br><span class="line">   20000 base of data</span><br><span class="line">         ----- new -----</span><br><span class="line">  400000 image base</span><br><span class="line">   10000 section alignment</span><br><span class="line">     200 file alignment</span><br><span class="line">       2 subsystem (Windows GUI)</span><br><span class="line">     0.B operating system version</span><br><span class="line">     1.0 image version</span><br><span class="line">     3.A subsystem version</span><br><span class="line">   C0000 size of image</span><br><span class="line">     400 size of headers</span><br><span class="line">       0 checksum</span><br><span class="line">   10000 size of stack reserve</span><br><span class="line">    1000 size of stack commit</span><br><span class="line">   10000 size of heap reserve</span><br><span class="line">    1000 size of heap commit</span><br><span class="line">   ...</span><br></pre></td></tr></table></figure>
+<p>The last two entries are hexadecimal values specifying the amount of reserved and committed space initially needed by the application.</p>
+<p>There are two ways to tell the linker what to use for these values. You can link your application with a module definition file and include a statement in the file like the following:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HEAPSIZE   0x10000 0x1000</span><br></pre></td></tr></table></figure>
+<p>Or you can directly inform the linker by using the <strong>/HEAP</strong> linker switch, as in:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/HEAP: 0x10000, 0x1000</span><br></pre></td></tr></table></figure>
+<p>In both examples, the heap is specified to initially have 0x10000 (64K) bytes reserved address space and 0x1000 (4K) bytes committed memory. If you fail to indicate the heap size in either method, the linker uses the default values of 0x100000 (1 MB) reserved address space and 0x1000 (4K) committed memory.</p>
+<p>The linker accepts almost any value for heap reserve space, because the application loader ensures that the application will meet certain minimum requirements during the load process. In other words, you can link an application with an initial heap value of 1 page reserved address space. The linker doesn’t perform any data validation; it simply marks the executable with the given value. Yet, since the minimum range of address space that can be reserved is 16 pages (64K), the loader compensates by reserving 16 pages for the application heap at load time.</p>
+<p>As indicated above, options exist that indicate how much memory should initially be committed for an application’s default heap. The problem is they don’t seem to work yet. The linker for the second beta release of Windows NT marks all executable applications with 0x1000 (4K) initial committed memory for the default heap size, regardless of the value indicated as an option. Yet this is not that big a deal because it actually may be better for an application to commit as it needs to, rather than to commit memory that is not being used.</p>
+<h3 id="A-Default-Heap-That-Grows-and-Spreads"><a class="header-anchor" href="#A-Default-Heap-That-Grows-and-Spreads"></a>A Default Heap That Grows and Spreads</h3>
+<p>In its simplest form, the default heap spans a range of addresses. Some ranges are reserved, while others are committed and have pages of memory associated with them. In this case the addresses are contiguous, and they all originated from the same base allocation address. In some cases the default heap needs to allocate more memory than is available in its current reserved address space. For these cases the heap can either fail the call that requests the memory, or reserve an additional address range elsewhere in the process. The default heap manager opts for the second choice.</p>
+<p>When the default heap needs more memory than is currently available, it reserves another 1-MB address range in the process. It also initially commits as much memory as it needs from this reserved address range to satisfy the allocation request. The default heap manager is then responsible for managing this new memory region as well as the original heap space. If necessary, it will repeat this throughout the application until the process runs out of memory and address space. You could end up with a default heap that manifests itself in your process in a manner similar to the heap represented in Figure 2.</p>
+<p><img src="/assets/msdn-managing-heap-memory/2.gif" alt=""></p>
+<p><strong>Figure 2. The default heap for each process can expand into free address regions within the process.</strong></p>
+<p>So the default heap is not really a static heap at all. In fact, it may seem like a waste of energy to bother with managing the size of the initial heap since the heap always behaves in the same way after initialization. Managing the size of the default heap offers one advantage, though. It takes time to locate and reserve a new range of addresses in a process; you can save time by simply reserving a large enough address range initially. If you expect your application to require more heap space than the 1-MB default, reserve more address space initially to avoid allocating another region of addresses in your process later. Remember, each application has 2 gigabytes (GB) of address space to work with, and requires very little physical memory to support it.</p>
+<h2 id="Global-and-Local-Memory-Functions"><a class="header-anchor" href="#Global-and-Local-Memory-Functions"></a>Global and Local Memory Functions</h2>
+<p>At first glance it appears that the local and global memory management functions exist in Windows purely for backward compatibility with Windows version 3.1. This may be true, but the functions are managed as efficiently as the new heap functions discussed below. In fact, porting an application from 16-bit Windows does not necessarily include migrating from global and local memory functions to heap memory functions. The global and local functions offer the same basic capabilities (and then some) and are just as fast to work with. If anything, they are probably more convenient to work with because you do not have to keep track of a heap handle.</p>
+<p>Nonetheless, the implementation of these functions is not the same as it was for 16-bit Windows. 16-bit Windows had a global heap, and each application had a local heap. Those two heap managers implemented the global and local functions. Allocating memory via <strong>GlobalAlloc</strong> meant retrieving a chunk of memory from the global heap, while <strong>LocalAlloc</strong> allocated memory from the local heap. Windows now has a single heap for both types of functions—the default heap described above.</p>
+<p>Now you’re probably wondering if there is any difference between the local and global functions themselves. Well, the answer is no, they are now the same. In fact, they are interchangeable. Memory allocated via a call to <strong>LocalAlloc</strong> can be reallocated with <strong>GlobalReAlloc</strong> and then locked by <strong>LocalLock</strong>. The following table lists the global and local functions now available.</p>
+<table>
+<thead>
+<tr>
+<th>Global memory functions</th>
+<th>Local memory functions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GlobalAlloc</td>
+<td>LocalAlloc</td>
+</tr>
+<tr>
+<td>GlobalDiscard</td>
+<td>LocalDiscard</td>
+</tr>
+<tr>
+<td>GlobalFlags</td>
+<td>LocalFlags</td>
+</tr>
+<tr>
+<td>GlobalFree</td>
+<td>LocalFree</td>
+</tr>
+<tr>
+<td>GlobalHandle</td>
+<td>LocalHandle</td>
+</tr>
+<tr>
+<td>GlobalLock</td>
+<td>LocalLock</td>
+</tr>
+<tr>
+<td>GlobalReAlloc</td>
+<td>LocalReAlloc</td>
+</tr>
+<tr>
+<td>GlobalSize</td>
+<td>LocalSize</td>
+</tr>
+<tr>
+<td>GlobalUnlock</td>
+<td>LocalUnlock</td>
+</tr>
+</tbody>
+</table>
+<p>It seems redundant to have two sets of functions that perform exactly the same, but that’s where the backward compatibility comes in. Whether you used the global or local functions in a 16-bit Windows application before doesn’t matter now—they are equally efficient.</p>
+<h3 id="Types-of-Global-and-Local-Memory"><a class="header-anchor" href="#Types-of-Global-and-Local-Memory"></a>Types of Global and Local Memory</h3>
+<p>In the Windows API, the global and local memory management functions provide two types of memory, MOVEABLE and FIXED. MOVEABLE memory can be further qualified as DISCARDABLE memory. When you allocate memory with either <strong>GlobalAlloc</strong> or <strong>LocalAlloc</strong>, you designate the type of memory you want by supplying the appropriate memory flag. The following table lists and describes each memory flag for global and local memory.</p>
+<p>| Global memory flag | Local memory flag | Allocation meaning |<br>
+| — | — |<br>
+| GMEM_FIXED | LMEM_FIXED | Allocate fixed memory. |<br>
+| GMEM_MOVEABLE | LMEM_MOVEABLE | Allocate movable memory. |<br>
+| GMEM_DISCARDABLE | LMEM_DISCARDABLE | Allocate discardable, movable memory. |<br>
+| GMEM_ZEROINIT | LMEM_ZEROINIT | Initialize memory to zeros during allocation. |<br>
+| GMEM_NODISCARD | LMEM_NODISCARD | Do not discard other memory to meet the needs of this allocation; instead, fail this request. |<br>
+| GMEM_NOCOMPACT | LMEM_NOCOMPACT | Do not discard or move other memory to meet the needs of this allocation; instead, fail this request. |<br>
+| GMEM_SHARE, GMEM_DDESHARE | N/A | Allocate global memory that is more efficient to use with DDE. |</p>
+<p>It is surprising that the distinction between FIXED and MOVEABLE memory still exists in these functions. In 16-bit Windows, MOVEABLE memory compacted the local and global heaps to reduce fragmentation and make more memory available to all applications. Yet the Windows NT virtual memory system does not rely on these techniques for efficient memory management and has little to gain by applications using them. In any case, they still exist and could actually be used in some circumstances.</p>
+<p>When allocating FIXED memory in Windows, the <strong>GlobalAlloc</strong> and <strong>LocalAlloc</strong> functions return a 32-bit pointer to the memory block rather than a handle as they do for MOVEABLE memory. The pointer can directly access the memory without having to lock it first. This pointer can also be passed to the <strong>GlobalFree</strong> and <strong>LocalFree</strong> functions to release the memory without having to first retrieve the handle by calling the <strong>GlobalHandle</strong> function. With FIXED memory, allocating and freeing memory is similar to using the C run-time functions <strong>_malloc</strong> and <strong>_free</strong>.</p>
+<p>MOVEABLE memory, on the other hand, cannot provide this luxury. Because MOVEABLE memory can be moved (and DISCARDABLE memory can be discarded), the heap manager needs a handle to identify the chunk of memory to move or discard. To access the memory, the handle must first be locked by calling either <strong>GlobalLock</strong> or <strong>LocalLock</strong>. As in 16-bit Windows, the memory cannot be moved or discarded while the handle is locked.</p>
+<h3 id="The-MOVEABLE-Memory-Handle-Table"><a class="header-anchor" href="#The-MOVEABLE-Memory-Handle-Table"></a>The MOVEABLE Memory Handle Table</h3>
+<p>As it turns out, each handle to MOVEABLE memory is actually a pointer into the MOVEABLE memory handle table. The handle table exists outside the heap, elsewhere in the process’s address space. To learn more about this behavior, we created a test application that allocates several MOVEABLE memory blocks from the default heap. The handle table was created only upon allocation of the first MOVEABLE chunk of memory. This is nice, because if you never allocate any MOVEABLE memory, the table is never created and does not waste memory. ProcessWalker reveals that when this handle table is created, 1 page of memory is committed for the initial table and 512K of address space is reserved (see Figure 3).</p>
+<p><img src="/assets/msdn-managing-heap-memory/3.gif" alt=""></p>
+<p><strong>Figure 3. ProcessWalker highlights changes in the address space of a process. The heap memory handle table is shown as it looks immediately after it is created.</strong></p>
+<p>If you work out the math you can see that the number of memory handles available for MOVEABLE memory is limited. 512K bytes / 8 bytes per handle = 65,535 handles. In fact, the system imposes this limitation on each process. Fortunately, this only applies to MOVEABLE memory. You can allocate as many chunks of FIXED memory as you like, provided the memory and address space are available in your process.</p>
+<p>Each handle requires 8 bytes of committed memory in the handle table to represent information, including the virtual address of the memory, the lock count on the handle, and the type of memory. Figure 4 shows how the handle table looks when viewed in ProcessWalker.</p>
+<p><img src="/assets/msdn-managing-heap-memory/4.gif" alt=""></p>
+<p><strong>Figure 4. Each MOVEABLE memory handle is 8 bytes and represents the location of the chunk of memory.</strong></p>
+<blockquote>
+<p><strong>Note</strong>   In the ProcessWalker view window, each line is 16 bytes (two memory handles). The far-left column represents the address of each line within the process. The addresses in white indicate the lines in which data changed since the last refresh. Red text shows exactly which bytes changed. This feature allows you to easily track changes in memory in response to certain events within the child process. A very useful debugging tool, to say the least.</p>
+</blockquote>
+<p>The first 8 bytes in the view window—at address 0x000f0000—show the first handle allocated in the table. The handle value for this example would actually be 0x000f0004, which is a 4-byte offset into the 8-byte handle table entry. At the 4-byte offset in the table entry is the current 32-bit address representing the location of the chunk of memory. In this example, the 32-bit address is 0x00042A70, reading 4 bytes from right to left starting at 0x000f0008 and ending at 0x000f0004. If the memory is moved to a new location, this address changes to reflect the new location.</p>
+<p>If you back up 4 bytes from the handle to the first byte in this handle table entry, you’ll find the lock count for the handle. Remember, a block of memory can be moved or discarded only if its handle’s lock count is zero. Since there is only 1 byte to record the lock count, it stands to reason that a handle can be locked only 256 (0xFF) times. Unfortunately, the system currently does not warn you when you reach that limit. If you lock a handle a 257th time, you receive a valid pointer to the memory, but the lock count remains at 256. It is possible, then, that you could unlock the handle 256 times and expect the memory to be locked. Yet the lock count is decremented to 0, and the memory could be moved or discarded. So what happens if you try to access the pointer you believe to be valid? Well, it depends on what is now at the address where you believe the memory to be. The memory could still be there, or some other memory could have been moved there. This is not the desired behavior, and we hope the system will be fixed to prevent this from happening. Incidentally, how should the system be fixed? The easiest thing to do would be to fail the call to <strong>GlobalLock</strong> or <strong>LocalLock</strong> on any attempt beyond 256, so check the return value to make sure the function succeeds.</p>
+<p>The third and fourth bytes of the handle represent the memory type, that is, MOVEABLE, DDESHARE, or DISCARDABLE. Presumably because of compatibility with 16-bit Windows, local and global memory flags that have the same name and meaning do not have the same value. (The WINBASE.H header file defines each flag.) Yet once the memory is allocated, the handle table entry records no difference. Whether you use LMEM_DISCARDABLE or GMEM_DISCARDABLE does not matter—the handle table identifies all DISCARDABLE memory the same way. A little exploring in ProcessWalker shows the following type value identifiers.</p>
+<table>
+<thead>
+<tr>
+<th>Memory type</th>
+<th>Byte 3</th>
+<th>Byte 4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MOVEABLE</td>
+<td>02</td>
+<td>–</td>
+</tr>
+<tr>
+<td>DISCARDABLE</td>
+<td>06</td>
+<td>–</td>
+</tr>
+<tr>
+<td>DDESHARE</td>
+<td>–</td>
+<td>08</td>
+</tr>
+</tbody>
+</table>
+<p>Keep in mind that these values as represented in the handle table are not documented, so they could change with a new release of Windows NT. But it would be easy to use ProcessWalker to view the handle table to see the changes.</p>
+<p>Returning to the test application example… After allocating the first MOVEABLE memory block and thereby creating the handle table, we used the test application to allocate 15 more handles from the table. A quick view of the memory window showed the first eight lines had data associated with them, while the rest of the committed page was filled with zeros. Then we allocated one more handle, making a total of 17 handles. The view window was refreshed to indicate what changes occurred in the table as a result of allocating the seventeenth handle only. Figure 4 (above) shows the results.</p>
+<p>As you can see, more than 8 bytes changed during the last allocation. In fact, 8 lines were updated for a total of 128 bytes. The first 8 bytes represent the seventeenth handle entry information as expected. The following 120 bytes indicate that the heap manager initializes the handle table every sixteenth handle. Examining this initialization data shows that the next 15 available handle table entries are identified in the table. When allocating the eighteenth handle, the location of the nineteenth handle is identified by the address location portion of the eighteenth handle table entry. As expected, then, if a handle is removed from the table (the memory is freed), the address location in that entry is replaced with the location of the next available handle after it. This behavior indicates that the heap manager keeps the location of the next available handle table entry in a static variable and uses that entry itself to store the location of the subsequent entry. Notice also that the last initialized entry has a null location for the next address. The heap manager uses this as an indicator to initialize another 16 handle table entries during the next handle allocation.</p>
+<p>Another efficiency in the heap manager is its ability to commit pages of memory for the handle table as it needs them, not all 128 pages (512K) at once. Since the heap manager initializes its handle table in 16-handle (128-byte) increments, it is easy to determine when to commit a new page of memory. Every thirty-second (4096 / 128 = 32) initialization requires a new page of committed memory. Also, the entries do not straddle page boundaries, so their management is easier and potentially more efficient.</p>
+<h3 id="CRT-Library"><a class="header-anchor" href="#CRT-Library"></a>CRT Library</h3>
+<p>Managing memory in 16-bit Windows involved a great deal of uncertainty about using the C run-time (CRT) library. Now, there should be little hesitation. The current CRT library is implemented in a manner similar to FIXED memory allocated via the local and global memory management functions. The CRT library is also implemented using the same default heap manager as the global and local memory management functions.</p>
+<p>Subsequent memory allocations via <strong>malloc</strong>, <strong>GlobalAlloc</strong>, and <strong>LocalAlloc</strong> return pointers to memory allocated from the same heap. The heap manager does not divide its space among the CRT and global/local memory functions, and it does not maintain separate heaps for these functions. Instead, it treats them the same, promoting consistent behavior across the types of functions. As a result, you can now write code using the functions you’re most comfortable with. And, if you’re interested in portability, you can safely use the CRT functions exclusively for managing heap memory.</p>
+<h2 id="Heap-Memory-API"><a class="header-anchor" href="#Heap-Memory-API"></a>Heap Memory API</h2>
+<p>As mentioned earlier, you can create as many dynamic heaps as you like by simply calling <strong>HeapCreate</strong>. You must specify the maximum size of the heap so that the function knows how much address space to reserve. You can also indicate how much memory to commit initially. In the following example, a heap is created in your process that reserves 1 MB of address space and initially commits two pages of memory:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hHeap = HeapCreate (<span class="number">0</span>, <span class="number">0x2000</span>, <span class="number">0x100000</span>);</span><br></pre></td></tr></table></figure>
+<p>Since you can have many dynamic heaps in your process, you need a handle to identify each heap when you access it. The <strong>HeapCreate</strong> function returns this handle. Each heap you create returns a unique handle so that several dynamic heaps may coexist in your process. Having to identify your heap by handle also makes managing dynamic heaps more difficult than managing the default heap, since you have to keep each heap handle around for the life of the heap.</p>
+<p>If you’re bothered by having to keep this handle around, there is an alternative. You can use the heap memory functions on the default heap instead of creating a dynamic heap explicitly for them. To do this, simply use the <strong>GetProcessHeap</strong> function to get the handle of the default heap. For simple allocations of short-term memory, the following example taken from the ProcessWalker sample application illustrates how easy this is to do:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span>    *szCaption;</span><br><span class="line"><span class="keyword">int</span>     nCaption = GetWindowTextLength (hWnd);</span><br><span class="line"></span><br><span class="line"><span class="comment">/* retrieve view memory range */</span></span><br><span class="line">szCaption = HeapAlloc (GetProcessHeap (),</span><br><span class="line">                       HEAP_ZERO_MEMORY,</span><br><span class="line">                       nCaption+<span class="number">1</span>);</span><br><span class="line">GetWindowText (hViewWnd, szCaption, nCaption);</span><br></pre></td></tr></table></figure>
+<p>In this example the default heap is chosen because the allocation is independent of other memory management needs, and there is no reason to create a dynamic heap just for this one allocation. Note that you could achieve the same result by using the global, local, or CRT functions since they allocate only from the default heap.</p>
+<p>As shown earlier, the first parameter to <strong>HeapCreate</strong> allows you to specify an optional HEAP_NO_SERIALIZE flag. A serialized heap does not allow two threads to access it simultaneously. The default behavior is to serialize access to the heap. If you plan to use a heap strictly within one thread, specifying the HEAP_NO_SERIALIZE flag improves overall heap performance slightly.</p>
+<p>Like all of the heap memory functions, <strong>HeapAlloc</strong> requires a heap handle as its first argument. The example uses the <strong>GetProcessHeap</strong> function instead of a dynamic heap handle. The second parameter to <strong>HeapAlloc</strong> is an optional flag that indicates whether the memory should be zeroed first and whether to generate exceptions on error. To get zeroed memory, specify the HEAP_ZERO_MEMORY flag as shown above. The generate exceptions flag (HEAP_GENERATE_EXCEPTIONS) is a useful feature if you have exception handling built into your application. When using this flag, the function raises an exception on failure rather than just returning NULL. Depending on your use, exception handling can be an effective way of triggering special events—such as low memory situations—in your application.</p>
+<p><strong>HeapAlloc</strong> has a cousin called <strong>HeapReAlloc</strong> that works in much the same way as the standard global and local memory management functions described earlier. Use <strong>HeapReAlloc</strong> primarily to resize a previous allocation. This function has four parameters, three of which are the same as for <strong>HeapAlloc</strong>. The new parameter, <em>lpMem</em>, is a pointer to the chunk of memory being resized.</p>
+<p>It is important to note that although heap memory is not movable as in global and local memory, it may be moved during the <strong>HeapReAlloc</strong> function. This function returns a pointer to the resized chunk of memory, which may or may not be at the same location as initially indicated by the pointer passed to the function. This is the only time memory can be moved in dynamic heaps, and the only chunk of memory affected is the one identified by <em>lpMem</em> in the function. You can also override this behavior by specifying the HEAP_REALLOC_IN_PLACE_ONLY flag. With this flag, if there is not enough room to reallocate the memory in place, the function returns with failure status rather than move the memory.</p>
+<p>Memory allocated with <strong>HeapAlloc</strong> or reallocated with <strong>HeapReAlloc</strong> can be freed by calling <strong>HeapFree</strong>. This function is easy to use: simply indicate the heap handle and a pointer to the chunk of memory to free. Completing the example above, here is how you can use <strong>HeapFree</strong> with the default heap:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* free default heap memory */</span></span><br><span class="line">HeapFree (GetProcessHeap (), szCaption);</span><br></pre></td></tr></table></figure>
+<p>This example shows how easy it can be to work with heaps in Windows. However, you may still want to create a dynamic heap specifically to manage complex dynamic data structures in your application. In fact, one nice benefit of heap memory is how well it caters to the needs of traditional data structures such as binary trees, linked lists, and dynamic arrays. Having the heap handle provides a way of uniquely identifying these structures independently. One example that comes to mind is when you’re building a multiwindow application—perhaps a multiple document interface (MDI) application. Simply create and store a heap handle in the window extra bytes or window property list for each window during the WM_CREATE message. Then it is easy to write a window procedure that manages data structures from its own heap by retrieving the heap handle when necessary. When the window goes away, simply have it destroy the heap in the WM_DESTROY message.</p>
+<p>You can easily destroy dynamic heaps by calling <strong>HeapDestroy</strong> on a specific heap handle. This powerful function will remove a heap regardless of its state. The <strong>HeapDestroy</strong> function doesn’t care whether you have outstanding allocations in the heap or not.</p>
+<p>To make heap memory management most efficient, you would only create a heap of the size you need. In some cases it is easy to determine the heap size you need—if you’re allocating a buffer to read a file into, simply check the size of the file. In other cases, heap size is more difficult to figure—if you’re creating a dynamic data structure that grows according to user interaction, it is difficult to predict what the user will do. Dynamic heaps have a provision for this latter circumstance. By specifying a maximum heap size of zero, you make the heap assume a behavior like the default heap. That is, it will grow and spread in your process as much as necessary, limited only by available memory. In this case, available memory means available address space in your process and available pagefile space on your hard disk.</p>
+<h2 id="Overhead-on-Heap-Memory-Allocations"><a class="header-anchor" href="#Overhead-on-Heap-Memory-Allocations"></a>Overhead on Heap Memory Allocations</h2>
+<p>With all types of heap memory, an overhead is associated with each memory allocation. This overhead is due to:</p>
+<ul>
+<li>Granularity on memory allocations within the heap.</li>
+<li>The overhead necessary to manage each memory segment within the heap.</li>
+</ul>
+<p>The granularity of heap allocations in 32-bit Windows is 16 bytes. So if you request a global memory allocation of 1 byte, the heap returns a pointer to a chunk of memory, guaranteeing that the 1 byte is available. Chances are, 16 bytes will actually be available because the heap cannot allocate less than 16 bytes at a time.</p>
+<h3 id="Global-and-Local-Memory-Functions-v2"><a class="header-anchor" href="#Global-and-Local-Memory-Functions-v2"></a>Global and Local Memory Functions</h3>
+<p>For global and local memory functions, the documentation suggests that you use the <strong>GlobalSize</strong> and <strong>LocalSize</strong> functions to determine the exact size of the allocation, but in my tests this function consistently returned the size I requested and not the size actually allocated.</p>
+<p>To confirm this finding, turn to ProcessWalker again and view the committed memory in your default heap. For the sake of observation, perform consecutive allocations of 1, 2, 3, 14, 15, and 16 bytes using either <strong>GlobalAlloc</strong> or <strong>LocalAlloc</strong>. In this particular example, we used <strong>GlobalAlloc</strong> with the GMEM_MOVEABLE flag, but the result is the same for memory allocated as GMEM_FIXED. Then, refresh your view of the committed memory in the heap. Finally, scroll the view window so that the addresses of the allocated blocks of memory are all in view. You should see something similar to the window in Figure 5.</p>
+<p><img src="/assets/msdn-managing-heap-memory/5.gif" alt=""></p>
+<p><strong>Figure 5. A ProcessWalker view of the default heap after making consecutive allocations of 1, 2, 3, 14, 15, and 16 bytes using the <em>GlobalAlloc</em> function.</strong></p>
+<p>In Figure 5, the first line represents the header for the 1-byte allocation, followed immediately by the minimum 16 bytes allocated for the 1-byte request. Just to add visual clarity, the letter <em>m</em> appears in each allocated byte beginning at the address of the allocation. The <em>m</em>’s are visible in the ASCII representation of memory to the right of each line. At the end of all heap allocations is a heap tail, as indicated by the last line of new information in Figure 5.</p>
+<p>So, although you request only 1 byte and <strong>GlobalSize</strong> returns a size of 1 byte, there are actually 16 bytes allocated and available. Similarly, for the 3-byte allocation, 13 additional bytes are available. Even more interesting is the apparent waste of memory for allocations of 14, 15, and 16 bytes. In these allocations an additional 16 bytes were allocated for no reason. These are the lines immediately following the lines with 14, 15, and 16 <em>m</em> characters. Presumably you could also use these extra 16 bytes, but again <strong>GlobalSize</strong> does not indicate their existence.</p>
+<p>So what is the cost of allocating from a heap? Well, it depends on the size of the allocation. Every 1-byte allocation uses a total of 32 bytes, and a 16-byte allocation uses a total of 48 bytes. This is a considerable amount of overhead on smaller allocations. Therefore, it would not be a good idea to accumulate a number of small heap allocations because they would cost a great deal in actual memory used. On the other hand, there is nothing wrong with allocating a large chunk of memory from the heap and dividing it into smaller pieces.</p>
+<h3 id="Heap-Memory-Functions"><a class="header-anchor" href="#Heap-Memory-Functions"></a>Heap Memory Functions</h3>
+<p>Similar to the global and local memory functions, the heap memory functions have a minimum 16-byte granularity and the same overhead on memory allocations. Figure 6 presents a ProcessWalker view of a dynamic heap using the same allocations of 1, 2, 3, 14, 15, and 16 bytes, but this time using the <strong>HeapAlloc</strong> function.</p>
+<p><img src="/assets/msdn-managing-heap-memory/6.gif" alt=""></p>
+<p><strong>Figure 6. A ProcessWalker view of a dynamic heap after making consecutive allocations of 1, 2, 3, 14, 15, and 16 bytes using the <em>HeapAlloc</em> function.</strong></p>
+<p>For this example, the letter <em>h</em> appears in the allocated memory for comparison with the global memory allocations shown in Figure 5. A comparison of Figures 5 and 6 shows that the two heaps behave in an identical manner for the test allocations. Also, as in the global and local memory functions, a <strong>HeapSize</strong> function determines the exact amount of memory allocated for a given request. Unfortunately, this function seems to be implemented exactly like the <strong>GlobalSize</strong> and <strong>LocalSize</strong> functions. In my tests, <strong>HeapSize</strong> always returned the amount of the allocation request, while actually allocating with the same 16-byte granularity.</p>
+<h3 id="C-Run-Time-Memory-Functions"><a class="header-anchor" href="#C-Run-Time-Memory-Functions"></a>C Run-Time Memory Functions</h3>
+<p>Can you guess how the C run-time library memory functions will behave on this same test? Yes, the C run-time functions exhibit the same heap memory behavior. Figure 7 represents the same allocations using the <strong>malloc</strong> function.</p>
+<p><img src="/assets/msdn-managing-heap-memory/7.gif" alt=""></p>
+<p><strong>Figure 7. A ProcessWalker view of the default heap after making consecutive allocations of 1, 2, 3, 14, 15, and 16 bytes using the C run-time <em>malloc</em> function.</strong></p>
+<p>Unlike the global/local and heap memory functions, the C run-time library does not provide a means for retrieving the exact number of bytes allocated. Then again, how useful is that information anyway, since the <strong>GlobalSize</strong>, <strong>LocalSize</strong>, and <strong>HeapSize</strong> functions fail to perform accurately?</p>
+<h2 id="Summary-and-Recommendations"><a class="header-anchor" href="#Summary-and-Recommendations"></a>Summary and Recommendations</h2>
+<p>Heap memory management in Windows is greatly improved over 16-bit Windows. Instead of a systemwide global heap and application-specific local heaps, each application has a default heap and as many dynamic heaps as the application wants to create. Both types of heaps can grow dynamically and use as much of the address space as they need to satisfy an allocation request.</p>
+<p>The default heap provides all dynamic memory allocations for the C run-time library <strong>malloc</strong> functions as well as the global and local memory functions. The heap memory functions can also allocate from the default heap by using its handle, which they retrieve by calling the <strong>GetProcessHeap</strong> function.</p>
+<p>The dynamic heap provides serialization to avoid conflict among multiple threads accessing the same heap. To support the management of multiple dynamic heaps, each heap is identified by a unique handle returned by the <strong>HeapCreate</strong> function.</p>
+<p>Heaps do at least one thing well—they allocate smaller chunks of memory rather quickly. So whenever you are reluctant to create an automatic variable in a window procedure simply for an occasional <strong>LoadString</strong> buffer, why not use <strong>GlobalAlloc</strong> or <strong>LocalAlloc</strong>, <strong>malloc</strong> or <strong>HeapAlloc</strong>? Heaps are also very good at allocating storage for dynamic data structures. Dynamic heaps lend themselves particularly well to managing several distinct dynamic data structures in an application.</p>
+<p>Finally, what is the cost of using a heap? Well, if you never use any MOVEABLE (including DISCARDABLE) memory, the cost is considerably lower, and MOVEABLE memory probably doesn’t buy you much in a 32-bit linear address space. Not to mention that at 8 bytes per MOVEABLE memory handle, the system limits processes to 65,535 handles. Each chunk of heap memory allocated in either the default heap or a dynamic heap is subject to a 16-byte granularity and is charged a 16-byte header. In total, then, allocating 1 byte of MOVEABLE memory costs 40 bytes (8 bytes for the handle table entry, 16 bytes for granularity, and 16 bytes for the header). Happy heaping.</p>
+<hr>
+<p><strong>Article link: <a href="http://xnerv.wang/msdn-managing-heap-memory/">http://xnerv.wang/msdn-managing-heap-memory/</a></strong><br>
+Reprinted from: <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/ms810603.aspx">(MSDN) Managing Heap Memory</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+              <a href="/tags/Heap/" rel="tag"># Heap</a>
+              <a href="/tags/MSDN/" rel="tag"># MSDN</a>
+              <a href="/tags/Memory-Management/" rel="tag"># Memory Management</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Abstract"><span class="nav-text">Abstract</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Purpose-of-Heaps"><span class="nav-text">The Purpose of Heaps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#General-Heap-Behavior"><span class="nav-text">General Heap Behavior</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-two-Types-of-Heaps"><span class="nav-text">The two Types of Heaps</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Managing-the-Default-Heap"><span class="nav-text">Managing the Default Heap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-Default-Heap-That-Grows-and-Spreads"><span class="nav-text">A Default Heap That Grows and Spreads</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Global-and-Local-Memory-Functions"><span class="nav-text">Global and Local Memory Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Types-of-Global-and-Local-Memory"><span class="nav-text">Types of Global and Local Memory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-MOVEABLE-Memory-Handle-Table"><span class="nav-text">The MOVEABLE Memory Handle Table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CRT-Library"><span class="nav-text">CRT Library</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Heap-Memory-API"><span class="nav-text">Heap Memory API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Overhead-on-Heap-Memory-Allocations"><span class="nav-text">Overhead on Heap Memory Allocations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Global-and-Local-Memory-Functions-v2"><span class="nav-text">Global and Local Memory Functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Heap-Memory-Functions"><span class="nav-text">Heap Memory Functions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C-Run-Time-Memory-Functions"><span class="nav-text">C Run-Time Memory Functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary-and-Recommendations"><span class="nav-text">Summary and Recommendations</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

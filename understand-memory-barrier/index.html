@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="本文例子均在 Linux（g++）下验证通过，CPU 为 X86-64 处理器架构。所有罗列的 Linux 内核代码也均在（或只在）X86-64 下有效。 本文首先通过范例（以及内核代码）来解释 Memory barrier，然后介绍一个利用 Memory barrier 实现的无锁环形缓冲区。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解 Memory barrier（内存屏障）（转载）">
+<meta property="og:url" content="https://xnerv.wang/understand-memory-barrier/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="本文例子均在 Linux（g++）下验证通过，CPU 为 X86-64 处理器架构。所有罗列的 Linux 内核代码也均在（或只在）X86-64 下有效。 本文首先通过范例（以及内核代码）来解释 Memory barrier，然后介绍一个利用 Memory barrier 实现的无锁环形缓冲区。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-10-27T04:51:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:21.131Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="内存屏障">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xnerv.wang/understand-memory-barrier/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>理解 Memory barrier（内存屏障）（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/understand-memory-barrier/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          理解 Memory barrier（内存屏障）（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-10-26 21:51:00" itemprop="dateCreated datePublished" datetime="2017-10-26T21:51:00-07:00">2017-10-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文例子均在 Linux（g++）下验证通过，CPU 为 X86-64 处理器架构。所有罗列的 Linux 内核代码也均在（或只在）X86-64 下有效。</p>
+<p>本文首先通过范例（以及内核代码）来解释 Memory barrier，然后介绍一个利用 Memory barrier 实现的无锁环形缓冲区。</p>
+<a id="more"></a>
+<h2 id="Memory-barrier-简介"><a class="header-anchor" href="#Memory-barrier-简介"></a>Memory barrier 简介</h2>
+<p>程序在运行时内存实际的访问顺序和程序代码编写的访问顺序不一定一致，这就是内存乱序访问。内存乱序访问行为出现的理由是为了提升程序运行时的性能。内存乱序访问主要发生在两个阶段：</p>
+<ol>
+<li>编译时，编译器优化导致内存乱序访问（指令重排）</li>
+<li>运行时，多 CPU 间交互引起内存乱序访问</li>
+</ol>
+<p>Memory barrier 能够让 CPU 或编译器在内存访问上有序。一个 Memory barrier 之前的内存访问操作必定先于其之后的完成。Memory barrier 包括两类：</p>
+<ol>
+<li>编译器 barrier</li>
+<li>CPU Memory barrier</li>
+</ol>
+<p>很多时候，编译器和 CPU 引起内存乱序访问不会带来什么问题，但一些特殊情况下，程序逻辑的正确性依赖于内存访问顺序，这时候内存乱序访问会带来逻辑上的错误，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// thread 1</span></span><br><span class="line"><span class="keyword">while</span> (!ok);</span><br><span class="line"><span class="keyword">do</span>(x);</span><br><span class="line"></span><br><span class="line"><span class="comment">// thread 2</span></span><br><span class="line">x = <span class="number">42</span>;</span><br><span class="line">ok = <span class="number">1</span>;</span><br><span class="line">ccc</span><br></pre></td></tr></table></figure>
+<p>此段代码中，ok 初始化为 0，线程 1 等待 ok 被设置为 1 后执行 do 函数。假如说，线程 2 对内存的写操作乱序执行，也就是 x 赋值后于 ok 赋值完成，那么 do 函数接受的实参就很可能出乎程序员的意料，不为 42。</p>
+<h2 id="编译时内存乱序访问"><a class="header-anchor" href="#编译时内存乱序访问"></a>编译时内存乱序访问</h2>
+<p>在编译时，编译器对代码做出优化时可能改变实际执行指令的顺序（例如 gcc 下 O2 或 O3 都会改变实际执行指令的顺序）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test.cpp</span></span><br><span class="line"><span class="keyword">int</span> x, y, r;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x = r;</span><br><span class="line">    y = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译器优化的结果可能导致 y = 1 在 x = r 之前执行完成。首先直接编译此源文件：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g++ -S test.cpp</span><br></pre></td></tr></table></figure>
+<p>得到相关的汇编代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl    r(%rip), %eax</span><br><span class="line">movl    %eax, x(%rip)</span><br><span class="line">movl    $1, y(%rip)</span><br></pre></td></tr></table></figure>
+<p>这里我们看到，x = r 和 y = 1 并没有乱序。现使用优化选项 O2（或 O3）编译上面的代码（g++ -O2 -S test.cpp），生成汇编代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">movl    r(%rip), %eax</span><br><span class="line">movl    $1, y(%rip)</span><br><span class="line">movl    %eax, x(%rip)</span><br></pre></td></tr></table></figure>
+<p>我们可以清楚的看到经过编译器优化之后 movl $1, y(%rip) 先于 movl %eax, x(%rip) 执行。避免编译时内存乱序访问的办法就是使用编译器 barrier（又叫优化 barrier）。Linux 内核提供函数 barrier() 用于让编译器保证其之前的内存访问先于其之后的完成。内核实现 barrier() 如下（X86-64 架构）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> barrier() __asm__ __volatile__(<span class="meta-string">&quot;&quot;</span> ::: <span class="meta-string">&quot;memory&quot;</span>)</span></span><br></pre></td></tr></table></figure>
+<p>现在把此编译器 barrier 加入代码中：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x, y, r;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x = r;</span><br><span class="line">    __asm__ __volatile__(<span class="string">&quot;&quot;</span> ::: <span class="string">&quot;memory&quot;</span>);</span><br><span class="line">    y = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就避免了编译器优化带来的内存乱序访问的问题了（如果有兴趣可以再看看编译之后的汇编代码）。本例中，我们还可以使用 volatile 这个关键字来避免编译时内存乱序访问（而无法避免后面要说的运行时内存乱序访问）。volatile 关键字能够让相关的变量之间在内存访问上避免乱序，这里可以修改 x 和 y 的定义来解决问题：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> x, y;</span><br><span class="line"><span class="keyword">int</span> r;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x = r;</span><br><span class="line">    y = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现加上了 volatile 关键字，这使得 x 相对于 y、y 相对于 x 在内存访问上有序。在 Linux 内核中，提供了一个宏 ACCESS_ONCE 来避免编译器对于连续的 ACCESS_ONCE 实例进行指令重排。其实 ACCESS_ONCE 实现源码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ACCESS_ONCE(x) (*(volatile typeof(x) *)&amp;(x))</span></span><br></pre></td></tr></table></figure>
+<p>此代码只是将变量 x 转换为 volatile 的而已。现在我们就有了第三个修改方案：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> x, y, r;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ACCESS_ONCE(x) = r;</span><br><span class="line">    ACCESS_ONCE(y) = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此基本上就阐述完了我们的编译时内存乱序访问的问题。下面开始介绍运行时内存乱序访问。</p>
+<h2 id="运行时内存乱序访问"><a class="header-anchor" href="#运行时内存乱序访问"></a>运行时内存乱序访问</h2>
+<p>在运行时，CPU 虽然会乱序执行指令，但是在单个 CPU 的上，硬件能够保证程序执行时所有的内存访问操作看起来像是按程序代码编写的顺序执行的，这时候 Memory barrier 没有必要使用（不考虑编译器优化的情况下）。这里我们了解一下 CPU 乱序执行的行为。在乱序执行时，一个处理器真正执行指令的顺序由可用的输入数据决定，而非程序员编写的顺序。</p>
+<p>早期的处理器为有序处理器（In-order processors），有序处理器处理指令通常有以下几步：</p>
+<ol>
+<li>指令获取</li>
+<li>如果指令的输入操作对象（input operands）可用（例如已经在寄存器中了），则将此指令分发到适当的功能单元中。如果一个或者多个操作对象不可用（通常是由于需要从内存中获取），则处理器会等待直到它们可用</li>
+<li>指令被适当的功能单元执行</li>
+<li>功能单元将结果写回寄存器堆（Register file，一个 CPU 中的一组寄存器）</li>
+</ol>
+<p>相比之下，乱序处理器（Out-of-order processors）处理指令通常有以下几步：</p>
+<ol>
+<li>指令获取</li>
+<li>指令被分发到指令队列</li>
+<li>指令在指令队列中等待，直到输入操作对象可用（一旦输入操作对象可用，指令就可以离开队列，即便更早的指令未被执行）</li>
+<li>指令被分配到适当的功能单元并执行</li>
+<li>执行结果被放入队列（而不立即写入寄存器堆）</li>
+<li>只有所有更早请求执行的指令的执行结果被写入寄存器堆后，指令执行的结果才被写入寄存器堆（执行结果重排序，让执行看起来是有序的）</li>
+</ol>
+<p>从上面的执行过程可以看出，乱序执行相比有序执行能够避免等待不可用的操作对象（有序执行的第二步）从而提高了效率。现代的机器上，处理器运行的速度比内存快很多，有序处理器花在等待可用数据的时间里已经可以处理大量指令了。</p>
+<p>现在思考一下乱序处理器处理指令的过程，我们能得到几个结论：</p>
+<ol>
+<li>对于单个 CPU 指令获取是有序的（通过队列实现）</li>
+<li>对于单个 CPU 指令执行结果也是有序返回寄存器堆的（通过队列实现）</li>
+</ol>
+<p>由此可知，在单 CPU 上，不考虑编译器优化导致乱序的前提下，多线程执行不存在内存乱序访问的问题。我们从内核源码也可以得到类似的结论（代码不完全的摘录）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> CONFIG_SMP</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> smp_mb() mb()</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> smp_mb() barrier()</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<p>这里可以看到，如果是 SMP 则使用 mb，mb 被定义为 CPU Memory barrier（后面会讲到），而非 SMP 时，直接使用编译器 barrier。</p>
+<p>在多 CPU 的机器上，问题又不一样了。每个 CPU 都存在 cache（cache 主要是为了弥补 CPU 和内存之间较慢的访问速度），当一个特定数据第一次被特定一个 CPU 获取时，此数据显然不在 CPU 的 cache 中（这就是 cache miss）。此 cache miss 意味着 CPU 需要从内存中获取数据（这个过程需要 CPU 等待数百个周期），此数据将被加载到 CPU 的 cache 中，这样后续就能直接从 cache 上快速访问。当某个 CPU 进行写操作时，它必须确保其他的 CPU 已经将此数据从它们的 cache 中移除（以便保证一致性），只有在移除操作完成后此 CPU 才能安全的修改数据。显然，存在多个 cache 时，我们必须通过一个 cache 一致性协议来避免数据不一致的问题，而这个通讯的过程就可能导致乱序访问的出现，也就是这里说的运行时内存乱序访问。这里不再深入讨论整个细节，这是一个比较复杂的问题，有兴趣可以研究<a target="_blank" rel="noopener" href="http://www.rdrop.com/users/paulmck/scalability/paper/whymb.2010.06.07c.pdf">http://www.rdrop.com/users/paulmck/scalability/paper/whymb.2010.06.07c.pdf</a>一文，其详细的分析了整个过程。</p>
+<p>现在通过一个例子来说明多 CPU 下内存乱序访问：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test2.cpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------</span></span><br><span class="line"><span class="keyword">int</span> cpu_thread1 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> cpu_thread2 = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">volatile</span> <span class="keyword">int</span> x, y, r1, r2;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x = y = r1 = r2 = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">end</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(!(r1 == <span class="number">0</span> &amp;&amp; r2 == <span class="number">0</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x = <span class="number">1</span>;</span><br><span class="line">    r1 = y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    y = <span class="number">1</span>;</span><br><span class="line">    r2 = x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// -------------------</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_barrier_t</span> barrier_start;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">pthread_barrier_t</span> barrier_end;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">thread1</span><span class="params">(<span class="keyword">void</span>*)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        pthread_barrier_wait(&amp;barrier_start);</span><br><span class="line">        run1();</span><br><span class="line">        pthread_barrier_wait(&amp;barrier_end);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span>* <span class="title">thread2</span><span class="params">(<span class="keyword">void</span>*)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        pthread_barrier_wait(&amp;barrier_start);</span><br><span class="line">        run2();</span><br><span class="line">        pthread_barrier_wait(&amp;barrier_end);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    assert(pthread_barrier_init(&amp;barrier_start, <span class="literal">NULL</span>, <span class="number">3</span>) == <span class="number">0</span>);</span><br><span class="line">    assert(pthread_barrier_init(&amp;barrier_end, <span class="literal">NULL</span>, <span class="number">3</span>) == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">pthread_t</span> t1;</span><br><span class="line">    <span class="keyword">pthread_t</span> t2;</span><br><span class="line">    assert(pthread_create(&amp;t1, <span class="literal">NULL</span>, thread1, <span class="literal">NULL</span>) == <span class="number">0</span>);</span><br><span class="line">    assert(pthread_create(&amp;t2, <span class="literal">NULL</span>, thread2, <span class="literal">NULL</span>) == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">cpu_set_t</span> cs;</span><br><span class="line">    CPU_ZERO(&amp;cs);</span><br><span class="line">    CPU_SET(cpu_thread1, &amp;cs);</span><br><span class="line">    assert(pthread_setaffinity_np(t1, <span class="keyword">sizeof</span>(cs), &amp;cs) == <span class="number">0</span>);</span><br><span class="line">    CPU_ZERO(&amp;cs);</span><br><span class="line">    CPU_SET(cpu_thread2, &amp;cs);</span><br><span class="line">    assert(pthread_setaffinity_np(t2, <span class="keyword">sizeof</span>(cs), &amp;cs) == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        start();</span><br><span class="line">        pthread_barrier_wait(&amp;barrier_start);</span><br><span class="line">        pthread_barrier_wait(&amp;barrier_end);</span><br><span class="line">        <span class="built_in">end</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里创建了两个线程来运行测试代码（需要测试的代码将放置在 run 函数中）。我使用了 pthread barrier（区别于本文讨论的 Memory barrier）主要为了让两个子线程能够同时运行它们的 run 函数。此段代码不停的尝试同时运行两个线程的 run 函数，以便得出我们期望的结果。在每次运行 run 函数前会调用一次 start 函数（进行数据初始化），run 运行后会调用一次 end 函数（进行结果检查）。run1 和 run2 两个函数运行在哪个 CPU 上则通过 cpu_thread1 和 cpu_thread2 两个变量控制。</p>
+<p>先编译此程序：g++ -lpthread -o test2 test2.cpp（这里未优化，目的是为了避免编译器优化的干扰）。需要注意的是，两个线程运行在两个不同的 CPU 上（CPU 0 和 CPU 1）。只要内存不出现乱序访问，那么 r1 和 r2 不可能同时为 0，因此断言失败表示存在内存乱序访问。编译之后运行此程序，会发现存在一定概率导致断言失败。为了进一步说明问题，我们把 cpu_thread2 的值改为 0，换而言之就是让两个线程跑在同一个 CPU 下，再运行程序发现断言不再失败。</p>
+<p>最后，我们使用 CPU Memory barrier 来解决内存乱序访问的问题（X86-64 架构下）：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> cpu_thread1 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">int</span> cpu_thread2 = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run1</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    x = <span class="number">1</span>;</span><br><span class="line">    __asm__ __volatile__(<span class="string">&quot;mfence&quot;</span> ::: <span class="string">&quot;memory&quot;</span>);</span><br><span class="line">    r1 = y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    y = <span class="number">1</span>;</span><br><span class="line">    __asm__ __volatile__(<span class="string">&quot;mfence&quot;</span> ::: <span class="string">&quot;memory&quot;</span>);</span><br><span class="line">    r2 = x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="准备使用-Memory-barrier"><a class="header-anchor" href="#准备使用-Memory-barrier"></a>准备使用 Memory barrier</h2>
+<p>Memory barrier 常用场合包括：</p>
+<ol>
+<li>实现同步原语（synchronization primitives）</li>
+<li>实现无锁数据结构（lock-free data structures）</li>
+<li>驱动程序</li>
+</ol>
+<p>实际的应用程序开发中，开发者可能完全不知道 Memory barrier 就可以开发正确的多线程程序，这主要是因为各种同步机制中已经隐含了 Memory barrier（但和实际的 Memory barrier 有细微差别），这就使得不直接使用 Memory barrier 不会存在任何问题。但是如果你希望编写诸如无锁数据结构，那么 Memory barrier 还是很有用的。</p>
+<p>通常来说，在单个 CPU 上，存在依赖的内存访问有序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Q &#x3D; P;</span><br><span class="line">D &#x3D; *Q;</span><br></pre></td></tr></table></figure>
+<p>这里内存操作有序。然而在 Alpha CPU 上，存在依赖的内存读取操作不一定有序，需要使用数据依赖 barrier（由于 Alpha 不常见，这里就不详细解释了）。</p>
+<p>在 Linux 内核中，除了前面说到的编译器 barrier — barrier() 和 ACCESS_ONCE()，还有 CPU Memory barrier：</p>
+<ol>
+<li>通用 barrier，保证读写操作有序的，mb() 和 smp_mb()</li>
+<li>写操作 barrier，仅保证写操作有序的，wmb() 和 smp_wmb()</li>
+<li>读操作 barrier，仅保证读操作有序的，rmb() 和 smp_rmb()</li>
+</ol>
+<p>注意，所有的 CPU Memory barrier（除了数据依赖 barrier 之外）都隐含了编译器 barrier。这里的 smp 开头的 Memory barrier 会根据配置在单处理器上直接使用编译器 barrier，而在 SMP 上才使用 CPU Memory barrier（也就是 mb()、wmb()、rmb()，回忆上面相关内核代码）。</p>
+<p>最后需要注意一点的是，CPU Memory barrier 中某些类型的 Memory barrier 需要成对使用，否则会出错，详细来说就是：一个写操作 barrier 需要和读操作（或数据依赖）barrier 一起使用（当然，通用 barrier 也是可以的），反之依然。</p>
+<h2 id="Memory-barrier-的范例"><a class="header-anchor" href="#Memory-barrier-的范例"></a>Memory barrier 的范例</h2>
+<p>读内核代码进一步学习 Memory barrier 的使用。</p>
+<p>Linux 内核实现的无锁（只有一个读线程和一个写线程时）环形缓冲区 kfifo 就使用到了 Memory barrier，实现源码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * A simple kernel FIFO implementation.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Copyright (C) 2004 Stelian Pop &lt;stelian@popies.net&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This program is free software; you can redistribute it and/or modify</span></span><br><span class="line"><span class="comment"> * it under the terms of the GNU General Public License as published by</span></span><br><span class="line"><span class="comment"> * the Free Software Foundation; either version 2 of the License, or</span></span><br><span class="line"><span class="comment"> * (at your option) any later version.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This program is distributed in the hope that it will be useful,</span></span><br><span class="line"><span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span></span><br><span class="line"><span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span></span><br><span class="line"><span class="comment"> * GNU General Public License for more details.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * You should have received a copy of the GNU General Public License</span></span><br><span class="line"><span class="comment"> * along with this program; if not, write to the Free Software</span></span><br><span class="line"><span class="comment"> * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kernel.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/module.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/slab.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/err.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/kfifo.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/log2.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * kfifo_init - allocates a new FIFO using a preallocated buffer</span></span><br><span class="line"><span class="comment"> * @buffer: the preallocated buffer to be used.</span></span><br><span class="line"><span class="comment"> * @size: the size of the internal buffer, this have to be a power of 2.</span></span><br><span class="line"><span class="comment"> * @gfp_mask: get_free_pages mask, passed to kmalloc()</span></span><br><span class="line"><span class="comment"> * @lock: the lock to be used to protect the fifo buffer</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Do NOT pass the kfifo to kfifo_free() after use! Simply free the</span></span><br><span class="line"><span class="comment"> * &amp;struct kfifo with kfree().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">struct kfifo *<span class="title">kfifo_init</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> *buffer, <span class="keyword">unsigned</span> <span class="keyword">int</span> size,</span></span></span><br><span class="line"><span class="function"><span class="params">                         <span class="keyword">gfp_t</span> gfp_mask, <span class="keyword">spinlock_t</span> *lock)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kfifo</span> *<span class="title">fifo</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* size must be a power of 2 */</span></span><br><span class="line">    BUG_ON(!is_power_of_2(size));</span><br><span class="line"></span><br><span class="line">    fifo = kmalloc(<span class="keyword">sizeof</span>(struct kfifo), gfp_mask);</span><br><span class="line">    <span class="keyword">if</span> (!fifo)</span><br><span class="line">        <span class="keyword">return</span> ERR_PTR(-ENOMEM);</span><br><span class="line"></span><br><span class="line">    fifo-&gt;buffer = buffer;</span><br><span class="line">    fifo-&gt;size = size;</span><br><span class="line">    fifo-&gt;in = fifo-&gt;out = <span class="number">0</span>;</span><br><span class="line">    fifo-&gt;lock = lock;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> fifo;</span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL(kfifo_init);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * kfifo_alloc - allocates a new FIFO and its internal buffer</span></span><br><span class="line"><span class="comment"> * @size: the size of the internal buffer to be allocated.</span></span><br><span class="line"><span class="comment"> * @gfp_mask: get_free_pages mask, passed to kmalloc()</span></span><br><span class="line"><span class="comment"> * @lock: the lock to be used to protect the fifo buffer</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * The size will be rounded-up to a power of 2.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">struct kfifo *<span class="title">kfifo_alloc</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">int</span> size, <span class="keyword">gfp_t</span> gfp_mask, <span class="keyword">spinlock_t</span> *lock)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> *buffer;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">kfifo</span> *<span class="title">ret</span>;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * round up to the next power of 2, since our &#x27;let the indices</span></span><br><span class="line"><span class="comment">     * wrap&#x27; technique works only in this case.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (!is_power_of_2(size)) &#123;</span><br><span class="line">        BUG_ON(size &gt; <span class="number">0x80000000</span>);</span><br><span class="line">        size = roundup_pow_of_two(size);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    buffer = kmalloc(size, gfp_mask);</span><br><span class="line">    <span class="keyword">if</span> (!buffer)</span><br><span class="line">        <span class="keyword">return</span> ERR_PTR(-ENOMEM);</span><br><span class="line"></span><br><span class="line">    ret = kfifo_init(buffer, size, gfp_mask, lock);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (IS_ERR(ret))</span><br><span class="line">        kfree(buffer);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL(kfifo_alloc);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * kfifo_free - frees the FIFO</span></span><br><span class="line"><span class="comment"> * @fifo: the fifo to be freed.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">kfifo_free</span><span class="params">(struct kfifo *fifo)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    kfree(fifo-&gt;buffer);</span><br><span class="line">    kfree(fifo);</span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL(kfifo_free);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * __kfifo_put - puts some data into the FIFO, no locking version</span></span><br><span class="line"><span class="comment"> * @fifo: the fifo to be used.</span></span><br><span class="line"><span class="comment"> * @buffer: the data to be added.</span></span><br><span class="line"><span class="comment"> * @len: the length of the data to be added.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This function copies at most @len bytes from the @buffer into</span></span><br><span class="line"><span class="comment"> * the FIFO depending on the free space, and returns the number of</span></span><br><span class="line"><span class="comment"> * bytes copied.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Note that with only one concurrent reader and one concurrent</span></span><br><span class="line"><span class="comment"> * writer, you don&#x27;t need extra locking to use these functions.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> __kfifo_put(struct kfifo *fifo,</span><br><span class="line">                         <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">char</span> *buffer, <span class="keyword">unsigned</span> <span class="keyword">int</span> len)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> l;</span><br><span class="line"></span><br><span class="line">    len = min(len, fifo-&gt;size - fifo-&gt;in + fifo-&gt;out);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Ensure that we sample the fifo-&gt;out index -before- we</span></span><br><span class="line"><span class="comment">     * start putting bytes into the kfifo.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    smp_mb();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* first put the data starting from fifo-&gt;in to buffer end */</span></span><br><span class="line">    l = min(len, fifo-&gt;size - (fifo-&gt;in &amp; (fifo-&gt;size - <span class="number">1</span>)));</span><br><span class="line">    <span class="built_in">memcpy</span>(fifo-&gt;buffer + (fifo-&gt;in &amp; (fifo-&gt;size - <span class="number">1</span>)), buffer, l);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* then put the rest (if any) at the beginning of the buffer */</span></span><br><span class="line">    <span class="built_in">memcpy</span>(fifo-&gt;buffer, buffer + l, len - l);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Ensure that we add the bytes to the kfifo -before-</span></span><br><span class="line"><span class="comment">     * we update the fifo-&gt;in index.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    smp_wmb();</span><br><span class="line"></span><br><span class="line">    fifo-&gt;in += len;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> len;</span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL(__kfifo_put);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * __kfifo_get - gets some data from the FIFO, no locking version</span></span><br><span class="line"><span class="comment"> * @fifo: the fifo to be used.</span></span><br><span class="line"><span class="comment"> * @buffer: where the data must be copied.</span></span><br><span class="line"><span class="comment"> * @len: the size of the destination buffer.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This function copies at most @len bytes from the FIFO into the</span></span><br><span class="line"><span class="comment"> * @buffer and returns the number of copied bytes.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Note that with only one concurrent reader and one concurrent</span></span><br><span class="line"><span class="comment"> * writer, you don&#x27;t need extra locking to use these functions.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span> __kfifo_get(struct kfifo *fifo,</span><br><span class="line">                         <span class="keyword">unsigned</span> <span class="keyword">char</span> *buffer, <span class="keyword">unsigned</span> <span class="keyword">int</span> len)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> l;</span><br><span class="line"></span><br><span class="line">    len = min(len, fifo-&gt;in - fifo-&gt;out);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Ensure that we sample the fifo-&gt;in index -before- we</span></span><br><span class="line"><span class="comment">     * start removing bytes from the kfifo.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    smp_rmb();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* first get the data from fifo-&gt;out until the end of the buffer */</span></span><br><span class="line">    l = min(len, fifo-&gt;size - (fifo-&gt;out &amp; (fifo-&gt;size - <span class="number">1</span>)));</span><br><span class="line">    <span class="built_in">memcpy</span>(buffer, fifo-&gt;buffer + (fifo-&gt;out &amp; (fifo-&gt;size - <span class="number">1</span>)), l);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* then get the rest (if any) from the beginning of the buffer */</span></span><br><span class="line">    <span class="built_in">memcpy</span>(buffer + l, fifo-&gt;buffer, len - l);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Ensure that we remove the bytes from the kfifo -before-</span></span><br><span class="line"><span class="comment">     * we update the fifo-&gt;out index.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    smp_mb();</span><br><span class="line"></span><br><span class="line">    fifo-&gt;out += len;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> len;</span><br><span class="line">&#125;</span><br><span class="line">EXPORT_SYMBOL(__kfifo_get);</span><br></pre></td></tr></table></figure>
+<p>为了更好的理解上面的源码，这里顺带说一下此实现使用到的一些和本文主题无关的技巧：</p>
+<ol>
+<li>使用与操作来求取环形缓冲区的下标，相比取余操作来求取下标的做法效率要高不少。使用与操作求取下标的前提是环形缓冲区的大小必须是 2 的 N 次方，换而言之就是说环形缓冲区的大小为一个仅有一个 1 的二进制数，那么 index &amp; (size – 1) 则为求取的下标（这不难理解）</li>
+<li>使用了 in 和 out 两个索引且 in 和 out 是一直递增的（此做法比较巧妙），这样能够避免一些复杂的条件判断（某些实现下，in == out 时还无法区分缓冲区是空还是满）</li>
+</ol>
+<p>这里，索引 in 和 out 被两个线程访问。in 和 out 指明了缓冲区中实际数据的边界，也就是 in 和 out 同缓冲区数据存在访问上的顺序关系，由于未使用同步机制，那么保证顺序关系就需要使用到 Memory barrier 了。索引 in 和 out 都分别只被一个线程修改，而被两个线程读取。__kfifo_put 先通过 in 和 out 来确定可以向缓冲区中写入数据量的多少，这时，out 索引应该先被读取后才能真正的将用户 buffer 中的数据写入缓冲区，因此这里使用到了 smp_mb()，对应的，__kfifo_get 也使用 smp_mb() 来确保修改 out 索引之前缓冲区中数据已经被成功读取并写入用户 buffer 中了。对于 in 索引，在 __kfifo_put 中，通过 smp_wmb() 保证先向缓冲区写入数据后才修改 in 索引，由于这里只需要保证写入操作有序，故选用写操作 barrier，在 __kfifo_get 中，通过 smp_rmb() 保证先读取了 in 索引（这时候 in 索引用于确定缓冲区中实际存在多少可读数据）才开始读取缓冲区中数据（并写入用户 buffer 中），由于这里只需要保证读取操作有序，故选用读操作 barrier。</p>
+<p>到这里，Memory barrier 就介绍完毕了。</p>
+<h2 id="参考文献列表："><a class="header-anchor" href="#参考文献列表："></a>参考文献列表：</h2>
+<p><a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Memory_barrier">http://en.wikipedia.org/wiki/Memory_barrier</a><br>
+<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Out-of-order_execution">http://en.wikipedia.org/wiki/Out-of-order_execution</a><br>
+<a target="_blank" rel="noopener" href="https://www.kernel.org/doc/Documentation/memory-barriers.txt">https://www.kernel.org/doc/Documentation/memory-barriers.txt</a></p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/understand-memory-barrier/">http://xnerv.wang/understand-memory-barrier/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://name5566.com/4535.html">理解 Memory barrier（内存屏障）</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" rel="tag"># 操作系统</a>
+              <a href="/tags/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C/" rel="tag"># 内存屏障</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Memory-barrier-%E7%AE%80%E4%BB%8B"><span class="nav-text">Memory barrier 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E6%97%B6%E5%86%85%E5%AD%98%E4%B9%B1%E5%BA%8F%E8%AE%BF%E9%97%AE"><span class="nav-text">编译时内存乱序访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%97%B6%E5%86%85%E5%AD%98%E4%B9%B1%E5%BA%8F%E8%AE%BF%E9%97%AE"><span class="nav-text">运行时内存乱序访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E4%BD%BF%E7%94%A8-Memory-barrier"><span class="nav-text">准备使用 Memory barrier</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Memory-barrier-%E7%9A%84%E8%8C%83%E4%BE%8B"><span class="nav-text">Memory barrier 的范例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E5%88%97%E8%A1%A8%EF%BC%9A"><span class="nav-text">参考文献列表：</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

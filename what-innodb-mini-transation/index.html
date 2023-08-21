@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="前言 InnoDB有两个非常重要的日志，undo log 和 redo log；通过undo log可以看到数据较早版本，实现MVCC，或回滚事务等功能；redo log用来保证事务持久性 本文以一条insert语句为线索介绍 mini transaction mini transaction 简介 mini transation 主要用于innodb redo log 和 undo log写入，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL - InnoDB mini transation（转载）">
+<meta property="og:url" content="https://xnerv.wang/what-innodb-mini-transation/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="前言 InnoDB有两个非常重要的日志，undo log 和 redo log；通过undo log可以看到数据较早版本，实现MVCC，或回滚事务等功能；redo log用来保证事务持久性 本文以一条insert语句为线索介绍 mini transaction mini transaction 简介 mini transation 主要用于innodb redo log 和 undo log写入，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-17T23:42:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:18.950Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="DBMS">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="InnoDB">
+<meta property="article:tag" content="MTR">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xnerv.wang/what-innodb-mini-transation/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>MySQL - InnoDB mini transation（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/what-innodb-mini-transation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          MySQL - InnoDB mini transation（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-17 16:42:00" itemprop="dateCreated datePublished" datetime="2018-03-17T16:42:00-07:00">2018-03-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DBMS/" itemprop="url" rel="index">
+                    <span itemprop="name">DBMS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
+<p>InnoDB有两个非常重要的日志，undo log 和 redo log；通过undo log可以看到数据较早版本，实现MVCC，或回滚事务等功能；redo log用来保证事务持久性</p>
+<p>本文以一条insert语句为线索介绍 mini transaction</p>
+<h2 id="mini-transaction-简介"><a class="header-anchor" href="#mini-transaction-简介"></a>mini transaction 简介</h2>
+<p>mini transation 主要用于innodb redo log 和 undo log写入，保证两种日志的ACID特性</p>
+<p>mini-transaction遵循以下三个协议:</p>
+<ol>
+<li>
+<p>The FIX Rules</p>
+</li>
+<li>
+<p>Write-Ahead Log</p>
+</li>
+<li>
+<p>Force-log-at-commit</p>
+</li>
+</ol>
+<a id="more"></a>
+<h4 id="The-FIX-Rules"><a class="header-anchor" href="#The-FIX-Rules"></a>The FIX Rules</h4>
+<p>修改一个页需要获得该页的x-latch</p>
+<p>访问一个页是需要获得该页的s-latch或者x-latch</p>
+<p>持有该页的latch直到修改或者访问该页的操作完成</p>
+<h4 id="Write-Ahead-Log"><a class="header-anchor" href="#Write-Ahead-Log"></a>Write-Ahead Log</h4>
+<p>持久化一个数据页之前，必须先将内存中相应的日志页持久化</p>
+<p>每个页有一个LSN,每次页修改需要维护这个LSN,当一个页需要写入到持久化设备时，要求内存中小于该页LSN的日志先写入到持久化设备中</p>
+<h4 id="Force-log-at-commit"><a class="header-anchor" href="#Force-log-at-commit"></a>Force-log-at-commit</h4>
+<p>一个事务可以同时修改了多个页，Write-AheadLog单个数据页的一致性，无法保证事务的持久性</p>
+<p>Force -log-at-commit要求当一个事务提交时，其产生所有的mini-transaction日志必须刷到持久设备中</p>
+<p>这样即使在页数据刷盘的时候宕机，也可以通过日志进行redo恢复</p>
+<h4 id="代码简介"><a class="header-anchor" href="#代码简介"></a>代码简介</h4>
+<p>本文使用 MySQL 5.6.16 版本进行分析</p>
+<p>mini transation 相关代码路径位于 storage/innobase/mtr/ 主要有 <a target="_blank" rel="noopener" href="http://mtr0mtr.cc">mtr0mtr.cc</a> 和 <a target="_blank" rel="noopener" href="http://mtr0log.cc">mtr0log.cc</a> 两个文件</p>
+<p>另有部分代码在 storage/innobase/include/ 文件名以 mtr0 开头</p>
+<p>mini transaction 的信息保存在结构体 mtr_t 中，结构体成员描述如下</p>
+<table>
+<thead>
+<tr>
+<th>成员属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>state</td>
+<td>mini transaction所处状态 MTR_ACTIVE, MTR_COMMITTING, MTR_COMMITTED</td>
+</tr>
+<tr>
+<td>memo</td>
+<td>mtr 持有锁的栈</td>
+</tr>
+<tr>
+<td>log</td>
+<td>mtr产生的日志</td>
+</tr>
+<tr>
+<td>inside_ibuf</td>
+<td>insert buffer 是否修改</td>
+</tr>
+<tr>
+<td>modifications</td>
+<td>是否修改buffer pool pages</td>
+</tr>
+<tr>
+<td>made_dirty</td>
+<td>是否产生buffer pool脏页</td>
+</tr>
+<tr>
+<td>n_log_recs</td>
+<td>log 记录数</td>
+</tr>
+<tr>
+<td>n_freed_pages</td>
+<td>释放page数</td>
+</tr>
+<tr>
+<td>log_mode</td>
+<td>日志模式，默认MTR_LOG_ALL</td>
+</tr>
+<tr>
+<td>start_lsn</td>
+<td>lsn 起始值</td>
+</tr>
+<tr>
+<td>end_lsn</td>
+<td>lsn 结束值</td>
+</tr>
+<tr>
+<td>magic_n</td>
+<td>魔术字</td>
+</tr>
+</tbody>
+</table>
+<p>一个 mini transaction 从 mtr_start(mtr)开始，到 mtr_commit(mtr)结束</p>
+<h2 id="一条insert语句涉及的-mini-transaction"><a class="header-anchor" href="#一条insert语句涉及的-mini-transaction"></a>一条insert语句涉及的 mini transaction</h2>
+<p>下面涉及 mtr 的嵌套，在代码中，每个 mtr_t 对象变量名都叫 mtr，本文中为了区分不同 mtr，给不同的对象加编号</p>
+<p>下面一般省略 mtr_t 以外的参数</p>
+<p>第一个 mtr 从 row_ins_clust_index_entry_low 开始</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line">mtr_start(mtr_1) &#x2F;&#x2F; mtr_1 贯穿整条insert语句</span><br><span class="line">row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">mtr_s_lock(dict_index_get_lock(index), mtr_1) &#x2F;&#x2F; 对index加s锁</span><br><span class="line">btr_cur_search_to_nth_level</span><br><span class="line">row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">mtr_memo_push(mtr_1) &#x2F;&#x2F; buffer RW_NO_LATCH 入栈</span><br><span class="line">buf_page_get_gen</span><br><span class="line">btr_cur_search_to_nth_level</span><br><span class="line">row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">mtr_memo_push(mtr_1) &#x2F;&#x2F; page RW_X_LATCH 入栈</span><br><span class="line">buf_page_get_gen</span><br><span class="line">btr_block_get_func</span><br><span class="line">btr_cur_latch_leaves</span><br><span class="line">btr_cur_search_to_nth_level</span><br><span class="line">row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">	mtr_start(mtr_2) &#x2F;&#x2F; mtr_2 用于记录 undo log</span><br><span class="line">	trx_undo_report_row_operation</span><br><span class="line">	btr_cur_ins_lock_and_undo</span><br><span class="line">	btr_cur_optimistic_insert</span><br><span class="line">	row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">		mtr_start(mtr_3) &#x2F;&#x2F; mtr_3 分配或复用一个 undo log</span><br><span class="line">		trx_undo_assign_undo</span><br><span class="line">		trx_undo_report_row_operation</span><br><span class="line">		btr_cur_ins_lock_and_undo</span><br><span class="line">		btr_cur_optimistic_insert</span><br><span class="line">		row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">		mtr_memo_push(mtr_3) &#x2F;&#x2F; 对复用（也可能是分配）的 undo log page 加 RW_X_LATCH 入栈</span><br><span class="line">		buf_page_get_gen</span><br><span class="line">		trx_undo_page_get</span><br><span class="line">		trx_undo_reuse_cached &#x2F;&#x2F; 这里先尝试复用，如果复用失败，则分配新的 undo log</span><br><span class="line">		trx_undo_assign_undo</span><br><span class="line">		trx_undo_report_row_operation</span><br><span class="line"></span><br><span class="line"> 		trx_undo_insert_header_reuse(mtr_3) &#x2F;&#x2F; 写 undo log header</span><br><span class="line">		trx_undo_reuse_cached</span><br><span class="line">		trx_undo_assign_undo</span><br><span class="line">		trx_undo_report_row_operation</span><br><span class="line"></span><br><span class="line">		trx_undo_header_add_space_for_xid(mtr_3) &#x2F;&#x2F; 在 undo header 中预留 XID 空间</span><br><span class="line">		trx_undo_reuse_cached</span><br><span class="line">		trx_undo_assign_undo</span><br><span class="line">		trx_undo_report_row_operation</span><br><span class="line"></span><br><span class="line">		mtr_commit(mtr_3) &#x2F;&#x2F; 提交 mtr_3</span><br><span class="line">		trx_undo_assign_undo</span><br><span class="line">		trx_undo_report_row_operation</span><br><span class="line">		btr_cur_ins_lock_and_undo</span><br><span class="line">		btr_cur_optimistic_insert</span><br><span class="line">		row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">	mtr_memo_push(mtr_2) &#x2F;&#x2F; 即将写入的 undo log page 加 RW_X_LATCH 入栈</span><br><span class="line">	buf_page_get_gen</span><br><span class="line">	trx_undo_report_row_operation</span><br><span class="line">	btr_cur_ins_lock_and_undo</span><br><span class="line">	btr_cur_optimistic_insert</span><br><span class="line">	row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">	trx_undo_page_report_insert(mtr_2) &#x2F;&#x2F; undo log 记录 insert 操作</span><br><span class="line">	trx_undo_report_row_operation</span><br><span class="line">	btr_cur_ins_lock_and_undo</span><br><span class="line">	btr_cur_optimistic_insert</span><br><span class="line">	row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">	mtr_commit(mtr_2) &#x2F;&#x2F; 提交 mtr_2</span><br><span class="line">	trx_undo_report_row_operation</span><br><span class="line">	btr_cur_ins_lock_and_undo</span><br><span class="line">	btr_cur_optimistic_insert</span><br><span class="line">	row_ins_clust_index_entry_low</span><br><span class="line"></span><br><span class="line">&#x2F;*</span><br><span class="line">	mtr_2 提交后开始执行 insert 操作</span><br><span class="line">	page_cur_insert_rec_low 具体执行 insert 操作</span><br><span class="line">	在该函数末尾调用 page_cur_insert_rec_write_log 写 redo log</span><br><span class="line">*&#x2F;</span><br><span class="line"></span><br><span class="line">page_cur_insert_rec_write_log(mtr_1) &#x2F;&#x2F; insert 操作写 redo log</span><br><span class="line">page_cur_insert_rec_lowpage_cur_tuple_insert</span><br><span class="line">btr_cur_optimistic_insert</span><br><span class="line"></span><br><span class="line">mtr_commit(mtr_1) &#x2F;&#x2F; 提交 mtr_1</span><br><span class="line">row_ins_clust_index_entry_low</span><br></pre></td></tr></table></figure>
+<p>至此 insert 语句执行结束后</p>
+<p>一条 insert 是一个单语句事务，事务提交时也会涉及 mini transaction</p>
+<p>提交事务时，第一个 mtr 从 trx_prepare 开始</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">mtr_start(mtr_4) &#x2F;&#x2F; mtr_4 用于 prepare transaction</span><br><span class="line">trx_prepare</span><br><span class="line">trx_prepare_for_mysql</span><br><span class="line">innobase_xa_prepare</span><br><span class="line">ha_prepare_low</span><br><span class="line">MYSQL_BIN_LOG::prepare</span><br><span class="line">ha_commit_trans</span><br><span class="line">trans_commit_stmt</span><br><span class="line">mysql_execute_command</span><br><span class="line"></span><br><span class="line">mtr_memo_push(mtr_4) &#x2F;&#x2F; undo page 加 RW_X_LATCH 入栈</span><br><span class="line">buf_page_get_gen</span><br><span class="line">trx_undo_page_get</span><br><span class="line">trx_undo_set_state_at_prepare</span><br><span class="line">trx_prepare</span><br><span class="line"></span><br><span class="line">mlog_write_ulint(seg_hdr + TRX_UNDO_STATE, undo-&gt;state, MLOG_2BYTES, mtr_4) 写入TRX_UNDO_STATE</span><br><span class="line">trx_undo_set_state_at_prepare</span><br><span class="line">trx_prepare</span><br><span class="line"></span><br><span class="line">mlog_write_ulint(undo_header + TRX_UNDO_XID_EXISTS, TRUE, MLOG_1BYTE, mtr_4) 写入 TRX_UNDO_XID_EXISTS</span><br><span class="line">trx_undo_set_state_at_prepare</span><br><span class="line">trx_prepare</span><br><span class="line"></span><br><span class="line">trx_undo_write_xid(undo_header, &amp;undo-&gt;xid, mtr_4) undo 写入 xid</span><br><span class="line">trx_undo_set_state_at_prepare</span><br><span class="line">trx_prepare</span><br><span class="line"></span><br><span class="line">mtr_commit(mtr_4) &#x2F;&#x2F; 提交 mtr_4</span><br><span class="line">trx_prepare</span><br><span class="line"></span><br><span class="line">mtr_start(mtr_5) &#x2F;&#x2F; mtr_5 用于 commit transaction</span><br><span class="line">trx_commit</span><br><span class="line">trx_commit_for_mysql</span><br><span class="line">innobase_commit_low</span><br><span class="line">innobase_commit</span><br><span class="line">ha_commit_low</span><br><span class="line">MYSQL_BIN_LOG::process_commit_stage_queue</span><br><span class="line">MYSQL_BIN_LOG::ordered_commit</span><br><span class="line">MYSQL_BIN_LOG::commit</span><br><span class="line">ha_commit_trans</span><br><span class="line">trans_commit_stmt</span><br><span class="line">mysql_execute_command</span><br><span class="line"></span><br><span class="line">mtr_memo_push(mtr_5) &#x2F;&#x2F; undo page 加 RW_X_LATCH 入栈</span><br><span class="line">buf_page_get_gen</span><br><span class="line">trx_undo_page_get</span><br><span class="line">trx_undo_set_state_at_finish</span><br><span class="line">trx_write_serialisation_history</span><br><span class="line">trx_commit_low</span><br><span class="line">trx_commit</span><br><span class="line"></span><br><span class="line">trx_undo_set_state_at_finish(mtr_5) &#x2F;&#x2F; set undo state， 这里是 TRX_UNDO_CACHED</span><br><span class="line">trx_write_serialisation_history</span><br><span class="line">trx_commit_low</span><br><span class="line">trx_commit</span><br><span class="line"></span><br><span class="line">mtr_memo_push(mtr_5) &#x2F;&#x2F; 系统表空间 transaction system header page 加 RW_X_LATCH 入栈</span><br><span class="line">buf_page_get_gen</span><br><span class="line">trx_sysf_get</span><br><span class="line">trx_sys_update_mysql_binlog_offset</span><br><span class="line">trx_write_serialisation_history</span><br><span class="line">trx_commit_low</span><br><span class="line">trx_commit</span><br><span class="line"></span><br><span class="line">trx_sys_update_mysql_binlog_offset &#x2F;&#x2F; 更新偏移量信息到系统表空间</span><br><span class="line">trx_write_serialisation_history</span><br><span class="line">trx_commit_low</span><br><span class="line">trx_commit</span><br><span class="line"></span><br><span class="line">mtr_commit(mtr_5) &#x2F;&#x2F; 提交 mtr_5</span><br><span class="line">trx_commit_low</span><br><span class="line">trx_commit</span><br></pre></td></tr></table></figure>
+<p>至此 insert 语句涉及的 mini transaction 全部结束</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>上面可以看到加锁、写日志到 mlog 等操作在 mini transaction 过程中进行</p>
+<p>解锁、把日志刷盘等操作全部在 mtr_commit 中进行，和事务类似</p>
+<p>mini transaction 没有回滚操作， 因为只有在 mtr_commit 才将修改落盘，如果宕机，内存丢失，无需回滚；如果落盘过程中宕机，崩溃恢复时可以看出落盘过程不完整，丢弃这部分修改</p>
+<p>mtr_commit 主要包含以下步骤</p>
+<ol>
+<li>mlog 中日志刷盘</li>
+<li>释放 mtr 持有的锁，锁信息保存在 memo 中，以栈形式保存，后加的锁先释放</li>
+<li>清理 mtr 申请的内存空间，memo 和 log</li>
+<li>mtr—&gt;state 设置为 MTR_COMMITTED</li>
+</ol>
+<p>上面的步骤 1. 中，日志刷盘策略和 innodb_flush_log_at_trx_commit 有关</p>
+<ul>
+<li>当设置该值为1时，每次事务提交都要做一次fsync，这是最安全的配置，即使宕机也不会丢失事务</li>
+<li>当设置为2时，则在事务提交时只做write操作，只保证写到系统的page cache，因此实例crash不会丢失事务，但宕机则可能丢失事务</li>
+<li>当设置为0时，事务提交不会触发redo写操作，而是留给后台线程每秒一次的刷盘操作，因此实例crash将最多丢失1秒钟内的事务</li>
+</ul>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/what-innodb-mini-transation/">http://xnerv.wang/what-innodb-mini-transation/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://mysql.taobao.org/monthly/2017/10/03/">InnoDB mini transation</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/DBMS/" rel="tag"># DBMS</a>
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/InnoDB/" rel="tag"># InnoDB</a>
+              <a href="/tags/MTR/" rel="tag"># MTR</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mini-transaction-%E7%AE%80%E4%BB%8B"><span class="nav-text">mini transaction 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#The-FIX-Rules"><span class="nav-text">The FIX Rules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Write-Ahead-Log"><span class="nav-text">Write-Ahead Log</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Force-log-at-commit"><span class="nav-text">Force-log-at-commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E7%AE%80%E4%BB%8B"><span class="nav-text">代码简介</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E6%9D%A1insert%E8%AF%AD%E5%8F%A5%E6%B6%89%E5%8F%8A%E7%9A%84-mini-transaction"><span class="nav-text">一条insert语句涉及的 mini transaction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

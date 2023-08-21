@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="别到处找了，本系列文章没有（三）的。。。  作为10多年前搜索引擎代表性的技术成果之一，PageRank创造了Google辉煌的10年，同时也缔造了Google搜索的时代。然而，互联网越是往前发展，搜索服务越趋向于多元化、个性化、社区化和垂直化等，传统的通用搜索引擎越来越不能满足不同人群、不同习惯、不同场景的搜索需求，精而深的垂直搜索引擎的兴起对传统搜索市场引发了巨大的挑战。 正如同生物的生长一样">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来（转载）">
+<meta property="og:url" content="https://xnerv.wang/further-disscusion-of-pagerank-4/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="别到处找了，本系列文章没有（三）的。。。  作为10多年前搜索引擎代表性的技术成果之一，PageRank创造了Google辉煌的10年，同时也缔造了Google搜索的时代。然而，互联网越是往前发展，搜索服务越趋向于多元化、个性化、社区化和垂直化等，传统的通用搜索引擎越来越不能满足不同人群、不同习惯、不同场景的搜索需求，精而深的垂直搜索引擎的兴起对传统搜索市场引发了巨大的挑战。 正如同生物的生长一样">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2011-06-21T18:22:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:20.902Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="搜索引擎">
+<meta property="article:tag" content="PageRank">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xnerv.wang/further-disscusion-of-pagerank-4/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/further-disscusion-of-pagerank-4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2011-06-21 11:22:00" itemprop="dateCreated datePublished" datetime="2011-06-21T11:22:00-07:00">2011-06-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" itemprop="url" rel="index">
+                    <span itemprop="name">搜索引擎</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>别到处找了，本系列文章没有（三）的。。。</strong></p>
+<hr>
+<p>作为10多年前搜索引擎代表性的技术成果之一，PageRank创造了Google辉煌的10年，同时也缔造了Google搜索的时代。然而，互联网越是往前发展，搜索服务越趋向于多元化、个性化、社区化和垂直化等，传统的通用搜索引擎越来越不能满足不同人群、不同习惯、不同场景的搜索需求，精而深的垂直搜索引擎的兴起对传统搜索市场引发了巨大的挑战。</p>
+<p>正如同生物的生长一样，任何事物都是有其生命周期，PageRank也不例外。PageRank是否已经越过了它繁盛生命的顶锋？它是否能够担负起当今Web2.0，甚至是云计算时代的搜索排名之重任？我们慢慢来看~</p>
+<a id="more"></a>
+<h2 id="一、第二代搜索引擎的局限"><a class="header-anchor" href="#一、第二代搜索引擎的局限"></a>一、第二代搜索引擎的局限</h2>
+<p>第二代搜索引擎是基于用户输入关键字做文本的相关性分析，通过排序算法（包含PageRank）将排序后的结果反馈给用户，其代表是Google和百度。大体而言，第二代搜索引擎的局限可概括为以下4个方面：</p>
+<p><strong>（1）搜索结果不具备个性化因素，任何两个人得到的结果是一致的，没有考虑用户本身的搜索习惯。缺乏智能的感知体系，不能依据用户搜索偏好进行个性化的搜索推荐。</strong></p>
+<p>在第二代搜索引擎中毋庸质疑的是任何两个人所享受到的搜索服务是完全一致的，不存在个性化的搜索。但是用户本身的搜索习惯是不同的，打个比方，一个从来不看江苏卫视《非诚勿扰》相亲节目的人，有一天突然在搜索栏中键入“非诚勿扰”，他更多地是想找《非诚勿扰》这部电影；然而对于一个经常在看这个相亲节目的人而言，搜索结果最好能够把江苏卫视的那个娱乐节目反馈给她。也就是说，不同的人在输入同样的关键词之后，所期待的输出结果是不同的，搜索引擎应该能够依据不同的人，反馈不同的搜索结果。</p>
+<p>当然有人会说：我怎么知道是哪个用户在使用我的搜索引擎，嘿嘿<sub>问的好。Google可以发个公告说：Google搜索目前提供个性化搜索服务，使用的前提需要进行用户注册</sub>这并不是说面向大众的搜索服务不需要了，你还可以选择切换或自定义，想用个性就用，不想用还按常理出牌就可以了。我个人感觉这招还是挺吸引人的，当然，上面只是个原型的说辞，具体怎样推广就看Google的产品部那帮牛人怎么设计了。</p>
+<p>既然，搜索引擎的发展必然是趋向于精细化、个性化的模式，不同用户应该享受和获得不同的搜索体验和搜索反馈。那么，如何才能make it to be true？本文第三部分会给出解释~</p>
+<p><strong>（2）搜索内容是基本文本匹配的，搜索引擎本身并不理解你所输入的查询语句是什么意思，缺少语义分析。</strong></p>
+<p>当前的搜索引擎的搜索过程全部是基于文本字符串匹配的，即先通过爬虫从互联网上下载数据，对数据进行清洗、格式化处理，对所有的文本内容分词，并创建倒排索引。用户输入检索词Query，搜索引擎会对Query分词，通过查找倒排索引表，返回与Query最相关的文本集合，利用PageRank算法排序后反馈给用户，但搜索引擎本身并不理解你所输入的Query是什么含义。</p>
+<p>打个比方，比如你输入“愤怒的小狐狸是谁？”，搜索引擎就先分词为“愤怒”、“小”、“狐狸”、“是谁”，然后根据倒排索引表查找到底是哪些文档同时包含了这几个词条，排序后作为结果输出。然而，用户真正关心的是这只“愤怒的小狐狸”真人是谁，他并不需要知道哪些文档同时包含了这几个词，而只需要知道一个真实的人名即可。</p>
+<p>这样的例子举不胜举，再比如说检索“华中科技大学计算机科学院董勐同学的个人信息”，则用户期待搜索引擎反馈给他一个整合的数据信息，包括了董勐同学的姓名、年龄、联系方式、生日、住址、兴趣爱好等等，而不是说只是简单地把找到包含这句话的网页给返回过来。</p>
+<p>其实到这个时候，搜索引擎已经脱离了我们传统意义上理解的文本搜索引擎，而是能够智能地理解你要搜索的含义，并智能地生成你想要的结果。就像你跟一个真正的人在交流一样，你问他答，他在回答你话的同时，会根据他所储备的知识和信息推理演算你想要的结果，它是在思考问题，这属于问答式智能化的搜索引擎。</p>
+<p><strong>（3）面向文本内容的搜索，对于多媒体类型内容，如图片、视频、音乐、影像的检索不给力或力不从心。</strong></p>
+<p>在Web2.0时代，人们在互联网上所能接触、交流和分享的数据类型可谓琳琅满目，除了传统的文本信息外，多媒体的数据交互形式深受大众追捧。有例可考证像人人网、新浪微博这样的SNS网络，各种文本、视频、图片、音乐信息的共享铺天盖地。然而，搜索引擎在应对多媒体数据的时候总是显得非常的不给力或非常的力不从心。</p>
+<p>这里面的原因，一方面是由于这些信息无法用自然语言量化或很难量化，另一方面是如果对多媒体文件进行细粒度的分析和建模，那对于存储、计算资源的消耗可以非常恐怖的，你想想一部高清电影有多少帧需要分析就明白了。</p>
+<p>当然，不是没有办法做，现在是有一些基础性质的研究，其做法有点曲线救国的味道。以早期的Google图片搜索为例，你输入“海贼王”的话，搜索引擎实质上还是对文字的检索，返回的是打了“海贼王”标签的图片而已，本质上跟传统的文本搜索无异。如果是一张明明是“海贼王”里面乔巴的图片，你的标签描述写成了“茄菲猫”，那么即便它确实是“海贼王”也不可能被检索到。</p>
+<p>如果你输入“即有蓝天、又有白云、即有溪水、又有远山、即有美女、又有竹筏、即有细雨、又有花伞的图片”，那么很抱歉，你将得到一大堆跟你想要的主题毫无关联的图片结果。因为现阶段基于标签的图片搜索与文本搜索是一样的，只能做到如此，它无法像人一样能够智能地识别某个图片是否是用户想要的。</p>
+<p>目前，是有一些音频搜索的系统可以试用，可以对用户哼唱的曲目进行检索，但查准率还有待提升。Google刚刚推出了一项新的图片搜索服务，用户可以上传照片，Google能够检索与之类似的图片。我试了一下，在当前技术背景下，能够推出这样一款商用的图片搜索引擎，已经可以说是相当不错了，虽然说查准率还不是太高。</p>
+<p>对于静态图片已经比较困难了，更不用说是动态的视频影像了。当然科技是在发展，相信未来10年之内的多媒体搜索技术肯定能够呈现一个爆炸性的发展趋势，这些个难题的求解并不是没有可能的，让我们拭目以待吧。</p>
+<p><strong>（4）搜索结果排序依赖于人工智能，并没有考虑依靠真实用户的行为来引导和影响搜索结果的排序。</strong></p>
+<p>PageRank虽然说是以网页之间民主投票的方式产生了网页的重要性/级别，但这毕竟是一种死板、单一的排序方式，并没有考虑到实际用户参与的情况，能不能有一种人直接参与、以人类集体智慧做引导的排序方法呢？</p>
+<p>打个比方，当你检索“如何用U盘做引导盘”类似这种问问题的Query时，很多依据PageRank算出排名靠前的网页通常会让你无比失望，你点开一个一个又一个就是无法解决你的问题。然而，有可能你在刷了5、6页之后，偶然点开一个链接，却很轻易地解决了你的问题。这也就是说，按照PageRank排出来的结果未必真正是你所需要的。机器并不知道这个网页是否是真的好，它只是按照算法去一步步的执行而已，那么如何找到对网页质量更为智能的判定呢？</p>
+<p>我这里提供一种思路：话说如果为每个页面质量设置一个打分器，问题是否会清楚化呢？对于一个页面而言，所有注册用户都可以打分。当用户输入Query时，搜索结果页面左侧还是会显示按照传统PageRank算法的排列项目，右侧则会显示出与此Query相似输入所产生的网页中用户打分较高的项目。</p>
+<p>比如，我们可以这样说：对于“如何用U盘做引导盘”的检索，有100万的用户觉得网页A很赞，98万的用户觉得网页B很赞。如果你是一个用户的话，这样的搜索推荐对你有没有吸引力？那可是100万的人跟你输入同样问题的人都觉得很赞的网页啊！你说你会不会去点着试一下，你说你是去点PageRank排出来的页面，还是去点别人推荐的？这样我们就做到了依靠集体用户的智慧产生更为精确的结果推荐。当然，页面质量的评判还需要考虑到当前用户所输入的关键词，同一个页面对于不同的关键词而言，其质量也应该是有所不同的。</p>
+<p>这个原型想法跟Facebook的那个“赞”按钮很相似，具体怎样去推广运营还没有过多的思考，毕竟咱也只是一个小小的程序员而已。</p>
+<p>二、浮现出的第三代搜索引擎<br>
+在看到pagerank的局限性以后，一些新兴的搜索公司开始尝试通过提供更精准、更个性化的搜索结果，目前关于第三代搜索引擎的商业化雏形或产品还是有一些的，我大概收集整理了一下：<br>
+最近在美国颇受用户赞誉的另一个搜索引擎swicki，也在个性化和精准搜索方面可圈可点。虽然swicki的大部分内容来自Google，但同样针是对关键词，swicki可以根据用户注册时的使用偏好、搜索习惯，提供出不同的搜索结果。通过对搜索结果的二次评判，swicki还可以逐步校正搜索结果列表。<br>
+在国内，除了类似bbmao这样的社会化搜索引擎开始提供自动分类、聚类、用户收藏等功能而崭露头角外，老牌搜索厂商雅虎中国，也在搜索算法和呈现方式上进行了诸多改进，不仅强化了对社区内容、blog等微内容的数据抓取，而且在个性化呈现、模糊搜索等方面也有较大举措。<br>
+一个例子是，此前一个月，雅虎中国、雅虎全球、阿里巴巴三方联合推出了一个具有智能模糊匹配功能的搜索引擎——雅虎Imatch。据称，该系统可以根据用户的搜索习惯和意图，智能匹配相关的搜索结果。<br>
+Clusty、bbmao等元搜索引擎的自动分类、聚类功能一出，即大受用户追捧，专家也认为其提供了比之Google更精准、细分的呈现方式，殊不知Clusty、bbmao等所提供的自动分类、聚类功能本身一点都不新鲜。早在10年前，英国的企业搜索巨擘Autonomy已经提供了同类乃至更智能的呈现方式。例如，Autonomy基于某种专有的模式匹配和概念搜索的算法，可以自动根据文本中的概念进行分类，自动标引，并基于用户兴趣自动匹配出个性化、多侧面的直接或隐含的相关档案。当用户在搜索框中键入某个关键词，出现的结果可能被系统自动分为10类（或更多类），若其中9类与用户的查询期望距离较大，用户就可以将接近的那个结果作为查询条件，进行第二次查询，直到找到最需要的搜索结果。而Google、百度等第二代搜索引擎则主要使用SVM和KNN算法进行分类，因为算法的先天缺陷，分类准确率仅能达到80%到85%。并且，如果分类树有变更，如增加、修改或删除某个分类节点，整颗分类树就必须重新学习。</p>
+<h2 id="三、搜索引擎的未来：情景搜索？"><a class="header-anchor" href="#三、搜索引擎的未来：情景搜索？"></a>三、搜索引擎的未来：情景搜索？</h2>
+<p>关于第三代搜索，众多的创新者已经为我们勾勒出一个大致的轮廓，作为对第二代搜索的一种超越，未来的搜索引擎发展套路将趋向于个性化、社会化、垂直化、知识问答化的方向。而搜索引擎的核心技术将从传统的索引结构转向包含数据挖掘、机器学习、人工智能、模式识别和语义分析等领域。</p>
+<p>虽然迄今为止，计算机还无法做到完全理解语言，但通过采用基于统计学、概率论和信息论的概念识别技术，可以将信息和信息之间建立相应的关联规则。用户可以用自然语言描述自己的问题，搜索引擎会自动判断用户查询条件所描述的概念，借助于自身的知识库寻找与用户搜索概念相关的文档。显然，这种语义搜索比传统关键词搜索更能精准定位用户的搜索意图。</p>
+<p>试想，为什么Google要做Chrome？抛开云计算、云操作系统不谈，其一个非常重要的原因在于，利用浏览器可以获取、分析用户对网站的访问行为，获取用户的操作历史记录，从而能够对PageRank算法规则形成补充。因为PageRank它只考虑了网页之间的链接关系来确定网页的级别/重要性，并未考虑用户具体检索的内容，用户检索的意图以及用户当前所处的环境。这说明PageRank并不是完美的，它确实存在些很多不完善的地方。</p>
+<p>早在2009年，腾讯就提出了“情境搜索”的概念，目前基于这一概念诞生出了一系列的产品，比如QQ “表情搜索”、QQ的划词搜索、QQ聊天过程中会主动地帮你提取关键词并标明，点击后会触发信息检索。基于情境搜索更能贴近用户需求，搜索对用户来说将变得无处不在，如影随形。</p>
+<p>打个比方，你在腾讯在线平台上关注或与好友讨论电影《让子弹飞》，情境搜索将自动挖掘你最关心的内容：效果最好的影院在哪？如何预订电影票？网友的评价如何？哪些好友支持这部电影？预告片和音乐在哪里下载？此时你甚至无需打开浏览器输入检索词，一次又一次的甄选结果。情境搜索通过深入挖掘用户的“情境”需求，深入地了解到你需要什么，他不仅会把需要的信息直接推送到你面前，还会整合在线预定、购买等后续服务，甚至可以帮你找到志同道合的“搜友”。</p>
+<p>跟传统搜索引擎相比，情境搜索是基于用户历史、用户偏好、用户环境，计算用户情境搜索需求，进而提供信息融合及主动推送的搜索模式，传统的搜索则需要用户依靠用户键入关键词，并主动的触发检索过程。然而，很多时候，用户他并不清楚自己到底想要什么，他的信息量与知识面是有限的，与海量搜索引擎所掌握的信息是不对称的，甚至用户根本无法用语言或关键词来表述他的需求。</p>
+<p>情境搜索则打破了这一弊端，综合考虑用户背景、兴趣爱好以及环境的智能化搜索，通过对用户意图的深入理解，在用户使用互联网服务的各种场景下提供给用户的最贴切的搜索服务。情境搜索包含7个要素（6W&amp;1H），它强调“以人（Who）为本”，也就是以用户为中心，根据其搜索行为的时间（When）、地点（Where）、输入（What）、需求（Want）、习惯（How）、背景（Why）等因素，由情境计算得到最适合的搜索结果，再将这一结果通过用户的搜索情境直接呈现。</p>
+<p>Facebook的兴起，被视为Google的颠覆者。颠覆Google，不是在于Facebook流量已经超越了Facebook，也不在于Facebook的技术有很多强，而是Facebook对人的了解远远地超过Google，这对Google未来的搜索战略是极大的障碍。所以Google觊觎社交网站，更多是出于一种自卫的思想。</p>
+<p>意识到危机的Google目前也提到了“情境”这个词，具体技术是“情境发现”（Contextual Discovery），据说2011年会有应用上线。这显然和PageRank体系的核心有很大区别。决定搜索结果及排序的规则，多出了很多维度，比如上下文关联、浏览习惯、搜索者所处的“情境”等。微软公司一直在研究一种叫“BrowserRank”的算法，其思路也是引入更多维的衡量模型，比如将用户在网站停留的时间作为考量标准之一。实际上，类似这种BrowserRank算法在腾讯等公司也早已经在应用了。</p>
+<p>由此可见，随着情境搜索时代的来临，“人”的因素将在搜索技术中占据越来越重要的比重。换句话说，搜索服务商对“人”了解越深刻，对其所处环境了解越透彻，则其越能在情境搜索中占据主动。显然，拥有最海量用户群、最长停留时间、最深的互动关系、最强用户粘度的社交网络平台将在这一领域占得先机，代表的SNS如Facebook、人人网、新浪微博、QQ在线平台等。</p>
+<p>以腾讯为例，其定位在提供“在线生活”平台，打造互联网一条龙的在线服务的战略发展方向，从即时通信的QQ、腾讯微博、QQ空间到Web QQ再到正在推行的腾讯开放平台，这几乎是100%的网民覆盖，这些都将为情境计算提供基础的信息源，从而衍生出智能化的搜索服务。现阶段，腾讯野心是占领移动平台，对于拥有庞大客户端和多年移动而已的腾讯来说，也是相当的如鱼得水。</p>
+<p>Google曾经希望用户“找到信息，然后快速离开”，这句话在现在来看是非常荒谬的，而Google明显也已经意识到这一点了。所以Google也在通过iGoogle等手段将用户留下来，为未来的搜索演变做储备。</p>
+<p>值得注意的是，“情境搜索”毕竟还处于初级阶段，更像是一种“搜索概念”，从传统搜索到它的演变过程将是缓慢、递进的过程。但是情境搜索发展的大趋势是无法阻挡的了的，传统的搜索服务将在这场历史变革中被逐步取代，而像PageRank这样的算法能否经受的住下一个时代搜索科技创新大风大浪的挑战？能否在搜索引擎发展的历史长河中沉淀下来？我们还需要拭目以待~</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/further-disscusion-of-pagerank-4/">http://xnerv.wang/further-disscusion-of-pagerank-4/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/monkey_d_meng/article/details/6558100">深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" rel="tag"># 搜索引擎</a>
+              <a href="/tags/PageRank/" rel="tag"># PageRank</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E7%AC%AC%E4%BA%8C%E4%BB%A3%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E5%B1%80%E9%99%90"><span class="nav-text">一、第二代搜索引擎的局限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E7%9A%84%E6%9C%AA%E6%9D%A5%EF%BC%9A%E6%83%85%E6%99%AF%E6%90%9C%E7%B4%A2%EF%BC%9F"><span class="nav-text">三、搜索引擎的未来：情景搜索？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>

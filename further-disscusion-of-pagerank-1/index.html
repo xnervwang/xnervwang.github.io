@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="一、PageRank简介 大名鼎鼎的PageRank算法是Google排名运算法则（排名公式）的一个非常重要的组成部分，其用于衡量一个网站好坏的标准。在揉合了诸如Title、Keywords标识等所有其它因素之后，Google利用PageRank来调整网页的排名，使得“等级&#x2F;重要性”的网页会相对排在前面。简单来说，Google通过下述几个步骤来实现网页在其搜索结果页面中排名：  找到所有与搜索关键">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入探讨PageRank（一）：PageRank算法原理入门（转载）">
+<meta property="og:url" content="https://xnerv.wang/further-disscusion-of-pagerank-1/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="一、PageRank简介 大名鼎鼎的PageRank算法是Google排名运算法则（排名公式）的一个非常重要的组成部分，其用于衡量一个网站好坏的标准。在揉合了诸如Title、Keywords标识等所有其它因素之后，Google利用PageRank来调整网页的排名，使得“等级&#x2F;重要性”的网页会相对排在前面。简单来说，Google通过下述几个步骤来实现网页在其搜索结果页面中排名：  找到所有与搜索关键">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2011-06-19T19:22:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T02:24:20.851Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="转载">
+<meta property="article:tag" content="搜索引擎">
+<meta property="article:tag" content="PageRank">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xnerv.wang/further-disscusion-of-pagerank-1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>深入探讨PageRank（一）：PageRank算法原理入门（转载） | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-leetcode">
+
+    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/further-disscusion-of-pagerank-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          深入探讨PageRank（一）：PageRank算法原理入门（转载）
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2011-06-19 12:22:00" itemprop="dateCreated datePublished" datetime="2011-06-19T12:22:00-07:00">2011-06-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" itemprop="url" rel="index">
+                    <span itemprop="name">搜索引擎</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="一、PageRank简介"><a class="header-anchor" href="#一、PageRank简介"></a>一、PageRank简介</h2>
+<p>大名鼎鼎的PageRank算法是Google排名运算法则（排名公式）的一个非常重要的组成部分，其用于衡量一个网站好坏的标准。在揉合了诸如Title、Keywords标识等所有其它因素之后，Google利用PageRank来调整网页的排名，使得“等级/重要性”的网页会相对排在前面。简单来说，Google通过下述几个步骤来实现网页在其搜索结果页面中排名：</p>
+<ol>
+<li>找到所有与搜索关键词匹配的网页</li>
+<li>根据页面因素如标题、关键词密度等排列等级</li>
+<li>计算导入链接的锚文本中关键词</li>
+<li>通过PageRank得分调整网站排名结果</li>
+</ol>
+<p>事实上，真正的网站的排名过程并非这么简单，我们会在后面进行详细深入阐述。</p>
+<a id="more"></a>
+<p>PageRank于2001年9月被授予美国专利，专利人是Google创始人之一的拉里.佩奇（Larry Page）。所以，PageRank里面的Page并不是指网页，而是指佩奇<sub>PageRank对于网页重要性的级别分为1</sub>10级，10级为满级。PR值越高说明该网页越受欢迎，也即越重要。一个PR值为1的网站表明该网站不具备流行度，而PR值为<code>7~10</code>的网站则表明该网站是非常受欢迎的，或者说极其重要。一般PR值达到4，就算是一相当不错的网站了。Google把自己网站的PR值设置为<code>10~</code>类似里氏震级，PageRank级别并不是线性增长的，而是按照一种指数刻度，打个比方PageRank4比PageRank3虽然只是高了一级，但却在影响力上高上6~7倍，因此，一个PageRank5的网页和一个PageRank8的网页之间差距会比你可能认为的要大的多。</p>
+<p>在讨论之前，先介绍两个概念：导入链接，又称逆向链接，是指链至你网站的站点，也就是我们一般所说的外部链接。而当你链至另外一个站点，那么这个站点就是你的导出链接，即你向其他网站提供本站的链接。</p>
+<p>PageRank的思路很简单，打个比方：如何判断一篇论文的价值，即被其他论文引述的次数越多就越重要，如果被权威的论文引用，那么该论文也很重要。PageRank就是借鉴于这一思路，根据网站的外部链接和内部链接的数量和质量来衡量这个网站的价值，相当于每个到该页面的链接都是对该页面的一次投票，被链接的越多，就意味着被其他网站投票越多。这个就是所谓的链接流行度----衡量多少人愿意将他们的网站和你的网站挂钩。</p>
+<p>搜索引擎网站排名算法中各排名因子的重要性取决于它们所提供信息的质量。但如果排名因子具有易操纵性，则往往会被一些网站管理员利用来实现不良竞争。例如初引入的排名因子之一----关键词元标识（Meta Keywords），是由于理论上它可以很好地概括反映一个页面的内容，但后来却由于一些网站管理员的恶意操纵而不得不黯然退出。</p>
+<p>PageRank最初推出时针对的只是链接的数量，PageRank值较高的页面排名往往要比PageRank值较低的页面高，这导致了人们对于链接引用的着魔。在过去几年间，整个SEO社区人们忙于争夺、交换甚至销售链接，它是人们关注的焦点，所以被一些网站管理员钻了空子，利用链接工厂和访问簿大量低劣外部链接轻而易举地达到了自己的目的。Google意识到这个问题之后，便在系统中融合了对链接质量分析，开始放弃某些类型的链接，并对发现作弊的站点进行封杀，从而不但有效地打击了这种作法，而且保证了结果的和精准度。比如，被人们广泛接受的一条规定，来自缺乏内容的“link farm”（链接工厂）网站的链接将不会提供页面的PageRank，从PageRank较高的页面得到的链接但是内容不相差，比如说某个流行音乐网站链接到一个汽车网站就不会提供页面的PageRank。Google选择降低了对PageRank的更新频率，以便不鼓励人们不断地对其进行监测。</p>
+<p>PageRank一般一年更新4次，所以刚上线不久的新网站是不可能获得PR值的。你的网站很有可能在相当长的时间内是看不到PR值的变化的，特别是一些新的网站。PR值暂时没有，这不是什么不好的事情，耐心等待就好~<br>
+那么，我们如何知道一个网页的PageRank值呢？可以从http://toolbar.google.com上下载安装Google工具栏，这样就能显示所浏览网页的PageRank值了。若不能显示，可检查所安装版本号，需将老版本完全卸载，重启机器后安装最新版本即可<br>
+为你的网站获得外部的链接是一件好事，但是无视其他SEO领域的工作而进行急迫的链接建设就是在浪费时间，要时刻保持一个整体思路并记住以下几点：</p>
+<ol>
+<li>Google的排名算法并不是完全基于外部链接的。</li>
+<li>高PageRank并不能保证Google的高排名。</li>
+<li>PageRank值更新的比较慢，今天看到的PageRank的值可能是三个月前的值。</li>
+</ol>
+<p>一般来说，网站排名因素包括网页的标题（META TITLE），网页正文中的关键词密度，锚文本（也叫链接文本，指链接或超链的文本内容）和PageRank所决定的。请记住：单靠PageRank是无法使你获得比较理想的网站排名的。PageRank只是网站排名算法中的一个乘积因子，若你网站的其它排名因子的得分是0，就算你的PageRank值是1个亿都木有用，最后得分还是0。但这并不是说PageRank就毫无价值，而是在什么情况下PageRank能够完全发挥其功力。</p>
+<p>如果在Google上进行广泛搜索，看起来好象有几千个结果，但实际显示最多前1000项结果。例如对“car rental”，显示搜索结果为5,110,000，但实际显示结果只有826个。而且用时只有0.81秒。试想一下，0.84秒的时间就可以计算这五百万搜索结果的每个排名因子得分，然后给出最终我们所看到的网站排名结果吗？</p>
+<p>答案就在于：搜索引擎选取与查询条件最相关的那些网页形成一个子集来加快搜索的速度。例如：假设子集中包含2000个元素，搜索引擎所做的就是使用排名因子中的两到三个因素对整个数据库进行查询，找到针对这两三个排名因子得分较高的前2000个网页。(请记住，虽然可能有五百多万搜索结果，但最终实际显示的1000项搜索结果却是从这个2000页的子集中提炼出来的。) 然后搜索引擎再把所有排名因子整合进这2000项搜索结果组成的子集中并进行相应的网站排名。由于按相性进行排序，子集中越靠后的搜索结果(不是指网页)相关性(质量)也就越低，所以搜索引擎只向用户显示与查询条件最相关的前1000项搜索结果。</p>
+<p>请注意，在搜索引擎生成这2000项网页的子集中我们强调了“相关性”这个词。即搜索引擎找寻的是与查询条件有共同主题的网页。如果这时候我们把PageRank考虑进去，就很可能得到一些PageRank很高但主题只是略微相关的一些搜索结果。显然这有违搜索引擎为用户提供最为相关和精准的搜索结果的原则。</p>
+<p>一旦理解了为什么会如此，就说明了为什么你应当首先努力在“页面”因子和锚文本上下足工夫，最后才是PageRank。所以关键在于：你必须首先在页面因素和/或锚文本上下足工夫，使这些排名因子能够获得足够的得分，从而使你的网站能够按目标关键词跻身于这2,000项搜索结果的子集中，否则PageRank再高也与事无补。</p>
+<p>因此，我们不鼓励刻意地去追求PageRank，因为决定排名的因素可以有上百种。尽管如此，PageRank还是一个用来了解Google对你的网站页面如何评价的相当好的指标，建议网站设计者要充分认识PageRank在Google判断网站质量的重要作用，从设计前的考虑到后期网站更新都要给予PageRank足够的分析，很好的利用。我们要将PageRank看作一种业余爱好而不是一种信仰。</p>
+<h2 id="二、PageRank原理"><a class="header-anchor" href="#二、PageRank原理"></a>二、PageRank原理</h2>
+<p>通过对由超过50000万个变量和20亿个词汇组成的方程进行计算，PageRank能够对网页的重要性做出客观评价。PageRank并不计算直接链接的数量，而是将从网页A指向网页B的链接解释为由网页A对网页B所投的一票。这样，PageRank会根据网页B所收到的投票数量来评估该网页的重要性。此外，PageRank还会评估每个投票网页的重要性，因为某些重要网页的投票被认为具有较高的价值，这样，它所链接的网页就能获得较高的价值。这就是PageRank的核心思想，当然PageRank算法的实际实现上要复杂很多。</p>
+<p>但是问题又来了，计算其他网页PageRank的值需要用到网页本身的PageRank值，而其他网页的PageRank值反过来又影响本网页的PageRank的值，这不就成了一个先有鸡还是先有蛋的问题了吗？Google的两个创始人拉里.佩奇（Larry Page）和谢耳盖.布林（Sergey Brin）把这个问题变成一个二维矩阵相乘的问题，并且用迭代的方法解决了这个问题。他们先假定所有网页的排名是相同的，并且根据这个初始值，算出各个网页的第一次迭代的排名，然后再根据第一次迭代排名算出第二次的排名。他们两人从理论上证明了不论初始值如何选取，这种算法都将能够保证了网页排名的估计值能够收敛到它们就有的真实值。值得一提的是，这种算法的执行是完全没有任何人工干预的。</p>
+<p>理论问题解决了，但在实际的应用中，互联网上网页的数量是巨大的，上面提到的二维矩阵从理论上讲有网页数目平方之多个元素。如果我们假定有10亿个网页，那么这个矩阵就要有100亿亿个元素。这样大的矩阵相乘，计算量是非常之大。怎么办？怎么办？Larry和Sergey两利用稀疏矩阵计算的技巧，大大简化了计算量，并实现了这个网页排名算法。今天Google的工程师把这个算法移植移植到并行的计算机中，进一步缩短了计算的时间，使得网页的周期比以前短了许多。</p>
+<p>网页排名的高明之处在于它把整个互联网当作了一个整体对等。它无意识中符合了系统论的观点。相比之下，之前的信息检索大多把每一个网页当作独立的个体对等，很多人当初只注意了网页的内容和查询语句的相差性，忽略了网页之间的关联。</p>
+<p>今天，Google搜索引擎比最初复杂、完善了许多。但是网页的排名在Google所有算法中依然是到头重要的。在学术界，这个算法被公认为是文献检索中最大的贡献之一，并且被很多大学引入了信息检索课程的教程。</p>
+<p>在计算网站排名时，PageRank会将网站的外部链接数考虑进去。并不能说一个网站的外部链接数越多其PR值就越高，如果这样的话，一个网站尽可能地获得最多的外部链接就OK了，这种想法是错误的。Google对一个网站上的外部链接数的重视程度并不意味着你因此可以不求策略与任何网站建立连接。这是因为Google并不是简单地由计算网站的外部链接数来决定其等级的。Google的PageRank系统不单考虑一个网站的外部链接数量，也会考虑其质量，这个问题看来很复杂。</p>
+<p>首先来解释一下阻尼系数：当你投票或链接到另外一个站点时所获得的实际PR分值。阻尼系数一般是0.85。当然比起你网站的实际PR值，它就显得微不足道了。具体的PR值计算公式为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PR(A) &#x3D; (1 - d) + d (PR(t1) &#x2F; C(t1) + … + PR(tn) &#x2F; C(tn))</span><br></pre></td></tr></table></figure>
+<p>其中，PR(A)表示从一个外部链接站点t1上，依据PageRank系统给你的网站所增加的PR值。PR(t1)表示该外部链接网站本身的PR值，C(t1)表示该外部链接站点所拥有的外部链接数量。大家要谨记：一个网站的投票权值只有该网站PR值的0.85倍。</p>
+<p>必须要注意的一点是：PageRank不单考虑一个网站的外部链接质量，还需要考虑其数量。打个比方：对于网站X而言，网站Y是它唯一的一个外部链接，那么Google就相信网站X将网站Y视为它最好的一个外部链接，从而给网站Y更多的分值。可是，如果网站X上已经存在了49个外部链接，那么Google就相信网站X只是将网站Y视为它第50个好网站。因而一个网站上外部链接的数量越多，它所能够提供的PR值则会越低。如果一个PR值大于等于6的外部链接站点，可显著提升你的PR值。但如果这个外部链接站点已经有100个其它的外部链接时，那么你能够得到的PR值就几乎为0了。同样，如果一个外部链接站点PR值为2，但你却是它唯一一个外部链接，那么你所能够获得的PR值要远远大于那个PR值为6，外部链接数为100的网站。</p>
+<p>影响Google PageRank的几个重要因素：</p>
+<ol>
+<li>与PR高的网站做链接</li>
+<li>内容质量高的网站链接</li>
+<li>加入搜索引擎分类目录</li>
+<li>加入免费开源目录</li>
+<li>你的链接出现在流量大、知名度高、频繁更新的重要网站上</li>
+<li>Google对PDF格式的文件比较看重</li>
+<li>域名和Title标题出现关键词与Meta标签等</li>
+<li>反向链接数量和反向链接等级</li>
+<li>Google抓取你网站的页面数量</li>
+<li>导出链接数量</li>
+</ol>
+<p>PageRank和其他排名因子之间存在不同：网页Title标识仅能被列出一次；正文中出现的关键词连续的重复只会降低关键词的重要性，重要的是接近度；锚文本加权值极高，但存在上限，超过上限的锚文本信息将被忽略或降低权值；PageRank潜质无穷，没有上限的限制，但需要大量工作。除了PageRank外，其它排名因子都存在一个阙值，也叫临界值或差值。即当增长到一定值时，因子的重要性反而开始慢慢降低，则该值就是非PageRank因子的阙值。</p>
+<p>设阙值为1000，如果网页A和B是我们对某一查询条件的其中两个查询结果，且A的总分数(包括页面因子得分和PageRank得分)是900，B是500，则显然A会排在B的前面。但由于A和B的分数均低于我们上面假设的非PageRank因子阙值，因而在不改变PageRank的情况下，我们可以通过对B页进行精心的页面优化使页面因子分数得到提高来使其排名超过A。但如果A的总得分升至1100分，则B若还只是一味优化页面因子是远远不够的。在这种情况下，提升PageRank就成为首要任务了。</p>
+<p>一般说来，Google的查询结果页中既可能包含一些分数超过阙值的网页，也可能包含一些分数低于阙值的网页。所以为了提高竞争能力，必须在阙值范围内尽可能提高页面的搜索引擎排名得分，否则会降低页面的竞争力。“页面因子”是接近和达到阙值最迅捷的方式，它与PageRank的结合使用才是提升网站排名得分的最佳优化策略。阙值解释了搜索引擎商所遵循的原则和不同的实施途径，同时亦阐述了为什么会产生关于PageRank的一些误解。我们可以把这两种策略当成两个人A和B。</p>
+<p>A认为“PageRank”并不重要。他们已有数年网页优化经验并知道如何完美地利用“页面因素”来达到优化的目的。他们亦理解基本的锚文本，但对PageRank得分毫不在意。结果如何呢？由于最大化地使用了“页面因子”，从而使A迅速达到“非PageRank因子的阙值”。所以通过精心选择关键词可使他们获得较好的网站排名。而且只要网站内容比较好，随着时间推移总会有排名高的站点链接，涓涓细流汇成河。A最后亦得到了PageRank得分，并籍此巩固了排名。</p>
+<p>B认为“PageRank”十分重要。他掌握了很多关于提升PageRank得分的信息，并为提高该得分下足了工夫。结果又如何呢？B的做法和A相反，但A在非PageRank因子上下工夫，结果却得到了PageRank得分。而B在PageRank因子上下工夫，结果却得到非PageRank因子得分。究其原因，就是由于提高PageRank得分需要外部链接，链接又具有锚文本，从而通过精心挑选外部链接的锚文本，B自发提高了其非PageRank因子的得分，从而赢得了较高的PageRank得分。虽然这只是两个极端，但我们可以利用它们来推知这两种途径各自的优缺点：<br>
+A：忽略PageRank  网站排名在短期内就可得到提升，自我生成链接节省了工作量，需投入大量工作维持网站排名，对新竞争者的应变速度较慢。<br>
+B：忽略页面排名因子，可获得可靠网站排名，并可在需要时轻松修改页面因素使排名迅速提升，极可能从非搜索类引擎来源上获得更高访问量，网站排名提升较慢，操作难度较大，容易为SPAM过滤程序所制。</p>
+<p>事实上，我们前面说过，最终排名得分=所有非PageRank因子实际得分x实际PageRank得分。亦即二者相辅相成，再加上随着网上营销方式的发展壮大，关键词的竞争也变的愈来愈激烈，这种情况下只靠非PageRank因子得到好排名显然是不可能的。而且非PageRank因子存在着阙值的局限性。同时，对于竞争性极高的关键词，还存在着PageRank下限的问题。也就是说，除非网站的PageRank得分超过这个下限标准，否则网站排名很难上去。PageRank的下限由关键词的竞争度所决定。竞争性一般的关键词PageRank下限也不高，而对竞争较为激烈的关键词来说，它所要求的PageRank下限相应就要高。而PageRank得分的提升又非常有难，这时候非PageRank因子就变的非常重要了。</p>
+<p>综上所述：我们需要充分发挥各排名因子的优势来赢取理想的综合排名得分。同时关键词（竞争度适宜）的精心选择亦变的非常重要，它可以节省大量的支出。</p>
+<h2 id="三、总结"><a class="header-anchor" href="#三、总结"></a>三、总结</h2>
+<p>关于PageRank，最权威的发言人自然还是Google。虽然Google不会也不可能提供相关的技术信息，但我们亦可从中窥得一斑：</p>
+<blockquote>
+<p>Chris：PageRank的命名是基于“Page”，还是和某个创始人有关？<br>
+Google：PageRank是以Google的联合创始人兼总裁Larry Page的名字命名的。<br>
+Chris：Google是否把PageRank视做显著区别于其它搜索引擎的一个特性？<br>
+Google：PageRank是一种能够使Google在搜索速度和搜索结果的相关性上区别于其它搜索引擎的技术。不唯如此，在排名公式中Google还使用了100种其它的算法。<br>
+Chris：Google是否认为引入PageRank可以显著提高搜索结果的质量？以后是否仍将继续使用PageRank？<br>
+Google：由于PageRank使用了量化方法来分析链接，所以它仍将是决定Google搜索结果页排名的一个重要因素。<br>
+Chris：您认为Google工具栏上的PageRank的信息对普通用户/网站管理员/搜索引擎优化专家来说各有什么意义？<br>
+Google：Google工具栏上所提供的PageRank信息仅作为一种网站评估信息使用。用户们会觉得它很有趣，网站管理员一般用它来衡量网站性能。不过，由于PageRank只是一个大体评估，所以对搜索引擎专家的价值并不大。<br>
+Chris：常有网站试图通过“链接工厂”和访客簿的手段达到提升PageRank的目的。对这样的网站Google有什么举措？<br>
+Google：Google的工程师会经常更新Google的排名算法以防止对Google排名的恶意操纵。</p>
+</blockquote>
+<p>选择导入链接时应首先考虑对方网站的内容如何，然后再考察其导出链接的数量进行决策。而在建立本站的导出链接时则应尽量使自己网站的PageRank维持在最大回馈和最小流失上。应确保合理的网站设计结构和内部联接方式。网站的结构和内部联接方式也会对PageRank产生影响，可利用其特性有效进行PagaRank在网站内部页面的再分布及尽可能保持网站整体的PageRank。网站的PageRank的提升应与该网站的访问者体验息息相关。即使获得再高的PageRank，如果没有客户访问，一样毫无价值。所以网站的内容始终是提升PageRank最关键的因素之一。</p>
+<hr>
+<p><strong>本文地址：<a href="http://xnerv.wang/further-disscusion-of-pagerank-1/">http://xnerv.wang/further-disscusion-of-pagerank-1/</a></strong><br>
+转载自：<a target="_blank" rel="noopener" href="http://blog.csdn.net/monkey_d_meng/article/details/6554518">深入探讨PageRank（一）：PageRank算法原理入门</a></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag"># 转载</a>
+              <a href="/tags/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/" rel="tag"># 搜索引擎</a>
+              <a href="/tags/PageRank/" rel="tag"># PageRank</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81PageRank%E7%AE%80%E4%BB%8B"><span class="nav-text">一、PageRank简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81PageRank%E5%8E%9F%E7%90%86"><span class="nav-text">二、PageRank原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E6%80%BB%E7%BB%93"><span class="nav-text">三、总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>
