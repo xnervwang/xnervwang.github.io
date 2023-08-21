@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -73,7 +73,7 @@
 <meta property="og:image" content="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_03_chichoke.png">
 <meta property="og:image" content="https://opensource.com/sites/default/files/images/life-uploads/mls-enforcement_06_nocatchow.png">
 <meta property="article:published_time" content="2013-11-13T08:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.879Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.171Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="SELinux">
@@ -317,7 +317,7 @@
 <p>SElinux is a labeling system. Every process has a label. Every file/directory object in the operating system has a label. Even network ports, devices, and potentially hostnames have labels assigned to them. We write rules to control the access of a process label to an a object label like a file. We call this <em>policy</em>. The kernel enforces the rules. Sometimes this enforcement is called Mandatory Access Control (MAC).</p>
 <p>The owner of an object does not have discretion over the security attributes of a object. Standard Linux access control, owner/group + permission flags like rwx, is often called Discretionary Access Control (DAC). SELinux has no concept of UID or ownership of files. Everything is controlled by the labels. Meaning an SELinux system can be setup without an all powerful root process.</p>
 <p><strong>Note:</strong> _SELinux does not let you side step DAC Controls. SELinux is a parallel enforcement model. An application has to be allowed by BOTH SELinux and DAC to do certain activities. This can lead to confusion for administrators because the process gets Permission Denied. Administrators see Permission Denied means something is wrong with DAC, not SELinux labels.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="Type-enforcement"><a class="header-anchor" href="#Type-enforcement"></a>Type enforcement</h3>
 <p>Lets look a little further into the labels. The SELinux primary model or enforcement is called <em>type enforcement</em>. Basically this means we define the label on a process based on its type, and the label on a file system object based on its type.</p>
 <p><em>Analogy</em></p>

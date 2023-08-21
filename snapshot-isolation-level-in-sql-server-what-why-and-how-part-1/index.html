@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="Introduction Snapshot Isolation level was introduced in SQL Server 2005 and has been available ever since. Snapshot isolation levels improve performance but there are some things to take into consider">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-01-30T08:37:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.255Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.103Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -298,7 +298,7 @@
         <h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
 <p><a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/tcbchxcb(v=vs.80).aspx">Snapshot Isolation</a> level was introduced in SQL Server 2005 and has been available ever since. Snapshot isolation levels improve performance but there are some things to take into consideration when using this feature. Some people use it frequently as it minimizes blocking and improves performance/concurrency without knowing its impact on maintaining versions in tempdb, whereas some people stay away from it because of this extra overhead. Some people get confused about the two variants of snapshot isolation level (Read Committed Snapshot Isolation (RCSI) and Snapshot Isolation (SI)) and use one where the other is needed or vice versa.</p>
 <p>In this article series, I am going to discuss what snapshot isolation levels are, their variants, why and when we should use them and how we should start using this feature with examples.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Understanding-Snapshot-Isolation-Level"><a class="header-anchor" href="#Understanding-Snapshot-Isolation-Level"></a>Understanding Snapshot Isolation Level</h2>
 <p>Isolation level controls how two or more transactions running simultaneously should be isolated from each other in terms of locking and blocking resources. Isolation level determines the level of concurrency and data consistency. Prior to SQL Server we had four isolation levels as briefly discussed below:</p>
 <ul>

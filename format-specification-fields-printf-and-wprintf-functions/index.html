@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="各种 printf 函数采用格式字符串和可选参数，并生成用于输出的格式化的字符序列。 格式字符串包含零个或多个指令，这些指令是用于输出的文本字符或描述如何在输出中设置参数格式的已编码的转换规范。 本主题介绍用于对格式字符串中的转换规范进行编码的语法。 有关这些函数的列表，请参阅流 I&#x2F;O。 一个转换规范由以下形式的可选和必需字段组成： %[标志][宽度][.精度][大小]类型 转换规范的每个字段都">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-11-19T05:33:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.525Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.388Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="C++">
@@ -299,7 +299,7 @@
 <p><strong>%</strong>[<a href="#flags"><em>标志</em></a>][<a href="#width"><em>宽度</em></a>][.<a href="#precision"><em>精度</em></a>][<a href="#size"><em>大小</em></a>]<a href="#type"><em>类型</em></a></p>
 <p>转换规范的每个字段都是一个用于指示特定的格式选项或转换说明符的字符或数字。 必填的类型字段指定要应用于参数的转换类型。 可选的标志、宽度和精度字段控制格式的其他方面（如前导空格或前导零、对齐方式和显示的精度）。 大小字段指定使用和转换的参数的大小。</p>
 <p>一个基本的转换规范仅包含百分号和一个类型字符。 例如，<code>%s</code> 指定一个字符串转换。 若要打印百分号字符，请使用 <code>%%</code>。 如果百分号后跟一个没有任何意义的字符作为格式字段，则将调用无效的参数处理程序。 有关详细信息，请参阅<a href="parameter-validation">参数验证</a>。</p>
-<a id="more"></a>
+<span id="more"></span>
 <blockquote>
 <p><strong>重要</strong></p>
 <p>为了实现安全性和稳定性，请确保转换规范字符串不是用户定义的。 例如，考虑这样一个程序，它提示用户输入名称并将输入存储在一个名为 <code>user_name</code> 的字符串变量中。 若要打印 <code>user_name</code>，请勿执行下列操作：</p>

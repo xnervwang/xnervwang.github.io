@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -70,7 +70,7 @@
 <meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/14_session_a.png">
 <meta property="og:image" content="http://pythianblog.wpengine.com/wp-content/uploads/15_session_a.png">
 <meta property="article:published_time" content="2018-01-30T07:21:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.346Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.112Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -315,7 +315,7 @@
 <p>Both the lack of documentation and the absence of a deeper description of the expected behavior in the SQL standard make <em>isolation levels</em> a topic that is more assumed than known by database administrators and developers. In this blog post, I aim to help you understand how the default isolation level in MySQL works and show you some surprising facts about it.</p>
 <p>But first let’s see how isolation levels are described in the standard: “The transaction isolation level of a SQL-transaction defines the degree to which the operations on SQL-data, or schemas in that SQL-transaction are affected by the effects of and can affect operations on SQL-data or schemas in concurrent SQL-transactions”. To put it in plain words, isolation levels define how concurrent transactions interact while modifying data.</p>
 <p>MySQL uses <strong>Repeatable-read</strong> as the default level. In the standard, this level forbids <em>dirty reads</em> (non committed data) and <em>non repeatable reads</em> (executing the same query twice should return the same values) and allows <em>phantom</em> reads (new rows are visible). But MySQL implements it in a different way. Let’s see how it is implemented with some examples.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="MySQL-Repeatable-Read-tests"><a class="header-anchor" href="#MySQL-Repeatable-Read-tests"></a>MySQL Repeatable-Read tests</h2>
 <p>We create two connections against a MySQL server. We will call them <strong>Session Blue</strong> and <strong>Session Red</strong> (The fact that these are the colors of <a target="_blank" rel="noopener" href="https://www.fcbarcelona.com">FC Barcelona</a> is purely coincidental). In Session Blue we will create the database <em>isolation</em> and the table <em>repeatable_read</em>, both will be required for this test.</p>
 <p><img src="http://pythianblog.wpengine.com/wp-content/uploads/1_session_a.png" alt="Create database isolation and table repeatable_read"></p>

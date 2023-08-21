@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="exe调用了cglover.dll中的一个导出类成员函数，是一个读取lua配置文件类，其中一个函数是读取int数组，并通知参数std::vector传递。 结果一出调用函数作用域，就挂调用，挂在std::vector的析构释放内存上~ 郁闷找不到原因，往床上一躺，突然想起关于很早以前就在游戏编程精粹上看到过exe释放dll分配的内存会有问题，但一直没明白为什么，也没有深究，应该是这个问题了。于是上">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2010-06-08T04:29:46.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.367Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.232Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Windows">
@@ -297,7 +297,7 @@
       
         <p>exe调用了cglover.dll中的一个导出类成员函数，是一个读取lua配置文件类，其中一个函数是读取int数组，并通知参数std::vector<int>传递。<br>
 结果一出调用函数作用域，就挂调用，挂在std::vector的析构释放内存上~ 郁闷找不到原因，往床上一躺，突然想起关于很早以前就在游戏编程精粹上看到过exe释放dll分配的内存会有问题，但一直没明白为什么，也没有深究，应该是这个问题了。于是上网查了下，然后用windbg跟了下，总算整明白了。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>Malloc和Free由CRT提供，分别是</p>
 <ul>
 <li>DEBUG版本：

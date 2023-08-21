@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -73,7 +73,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/dynamo-implement/2017-10-24-merkle-hash-tree.png">
 <meta property="og:image" content="https://xnerv.wang/assets/dynamo-implement/2017-10-24-amazon-cto-twitter-about-dynamo.png">
 <meta property="article:published_time" content="2018-03-17T01:40:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.600Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.259Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="分布式及存储">
@@ -315,7 +315,7 @@
         <p>在最近的一周时间里，一直都在研究和阅读 Amazon 的一篇论文 <a target="_blank" rel="noopener" href="http://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf">Dynamo: Amazon’s Highly Available Key-value Store</a>，论文中描述了 Amazon 的高可用分布式键值存储服务 Dynamo 的实现原理。</p>
 <p><img src="/assets/dynamo-implement/2017-10-24-dynamodb.png" alt="dynamodb"></p>
 <p>之前在阅读 Google 的 <a target="_blank" rel="noopener" href="https://static.googleusercontent.com/media/research.google.com/en//archive/bigtable-osdi06.pdf">Bigtable: A Distributed Storage System for Structured Data</a> 时写了一篇 <a target="_blank" rel="noopener" href="https://draveness.me/bigtable-leveldb">浅析 Bigtable 和 LevelDB 的实现</a> 文章分析了 Bigtable 的单机版 LevelDB 的实现原理；在研究 Dynamo 时，作者发现 Dynamo 虽然和 Bigtable 同为 NoSQL，但是它们的实现却有着很大的不同，最主要的原因来自不同的应用场景和不同的目的。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Bigtable-和-Dynamo"><a class="header-anchor" href="#Bigtable-和-Dynamo"></a><a href="#bigtable-%E5%92%8C-dynamo"></a>Bigtable 和 Dynamo</h2>
 <p>Bigtable 和 Dynamo 两者分别是 Google 和 Amazon 两大巨头给出的存储海量数据的解决方法，作为 NoSQL 两者都具有分布式、容错以及可扩展的几大特性。</p>
 <p><img src="/assets/dynamo-implement/2017-10-24-nosql-main-characteristics.png" alt="nosql-main-characteristics"></p>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -61,7 +61,7 @@
 <meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2014/01/two-generals-problems.jpg">
 <meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2014/01/Transaction-Across-DataCenter.jpg">
 <meta property="article:published_time" content="2014-01-20T08:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.574Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.245Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="分布式及存储">
@@ -308,7 +308,7 @@
 <p>于是我们不得不对我们的服务器进行扩展，加入更多的机器来分担性能上的问题，以及来解决单点故障问题。 通常，我们会通过两种手段来扩展我们的数据服务：</p>
 <p>1）<strong>数据分区</strong>：就是把数据分块放在不同的服务器上（如：uid % 16，一致性哈希等）。</p>
 <p>2）<strong>数据镜像</strong>：让所有的服务器都有相同的数据，提供相当的服务。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>对于第一种情况，我们无法解决数据丢失的问题，单台服务器出问题时，会有部分数据丢失。所以，<strong>数据服务的高可用性只能通过第二种方法来完成——数据的冗余存储</strong>（一般工业界认为比较安全的备份数应该是3份，如：Hadoop和Dynamo）<strong>。 但是，加入更多的机器，会让我们的数据服务变得很复杂，尤其是跨服务器的事务处理，也就是跨服务器的数据一致性</strong>。这个是一个很难的问题。 让我们用最经典的Use Case：“A帐号向B帐号汇钱”来说明一下，熟悉RDBMS事务的都知道从帐号A到帐号B需要6个操作：</p>
 <ol>
 <li>从A帐号中把余额读出来。</li>

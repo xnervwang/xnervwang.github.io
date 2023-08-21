@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -57,7 +57,7 @@
 <meta property="og:image" content="http://slacksite.com/images/ftp/activeftp.gif">
 <meta property="og:image" content="http://slacksite.com/images/ftp/passiveftp.gif">
 <meta property="article:published_time" content="2018-02-20T22:34:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.859Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.440Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="网络协议">
@@ -301,7 +301,7 @@
         <h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
 <p>One of the most commonly seen questions when dealing with firewalls and other Internet connectivity issues is the difference between active and passive FTP and how best to support either or both of them. Hopefully the following text will help to clear up some of the confusion over how to support FTP in a firewalled environment.</p>
 <p>This may not be <em>the</em> definitive explanation, as the title claims, however, I’ve heard enough good feedback and seen this document linked in enough places to know that quite a few people have found it to be useful. I am always looking for ways to improve things though, and if you find something that is not quite clear or needs more explanation, please let me know! Recent additions to this document include the examples of both active and passive command line FTP sessions. These session examples should help make things a bit clearer. They also provide a nice picture into what goes on behind the scenes during an FTP session. Now, on to the information…</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="The-Basics"><a class="header-anchor" href="#The-Basics"></a>The Basics</h2>
 <p>FTP is a TCP based service exclusively. There is no UDP component to FTP. FTP is an unusual service in that it utilizes two ports, a ‘data’ port and a ‘command’ port (also known as the control port). Traditionally these are port 21 for the command port and port 20 for the data port. The confusion begins however, when we find that depending on the mode, the data port is not always on port 20.</p>
 <h2 id="Active-FTP"><a class="header-anchor" href="#Active-FTP"></a>Active FTP</h2>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="I’m sure it’s been drilled into your head by now that you have to free memory with the same allocator that allocated it. LocalAlloc matches LocalFree, GlobalAlloc matches GlobalFree, new[] matches del">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-10-24T05:23:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.312Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.227Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Windows">
@@ -296,7 +296,7 @@
 
       
         <p>I’m sure it’s been drilled into your head by now that you have to free memory with the same allocator that allocated it. LocalAlloc matches LocalFree, GlobalAlloc matches GlobalFree, new[] matches delete[]. But this rule goes deeper.</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>If you have a function that allocates and returns some data, the caller must know how to free that memory. You have a variety of ways of accomplishing this. One is to state explicitly how the memory should be freed. For example, the FormatMessage documentation explicitly states that you should use the LocalFree function to free the buffer that is allocated if you pass the FORMAT_MESSAGE_ALLOCATE_BUFFER flag. All BSTRs must be freed with SysFreeString. And all memory returned across COM interface boundaries must be allocated and freed with the COM task allocator.</p>
 <p>Note, however, that if you decide that a block of memory should be freed with the C runtime, such as with free, or with the C++ runtime via delete or delete[], you have a new problem: Which runtime?</p>
 <p>If you choose to link with the static runtime library, then your module has its own private copy of the C/C++ runtime. When your module calls new or malloc, the memory can only be freed by your module calling delete or free. If another module calls delete or free, that will use the C/C++ runtime of <strong>that other module</strong> which is not the same as yours. Indeed, even if you choose to link with the DLL version of the C/C++ runtime library, you still have to agree which version of the C/C++ runtime to use. If your DLL uses MSVCRT20.DLL to allocate memory, then anybody who wants to free that memory must also use MSVCRT20.DLL.</p>

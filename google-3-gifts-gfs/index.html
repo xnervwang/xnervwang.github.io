@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/7.jpg">
 <meta property="og:image" content="https://xnerv.wang/assets/google-3-gifts-gfs/8.jpg">
 <meta property="article:published_time" content="2012-04-22T00:28:31.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.767Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.275Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="分布式及存储">
@@ -315,7 +315,7 @@
 <li>高带宽比低延迟更重要，GFS的应用大多需要快速处理大量的数据，很少会严格要求单一操作的响应时间。</li>
 </ol>
 <p>从这些假设基本可以看出GFS期望的应用场景应该是大文件，连续读，不修改，高并发。国内的淘宝文件系统（TFS）就不一样，专门为处理小文件进行了优化。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="1-体系结构"><a class="header-anchor" href="#1-体系结构"></a>1 体系结构</h2>
 <p>GFS包括一个master结点（元数据服务器），多个chunkserver（数据服务器）和多个client（运行各种应用的客户端）。在可靠性要求不高的场景，client和chunkserver可以位于一个结点。图1是GFS的体系结构示意图，每一结点都是普通的Linux服务器，GFS的工作就是协调成百上千的服务器为各种应用提供服务。</p>
 <p><img src="/assets/google-3-gifts-gfs/1.jpg" alt=""></p>

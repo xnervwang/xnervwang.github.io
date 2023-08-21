@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -59,7 +59,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/formula1.png">
 <meta property="og:image" content="https://xnerv.wang/assets/special-features-of-linux-memory-management-mechanism/formula2.png">
 <meta property="article:published_time" content="2014-12-01T00:27:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.822Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.166Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Heap">
@@ -302,7 +302,7 @@
 
       
         <p>In this article, I am going to describe some general features and some specific ones of the memory management in Linux. It will be mainly on dynamic memory allocation and release, as well as the management of the free memory. The article concerns the Linux kernel versions 2.6.X.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Structure-of-the-Linux-memory-management"><a class="header-anchor" href="#Structure-of-the-Linux-memory-management"></a>Structure of the Linux memory management</h2>
 <p>The term “memory management” refers to the mechanisms implemented by an operating system to provide applications with memory-related services. These services include usage of virtual memory (utilizing of a hard disk or other non-RAM storage media to provide additional program memory), protected memory (exclusive access to a region of memory by a process), and shared memory (cooperative access to a region of memory by multiple processes).</p>
 <p>Memory management services in the Linux are built on a programming foundation that includes a peripheral device called <strong>Memory Management Unit (MMU)</strong>. MMU translates physical memory addresses to linear addresses used by the operating system, and requests a page fault interrupt, when the CPU tries to access memory that it is not entitled to.</p>

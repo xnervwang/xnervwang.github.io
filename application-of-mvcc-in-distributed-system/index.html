@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -61,7 +61,7 @@
 <meta property="og:image" content="http://images.cnblogs.com/cnblogs_com/weidagang2046/362318/o_mvcc_3.png">
 <meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2012/03/0915533324-2.png">
 <meta property="article:published_time" content="2012-03-13T07:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.615Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.261Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="分布式及存储">
@@ -315,7 +315,7 @@
 <li>L2将key:123更新为100 + 2</li>
 </ol>
 <p>如果L1和L2串行执行，key:123对应的值将为103，但上面并发执行中L1的执行效果完全被L2所覆盖，实际key:123所对应的值变成了102。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="解决方案1：基于锁的事务"><a class="header-anchor" href="#解决方案1：基于锁的事务"></a>解决方案1：基于锁的事务</h2>
 <p>为了让L的处理具有可串行化特性(Serializability)，一种最直接的解决方案就是考虑为D加上基于锁的简单事务。让L在进行业务处理前先锁定D，完成以后释放锁。另外，为了防止持有锁的L由于某种原因长时间未提交事务，D还需要具有超时机制，当L尝试提交一个已超时的事务时会得到一个错误响应。</p>
 <p><img src="http://images.cnblogs.com/cnblogs_com/weidagang2046/362318/o_conditional_update_1.PNG" alt=""><img src="https://coolshell.cn/wp-content/uploads/2012/03/0915536496-0.png" alt="0915536496-0"></p>

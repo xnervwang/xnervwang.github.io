@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -58,7 +58,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/two-ways-of-allocating-memory-brk-and-mmap/2.jpg">
 <meta property="og:image" content="https://xnerv.wang/assets/two-ways-of-allocating-memory-brk-and-mmap/3.jpg">
 <meta property="article:published_time" content="2014-09-23T18:31:56.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.189Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.333Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="操作系统">
@@ -312,7 +312,7 @@ majflt代表major fault，中文名叫大错误，minflt代表minor fault，中�
 </ol>
 <p>重新执行发生缺页中断的那条指令<br>
 如果第3步，需要读取磁盘，那么这次缺页中断就是majflt，否则就是minflt。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="内存分配的原理"><a class="header-anchor" href="#内存分配的原理"></a>内存分配的原理</h2>
 <p>从操作系统角度来看，进程分配内存有两种方式，分别由两个系统调用完成：<strong>brk和mmap（不考虑共享内存）</strong>。</p>
 <ol>

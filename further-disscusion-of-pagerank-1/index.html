@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="一、PageRank简介 大名鼎鼎的PageRank算法是Google排名运算法则（排名公式）的一个非常重要的组成部分，其用于衡量一个网站好坏的标准。在揉合了诸如Title、Keywords标识等所有其它因素之后，Google利用PageRank来调整网页的排名，使得“等级&#x2F;重要性”的网页会相对排在前面。简单来说，Google通过下述几个步骤来实现网页在其搜索结果页面中排名：  找到所有与搜索关键">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2011-06-19T19:22:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.851Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.299Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="搜索引擎">
@@ -302,14 +302,14 @@
 <li>通过PageRank得分调整网站排名结果</li>
 </ol>
 <p>事实上，真正的网站的排名过程并非这么简单，我们会在后面进行详细深入阐述。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>PageRank于2001年9月被授予美国专利，专利人是Google创始人之一的拉里.佩奇（Larry Page）。所以，PageRank里面的Page并不是指网页，而是指佩奇<sub>PageRank对于网页重要性的级别分为1</sub>10级，10级为满级。PR值越高说明该网页越受欢迎，也即越重要。一个PR值为1的网站表明该网站不具备流行度，而PR值为<code>7~10</code>的网站则表明该网站是非常受欢迎的，或者说极其重要。一般PR值达到4，就算是一相当不错的网站了。Google把自己网站的PR值设置为<code>10~</code>类似里氏震级，PageRank级别并不是线性增长的，而是按照一种指数刻度，打个比方PageRank4比PageRank3虽然只是高了一级，但却在影响力上高上6~7倍，因此，一个PageRank5的网页和一个PageRank8的网页之间差距会比你可能认为的要大的多。</p>
 <p>在讨论之前，先介绍两个概念：导入链接，又称逆向链接，是指链至你网站的站点，也就是我们一般所说的外部链接。而当你链至另外一个站点，那么这个站点就是你的导出链接，即你向其他网站提供本站的链接。</p>
 <p>PageRank的思路很简单，打个比方：如何判断一篇论文的价值，即被其他论文引述的次数越多就越重要，如果被权威的论文引用，那么该论文也很重要。PageRank就是借鉴于这一思路，根据网站的外部链接和内部链接的数量和质量来衡量这个网站的价值，相当于每个到该页面的链接都是对该页面的一次投票，被链接的越多，就意味着被其他网站投票越多。这个就是所谓的链接流行度----衡量多少人愿意将他们的网站和你的网站挂钩。</p>
 <p>搜索引擎网站排名算法中各排名因子的重要性取决于它们所提供信息的质量。但如果排名因子具有易操纵性，则往往会被一些网站管理员利用来实现不良竞争。例如初引入的排名因子之一----关键词元标识（Meta Keywords），是由于理论上它可以很好地概括反映一个页面的内容，但后来却由于一些网站管理员的恶意操纵而不得不黯然退出。</p>
 <p>PageRank最初推出时针对的只是链接的数量，PageRank值较高的页面排名往往要比PageRank值较低的页面高，这导致了人们对于链接引用的着魔。在过去几年间，整个SEO社区人们忙于争夺、交换甚至销售链接，它是人们关注的焦点，所以被一些网站管理员钻了空子，利用链接工厂和访问簿大量低劣外部链接轻而易举地达到了自己的目的。Google意识到这个问题之后，便在系统中融合了对链接质量分析，开始放弃某些类型的链接，并对发现作弊的站点进行封杀，从而不但有效地打击了这种作法，而且保证了结果的和精准度。比如，被人们广泛接受的一条规定，来自缺乏内容的“link farm”（链接工厂）网站的链接将不会提供页面的PageRank，从PageRank较高的页面得到的链接但是内容不相差，比如说某个流行音乐网站链接到一个汽车网站就不会提供页面的PageRank。Google选择降低了对PageRank的更新频率，以便不鼓励人们不断地对其进行监测。</p>
 <p>PageRank一般一年更新4次，所以刚上线不久的新网站是不可能获得PR值的。你的网站很有可能在相当长的时间内是看不到PR值的变化的，特别是一些新的网站。PR值暂时没有，这不是什么不好的事情，耐心等待就好~<br>
-那么，我们如何知道一个网页的PageRank值呢？可以从http://toolbar.google.com上下载安装Google工具栏，这样就能显示所浏览网页的PageRank值了。若不能显示，可检查所安装版本号，需将老版本完全卸载，重启机器后安装最新版本即可<br>
+那么，我们如何知道一个网页的PageRank值呢？可以从<a target="_blank" rel="noopener" href="http://toolbar.google.xn--comGoogle-sb6nla236hm36a15gg94b4m3in4xa">http://toolbar.google.com上下载安装Google工具栏</a>，这样就能显示所浏览网页的PageRank值了。若不能显示，可检查所安装版本号，需将老版本完全卸载，重启机器后安装最新版本即可<br>
 为你的网站获得外部的链接是一件好事，但是无视其他SEO领域的工作而进行急迫的链接建设就是在浪费时间，要时刻保持一个整体思路并记住以下几点：</p>
 <ol>
 <li>Google的排名算法并不是完全基于外部链接的。</li>
@@ -330,7 +330,7 @@
 <p>今天，Google搜索引擎比最初复杂、完善了许多。但是网页的排名在Google所有算法中依然是到头重要的。在学术界，这个算法被公认为是文献检索中最大的贡献之一，并且被很多大学引入了信息检索课程的教程。</p>
 <p>在计算网站排名时，PageRank会将网站的外部链接数考虑进去。并不能说一个网站的外部链接数越多其PR值就越高，如果这样的话，一个网站尽可能地获得最多的外部链接就OK了，这种想法是错误的。Google对一个网站上的外部链接数的重视程度并不意味着你因此可以不求策略与任何网站建立连接。这是因为Google并不是简单地由计算网站的外部链接数来决定其等级的。Google的PageRank系统不单考虑一个网站的外部链接数量，也会考虑其质量，这个问题看来很复杂。</p>
 <p>首先来解释一下阻尼系数：当你投票或链接到另外一个站点时所获得的实际PR分值。阻尼系数一般是0.85。当然比起你网站的实际PR值，它就显得微不足道了。具体的PR值计算公式为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PR(A) &#x3D; (1 - d) + d (PR(t1) &#x2F; C(t1) + … + PR(tn) &#x2F; C(tn))</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PR(A) = (1 - d) + d (PR(t1) / C(t1) + … + PR(tn) / C(tn))</span><br></pre></td></tr></table></figure>
 <p>其中，PR(A)表示从一个外部链接站点t1上，依据PageRank系统给你的网站所增加的PR值。PR(t1)表示该外部链接网站本身的PR值，C(t1)表示该外部链接站点所拥有的外部链接数量。大家要谨记：一个网站的投票权值只有该网站PR值的0.85倍。</p>
 <p>必须要注意的一点是：PageRank不单考虑一个网站的外部链接质量，还需要考虑其数量。打个比方：对于网站X而言，网站Y是它唯一的一个外部链接，那么Google就相信网站X将网站Y视为它最好的一个外部链接，从而给网站Y更多的分值。可是，如果网站X上已经存在了49个外部链接，那么Google就相信网站X只是将网站Y视为它第50个好网站。因而一个网站上外部链接的数量越多，它所能够提供的PR值则会越低。如果一个PR值大于等于6的外部链接站点，可显著提升你的PR值。但如果这个外部链接站点已经有100个其它的外部链接时，那么你能够得到的PR值就几乎为0了。同样，如果一个外部链接站点PR值为2，但你却是它唯一一个外部链接，那么你所能够获得的PR值要远远大于那个PR值为6，外部链接数为100的网站。</p>
 <p>影响Google PageRank的几个重要因素：</p>

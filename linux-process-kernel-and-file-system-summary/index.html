@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -60,7 +60,7 @@
 <meta property="og:image" content="http://pic002.cnblogs.com/images/2012/360373/2012082223132263.jpg">
 <meta property="og:image" content="http://img.blog.csdn.net/20140831224917875?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvY3l3b3Nw/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="article:published_time" content="2017-11-03T23:58:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.579Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.137Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="原创">
 <meta property="article:tag" content="Linux">
@@ -309,7 +309,7 @@
 但是在复杂系统中，有时我们fork子进程时已经不知道打开了多少个文件描述符（包括socket句柄等），这此时进行逐一清理确实有很大难 度。我们期望的是能在fork子进程前打开某个文件句柄时就指定好：“这个句柄我在fork子进程后执行exec时就关闭”。其实时有这样的方法的：即所 谓 的 close-on-exec。<br>
 回到我们的应用场景中来，只要我们在创建socket的时候加上 SOCK_CLOEXEC标志，就能够达到我们要求的效果，在fork子进程中执行exec的时候，会清理掉父进程创建的socket。</p>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
 <p><a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/395877/are-child-processes-created-with-fork-automatically-killed-when-the-parent-is">Are child processes created with fork() automatically killed when the parent is killed?</a></p>
 <blockquote>
 <p>No. If the parent is killed, children become children of the init process (that has the process id 1 and is launched as the first user process by the kernel).<br>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="Seafile是国内少有的做的还不错的开源产品之一。相信很多朋友都经历过几年前的各大云盘厂商大战然后纷纷衰落的这个过程。金山快盘应该是我用过的个人觉得最好的一款云盘了，和Windows GUI的集成也非常完美。可惜现如今各大云盘不是停止运营了就是今非昔比了。因此与其每天提心吊胆地担心自己宝贵的“资源”是不是会被某度网盘封杀，作为码农的我们何不自己动手来搭建一个私有云盘。Seafile的UI是基于Q">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-12-23T20:20:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.475Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.237Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="原创">
 <meta property="article:tag" content="Windows">
@@ -298,7 +298,7 @@
       
         <p>Seafile是国内少有的做的还不错的开源产品之一。相信很多朋友都经历过几年前的各大云盘厂商大战然后纷纷衰落的这个过程。金山快盘应该是我用过的个人觉得最好的一款云盘了，和Windows GUI的集成也非常完美。可惜现如今各大云盘不是停止运营了就是今非昔比了。因此与其每天提心吊胆地担心自己宝贵的“资源”是不是会被某度网盘封杀，作为码农的我们何不自己动手来搭建一个私有云盘。Seafile的UI是基于Qt，考虑到可移植性和跨平台兼容性，虽然不能像金山快盘那样拥有一些Windows上的特效，例如在托盘上查看当前在上传/下载哪些文件，以及上传/下载的进度。但优势是多平台，在Linux、安卓，iOS上都有相应的客户端。</p>
 <p>Seafile官网只提供了Linux版本客户端的编译方法，并没有提供Windows版本的步骤。搜索了官方论坛，虽然有不少人提问问过，但是官方并没有给出回答。只能说国内的开源的文档还需要进一步完善，遮遮掩掩不算是真正的开源。<a target="_blank" rel="noopener" href="http://www.ilovecpp.com/2018/06/25/seafile-compile/">搭建seafile windows客户端的交叉编译环境</a>这篇文章给出了一种基于MinGW在Fedora上交叉编译Windows版本Seafile的方法。我曾尝试过在Ubuntu 18.04上重复这个步骤，但是因为一些packages的原因没能成功。不同的Linux发行版之间的package有一些区别。我也曾尝试过在Windows上的MinGW上交叉编译，但有一些packages死活找不到在Windows MinGW上对应的版本，而且编译时也有一些错误（Windows上的MinGW好像是跑在Cygwin上面的，也就是说Cygwin上的packages可能不全或者跟Fedora上有一些不同）。最终由于时间关系，我放弃了去弄清楚其中的原因，而是采用在Ubuntu上用docker安装Fedora镜像这种类似作弊的方法来重现这篇文章中的步骤。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>基于<a target="_blank" rel="noopener" href="http://www.ilovecpp.com/2018/06/25/seafile-compile/">搭建seafile windows客户端的交叉编译环境</a>这篇文章，我写了一些脚本来自动化整个编译流程以及打包流程，这些脚本我都放到了GitHub上：<a target="_blank" rel="noopener" href="https://github.com/xnervwang/SeafileClientBuildTools">xnervwang/SeafileClientBuildTools</a>。脚本分成两种，一种是在Host环境（例如我的Ubuntu）上执行的，一种是在docker实例中执行的。先介绍一下各个脚本的作用：</p>
 <ul>
 <li>

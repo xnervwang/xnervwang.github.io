@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -56,7 +56,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xnerv.wang/assets/when-does-windows-decide-to-pull-out-pages-from-working-set/1.jpg">
 <meta property="article:published_time" content="2013-08-15T19:18:31.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.239Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.212Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="OS">
@@ -315,7 +315,7 @@
 <li>In general, when does Windows decide to pull out pages from Working set list to Modified/Standby list even when there is Free memory left?</li>
 </ol>
 <p>I am using Windows 7, with 4.0 GB of installed RAM, 3.5 GB being usable.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Answer-by-Rick-Brant"><a class="header-anchor" href="#Answer-by-Rick-Brant"></a>Answer by Rick Brant</h2>
 <p>No. If a page is going to be read from disk, or if it’s an allocation from kernel mode, the free list is checked first, then the zeroed list. If it isn’t, the zeroed list is checked first, then the free list (if allocated from the free list the page will be zeroed in-line before the faulting process gets to see it). In both cases, the standby list comes next. I don’t believe the modified list is ever used to satisfy page faults… since the pages have to be written out to disk before they can be assigned to other uses… so, might as well wait for the modified page writer to do its regular thing, whereupon the pages will show up on the standby list.<br>
 1a. “As long as we have free page frames, everything should either be in the working set list or free list.” No. The standby list is considered “available” but until someone needs that RAM its pages are used for two different types of caches.</p>

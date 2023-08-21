@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="Question Can somebody explain me how a process can acquire SIX lock on a page? I my deadlock-graph xml file I see that a process running under RC isolation level (executing a select statement at the m">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-02-22T00:53:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:18.609Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.040Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -301,7 +301,7 @@
 <p>For my case that would be <code>IX</code>-locks on rows? Can <code>IX</code>-lock be placed on a row? (I guess no). I am confused.</p>
 <p>Another thing is that I expect several <code>X</code>-locks on rows and no <code>S</code>-locks at all (since the <strong>IL</strong> is <strong>ReadCommited</strong>). Why do I have the whole page locked with <code>SIX</code> if I only inserted several records in previous statement?</p>
 <p>up!</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Answer-by-Sebastian-Meine"><a class="header-anchor" href="#Answer-by-Sebastian-Meine"></a>Answer by Sebastian Meine</h2>
 <p>To answer that I have to take a little detour, so bear with me. If two sessions take a lock on the same resource SQL Server checks the lock compatibility map and if the second request is not “compatible” with the first, the second session has to wait. There are three lock types &quot;S&quot;hared, &quot;U&quot;pdate and e&quot;X&quot;clusive. S locks are taken to read from a resource and X locks are taken to write to a resource. S locks are compatible with each other, X locks are not compatible with anything else. U locks are a hybrid that is used in some cases for deadlock prevention.</p>
 <p>Now, SQL Server can take locks on several levels:Table, Partition, Page and Row. So if session one takes a table lock and session two takes a non-compatible lock on one row of the table, those two locks are not on the same resource and SQL Server won’t detect the collision. To protect against that, SQL Server always starts to take a lock on the table level and works its way down the hierarchy. Now the point of page and row locks is higher concurrency, so if one session wants to write to one row and another session wants to write to another row, they should not block each other. If a session in addition to taking a lock on a row also has to take the same lock on the table, that advantage is gone. So instead of taking an exclusive lock (X) on the table, the session requests an intend-exclusive lock (IX). This lock is compatible with other intend locks but not with other “real” locks. So another session can take an intend-exclusive lock on the same table as well. The intend-exclusive lock says, that the session intends to take an exclusive lock on a lower level resource. The same happens on the page level, if the intended lock is a row lock, so after all is done, the session has an IX lock on the table and on one of the pages and an X lock on one of the rows in that page. This also means, that you will never find an intend lock on a row as rows are the lowest level in the lock hierarchy.</p>

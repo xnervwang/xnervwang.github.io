@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -57,7 +57,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-virtual-memory/1.gif">
 <meta property="og:image" content="https://xnerv.wang/assets/msdn-managing-virtual-memory/2.gif">
 <meta property="article:published_time" content="2017-11-14T21:58:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.221Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.210Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Windows">
@@ -310,7 +310,7 @@ Microsoft Developer Network Technology Group</p>
 <li>Querying a process’s virtual memory</li>
 </ul>
 <p>A sample application called ProcessWalker accompanies this technical article on the Microsoft Developer Network CD. This sample application is useful for exploring the virtual address space of a process. It also employs the use of virtual memory functions for implementing a linked list structure.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Introduction"><a class="header-anchor" href="#Introduction"></a>Introduction</h2>
 <p>This is one of three related technical articles—“Managing Virtual Memory,” “Managing Memory-Mapped Files,” and “Managing Heap Memory”—that explain how to manage memory in applications for Windows. In each article, this introduction identifies the basic memory components in the Windows programming model and indicates which article to reference for specific areas of interest.</p>
 <p>The first version of the Microsoft Windows operating system introduced a method of managing dynamic memory based on a single <em>global heap</em>, which all applications and the system share, and multiple, private <em>local heaps</em>, one for each application. Local and global memory management functions were also provided, offering extended features for this new memory management system. More recently, the Microsoft C run-time (CRT) libraries were modified to include capabilities for managing these heaps in Windows using native CRT functions such as <strong>malloc</strong> and <strong>free</strong>. Consequently, developers are now left with a choice—learn the new application programming interface (API) provided as part of Windows or stick to the portable, and typically familiar, CRT functions for managing memory in applications written for Windows.</p>

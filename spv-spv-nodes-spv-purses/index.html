@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="一、什么是SPV SPV是 “Simplified Payment Verification”（简单支付验证） 的缩写。中本聪论文简要地提及了这一概念，指出：不运行完全节点也可验证支付，用户只需要保存所有的block header就可以了。用户虽然不能自己验证交易，但如果能够从区块链的某处找到相符的交易，他就可以知道网络已经认可了这笔交易，而且得到了网络的多少个确认。 按照中本聪的原文，这里有个细">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-01-20T23:18:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.797Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.288Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="区块链与比特币">
 <meta property="article:tag" content="区块链">
@@ -303,7 +303,7 @@
 在比特币系统中，这一通知是以一个固定格式的“交易&quot;来实现的，该交易中包含B的汇款账户、B的签名、汇给A的金额以及A的地址。<br>
 如果A想本人亲自验证这笔交易，首先，A要遍历区块链账本，定位到B的账户上，这样才能查看B所给的账户上是否曾经有足够的金额；接下来，A要遍历后续的所有账本，看B是否已经支出了这个账户上的钱给别人(是否存在双花欺骗）；然后还要验证脚本来判断B是否拥有该账户的支配权。这一过程要求A必须得到完整的区块链才行。</p>
 <p>但是，如果A只想知道这笔支付是否已经得到了验证（如果验证了就发货），他可以依赖比特币系统来快速验证。即，检查发生此项支付的那笔交易是否已经收录于区块链中，并得到了多少个确认。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p><strong>原理</strong>：block header中有三个关键字段，一是prev_block_hash(前一区块的hash值，确保了区块链所记录的交易次序）；二是bits（当前区块的计算难度）, 三是merkle_root_hash（借助merkle tree算法，确保收录与区块中所有交易的真实性）。</p>
 <p>验证某个交易是否真实存在时，理论上，用户可以通过以下方式进行验证：<br>
 0. 从网络上获取并保存最长链的所有block header至本地；</p>

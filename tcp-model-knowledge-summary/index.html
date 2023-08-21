@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -64,7 +64,7 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20130801220438375?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2ljb2ZpZWxk/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="http://img.blog.csdn.net/20130801220556750?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvc2ljb2ZpZWxk/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="article:published_time" content="2019-11-17T01:02:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.837Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.427Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="网络协议">
 <meta property="article:tag" content="原创">
@@ -313,7 +313,7 @@ IP层会丢弃传输中损坏的数据报，但是不产生错误消息，由上
 在IP层下面的每一种数据链路层都有自己的帧格式，其中包括帧格式中的数据字段的最大长度，即最大传送单元 MTU (Maximum Transfer Unit)。当一个数据报封装成链路层的帧时，此数据报的总长度（即首部加上数据部分）最好不能超过下面的数据链路层的MTU值，否则要分片。<br>
 增加首部的可变部分是为了增加IP数据报的功能，但这同时也使得IP数据报的首部长度成为可变的。这就增加了每一个路由器处理数据报的开销，实际上这些选项很少被使用。新的IP版本IPv6就将IP数据报的首部长度做成固定的。<br>
 IP包中只有首部检验和，由TCP和UDP报文各自包含自身的数据校验和。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h3 id="IPv6"><a class="header-anchor" href="#IPv6"></a>IPv6</h3>
 <p><img src="/assets/tcp-model-knowledge-summary/ipv6.png" alt="IPv6头"></p>
 <h4 id="IPv6的区别"><a class="header-anchor" href="#IPv6的区别"></a>IPv6的区别</h4>
@@ -414,7 +414,7 @@ TCP Delayed Acknoledgement 也是为了类似的目的被设计出来的，它�
 <p>Nagle算法主要是避免发送小的数据包，要求TCP连接上最多只能有一个未被确认的小分组，在该分组的确认到达之前不能发送其他的小分组。相反，TCP收集这些少量的小分组，并在确认到来时以一个分组的方式发出去。</p>
 <h3 id="SO-LINGER"><a class="header-anchor" href="#SO-LINGER"></a>SO_LINGER</h3>
 <p>设置函数close()关闭TCP连接时的行为。缺省close()的行为是，如果有数据残留在socket发送缓冲区中则系统将继续发送这些数据给对方，等待被确认，然后返回。SO_LINGER选项用来改变此缺省设置。使用如下结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct linger &#123;</span><br><span class="line">     int l_onoff; &#x2F;* 0 &#x3D; off, nozero &#x3D; on *&#x2F;</span><br><span class="line">     int l_linger; &#x2F;* linger time *&#x2F;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">struct linger &#123;</span><br><span class="line">     int l_onoff; /* 0 = off, nozero = on */</span><br><span class="line">     int l_linger; /* linger time */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>

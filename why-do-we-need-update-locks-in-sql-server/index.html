@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -57,7 +57,7 @@
 <meta property="og:image" content="http://www.sqlpassion.at/wp-content/uploads/2014/07/UpdateQueryPlan.png">
 <meta property="og:image" content="http://www.sqlpassion.at/wp-content/uploads/2014/07/UpdateDeadlock.png">
 <meta property="article:published_time" content="2018-01-31T07:21:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.388Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.114Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -307,7 +307,7 @@
 </ul>
 <p><img src="http://www.sqlpassion.at/wp-content/uploads/2014/07/UpdateQueryPlan.png" alt="Update Query Plan" title="Update Query Plan"></p>
 <p>When SQL Server initially reads the data to be changed in the first part of the query plan, Update Locks are acquired on the individual records. And finally these Update Locks are converted to Exclusive (X) Locks when the data is changed in the third part of the query plan. The question that arrises with this approach is always the same: why does SQL Server acquire Update Locks instead of Shared (S) Locks in the first phase? When you normally read data through a SELECT statement, a Shared Lock is also good enough. Why is there now a different approach with UPDATE query plans? Let’s have a more detailed look at it.</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Deadlock-Avoidance"><a class="header-anchor" href="#Deadlock-Avoidance"></a>Deadlock Avoidance</h2>
 <p>First of all UPDATE Locks are needed to avoid deadlock situations in UPDATE query plans. Let’s try to imagine what happens when multiple UPDATE query plans acquire Shared Locks in the first phase of the plan, and afterwards convert these Shared Locks to Exclusive Locks when the data is finally changed in the third phase of the query plan:</p>
 <ul>

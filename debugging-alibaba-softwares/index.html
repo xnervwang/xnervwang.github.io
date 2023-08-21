@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -65,7 +65,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/debugging-alibaba-softwares/8.jpg">
 <meta property="og:image" content="https://xnerv.wang/assets/debugging-alibaba-softwares/9.jpg">
 <meta property="article:published_time" content="2014-09-16T21:48:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.021Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.179Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Windows">
@@ -305,7 +305,7 @@
 
       
         <p>摘要：为了抢占用户桌面，很多客户端软件都是主动送上门的，不需要花钱购买。可能只要你一个认可，就在电脑上安家落户。住下来之后，有些软件偶尔动动，但也有些高调强势，让你不得不注意到它，本文要谈的就是这样的软件。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="谁在消耗电池？"><a class="header-anchor" href="#谁在消耗电池？"></a>谁在消耗电池？</h2>
 <p>人们对手机、笔记本电脑等移动设备的依赖越来越大。一旦电池用尽而又不能立刻充电，便可能把人急得双脚跳。面对类似情况，为了让笔记本电池多支撑一会儿，我会采取两项省电措施：一是把屏幕调暗，二是杀掉特别费电的软件。第一项容易理解，略去不谈。第二项的关键是如何找到高功耗软件。一种简单的方法是调出任务管理器，通过View菜单（Windows 8之前）或者在列表的标题行（Windows 8/8.1）调出图1所示的“选择列”对话框，然后将Page faults（缺页异常总次数）和PF Delta（自上次更新后缺页异常的新增次数，默认为每秒更新一次）两项选中。接下来分别按Page faults、PF Delta和CPU使用率指标对进程排序，找出这几项指标高的进程。</p>
 <center>
@@ -334,13 +334,13 @@
 <p>接下来的目标是寻找这个进程躁动的原因。如何做呢？有多种方法，例如以前介绍过的使用<code>~*e .ttime</code>命令观察每个线程的执行时间，再例如使用~* k命令显示每个线程的栈回溯，寻找线索。对于眼下的问题，这两种方法也都有效。但为了避免陈词滥调，这次我打算介绍种新方法。</p>
 <p>简单说，就是让被调试对象在调试器里跑一跑，让其“自露马脚”。套用赵本山的话就是“有病没病走两步”。轻扣键盘，发出g命令，恢复AlipaySecSvc运行，端起茶杯，等待WinDBG报告“蛛丝马迹”。</p>
 <p>手里的茶杯还没放下，WinDBG便有所发现。屏幕上出现如下信息。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**(27bc.1b30): Unknown exception – code 000006ba (first chance)**</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**(27bc.1b30): Unknown exception – code 000006ba (first chance)**</span><br></pre></td></tr></table></figure>
 <p>看来是有真的异常（Windows系统的结构化异常SEH）发生。继续观察，WinDBG连续输出这样的信息，间隔不到一秒。根据经验，这个信息很有价值，可以作为突破口。轻按Ctrl+Break再将AlipaySecSvc断下，然后通过菜单Debug→Event Filters调出图5所示的调试事件过滤器对话框。</p>
 <center>
 <img src="/assets/debugging-alibaba-softwares/5.jpg" alt="图5  WinDBG的调试事件过滤器对话框" title="图5  WinDBG的调试事件过滤器对话框" />
 </center>
 <p>因为信息输出的6ba异常不在WinDBG的常见异常列表中，所以点击Add按钮增加一个代码为0x6ba的异常。之后选中新增的项目，再点击Command按钮调出图6所示的过滤器关联命令对话框，并输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**.echo ********bang******;? @$tid;.ttime**</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**.echo ********bang******;? @$tid;.ttime**</span><br></pre></td></tr></table></figure>
 <center>
 <img src="/assets/debugging-alibaba-softwares/6.jpg" alt="图6  过滤器命令" title="图6  过滤器命令" />
 </center>

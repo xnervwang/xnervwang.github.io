@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -63,7 +63,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/cpp11-no-fences.png">
 <meta property="og:image" content="https://xnerv.wang/assets/acquire-and-release-semantics/acq-rel-lock.png">
 <meta property="article:published_time" content="2012-09-13T07:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.012Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.319Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="OS">
@@ -304,7 +304,7 @@
       
         <div class="entry-content">
 <p>Generally speaking, in <a target="_blank" rel="noopener" href="http://preshing.com/20120612/an-introduction-to-lock-free-programming">lock-free programming</a>, there are two ways in which threads can manipulate shared memory: They can compete with each other for a resource, or they can pass information co-operatively from one thread to another. Acquire and release semantics are crucial for the latter: reliable passing of information between threads. In fact, I would venture to guess that incorrect or missing acquire and release semantics is the <code>#1</code> type of lock-free programming error.</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>In this post, I’ll demonstrate various ways to achieve acquire and release semantics in C++. I’ll touch upon the C++11 atomic library standard in an introductory way, so you don’t already need to know it. And to be clear from the start, the information here pertains to lock-free programming <em>without</em> <a target="_blank" rel="noopener" href="http://preshing.com/20120612/an-introduction-to-lock-free-programming#sequential-consistency">sequential consistency</a>. We’re dealing directly with memory ordering in a multicore or multiprocessor environment.</p>
 <p>Unfortunately, the terms <em>acquire and release semantics</em> appear to be in even worse shape than the term <em>lock-free</em>, in that the more you scour the web, the more seemingly contradictory definitions you’ll find. Bruce Dawson offers a couple of good definitions (credited to Herb Sutter) about halfway through <a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/windows/desktop/ee418650.aspx">this white paper</a>. I’d like to offer a couple of definitions of my own, staying close to the principles behind C++11 atomics:</p>
 <blockquote>

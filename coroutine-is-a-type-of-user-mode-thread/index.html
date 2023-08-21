@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-09-10T07:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.089Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.326Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="操作系统">
@@ -295,7 +295,7 @@
 
       
         <p>笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据的区域，相当于高级语言里的变量。但是有一个寄存器是特殊的，它存放了cpu当前正在执行的指令的内存地址(Instruction Register)。一个高级语言中的函数一般会被编译成指令存放在一段连续的内存空间中（data segment）。那么所谓函数执行到了第几行这样的信息其实就是保存在这个Instruction Register中的。另外一个很特殊的寄存器是Stack Register，它其中存放的内存地址指向的内存区域用于函数之间传递参数和返回值，以及存放一个函数内的局部变量。如果不考虑现代计算机cpu中各种各样其他存放中间结果的寄存器，理论上保存了Instruction Register（执行到哪儿了）和Stack Register（堆栈上的变量）就保存了一个函数的当前执行状态，分别是函数当前执行到了哪，以及这个函数局部变量所代表的当前state。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>事实上，操作系统的几个关键切换也是这么来完成的。操作系统提供了两个执行态，一个是用户态，一般我们的代码都是执行在用户态的。另外一个是内核态，像驱动程序之类的代码会用各种方式被加载到操作系统内部执行在内核之中。内核态里的代码可以完全控制CPU的I/O中断，从而可以和外部设备交互。用户态的代码属于受限代码，必须把I/O请求通过syscall交由运行在内核态的操作系统来完成。当一个cpu的核在执行用户态代码时，其寄存器里存放的状态是你的应用的代码的状态，但是应用要进行I/O操作的时候，cpu要被切换到内核的代码里去执行内核态的代码。这里就需要进行一次context switch，所谓context switch其实原理不会比把寄存器的值存到内存的一个地方，等回来的时候再把内存中临时保存的值加载回寄存器复杂多少。</p>
 <p>操作系统还有一个需要进行context switch的地方，那就是在协程与协程之间。操作系统在执行一个ELF或者PE的可执行文件的时候，对于这个可执行文件内的汇编代码来说，整个内存寻址空间是独立的。也就是1.exe的执行状态完全无法感知到2.exe的执行状态的内存。也就是现代操作系统的虚拟内存空间。有cpu在两个进程之间切换状态的时候，需要把内存的映射关系调整过来，否则虚拟内存的地址是无法对应到正确的物理地址的。一个进程内的两个线成切换的时候，要稍微简单一些，只需要把当前线成正在执行的位置和栈做切换就可以了。</p>
 <p>无论是操作系统做user/kernel的switch，还是process/process，thread/thread的switch，其实现方式都是大同小异的。通过把“当前执行状态”这样的一个抽象概念落实为一个具体的数据结构存储起来，然后指挥cpu在不同的场合加载不同的数据恢复不同的“当前执行状态”。</p>

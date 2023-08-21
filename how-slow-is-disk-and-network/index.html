@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -56,7 +56,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xnerv.wang/assets/how-slow-is-disk-and-network/1.jpg">
 <meta property="article:published_time" content="2019-12-28T08:29:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.879Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.442Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="性能瓶颈">
 <meta property="article:tag" content="CPU">
@@ -304,7 +304,7 @@
 <p>最为我们熟知的关于计算机不同组件速度差异的图表，是下面这种金字塔形式：越往上速度越快，容量越小，而价格越高。这张图只是给了我们一个直观地感觉，并没有对各个速度和性能做出量化的说明和解释。而实际上，不同层级之间的差异要比这张图大的多。这篇文章就让你站在 CPU 的角度看这个世界，说说到底它们有多慢。</p>
 <p>希望你看到看完这篇文章能明白两件事情：磁盘和网络真的很慢，性能优化是个复杂的系统性的活。</p>
 <p>注：所有的数据都是来自<a target="_blank" rel="noopener" href="https://gist.github.com/hellerbarde/2843375">这个地址</a>。所有的数据会因为机器配置不同，或者硬件的更新而有出入，但是不影响我们直觉的感受。如果对这些数据比较感兴趣，<a target="_blank" rel="noopener" href="https://people.eecs.berkeley.edu/~rcs/research/interactive_latency.html">这个网址</a>给出了不同年份一些指标的数值。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="数据"><a class="header-anchor" href="#数据"></a>数据</h2>
 <ul>
 <li>

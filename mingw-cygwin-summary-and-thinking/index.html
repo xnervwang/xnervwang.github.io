@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -58,7 +58,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/mingw-cygwin-summary-and-thinking/mingw-bash-dep.png">
 <meta property="og:image" content="https://xnerv.wang/assets/mingw-cygwin-summary-and-thinking/msys2-usr-gcc-dep.png">
 <meta property="article:published_time" content="2019-12-25T23:40:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.818Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.425Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="原创">
 <meta property="article:tag" content="MinGW">
@@ -302,7 +302,7 @@
 <h2 id="关于MinGW和Cygwin的关系"><a class="header-anchor" href="#关于MinGW和Cygwin的关系"></a>关于MinGW和Cygwin的关系</h2>
 <p>网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。</p>
 <p>从<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/MinGW">MinGW的维基百科</a>上看，Cygwin是提供一个模拟的POSIX层（cygwin1.dll）。我推测Cygwin也提供了一系列基于Cygwin的编译工具，在将需要移植的Linux代码在Cygwin上重新编译后，可以获得可以在Windows上直接运行的exe，而这个exe调用的还是POSIX风格的API，只不过这些API由cygwin1.dll提供模拟实现。而MinGW也提供了一系列编译工具，但MinGW-GCC是在编译时将代码中的POSIX API调用直接修改为对应的Windows API调用，从而不需要一个额外的dll转换层。需要额外提到的是，gcc的这种在编译时直接修改调用的API的行为不仅不少见，而且非常常见，在64位Linux上编译C++程序时，例如调用open这个函数，实际上在gcc编译后，调用的是libc中的open64函数，这个可以通过objdump导出外部依赖符号表来确认。另外就是，MinGW并不提供某些难以用Windows API实现的POSIX API，例如fork()，mmap()和ioctl()。</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="MinGW和MinGW-w64"><a class="header-anchor" href="#MinGW和MinGW-w64"></a>MinGW和MinGW-w64</h2>
 <p>MinGW（mingw32）据说更新太慢代码太老，因此另一帮人就新搞了一个MinGW-w64，据说老的MinGW不支持编译64位程序。不知道是不是这就意味着可以完全放弃掉MinGW而直接采用MinGW-x64？</p>
 <p>在安装MinGW时需要选择线程模型：posix或win32。从<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/17242516/mingw-w64-threads-posix-vs-win32">mingw-w64 threads: posix vs win32</a>看来，win32是在C++11之前MinGW-GCC搞的一套基于win32 threads模型的多线程库，而posix则是基于libwinpthreads，支持C++11的一些新的头文件。有另外一个单独的GitHub项目<a target="_blank" rel="noopener" href="https://github.com/meganz/mingw-std-threads">mingw-std-threads</a>可以让win32模型也支持这些C++11头文件。</p>

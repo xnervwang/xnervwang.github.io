@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="Question In Linux, what happens when a program (that possibly has multiple threads) receives a signal, like SIGTERM or SIGHUP? Which thread intercepts the signal? Can multiple threads get the same sig">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2012-07-27T06:36:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.528Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.133Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Linux">
@@ -297,7 +297,7 @@
         <h2 id="Question"><a class="header-anchor" href="#Question"></a>Question</h2>
 <p>In Linux, what happens when a program (that possibly has multiple threads) receives a signal, like SIGTERM or SIGHUP?</p>
 <p>Which thread intercepts the signal? Can multiple threads get the same signal? Is there a special thread dedicated entirely to handling signals? If not, what happens inside the thread that is to handle the signal? How does the execution resume after the signal handler routine finishes?</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Answer-by-Alan"><a class="header-anchor" href="#Answer-by-Alan"></a>Answer by Alan</h2>
 <p>This is slightly nuanced, based on which version of the Linux kernel you are using.</p>
 <p>Assuming 2.6 posix threads, and if you are talking about the OS sending SIGTERM or SIGHUP, the signal is sent to process, which is received by and handled by root thread. Using POSIX threads, you can also sent SIGTERM to individual threads as well, but I suspect you are asking about what happens when the OS sends the signal to the process.</p>

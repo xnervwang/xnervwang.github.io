@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="Question I am trying to use the perfmon windows utility to debug memory leaks in a process. This is how perfmon explains the terms: Working Set is the current size, in bytes, of the Working Set of thi">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2009-12-31T14:16:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.950Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.317Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="OS">
@@ -303,7 +303,7 @@
 <p><strong>Working Set</strong> is the current size, in bytes, of the Working Set of this process. The Working Set is the set of memory pages touched recently by the threads in the process. If free memory in the computer is above a threshold, pages are left in the Working Set of a process even if they are not in use. When free memory falls below a threshold, pages are trimmed from Working Sets. If they are needed they will then be soft-faulted back into the Working Set before leaving main memory.</p>
 <p><strong>Virtual Bytes</strong> is the current size, in bytes, of the virtual address space the process is using. Use of virtual address space does not necessarily imply corresponding use of either disk or main memory pages. Virtual space is finite, and the process can limit its ability to load libraries.</p>
 <p><strong>Private Bytes</strong> is the current size, in bytes, of memory that this process has allocated that cannot be shared with other processes.</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>These are the questions I have:</p>
 <p><em>Is it the Private Bytes which I should measure to be sure if the process is having any leaks as it does not involve any shared libraries and any leaks, if happening, will come from the process itself?</em></p>
 <p><em>What is the total memory consumed by the process? Is it the Virtual Bytes or is it the sum of Virtual Bytes and Working Set?</em></p>

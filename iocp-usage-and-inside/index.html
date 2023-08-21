@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -55,7 +55,7 @@
 <meta property="og:description" content="IOCP wiki  使用CreateIoCompletionPort函数创建IOCP，还可以把socket或文件句柄与IOCP关联起来。 一个线程，第一次调用GetQueuedCompletionStatus函数时，该线程变为关联了该IOCP的线程，直道下述三种情形之一发生：  该线程退出； 该线程调用GetQueuedCompletionStatus函数关联到其他的IOCP； 该IOCP被关闭">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-10-23T04:40:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:20.256Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.212Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="原创">
 <meta property="article:tag" content="Windows">
@@ -304,7 +304,7 @@
 <li>该IOCP被关闭。</li>
 </ul>
 <p>即，一个线程在任何时刻最多关联一个IOCP。</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>线程调用GetQueuedCompletionStatus函数等待放入IOCP的I/O完成包（completion packet）。IOCP拥有一个线程池。阻塞在IOCP上的线程按照后进先出（LIFO）顺序被释放（这是为了减少线程切换的代价）；而一个线程的完成包按照先进先出（FIFO）顺序从IOCP的队列中取走。IOCP有一个最大允许并发的线程数量上限，在CreateIoCompletionPort函数中制定，每次I/O完成包在从队列取走前检查关联与该IOCP且正在并发执行的线程数量是否达到该限。因其他原因（如调用SuspendThread函数）而挂起的线程不算作正在执行的线程。CompletionKey(完成键)一般作为“单句柄数据”的结构体（PER_HANDLE_DATA），用来标识是哪个设备的I/O完成操作己经完成。IO重叠结构（Overlapped）一般作为“单IO数据”的结构体（PER_IO_DATA），该结构体的第1个成员为OVERLAPPED结构体，用来标识是设备的具体哪个操作。</p>
 <p>线程可以用PostQueuedCompletionStatus函数在IOCP上放置一个完成包。</p>
 <p>IOCP不能跨进程使用。</p>
@@ -329,12 +329,12 @@
 <ol>
 <li>创建一个完成端口；</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Port port = createIoCompletionPort(INVALID_HANDLE_VALUE, <span class="number">0</span>, <span class="number">0</span>, fixedThreadCount());</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Port</span> <span class="variable">port</span> <span class="operator">=</span> createIoCompletionPort(INVALID_HANDLE_VALUE, <span class="number">0</span>, <span class="number">0</span>, fixedThreadCount());</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>创建一个线程 ThreadA；</li>
 <li>ThreadA 线程循环调用 GetQueuedCompletionStatus 方法来得到 I/O 操作结果，这个方法是一个阻塞方法；</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">While(<span class="keyword">true</span>)&#123;</span><br><span class="line"> getQueuedCompletionStatus(port, ioResult);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">While(<span class="literal">true</span>)&#123;</span><br><span class="line"> getQueuedCompletionStatus(port, ioResult);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol start="4">
 <li>主线程循环调用 accept 等待客户端连接上来；</li>
 <li>主线程 accept 返回新连接建立以后，把这个新的套接字句柄用 CreateIoCompletionPort 关联到完成端口，然后发出一个异步的 Read 或者 Write 调用，因为是异步函数，Read/Write 会马上返回，实际的发送或者接收数据的操作由操作系统去做。</li>

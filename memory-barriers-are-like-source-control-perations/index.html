@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -64,7 +64,7 @@
 <meta property="og:image" content="https://xnerv.wang/assets/memory-barriers-are-like-source-control-perations/get-back-to-later.png">
 <meta property="og:image" content="https://xnerv.wang/assets/memory-barriers-are-like-source-control-perations/storeload.png">
 <meta property="article:published_time" content="2012-07-10T07:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:21.066Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.324Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="OS">
@@ -305,7 +305,7 @@
       
         <p>If you use source control, you’re on your way towards understanding memory ordering, an important consideration when writing lock-free code in C, C++ and other languages.</p>
 <p>In my last post, I wrote about <a target="_blank" rel="noopener" href="http://preshing.com/20120625/memory-ordering-at-compile-time">memory ordering at compile time</a>, which forms one half of the memory ordering puzzle. This post is about the other half: memory ordering at runtime, on the processor itself. Like compiler reordering, processor reordering is invisible to a single-threaded program. It only becomes apparent when <a target="_blank" rel="noopener" href="http://preshing.com/20120612/an-introduction-to-lock-free-programming">lock-free techniques</a> are used – that is, when shared memory is manipulated without any mutual exclusion between threads. However, unlike compiler reordering, the effects of processor reordering are <a target="_blank" rel="noopener" href="http://preshing.com/20120515/memory-reordering-caught-in-the-act">only visible in multicore and multiprocessor systems</a>.</p>
-<a id="more"></a>
+<span id="more"></span>
 <p>You can enforce correct memory ordering on the processor by issuing any instruction which acts as a <strong>memory barrier</strong>. In some ways, this is the only technique you need to know, because when you use such instructions, compiler ordering is taken care of automatically. Examples of instructions which act as memory barriers include (but are not limited to) the following:</p>
 <ul>
 <li>Certain inline assembly directives in GCC, such as the PowerPC-specific <code>asm volatile(&quot;lwsync&quot; ::: &quot;memory&quot;)</code></li>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.0.2">
+<meta name="generator" content="Hexo 6.3.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -56,7 +56,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://www.sqlpassion.at/wp-content/uploads/2016/04/Picture1-2.png">
 <meta property="article:published_time" content="2018-02-01T07:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T02:24:19.369Z">
+<meta property="article:modified_time" content="2023-08-21T02:40:00.113Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -309,7 +309,7 @@
 <li>Intent Exclusive Lock (IX), when you have an Exclusive Lock at the row level</li>
 </ul>
 <p>Therefore you always get the Lock Hierarchy as shown above when you read and write your records. But why is SQL Server using these Intent Locks?</p>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="Intent-Locks-in-SQL-Server"><a class="header-anchor" href="#Intent-Locks-in-SQL-Server"></a>Intent Locks in SQL Server</h2>
 <p>From a technical perspective the Intent Locks are not really needed by SQL Server. They have to do with performance optimization. Let’s have a look on that in more detail. With an Intent Lock SQL Server just indicates at a higher level within the Lock Hierarchy that you have acquired a Lock somewhere else. A <strong>Intent Shared Lock</strong> tells SQL Server that there is a <strong>Shared Lock</strong> somewhere else. <strong>A Intent Update</strong> or <strong>Intent Exclusive Lock</strong> does the same, but this time SQL Server knows that there is an <strong>Update Lock</strong> or an <strong>Exclusive Lock</strong> somewhere. It is just an indication, nothing more.</p>
 <p>But how does that indication help SQL Server with performance optimization? Imagine you want to acquire an Exclusive Lock at the table level. In that case, SQL Server has to know if there is an incompatible lock (like a Shared or Update Lock) somewhere else on a record. Without Intent Locks SQL Server would have to check every record to see if an incompatible lock has been granted.</p>
