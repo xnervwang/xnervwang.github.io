@@ -11252,9 +11252,10 @@ Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understand
 <li>VSCode可以登录微软账号或github账号同步插件和配置。Atom则是通过安装插件实现，配置保存在指定Gist。但根据我使用了几年的体验，如果有多台电脑同步配置的情况下，经常会出现一些问题，因此我从去年开始屏蔽了Atom上的同步插件。</li>
 <li>但遗憾的是，像Cmd Markdown等编辑器所支持的TOC大纲（就是有一个单独的窗口或者下拉菜单显示各级标题，类似Word的左侧边栏的大纲视图），在VSCode和Atom中都没有相应的插件可以支持，而只是可以在文章中插入TOC链接。我所希望的是有一个插件可以在VSCode的左侧边栏上可以显示TOC大纲，但目前暂未发现有这样的插件。</li>
 </ul>
-<h2 id="2023-08-20刚发现VSCode已经-原生支持显示TOC大纲-Document-outline-了。效果如图："><a class="header-anchor" href="#2023-08-20刚发现VSCode已经-原生支持显示TOC大纲-Document-outline-了。效果如图："></a><strong>2023/08/20</strong><br>
+<p><strong>2023/08/20</strong><br>
 刚发现VSCode已经[原生支持显示TOC大纲](Document outline)了。效果如图：<br>
-<img src="https://code.visualstudio.com/assets/docs/languages/Markdown/markdown-outline-view.png" alt=""></h2>
+<img src="https://code.visualstudio.com/assets/docs/languages/Markdown/markdown-outline-view.png" alt=""></p>
+<hr>
 <p><strong>本文地址：<a href="http://xnerv.wang/use-vscode-instead-of-atom-as-markdown/">http://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</a></strong></p>
 ]]></content>
       <categories>
