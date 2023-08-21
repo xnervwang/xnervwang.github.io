@@ -292,24 +292,14 @@
       
           <p>从大学开始我就有做编程笔记的习惯。最开始是写在txt文件中直接放本地硬盘，也因此由于不小心格式化硬盘而丢了一些原始的笔记。后来在云笔记开始兴起之后，使用过几年的为知笔记。再加上为知笔记有直接保存网页的插件，因此我也将浏览器收藏夹中收集的一些技术网页直接保存到了为知笔记中，避免了网页失效而造成的知识丢失（其实现在的技术博客会被套娃式地转载好多次，就算删除原始文章也基本能找到了。。。）。随着积累的没看过的网页越来越多，消耗的速度完全跟不上增长的速度，也慢慢开始总结和消化收集的网页上的知识，记录下要点并标注来源URL，因此开始转向了Markdown。我喜欢上Markdown的另一个原因是我有点很多码农都有的编程洁癖，对于富文本总是想调整好每一处的格式、颜色和字体，因此支持富文本的Word、网络云笔记啥的简直就是我的噩梦，而Markdown则拯救了我这样的强迫症。</p>
 <p>几年前，为了找了一款可以在Windows平台上运行的满意的Markdown编辑器，我曾经试用和对比了能找到的几款Markdown编辑器。</p>
-<p>作业部落的Cmd Markdown是当时我接触的完成度最高的Markdown编辑器，插入图片非常方便，各种辅助功能都已经事先做好，不需要自己去做一大堆的配置和安装插件，并且最大的特点是笔记会云同步备份在服务器上。我用过一段时间的Cmd Markdown，但最终还是迁走了。最大的原因是笔记是保存在编辑器的数据文件中，而不是以明文的md文件直接保存在本地。这让我有点不安，哪一天如果这个编辑器出了bug打不开程序，或者这编辑器背后的公司破产，我的数据可能就此付之一炬，而我没有任何办法导出我的文件。</p>
-<p>马克飞翔是印象笔记Evernote的一个Markdown插件。我对马克飞翔的印象是UI做得很好，各种功能也很齐全。然而缺点跟Cmd Markdown是一样的，由于印象笔记的文件也是保存在数据文件中的，无法通过其它文本工具直接编辑。而我更希望将文件直接放在我的硬盘里，可以通过各种文本工具进行编辑。</p>
-<p>我还用过一个叫做Typora的比较有特色的的Markdown编辑器。大多数的Markdown编辑器是将界面一分为二，左边写Markdown源码，右边是最终效果Preview，当然一般左边的编辑栏也会有一些基本的语法高亮。但Typora则是将两个界面整合在了一起，同时可以在源码视图和结果视图中进行切换。老实说这样的做法有利有弊，纯粹看个人喜好。Typora至今应该仍不支持File Tree，也就是说一次只能编辑一个文档，如果要同时编辑多个Markdown文档就需要同时打开多个Typora进程。我至今仍保留安装着Typora，并希望将来有机会能拿出来用用，虽然至今我仍未再次用过。</p>
-<p>再后来，我开始使用github开源的Atom编辑器。有一个叫做Markdown Preview Enhanced的Atom插件，将一些常用的Markdown功能都整合到了一起，我非常喜欢这个插件。Atom应该是我使用时间最长且至今最为满意的Markdown编辑器了，配合各种Atom插件非常顺手，各种Markdown效果也基本满足我的需求。然后我再用Seafile搭建了个人云存储，将Markdown文件放在个人云盘里。</p>
-<p>不知道是不是由于微软收购了github和微软大力推广VSCode的缘故，感觉Atom最近几年的更新已经很少了，而且经常会出现插件加载失败的问题。例如Atom官网论坛上的18年的帖子<a target="_blank" rel="noopener" href="https://discuss.atom.io/t/is-atom-dead/55346">Is atom dead?</a>和19年的帖子<a target="_blank" rel="noopener" href="https://discuss.atom.io/t/is-atom-dead-again/70550/23">Is atom dead, again?</a>都在讨论这个问题，相信不只是我的个人猜测。</p>
-<p>而最后让我下定决心离开Atom的则是<a target="_blank" rel="noopener" href="https://github.com/shd101wyy/markdown-preview-enhanced/issues/1380">Markdown Preview Enhanced not working in Atom 1.47.0 #1380</a>。我最爱的Markdown Preview Enhanced由于Atom的bug而彻底不能使用，但目前看来Atom方面的修复还遥遥无期。</p>
-<p>很久以前我曾尝试过用VSCode写Markdown。当时Markdown Preview Enhanced还不支持VSCode，因此我在整合了一堆Markdown的插件后仍觉得效果不佳，因此放弃。不知道是不是Markdown Preview Enhanced的作者也察觉到了Atom正在走向死亡，因此也开始支持VSCode平台。在试用了最新的VSCode + Markdown Preview Enhanced后，我发现原本在Atom上常用的功能，在VSCode上都能找到，例如：</p>
-<ul>
-<li>Atom上可以用Tree View浏览目录结构，而VSCode自带File Explorer左侧边栏。</li>
-<li>Atom上有Project Manager插件可以在左侧边栏上同时打开多个目录，这样我就可以将多个Markdown目录同时加入进来。而VSCode也支持Workspace的概念，可以将多个目录加入进来。</li>
-<li>VSCode有和Atom类似的file-icons插件，可以在左侧边栏上针对不同类型的文件显示不同的icon便于区分。</li>
-<li>VSCode自带minimap/autosave功能，而Atom上则是通过安装插件实现。</li>
-<li>VSCode可以登录微软账号或github账号同步插件和配置。Atom则是通过安装插件实现，配置保存在指定Gist。但根据我使用了几年的体验，如果有多台电脑同步配置的情况下，经常会出现一些问题，因此我从去年开始屏蔽了Atom上的同步插件。</li>
-<li>但遗憾的是，像Cmd Markdown等编辑器所支持的TOC大纲（就是有一个单独的窗口或者下拉菜单显示各级标题，类似Word的左侧边栏的大纲视图），在VSCode和Atom中都没有相应的插件可以支持，而只是可以在文章中插入TOC链接。我所希望的是有一个插件可以在VSCode的左侧边栏上可以显示TOC大纲，但目前暂未发现有这样的插件。</li>
-</ul>
-<hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/use-vscode-instead-of-atom-as-markdown/">http://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</a></strong></p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/use-vscode-instead-of-atom-as-markdown/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
