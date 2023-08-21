@@ -2,6 +2,186 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-managing-heap-memory/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-heap-pleasures-and-pains/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-heap-functions/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/comparing-memory-allocation-methods/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
+    
+    <lastmod>2023-08-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
     
     <lastmod>2023-08-21</lastmod>
@@ -138,15 +318,6 @@
   
   <url>
     <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</loc>
     
     <lastmod>2023-08-21</lastmod>
     
@@ -921,177 +1092,6 @@
   
   <url>
     <loc>https://xnerv.wang/23-design-patterns-analysis/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-managing-heap-memory/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-heap-pleasures-and-pains/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-heap-functions/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/comparing-memory-allocation-methods/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
     
     <lastmod>2023-08-21</lastmod>
     
