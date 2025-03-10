@@ -235,7 +235,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/thread-synchronization-and-atomic-operation/">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/some-knowledge-points-learned-in-university/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/portraits/nerv.png">
@@ -250,7 +250,7 @@
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/thread-synchronization-and-atomic-operation/" class="post-title-link" itemprop="url">线程同步与原子操作</a>
+            <a href="/some-knowledge-points-learned-in-university/" class="post-title-link" itemprop="url">一些大学常用算法及知识点的回顾</a>
         </h2>
 
         <div class="post-meta">
@@ -260,7 +260,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-09-25 08:25:00" itemprop="dateCreated datePublished" datetime="2019-09-25T08:25:00-07:00">2019-09-25</time>
+              <time title="创建时间：2017-11-20 21:13:00" itemprop="dateCreated datePublished" datetime="2017-11-20T21:13:00-08:00">2017-11-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,8 +268,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
-                    <span itemprop="name">操作系统</span>
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构与算法</span>
                   </a>
                 </span>
             </span>
@@ -285,21 +285,97 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="volatile"><a class="header-anchor" href="#volatile"></a>volatile</h2>
-<ul>
-<li>volatile使得代码每次在读写volatile变量时都需要从内存读写，而不能使用寄存器中缓存的值。并且也禁止编译器对volatible做编译优化。volatile本身并不是用于线程同步，也不保证原子读写（例如volatile a++这种需要几个指令才能完成的操作）。volatile主要用于access to memory mapped devices和variables in signal handlers and between setjmp and longjmp。C++标准禁止编译器reorder同一个线程内的volatile变量的读写，但不同线程则没有限制。non-volatile变量则有可能发生reorder（<a target="_blank" rel="noopener" href="https://sites.google.com/site/kjellhedstrom2/stay-away-from-volatile-in-threaded-code">Stay away from Volatile in threaded code?</a>）。</li>
-<li>而根据<a target="_blank" rel="noopener" href="https://blog.csdn.net/dm_vincent/article/details/79604716">为什么volatile++不是原子性的？</a>中的说法，volatile的读操作后会插入LoadLoad和LoadStore屏障，避免volatile读操作与后面的普通读写发生reorder。而volatile的写操作前会插入StoreLoad和StoreStore屏障，避免volatile写操作与后面的普通读写发生reorder（我不太确定这种说法的正确性，毕竟在wikipedia<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Volatile_(computer_programming)">volatile (computer programming)</a>中并没有提到volatile会插入内存屏障，或者只有Java等语言才会这样做？）。</li>
-<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C">内存屏障</a>中有提到
+          <p>本文是关于大学时一些常见的数据结构、算法和知识点的总结。其实与其说工作中会用到，不如说面试时被面到的可能性更大一些。不过其中一些特定领域的算法，像银行家算法，BAT的面试中我也还没有遇到过。适当地回顾大学时学到的一些知识点，也许能给自己带来一些快乐吧，一种仅存在于回忆中的快乐。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/some-knowledge-points-learned-in-university/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/all-truths-about-python-encoding-problem/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/all-truths-about-python-encoding-problem/" class="post-title-link" itemprop="url">彻底研究Python的编码问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-05 17:14:00" itemprop="dateCreated datePublished" datetime="2017-11-05T17:14:00-08:00">2017-11-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Python的初学者（以及很多熟练工）相信都遇到过下面的运行时错误信息：</p>
 <blockquote>
-<p>C与C++语言中，volatile关键字意图允许内存映射的I/O操作。这要求编译器对此的数据读写按照程序中的先后顺序执行，不能对volatile内存的读写重排序。因此关键字volatile并不保证是一个内存屏障。[4]<br>
-对于Visual Studio 2003，编译器保证对volatile的操作是有序的，但是不能保证处理器的乱序执行。因此，可以使用InterlockedCompareExchange或InterlockedExchange函数。<br>
-对于Visual Studio 2005及以后版本，编译器对volatile变量的读操作使用acquire semantics，对写操作使用release semantics。</p>
+<p>UnicodeDecodeError: ‘ASCII’ codec can’t decode byte 0xe4 in position 0: ordinal not in range(128)</p>
 </blockquote>
-</li>
-</ul>
+<p>然后百度一下发现说明这个问题的网页有一大把，基本无非是下面两种解决方案：</p>
+<ol>
+<li>在Python文件的开头加一句<code>#coding=utf-8</code>。</li>
+<li>在代码中加入：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">&#x27;utf8&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>一般大家的做法是把两者都加上，然后问题一般也会得到解决。但很少有人会去深究过Python会什么会产生这样的编码问题，以及为什么通过加上面的代码可以解决这个问题。作为一个合格的程序员，遇到这种问题就应该追根究底 :)</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/thread-synchronization-and-atomic-operation/#more" rel="contents">
+              <a class="btn" href="/all-truths-about-python-encoding-problem/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -323,7 +399,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/linux-process-kernel-and-file-system-summary/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/portraits/nerv.png">
@@ -338,7 +414,7 @@
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/analysis-of-mdl-source-code-for-common-sql-statements/" class="post-title-link" itemprop="url">MySQL - 常用SQL语句的MDL加锁源码分析（转载）</a>
+            <a href="/linux-process-kernel-and-file-system-summary/" class="post-title-link" itemprop="url">Linux进程、内核及文件系统总结</a>
         </h2>
 
         <div class="post-meta">
@@ -348,7 +424,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-03-21 19:40:00" itemprop="dateCreated datePublished" datetime="2018-03-21T19:40:00-07:00">2018-03-21</time>
+              <time title="创建时间：2017-11-03 16:58:00" itemprop="dateCreated datePublished" datetime="2017-11-03T16:58:00-07:00">2017-11-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -356,8 +432,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
                   </a>
                 </span>
             </span>
@@ -373,35 +449,268 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <section class="post">
-<h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
-<p>MySQL5.5版本开始引入了MDL锁用来保护元数据信息，让MySQL能够在并发环境下多DDL、DML同时操作下保持元数据的一致性。本文用MySQL5.7源码分析了常用SQL语句的MDL加锁实现。</p>
-<h4 id="MDL锁粒度"><a class="header-anchor" href="#MDL锁粒度"></a>MDL锁粒度</h4>
-<p>MDL_key由namespace、db_name、name组成。</p>
-<p>namespace包含：</p>
+          <h2 id="fork"><a class="header-anchor" href="#fork"></a>fork</h2>
+<p><a target="_blank" rel="noopener" href="http://www.ahlinux.com/start/kernel/10313.html">关于linux进程间的close-on-exec机制</a></p>
+<blockquote>
+<p>一般我们会调用exec执行另一个程序，此时会用全新的程序替换子进程的正文，数据，堆和栈等。此时保存文件描述符的变量当然也不存在 了，我们就无法关闭无用的文件描述符了。所以通常我们会fork子进程后在子进程中直接执行close关掉无用的文件描述符，然后再执行exec。<br>
+但是在复杂系统中，有时我们fork子进程时已经不知道打开了多少个文件描述符（包括socket句柄等），这此时进行逐一清理确实有很大难 度。我们期望的是能在fork子进程前打开某个文件句柄时就指定好：“这个句柄我在fork子进程后执行exec时就关闭”。其实时有这样的方法的：即所 谓 的 close-on-exec。<br>
+回到我们的应用场景中来，只要我们在创建socket的时候加上 SOCK_CLOEXEC标志，就能够达到我们要求的效果，在fork子进程中执行exec的时候，会清理掉父进程创建的socket。</p>
+</blockquote>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/linux-process-kernel-and-file-system-summary/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/everything-you-never-wanted-to-know-about-dlls-cn/" class="post-title-link" itemprop="url">关于DLL的一些你不会想要知道的知识</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-10-22 23:16:00" itemprop="dateCreated datePublished" datetime="2017-10-22T23:16:00-07:00">2017-10-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>英文版本 <strong><a href="/everything-you-never-wanted-to-know-about-dlls/">Everything You Never Wanted To Know About DLLs</a></strong>.</p>
+<hr>
+<p>最近因为一些原因，我需要调研动态链接在Windows平台上的实现细节。这篇文章主要是总结我在这个问题上所学到的知识，用于我将来的回顾和参考，但同时我也希望这篇文章对其他人所有帮助，因为我将要总结的这些内容，你可能需要东找西找才能找到。</p>
+<p>废话不多说，让我们开始这趟旅程吧：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/everything-you-never-wanted-to-know-about-dlls-cn/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/iocp-usage-and-inside/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/iocp-usage-and-inside/" class="post-title-link" itemprop="url">IOCP的使用和技术内幕</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-10-22 21:40:00" itemprop="dateCreated datePublished" datetime="2017-10-22T21:40:00-07:00">2017-10-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="IOCP-wiki"><a class="header-anchor" href="#IOCP-wiki"></a><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/IOCP">IOCP wiki</a></h2>
+<blockquote>
+<p>使用CreateIoCompletionPort函数创建IOCP，还可以把socket或文件句柄与IOCP关联起来。<br>
+一个线程，第一次调用GetQueuedCompletionStatus函数时，该线程变为关联了该IOCP的线程，直道下述三种情形之一发生：</p>
 <ul>
-<li>
-<p>GLOBAL。用于global read lock，例如FLUSH TABLES WITH READ LOCK。</p>
-</li>
-<li>
-<p>TABLESPACE/SCHEMA。用于保护tablespace/schema。</p>
-</li>
-<li>
-<p>FUNCTION/PROCEDURE/TRIGGER/EVENT。用于保护function/procedure/trigger/event。</p>
-</li>
-<li>
-<p>COMMIT。主要用于global read lock后，阻塞事务提交。（在DML的commit阶段也会获取COMMIT锁）</p>
-</li>
-<li>
-<p>USER_LEVEL_LOCK。用于<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/internals/en/user-level-locks.html">user level lock函数</a>的实现，GET_LOCK(str,timeout)， RELEASE_LOCK(str)。</p>
-</li>
-<li>
-<p>LOCKING_SERVICE。用于<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/locking-service.html">locking service</a>的实现。</p>
-</li>
+<li>该线程退出；</li>
+<li>该线程调用GetQueuedCompletionStatus函数关联到其他的IOCP；</li>
+<li>该IOCP被关闭。</li>
+</ul>
+<p>即，一个线程在任何时刻最多关联一个IOCP。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/iocp-usage-and-inside/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/cpp-bean-knowledge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/cpp-bean-knowledge/" class="post-title-link" itemprop="url">一些基础的C++豆知识</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-07-23 16:34:00" itemprop="dateCreated datePublished" datetime="2017-07-23T16:34:00-07:00">2017-07-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="基础语法"><a class="header-anchor" href="#基础语法"></a>基础语法</h2>
+<ul>
+<li>由于C++的枚举不像C#中的枚举，其枚举类型名并不是标识符的一部分，因此经常可能发生命名冲突的问题，解决的方法有四个：在枚举元素名称前加限定前缀（如enum EnumFruit { EnumFruit_apple = 1 };），将枚举类型放在一个同名的命名空间中，或将枚举作为类的嵌套类型，或者使用C++11的enum class（<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/14041711/whats-an-enum-class-and-why-should-i-care?noredirect=1&amp;lq=1">What’s an enum class and why should I care?</a>）。</li>
+<li>struct和class的默认类继承方式都是private，这与struct的成员默认继承方式是public是不同的。</li>
+<li><code>#include_next &lt;filename.h&gt;</code>，include位于搜索路径中位于当前文件之后的文件filename.h。</li>
+<li>在vc中，inlucde的路径的反斜杠不需要转义，如<code>#include &quot;..\..\..\Global\Data\GlobalPreferencesMgr.h&quot;</code>。</li>
+<li>对于namespace中的函数或class的前置声明，必须同样也包括在相同的namespace中，而不能用class ::std::A这种写法。（<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/2059665/why-cant-i-forward-declare-a-class-in-a-namespace-like-this">Why can’t I forward-declare a class in a namespace like this?</a>）</li>
+<li>没有<code>&amp;&amp;=</code>，只有<code>&amp;=</code>。</li>
+<li>（-1 || 0） == 1，请想想为什么。</li>
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/analysis-of-mdl-source-code-for-common-sql-statements/#more" rel="contents">
+              <a class="btn" href="/cpp-bean-knowledge/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -425,7 +734,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/trace-metadata-lock-procedure-using-gdb/">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/portraits/nerv.png">
@@ -440,7 +749,7 @@
 
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/trace-metadata-lock-procedure-using-gdb/" class="post-title-link" itemprop="url">MySQL - 利用gdb跟踪MDL加锁过程（转载）</a>
+            <a href="/everything-you-never-wanted-to-know-about-dlls/" class="post-title-link" itemprop="url">Everything You Never Wanted To Know About DLLs（转载）</a>
         </h2>
 
         <div class="post-meta">
@@ -450,7 +759,7 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2018-03-21 19:38:00" itemprop="dateCreated datePublished" datetime="2018-03-21T19:38:00-07:00">2018-03-21</time>
+              <time title="创建时间：2011-07-04 00:00:00" itemprop="dateCreated datePublished" datetime="2011-07-04T00:00:00-07:00">2011-07-04</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -458,8 +767,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
+                  <a href="/categories/Windows/" itemprop="url" rel="index">
+                    <span itemprop="name">Windows</span>
                   </a>
                 </span>
             </span>
@@ -475,604 +784,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="MDL-Meta-Data-LocK-的作用"><a class="header-anchor" href="#MDL-Meta-Data-LocK-的作用"></a>MDL(Meta Data LocK)的作用</h2>
-<p>在MySQL5.1及之前的版本中，如果有未提交的事务trx，当执行DROP/RENAME/ALTER TABLE RENAME操作时，不会被其他事务阻塞住。这会导致如下问题(MySQL bug#989)</p>
-<p>master： 未提交的事务，但SQL已经完成(binlog也准备好了)，表schema发生更改，在commit的时候不会被察觉到.</p>
-<p>slave： 在binlog里是以事务提交顺序记录的，DDL隐式提交，因此在备库先执行DDL，后执行事务trx，由于trx作用的表已经发生了改变，因此trx会执行失败。 在DDL时的主库DML压力越大，这个问题触发的可能性就越高</p>
-<p>在5.5引入了MDL（meta data lock）锁来解决在这个问题</p>
+          <p>For the chinese translated version, please click <em><strong><a href="/everything-you-never-wanted-to-know-about-dlls-cn/">关于DLL的一些你不会想要知道的知识</a></strong></em>.</p>
+<hr>
+<p>I’ve recently had cause to investigate how dynamic linking is implemented on Windows. This post is basically a brain dump of everything I’ve learnt on the issue. This is mostly for my future reference, but I hope it will be useful to others too as I’m going to bring together lots of information you would otherwise have to hunt around for.</p>
+<p>Without further ado, here we go:</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/trace-metadata-lock-procedure-using-gdb/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/trace-metadata-lock/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/trace-metadata-lock/" class="post-title-link" itemprop="url">MySQL - 跟踪Metadata lock（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-21 19:32:00" itemprop="dateCreated datePublished" datetime="2018-03-21T19:32:00-07:00">2018-03-21</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
-<p>MySQL 从5.5.3版本，对Metadata lock进行了调整，主要是MDL锁持有的周期从语句变成了事务， 其原因主要是解决两个问题：</p>
-<p><strong>问题1: 破坏事务隔离级别</strong> 在repeatable read的隔离级别下，多次的select语句执行过程中，会因为其它session的DDL语句，而导致select语句执行的结果不相同，破坏了RR的隔离级别。</p>
-<p><strong>问题2: 破坏binlog的顺序</strong> 在对表的DML过程中，会因为其它session的DDL语句，导致binlog里的event顺序在备库执行的结果和主库不一致。</p>
-<p>从MySQL 5.5.3开始，MDL锁的持有周期变成了事务，解决了上面提到的两个问题，但在autocommit=off的情况下，也大大增加了阻塞的可能性。DBA对于阻塞的case，处理起来又比较麻烦，原因就是MDL锁的阻塞情况没有暴露明确的信息。</p>
-<p>从MySQL 5.7.6开始，可以通过performance schema来查询MDL锁的持有情况。</p>
-<p>在开始介绍5.7的跟踪Metadata lock之前， 小编还想讨论一下前面提到的这两个问题，在Oracle数据库中是如何处理的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/trace-metadata-lock/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/what-innodb-mini-transation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/what-innodb-mini-transation/" class="post-title-link" itemprop="url">MySQL - InnoDB mini transation（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-17 16:42:00" itemprop="dateCreated datePublished" datetime="2018-03-17T16:42:00-07:00">2018-03-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
-<p>InnoDB有两个非常重要的日志，undo log 和 redo log；通过undo log可以看到数据较早版本，实现MVCC，或回滚事务等功能；redo log用来保证事务持久性</p>
-<p>本文以一条insert语句为线索介绍 mini transaction</p>
-<h2 id="mini-transaction-简介"><a class="header-anchor" href="#mini-transaction-简介"></a>mini transaction 简介</h2>
-<p>mini transation 主要用于innodb redo log 和 undo log写入，保证两种日志的ACID特性</p>
-<p>mini-transaction遵循以下三个协议:</p>
-<ol>
-<li>
-<p>The FIX Rules</p>
-</li>
-<li>
-<p>Write-Ahead Log</p>
-</li>
-<li>
-<p>Force-log-at-commit</p>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/what-innodb-mini-transation/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/what-analysis-of-signal-processing-mechanism/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/what-analysis-of-signal-processing-mechanism/" class="post-title-link" itemprop="url">MySQL - 信号处理机制分析（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-17 16:32:00" itemprop="dateCreated datePublished" datetime="2018-03-17T16:32:00-07:00">2018-03-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
-<p>在 <a target="_blank" rel="noopener" href="https://github.com/alibaba/AliSQL/issues/68">AliSQL</a> 上面有人提交了一个 bug，在使用主备的时候 service stop mysql 不能关闭主库，一直显示 shutting down mysql …，到底怎么回事呢，先来看一下 service stop mysql 是怎么停止数据库的。配置 MySQL 在系统启动时启动需要把 MYSQL_BASEDIR/support-files 目录下的脚本 mysql.sever 放到 /etc/init.d/ 目录下，脚本来控制 mysqld 的启动和停止。看一下脚本中的代码 ：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">if test -s &quot;$mysqld_pid_file_path&quot;</span><br><span class="line">     then</span><br><span class="line">       mysqld_pid=`cat &quot;$mysqld_pid_file_path&quot;`</span><br><span class="line"></span><br><span class="line">       if (kill -0 $mysqld_pid 2&gt;/dev/null)</span><br><span class="line">       then</span><br><span class="line">         echo $echo_n &quot;Shutting down MySQL&quot;</span><br><span class="line">         kill $mysqld_pid</span><br><span class="line">         # mysqld should remove the pid file when it exits, so wait for it.</span><br><span class="line">         wait_for_pid removed &quot;$mysqld_pid&quot; &quot;$mysqld_pid_file_path&quot;; return_value=$?</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
-<p>实际上的关闭动作就是向 mysqld 进程发送一个 kill pid 的信号，也就是 TERM ， wait_for_pid 函数中就是不断检测 $MYSQL_DATADIR 下面的 pid 文件是否存在，并且打印 ‘.’，所以上述问题应该是 mysqld 没有正确处理接收到的信号。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/what-analysis-of-signal-processing-mechanism/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/mysql-introduction-innodb-adaptive-hash-index/" class="post-title-link" itemprop="url">MySQL - InnoDB Adaptive hash index介绍（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-17 16:26:00" itemprop="dateCreated datePublished" datetime="2018-03-17T16:26:00-07:00">2018-03-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
-<p>我们知道InnoDB的索引组织结构为Btree。通常情况下，我们需要根据查询条件，从根节点开始寻路到叶子节点，找到满足条件的记录。为了减少寻路开销，InnoDB本身做了几点优化。</p>
-<p>首先，对于连续记录扫描，InnoDB在满足比较严格的条件时采用row cache的方式连续读取8条记录（并将记录格式转换成MySQL Format），存储在线程私有的<code>row_prebuilt_t::fetch_cache</code>中；这样一次寻路就可以获取多条记录，在server层处理完一条记录后，可以直接从cache中取数据而无需再次寻路，直到cache中数据取完，再进行下一轮。</p>
-<p>另一种方式是，当一次进入InnoDB层获得数据后，在返回server层前，当前在btree上的cursor会被暂时存储到<code>row_prebuilt_t::pcur</code>中，当再次返回InnoDB层捞数据时，如果对应的Block没有发生任何修改，则可以继续沿用之前存储的cursor，无需重新定位。</p>
-<p>上面这两种方式都是为了减少了重新寻路的次数，而对于一次寻路的开销，则使用Adaptive hash index来解决。AHI是一个内存结构，严格来说不是传统意义上的索引，可以把它理解为建立在Btree索引上的“索引”。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/mysql-introduction-innodb-adaptive-hash-index/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/what-set-names-does/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/what-set-names-does/" class="post-title-link" itemprop="url">MySQL - set names 都做了什么（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-16 22:50:00" itemprop="dateCreated datePublished" datetime="2018-03-16T22:50:00-07:00">2018-03-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="背景"><a class="header-anchor" href="#背景"></a>背景</h2>
-<p>最近有同事问，set names 时会同时设置了3个session变量</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> character_set_client <span class="operator">=</span> charset_name;</span><br><span class="line"><span class="keyword">SET</span> character_set_results <span class="operator">=</span> charset_name;</span><br><span class="line"><span class="keyword">SET</span> character_set_connection <span class="operator">=</span> charset_name;</span><br></pre></td></tr></table></figure>
-<p>就从变量名字来看，character_set_client 是设置客户端相关的字符集，character_set_results 是设置返回结果相关的字符集，character_set_connection 这个就有点不太明白了，这个有啥用呢？</p>
-<h2 id="概念说明"><a class="header-anchor" href="#概念说明"></a>概念说明</h2>
-<p>通过<a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.6/en/charset-connection.html">官方文档</a>来看:</p>
-<ol>
-<li>character_set_client 是指客户端发送过来的语句的编码;</li>
-<li>character_set_connection 是指mysqld收到客户端的语句后，要转换到的编码；</li>
-<li>而 character_set_results 是指server执行语句后，返回给客户端的数据的编码。</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/what-set-names-does/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/mysql-index-condition-pushdown/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/mysql-index-condition-pushdown/" class="post-title-link" itemprop="url">MySQL - Index Condition Pushdown (ICP)（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-16 22:46:00" itemprop="dateCreated datePublished" datetime="2018-03-16T22:46:00-07:00">2018-03-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
-<p><a target="_blank" rel="noopener" href="http://mysql.taobao.org/monthly/2015/11/07/">上一篇文章</a> 提过，我们在之后的文章中会从 optimizer 的选项出发，系统的介绍 optimizer 的各个变量，包括变量的原理、作用以及源码实现等，然后再进一步的介绍优化器的工作过程（SQL 语句扁平化处理、索引选择、代价计算、多表连接顺序选择以及物理执行等内容），本期我们先看一下众所周知的 ICP，官方文档请参考<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.6/en/condition-pushdown-optimization.html">这里</a>。</p>
-<h2 id="ICP-测试"><a class="header-anchor" href="#ICP-测试"></a>ICP 测试</h2>
-<p>首先，咱们来看一下打开 ICP 与关闭 ICP 之间的性能区别，以下是测试过程：</p>
-<p>准备数据：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> icp(id <span class="type">int</span>, age <span class="type">int</span>, name <span class="type">varchar</span>(<span class="number">30</span>), memo <span class="type">varchar</span>(<span class="number">600</span>)) engine<span class="operator">=</span>innodb;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> icp <span class="keyword">add</span> index aind(age, name, memo);</span><br><span class="line"><span class="comment">--let $i= 100000</span></span><br><span class="line">while ($i)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">--eval insert into icp values($i, 1, &#x27;a$i&#x27;, repeat(&#x27;a$i&#x27;, 100))</span></span><br><span class="line">  <span class="comment">--dec $i</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>PS: MySQL 有一个叫profile的东东，可以用来监视 SQL 语句在各个阶段的执行情况，咱们可以使用这个工具来观察 SQL 语句在各个阶段的运行情况，关于 profile 的详细说明可以参考<a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/5.7/en/show-profile.html">官方文档</a>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/mysql-index-condition-pushdown/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/introduction-of-innodb-transaction-lock/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/portraits/nerv.png">
-      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域，也会偶尔刷一刷LeetCode等题库。毕业于南京大学软件学院，曾经在腾讯、百度、微软上海等大型互联网企业工作，目前奋斗在微软西雅图，从事Azure上的MySQL/PostgreSQL开源数据库云服务开发。">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="XNERV SURVEYS">
-    </span>
-      <header class="post-header">
-
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/introduction-of-innodb-transaction-lock/" class="post-title-link" itemprop="url">InnoDB 事务锁系统简介（转载）</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-16 22:28:00" itemprop="dateCreated datePublished" datetime="2018-03-16T22:28:00-07:00">2018-03-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DBMS/" itemprop="url" rel="index">
-                    <span itemprop="name">DBMS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
-<p>本文的目的是对 InnoDB 的事务锁模块做个简单的介绍，使读者对这块有初步的认识。本文先介绍行级锁和表级锁的相关概念，再介绍其内部的一些实现；最后以两个有趣的案例结束本文。</p>
-<p>本文所有的代码和示例都是基于当前最新的 MySQL5.7.10 版本。</p>
-<h2 id="行级锁"><a class="header-anchor" href="#行级锁"></a>行级锁</h2>
-<p>InnoDB 支持到行级别粒度的并发控制，本小节我们分析下几种常见的行级锁类型，以及在哪些情况下会使用到这些类型的锁。</p>
-<p><strong>LOCK_REC_NOT_GAP</strong></p>
-<p>锁带上这个 FLAG 时，表示这个锁对象只是单纯的锁在记录上，不会锁记录之前的 GAP。在 RC 隔离级别下一般加的都是该类型的记录锁（但唯一二级索引上的 duplicate key 检查除外，总是加 <code>LOCK_ORDINARY</code> 类型的锁）。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/introduction-of-innodb-transaction-lock/#more" rel="contents">
+              <a class="btn" href="/everything-you-never-wanted-to-know-about-dlls/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1096,7 +814,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
   </nav>
 
 
@@ -1142,20 +860,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">122</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">167</span>
+        <span class="site-state-item-count">49</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
