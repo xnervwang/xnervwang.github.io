@@ -63,7 +63,7 @@
 <img src="/assets/10-websites-for-helping-programmers-to-relax/10.jpg" alt="Raining.Fm"/>
 </center>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/10-websites-for-helping-programmers-to-relax/">http://xnerv.wang/10-websites-for-helping-programmers-to-relax/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/10-websites-for-helping-programmers-to-relax/">https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</a></strong><br>
 转载自：<a href="http://www.myexception.cn/other/1825517.html">10个帮程序员减压放松的网站</a></p>
 ]]></content>
       <categories>
@@ -127,7 +127,7 @@
 <p><img src="https:////images0.cnblogs.com/news/66372/201407/311847033214132.jpg" alt="Linux Cross Reference by Free Electrons"></p>
 <p>对于内核开发者或许有很大的帮助。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/16-useful-online-tools/">http://xnerv.wang/16-useful-online-tools/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/16-useful-online-tools/">https://xnerv.wang/16-useful-online-tools/</a></strong><br>
 转载自：<a href="https://news.cnblogs.com/n/214828/">16个很有用的在线工具</a></p>
 ]]></content>
       <categories>
@@ -576,7 +576,7 @@ public void workAll();<br>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 计算9+2-8的值</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Minus</span>().interpret((<span class="keyword">new</span> <span class="title class_">Context</span>(<span class="keyword">new</span> <span class="title class_">Plus</span>()</span><br><span class="line">                .interpret(<span class="keyword">new</span> <span class="title class_">Context</span>(<span class="number">9</span>, <span class="number">2</span>)), <span class="number">8</span>)));</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后输出正确的结果：<code>3</code>。基本就这样，解释器模式用来做各种各样的解释器，如正则表达式等的解释器等等！</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/23-design-patterns-analysis/">http://xnerv.wang/23-design-patterns-analysis/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/23-design-patterns-analysis/">https://xnerv.wang/23-design-patterns-analysis/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/longyulu/article/details/9159589">23种设计模式全解析</a></p>
 ]]></content>
       <categories>
@@ -642,7 +642,7 @@ public void workAll();<br>
 <p>Here, acquire and release semantics ensure that all modifications made while holding the lock will propagate fully to the next thread that obtains the lock. Every implementation of a lock, even one you <a href="http://preshing.com/20120226/roll-your-own-lightweight-mutex">roll on your own</a>, should provide these guarantees. Again, it’s all about passing information reliably between threads, especially in a multicore or multiprocessor environment.</p>
 <p>In a followup post, I’ll show a <a href="http://preshing.com/20121019/this-is-why-they-call-it-a-weakly-ordered-cpu">working demonstration</a> of C++11 code, running on real hardware, which can be plainly observed to break if acquire and release semantics are not used.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/acquire-and-release-semantics/">http://xnerv.wang/acquire-and-release-semantics/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/acquire-and-release-semantics/">https://xnerv.wang/acquire-and-release-semantics/</a></strong><br>
 转载自：<a href="http://preshing.com/20120913/acquire-and-release-semantics/">Acquire and Release Semantics</a></p>
 ]]></content>
       <categories>
@@ -797,7 +797,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 </samp></p>
 <p><font color="RED">Important Note: Please read and understand the documentation about the <code>AllowForeignAddress</code> directive before implementing it. This can open your FTP server up to bounce attacks. It is strongly recommended that this option not be set on systems being used as anonymous FTP servers.</font></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/">http://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/">https://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</a></strong><br>
 转载自：<a href="http://slacksite.com/other/ftp.html">Active FTP vs. Passive FTP, a Definitive Explanation</a></p>
 ]]></content>
       <categories>
@@ -824,15 +824,14 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 <li>在代码中加入：</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">&#x27;utf8&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>一般大家的做法是把两者都加上，然后问题一般也会得到解决。但很少有人会去深究过Python会什么会产生这样的编码问题，以及为什么通过加上面的代码可以解决这个问题。作为一个合格的程序员，遇到这种问题就应该追根究底，否则就只是以码谋生的码畜了 :)</p>
+<p>一般大家的做法是把两者都加上，然后问题一般也会得到解决。但很少有人会去深究过Python会什么会产生这样的编码问题，以及为什么通过加上面的代码可以解决这个问题。作为一个合格的程序员，遇到这种问题就应该追根究底 :)</p>
 <span id="more"></span>
 <h2 id="string与Unicode-string"><a class="header-anchor" href="#string与Unicode-string"></a>string与Unicode string</h2>
 <p>Python的编码问题一般只在Python2.x中存在，在Python3.x中则基本不会遇到这样的问题。根本原因在于Python2.x中存在两种字符串：string和Unicode string，两者都继承自basic string。</p>
 <p>string类似于C语言中的char*，或者C++中的std::string，本质上都是byte数组，本身不具备特定的encoding类型，而是由string的使用者决定的。例如向string中写入一个汉字，如果是UTF-8编码，则可能是三个char（或者更多），如果是GBK编码，则可能是两个char，但对于Python解释器，它并不清楚string用的是encoding，一切都是bytes。。。</p>
 <p>而Unicode string则明确地存储了Unicode编码的字符串。在Python2.x中，<code>a1=&quot;abc&quot;;</code>，a1就是一个string（是什么编码还不确定，等下再谈）。而<code>a2=u&quot;abc&quot;;</code>，a2就是一个Unicode string。</p>
 <h2 id="C-C-中的文件编码和字符串编码"><a class="header-anchor" href="#C-C-中的文件编码和字符串编码"></a>C/C++中的文件编码和字符串编码</h2>
-<p>C/C++不仅仅是一种编程语言，更是一个深入了解计算机底层原理的窗口和机会，一个只会堆砌代码而浮于表面的程序员，是不能称之为一个真正意义上的程序员的（这跟月薪有没有上3w没有关系）。</p>
-<p>我们先回过头来看看C/C++中是如何处理文件编码和字符串编码的问题的。以VC为例，VC下有两个编码的选项，分为Source encoding和Execution encoding。前者指定了源文件的编码（这比<a href="https://en.wikipedia.org/wiki/Byte_order_mark">BOM</a>更准确），后者是字符串常量等的编码。简单说，如果指定Source encoding为GBK，同时指定Execution encoding为UTF-8，则首先所有的源文件必须用GBK编码保存，否则VC在读入源文件时可能会无法解码其中的一些字符。同时，像<code>const char* a3=&quot;中文&quot;;</code>这样的常量字符串赋值语句，a3就是使用了UTF-8编码保存的字符串。在中文Windows系统下，如果不特意设置这两种编码，VC则一般使用的是system default encoding。</p>
+<p>C/C++不仅仅是一种编程语言，更是一个深入了解计算机底层原理的窗口和机会。我们先回过头来看看C/C++中是如何处理文件编码和字符串编码的问题的。以VC为例，VC下有两个编码的选项，分为Source encoding和Execution encoding。前者指定了源文件的编码（这比<a href="https://en.wikipedia.org/wiki/Byte_order_mark">BOM</a>更准确），后者是字符串常量等的编码。简单说，如果指定Source encoding为GBK，同时指定Execution encoding为UTF-8，则首先所有的源文件必须用GBK编码保存，否则VC在读入源文件时可能会无法解码其中的一些字符。同时，像<code>const char* a3=&quot;中文&quot;;</code>这样的常量字符串赋值语句，a3就是使用了UTF-8编码保存的字符串。在中文Windows系统下，如果不特意设置这两种编码，VC则一般使用的是system default encoding。</p>
 <p>（参考 <a href="https://stackoverflow.com/questions/9739070/char-encoding">Char * encoding</a>, <a href="https://msdn.microsoft.com/en-us/library/mt708818.aspx">/execution-charset (Set Execution Character Set)</a>, <a href="https://msdn.microsoft.com/en-us/library/mt708819.aspx">/source-charset (Set Source Character Set)</a>。）</p>
 <h2 id="Python中的文件编码和字符串编码"><a class="header-anchor" href="#Python中的文件编码和字符串编码"></a>Python中的文件编码和字符串编码</h2>
 <p>对比C/C++处理编码的方法，我们再看看Python是怎么做的。</p>
@@ -859,7 +858,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 但是，如果是utf8 string，而当前环境是Windows，则输出显然会乱码。如果是中文版Windows，用的是GB编码（code page 936）。如果是英文版Windows，用的可能是ANSI编码（code page 1252）。</p>
 <h2 id="最佳实践"><a class="header-anchor" href="#最佳实践"></a>最佳实践</h2>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/all-truths-about-python-encoding-problem/">http://xnerv.wang/all-truths-about-python-encoding-problem/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/all-truths-about-python-encoding-problem/">https://xnerv.wang/all-truths-about-python-encoding-problem/</a></strong></p>
 ]]></content>
       <categories>
         <category>编程语言</category>
@@ -885,7 +884,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 <p>Another option is to wrap your preferred allocator inside exported functions that manage the allocation. This is the mechanism used by the NetApi family of functions. For example, the NetGroupEnum function allocates memory and returns it through the bufptr parameter. When the caller is finished with the memory, it frees it with the NetApiBufferFree function. In this manner, the memory allocation method is isolated from the caller. Internally, the NetApi functions might be using LocalAlloc or HeapAllocate or possibly even new and free. It doesn’t matter; as long as NetApiBufferFree frees the memory with the same allocator that NetGroupEnum used to allocate the memory in the first place.</p>
 <p>Although I personally prefer using a fixed external allocator, many people find it more convenient to use the wrapper technique. That way, they can use their favorite allocator throughout their module. Either way works. The point is that when memory leaves your DLL, the code you gave the memory to must know how to free it, even if it’s using a different compiler from the one that was used to build your DLL.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/">http://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/">https://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</a></strong><br>
 转载自：<a href="https://blogs.msdn.microsoft.com/oldnewthing/20060915-04/?p=29723">Allocating and freeing memory across module boundaries</a></p>
 ]]></content>
       <categories>
@@ -1037,7 +1036,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 此外，由于长跳转的使用既易于出错，又难于理解和维护。在编码过程中也应当尽量避免使用。关于异常的一般性使用说明，请参考：<a href="http://baiy.cn/doc/cpp/index.htm#%E4%BB%A3%E7%A0%81%E9%A3%8E%E6%A0%BC%E4%B8%8E%E7%89%88%E5%BC%8F_%E5%BC%82%E5%B8%B8">代码风格与版式：异常</a>。</p>
 <p></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/analysis-about-cpp-exception-implementation/">http://xnerv.wang/analysis-about-cpp-exception-implementation/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/analysis-about-cpp-exception-implementation/">https://xnerv.wang/analysis-about-cpp-exception-implementation/</a></strong><br>
 转载自：<a href="http://baiy.cn/doc/cpp/inside_exception.htm">C++异常机制的实现方式和开销分析</a></p>
 ]]></content>
       <categories>
@@ -1192,7 +1191,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 <p>drop table语句执行加锁GLOBAL-STATEMENT-INTENTION_EXCLUSIVE，SCHEMA-MDL_TRANSACTION-INTENTION_EXCLUSIVE，TABLE-EXCLUSIVE。</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">drop:</span><br><span class="line">          DROP opt_temporary table_or_tables if_exists</span><br><span class="line">          &#123;</span><br><span class="line">            LEX *lex=Lex;</span><br><span class="line">            lex-&gt;sql_command = SQLCOM_DROP_TABLE;</span><br><span class="line">            lex-&gt;drop_temporary= $<span class="number">2</span>;</span><br><span class="line">            lex-&gt;drop_if_exists= $<span class="number">4</span>;</span><br><span class="line">            YYPS-&gt;m_lock_type= TL_UNLOCK;</span><br><span class="line">            YYPS-&gt;m_mdl_type= MDL_EXCLUSIVE;</span><br><span class="line">          &#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">http://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2018/02/01/">常用SQL语句的MDL加锁源码分析</a></p>
 ]]></content>
       <categories>
@@ -1441,7 +1440,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 <p>OS development is a case where custom scripts are useful, minimal example: <a href="https://github.com/cirosantilli/x86-bare-metal-examples/blob/d217b180be4220a0b4a453f31275d38e697a99e0/linker.ld">https://github.com/cirosantilli/x86-bare-metal-examples/blob/d217b180be4220a0b4a453f31275d38e697a99e0/linker.ld</a></p>
 <p>Once the executable is linked, it is only possible to know which section went to which segment if the linker stores the optional section header in the executable: <a href="https://stackoverflow.com/questions/23018496/where-is-the-section-to-segment-mapping-stored-in-elf-files">Where is the “Section to segment mapping” stored in ELF files?</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/">http://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/">https://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/</a></strong><br>
 转载自：<a href="https://www.ibm.com/developerworks/cn/linux/l-excutff/">UNIX/LINUX 平台可执行文件格式分析</a></p>
 ]]></content>
       <categories>
@@ -1514,7 +1513,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 <h4 id="友情推荐"><a class="header-anchor" href="#友情推荐"></a>友情推荐</h4>
 <p>本文的图是用我自己开发的<a href="http://textdiagram.sinaapp.com">TextDiagram</a>工具画的，欢迎试用！如果您喜欢，请推荐给朋友，谢谢！</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/application-of-mvcc-in-distributed-system/">http://xnerv.wang/application-of-mvcc-in-distributed-system/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/application-of-mvcc-in-distributed-system/">https://xnerv.wang/application-of-mvcc-in-distributed-system/</a></strong><br>
 转载自：<a href="https://coolshell.cn/articles/6790.html">多版本并发控制(MVCC)在分布式系统中的应用</a></p>
 ]]></content>
       <categories>
@@ -1698,7 +1697,7 @@ data    : client &gt;1024 -&gt; server &gt;1023<br>
 <li><a href="http://bean-li.github.io/leveldb-sstable/">leveldb 中的 SSTable</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/bigtable-leveldb/">http://xnerv.wang/bigtable-leveldb/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/bigtable-leveldb/">https://xnerv.wang/bigtable-leveldb/</a></strong><br>
 转载自：<a href="https://draveness.me/bigtable-leveldb">浅析 Bigtable 和 LevelDB 的实现</a></p>
 ]]></content>
       <categories>
@@ -1833,7 +1832,7 @@ H. Massias, X.S. Avila, and J.-J. Quisquater, “Design of a secure timestamping
 <li>W. Feller, “An introduction to probability theory and its applications,” （概率学理论与应用导论）1957(#refmark-8)</li>
 </ol>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/">http://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/">https://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</a></strong><br>
 转载自：<a href="http://www.8btc.com/wiki/bitcoin-a-peer-to-peer-electronic-cash-system">比特币白皮书：一种点对点的电子现金系统</a></p>
 ]]></content>
       <categories>
@@ -1896,7 +1895,7 @@ H. Massias, X.S. Avila, and J.-J. Quisquater, “Design of a secure timestamping
 <p>3）在软件开发或设计中，我非常建议在之前先去参考一下已有的设计和思路，<strong>看看相应的guideline，best practice或design pattern，吃透了已有的这些东西，再决定是否要重新发明轮子</strong>。千万不要似是而非地，想当然的做软件设计。</p>
 <p>4）上面，我们没有考虑缓存（Cache）和持久层（Repository）的整体事务的问题。比如，更新Cache成功，更新数据库失败了怎么吗？或是反过来。关于这个事，如果你需要强一致性，你需要使用“两阶段提交协议”——prepare, commit/rollback，比如Java 7 的<a href="http://docs.oracle.com/javaee/7/api/javax/transaction/xa/XAResource.html">XAResource</a>，还有MySQL 5.7的 <a href="http://dev.mysql.com/doc/refman/5.7/en/xa.html">XA Transaction</a>，有些cache也支持XA，比如<a href="http://www.ehcache.org/documentation/3.0/xa.html">EhCache</a>。当然，XA这样的强一致性的玩法会导致性能下降，关于分布式的事务的相关话题，你可以看看《<a href="https://coolshell.cn/articles/10910.html">分布式系统的事务处理</a>》一文。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/cache-update-routines/">http://xnerv.wang/cache-update-routines/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/cache-update-routines/">https://xnerv.wang/cache-update-routines/</a></strong><br>
 转载自：<a href="https://coolshell.cn/articles/17416.html">缓存更新的套路</a></p>
 ]]></content>
       <categories>
@@ -1933,7 +1932,7 @@ H. Massias, X.S. Avila, and J.-J. Quisquater, “Design of a secure timestamping
 <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366711(v=vs.85).aspx">Heap Functions</a><br>
 <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366916(v=vs.85).aspx">Virtual Memory Functions</a></p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/comparing-memory-allocation-methods/">http://xnerv.wang/comparing-memory-allocation-methods/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/comparing-memory-allocation-methods/">https://xnerv.wang/comparing-memory-allocation-methods/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366533">(MSDN) Comparing Memory Allocation Methods</a></p>
 ]]></content>
       <categories>
@@ -1981,7 +1980,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/windows/deskto
 </ul>
 <p>因此，基本的使用方法就是，首先基于<a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">docker官方文档</a>安装docker环境，然后git clone我的git repo，然后先执行<code>InitDockerVerification.sh</code>环境，然后以后就可以每次通过执行<code>RunDockerVerification.sh</code>来获取编译后的客户端，分别位于Host机器的build, ms-build, ms-build64这三个目录内。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/compile-windows-seafile-client/">http://xnerv.wang/compile-windows-seafile-client/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/compile-windows-seafile-client/">https://xnerv.wang/compile-windows-seafile-client/</a></strong></p>
 ]]></content>
       <categories>
         <category>分布式及存储</category>
@@ -2006,7 +2005,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/windows/deskto
 <p>在高级语言中，一个函数正在执行的位置以及其状态，内部都可以有一个抽象的表达方式。有的高级语言直接被编译成原生的机器码，那么其执行状态的表述就和操作系统的context switch的context非常类似。有的高级语言自身执行在一个虚拟机之上，那么其context的表述可能是虚拟机的instruction register和stack register，而不是80x86这样原生的机器的物理寄存器。但是原理是非常类似的。</p>
 <p>取决于语言设计者的觉悟，有的语言会把这种表达执行状态的能力直接提供出来，让一个函数在执行过程中可以把当前状态保存，然后把执行权交给另外一个函数执行，等那个函数放弃执行权回来的时候再把保存的状态恢复。这也就是所谓的协程（co-routine）。协程与线程的区别在于，协程的context switch是在完全在用户态，由语言的runtime或者是库来完成的。而线程的context switch则是操作系统来完成的。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</a></strong><br>
 转载自：<a href="https://segmentfault.com/a/1190000000663472">【协程原理】 - 协程不过是用户态的线程</a></p>
 ]]></content>
       <categories>
@@ -2343,7 +2342,7 @@ By default there would be three objects in that piece of code, temp inside fun, 
 Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.html">Value semantics: NRVO</a>, and <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-copy-elision.html">Value semantics: Copy elision</a>.</p>
 </blockquote>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/cpp-bean-knowledge/">http://xnerv.wang/cpp-bean-knowledge/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/cpp-bean-knowledge/">https://xnerv.wang/cpp-bean-knowledge/</a></strong></p>
 ]]></content>
       <categories>
         <category>编程语言</category>
@@ -2417,7 +2416,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <li><a href="https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6014.htm">https://docs.oracle.com/cd/B19306_01/server.102/b14200/statements_6014.htm</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/">http://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/">https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</a></strong><br>
 转载自：<a href="https://www.mssqltips.com/sqlservertip/4591/ddl-commands-in-transactions-in-sql-server-versus-oracle/">DDL commands in Transactions in SQL Server versus Oracle</a></p>
 ]]></content>
       <categories>
@@ -2511,7 +2510,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <p>如果说为所有普通函数标记重量还为时过早，那么给操作系统的标准API标识重量该排上议事日程了。这不仅必要而且可行。例如用可能引发的系统调用次数、跨进程调用的次数、触发缺页异常的次数等指标来衡量API的重量。标记之后，程序员就有所依据，避免频繁调用太重的API，尤其不要在当前没有明确任务的进程中调用这些沉重的API，以免白白消耗电池，让用户反感。</p>
 <p>话说回来，关键问题还在于写代码的程序员，即使标记重量了，程序员可能也置之不理。不标记重量，有经验的程序员也心中有数。退一步讲，本文讨论的问题，只要打开任务管理器就能察觉，挂一下WinDBG更容易发现，运行WPT也可以发现，但为什么问题就这样发生了呢？</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/debugging-alibaba-softwares/">http://xnerv.wang/debugging-alibaba-softwares/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/debugging-alibaba-softwares/">https://xnerv.wang/debugging-alibaba-softwares/</a></strong><br>
 转载自：<a href="http://www.csdn.net/article/2014-09-16/2821705">在调试器中看阿里的软件兵团</a></p>
 ]]></content>
       <categories>
@@ -2626,7 +2625,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 软件的历史不长，但软件的孩提时代已经过去了，因为今天的软件已经丧失了曾经拥有的简单和纯真，变得复杂、贪婪和狡黠。</p>
 <p>一年多之前，我曾写过一篇《<a href="http://www.csdn.net/article/1970-01-01/2821705">在调试器里看阿里的软件兵团</a>》，批评了支付宝客户端软件中的性能问题，文章发表后，很高兴看到阿里的同行不断改进，今天已经不再有当时的问题了（图1中还可以看到淘宝的TBSecSvc进程，排名已经比较靠后）。不知百度的同行看过此文有何感想？作为一款客户端软件，能帮助用户管家是好想法，但是管家毕竟是仆人，有事时应该尽心给主人办事，没事时应该安安静静休息，不要肆意挥霍主人家的东西。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/debugging-baidu-pan/">http://xnerv.wang/debugging-baidu-pan/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/debugging-baidu-pan/">https://xnerv.wang/debugging-baidu-pan/</a></strong><br>
 转载自：<a href="http://geek.csdn.net/news/detail/79743">在调试器里看百度云管家</a></p>
 ]]></content>
       <categories>
@@ -2676,7 +2675,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <p>The moral of this story/blog post? There is not really a good reason why you should disable Page and Row level Locks in SQL Server. Just work with the default Locking Strategy that SQL Server offers, because otherwise the locking that is employed will be too restrictive and the throughput of your workload will suffer…</p>
 <p>Thanks for your time.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/">http://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/">https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</a></strong><br>
 转载自：<a href="https://www.sqlpassion.at/archive/2016/10/31/disabling-row-and-page-level-locks-in-sql-server/">Disabling ROW and PAGE Level Locks in SQL Server</a></p>
 ]]></content>
       <categories>
@@ -2779,7 +2778,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <li><a href="https://draveness.me/bigtable-leveldb">浅析 Bigtable 和 LevelDB 的实现</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/dynamo-implement/">http://xnerv.wang/dynamo-implement/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/dynamo-implement/">https://xnerv.wang/dynamo-implement/</a></strong><br>
 转载自：<a href="https://draveness.me/dynamo">分布式键值存储 Dynamo 的实现原理</a></p>
 ]]></content>
       <categories>
@@ -2849,7 +2848,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <p>However, the question is causing some headache on the POSIX standard, and as a follow-up to the <a href="http://comments.gmane.org/gmane.comp.standards.posix.austin.general/6952">austin-group</a> (ie. POSIX mailing-list) discussion, an <a href="http://austingroupbugs.net/view.php?id=672">editorial clarification request</a> is still pending and is waiting for feedback from various implementors. (you may also have a look at the <a href="http://unix.derkeiler.com/Newsgroups/comp.unix.programmer/2013-03/msg00016.html">comp.unix.programmer discussion</a>)</p>
 <p><strong>TL;DR</strong>: syncing a file is not as simple as it seems!</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/">http://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/">https://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</a></strong><br>
 转载自：<a href="http://blog.httrack.com/blog/2013/11/15/everything-you-always-wanted-to-know-about-fsync/">Everything You Always Wanted to Know About Fsync()</a></p>
 ]]></content>
       <categories>
@@ -2962,7 +2961,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ gcc main3.c library.dll.a -o main3 -Wl,--disable-auto-import &amp;&amp; ./main3</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
 <p>如果你一直阅读到了这里，你应该已经对Windows上上DLL的导入和导出有了透彻的理解。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/">http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/">https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/</a></strong></p>
 ]]></content>
       <categories>
         <category>Windows</category>
@@ -3115,7 +3114,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <p>Dynamic linking on Windows is hairier than it at first appears. I hope this article has gone some way to clearing up the meaning of the mysterious <code>dllimport</code> and <code>dllexport</code> keywords, and at clarifying the role of the import and export libraries.</p>
 <p>Linux and friends implement dynamic linking in a totally different manner to Windows. The scheme they use is more flexible and allows more in-memory sharing of code, but incurs a significant runtime penalty (especially on i386). For more details see <a href="http://www.greyhat.ch/lab/downloads/pic.html">here</a> and <a href="http://www.skyfree.org/linux/references/ELF_Format.pdf">the Dynamic Linking section of the the ELF spec</a>.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/">http://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/">https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/</a></strong><br>
 转载自：<a href="http://blog.omega-prime.co.uk/2011/07/04/everything-you-never-wanted-to-know-about-dlls/">Everything You Never Wanted To Know About DLLs</a></p>
 ]]></content>
       <categories>
@@ -3141,7 +3140,7 @@ Ref to <a href="http://definedbehavior.blogspot.sg/2011/08/value-semantics-nrvo.
 <li>The sticky bit states that files and directories within that directory may only be deleted or renamed by their owner (or root)</li>
 </ul>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/">http://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/">https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</a></strong><br>
 Reprinted from: <a href="https://unix.stackexchange.com/q/21251">(StackOverflow) Execute vs Read bit. How do directory permissions in Linux work?</a></p>
 ]]></content>
       <categories>
@@ -3609,7 +3608,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251">(StackOverflow)
 <li><a href="printf-p-positional-parameters">printf_p 位置参数</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/">http://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/">https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</a></strong><br>
 转载自：<a href="https://docs.microsoft.com/zh-cn/cpp/c-runtime-library/format-specification-syntax-printf-and-wprintf-functions">(MSDN) Format Specification Syntax: printf and wprintf Functions</a></p>
 ]]></content>
       <categories>
@@ -3656,7 +3655,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251">(StackOverflow)
 <li><a href="../c-runtime-library/reference/scanf-s-scanf-s-l-wscanf-s-wscanf-s-l">scanf_s、_scanf_s_l、wscanf_s、_wscanf_s_l</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/">http://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/">https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</a></strong><br>
 转载自：<a href="https://docs.microsoft.com/zh-cn/cpp/c-runtime-library/format-specification-fields-scanf-and-wscanf-functions">(MSDN) Format Specification Fields: scanf and wscanf Functions</a></p>
 ]]></content>
       <categories>
@@ -3717,7 +3716,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/21251">(StackOverflow)
 </ol>
 <p>（xnerv：SQL Server的四种隔离级别的加锁区别应该都只针对READ操作，如果是INSERT或UPDATE，应该都会加X锁并持有到事务结束。可以假设有一个RU级别的事务A修改了一行数据，另一个RC级别的事务B尝试读取这行数据。如果事务A不加X锁，或者修改完后在事务结束前释放X锁，都会导致事务B在事务A提交前读取到新数据而违反RC原则。）</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/">http://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/">https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</a></strong><br>
 转载自：<a href="http://www.cnblogs.com/xwdreamer/archive/2011/01/18/2297042.html">数据库弱一致性四个隔离级别</a></p>
 ]]></content>
       <categories>
@@ -3811,7 +3810,7 @@ Google：Google的工程师会经常更新Google的排名算法以防止对Googl
 </blockquote>
 <p>选择导入链接时应首先考虑对方网站的内容如何，然后再考察其导出链接的数量进行决策。而在建立本站的导出链接时则应尽量使自己网站的PageRank维持在最大回馈和最小流失上。应确保合理的网站设计结构和内部联接方式。网站的结构和内部联接方式也会对PageRank产生影响，可利用其特性有效进行PagaRank在网站内部页面的再分布及尽可能保持网站整体的PageRank。网站的PageRank的提升应与该网站的访问者体验息息相关。即使获得再高的PageRank，如果没有客户访问，一样毫无价值。所以网站的内容始终是提升PageRank最关键的因素之一。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/further-disscusion-of-pagerank-1/">http://xnerv.wang/further-disscusion-of-pagerank-1/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/further-disscusion-of-pagerank-1/">https://xnerv.wang/further-disscusion-of-pagerank-1/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/monkey_d_meng/article/details/6554518">深入探讨PageRank（一）：PageRank算法原理入门</a></p>
 ]]></content>
       <categories>
@@ -4045,7 +4044,7 @@ X1 = 0.303514，X2 = 0.38286，X3 = 0.32396，X4 = 0.24297，X5 = 0.41231，X6 =
 <a href="http://www.charlesgao.com/?p=157">http://www.charlesgao.com/?p=157</a><br>
 <a href="http://www.kreny.com/pagerank_cn.htm">http://www.kreny.com/pagerank_cn.htm</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/further-disscusion-of-pagerank-2/">http://xnerv.wang/further-disscusion-of-pagerank-2/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/further-disscusion-of-pagerank-2/">https://xnerv.wang/further-disscusion-of-pagerank-2/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/monkey_d_meng/article/details/6556295">深入探讨PageRank（二）：PageRank原理剖析</a></p>
 ]]></content>
       <categories>
@@ -4110,7 +4109,7 @@ Clusty、bbmao等元搜索引擎的自动分类、聚类功能一出，即大受
 <p>Google曾经希望用户“找到信息，然后快速离开”，这句话在现在来看是非常荒谬的，而Google明显也已经意识到这一点了。所以Google也在通过iGoogle等手段将用户留下来，为未来的搜索演变做储备。</p>
 <p>值得注意的是，“情境搜索”毕竟还处于初级阶段，更像是一种“搜索概念”，从传统搜索到它的演变过程将是缓慢、递进的过程。但是情境搜索发展的大趋势是无法阻挡的了的，传统的搜索服务将在这场历史变革中被逐步取代，而像PageRank这样的算法能否经受的住下一个时代搜索科技创新大风大浪的挑战？能否在搜索引擎发展的历史长河中沉淀下来？我们还需要拭目以待~</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/further-disscusion-of-pagerank-4/">http://xnerv.wang/further-disscusion-of-pagerank-4/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/further-disscusion-of-pagerank-4/">https://xnerv.wang/further-disscusion-of-pagerank-4/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/monkey_d_meng/article/details/6558100">深入探讨PageRank（四）：PageRank的危机及搜索引擎的未来</a></p>
 ]]></content>
       <categories>
@@ -4191,7 +4190,7 @@ Clusty、bbmao等元搜索引擎的自动分类、聚类功能一出，即大受
 <p>[1] <code>Bigtable: A Distributed Storage System for Structured Data. In proceedings of OSDI'06</code>.<br>
 [2] <a href="http://jimbojw.com/wiki/index.php?title=Understanding_Hbase_and_BigTable"></a><a href="http://jimbojw.com/wiki/index.php?title=Understanding_Hbase_and_BigTable">Understanding HBase and BigTable</a>.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/google-3-gifts-bigtable/">http://xnerv.wang/google-3-gifts-bigtable/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/google-3-gifts-bigtable/">https://xnerv.wang/google-3-gifts-bigtable/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/opennaive/article/details/7532589">谷歌技术&quot;三宝&quot;之BigTable</a></p>
 ]]></content>
       <categories>
@@ -4305,7 +4304,7 @@ each with a 12.5 MB/s input connection），这个理论值我没有看明白是
 <h2 id="参考文献："><a class="header-anchor" href="#参考文献："></a>参考文献：</h2>
 <p>[1] The Google File System.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/google-3-gifts-gfs/">http://xnerv.wang/google-3-gifts-gfs/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/google-3-gifts-gfs/">https://xnerv.wang/google-3-gifts-gfs/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/opennaive/article/details/7483523">谷歌技术&quot;三宝&quot;之谷歌文件系统</a></p>
 ]]></content>
       <categories>
@@ -4388,7 +4387,7 @@ MapReduce本质上就是方法三，但是如何拆分文件集，如何copy程�
 [3] Phoenix. <a href="http://mapreduce.stanford.edu/">http://mapreduce.stanford.edu/</a><br>
 [4] Evaluating MapReduce for Multi-core and Multiprocessor Systems. In proceedings of HPCA’07.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/google-3-gifts-mapreduce/">http://xnerv.wang/google-3-gifts-mapreduce/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/google-3-gifts-mapreduce/">https://xnerv.wang/google-3-gifts-mapreduce/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/opennaive/article/details/7514146">谷歌技术&quot;三宝&quot;之MapReduce</a></p>
 ]]></content>
       <categories>
@@ -4425,7 +4424,7 @@ MapReduce本质上就是方法三，但是如何拆分文件集，如何copy程�
 <p>开头所说的Google T-shirt，是我2006-2010年间收藏的，其实还不止这些，有的已经被亲朋好友强行索要走。Google有印制T-shirt庆祝产品上线或者 活动发布的文化，用户体验部门几乎是跨产品跨部门协作最多的，自然就获得了更多沾光的机会。每次整理这些T-shirt，都忍不住回想起背后的一个个人和 故事，心里暖暖的。这也是Google文化的强大之处，无论在不在Google，无论当时是因为什么原因离开Google，（曾经的）Google人都被 心中的Google文化仅仅团结在一起。</p>
 <p>谢谢Google不会因为我抢了这么多T-shirt开除我！：）</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/google-50-tshirt/">http://xnerv.wang/google-50-tshirt/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/google-50-tshirt/">https://xnerv.wang/google-50-tshirt/</a></strong><br>
 转载自：<a href="https://www.techug.com/post/google-50-tshirt.html">如果阿里月饼黑客事件发生在谷歌会怎样？前Google人亲述他抢了50件T-shirt的故事</a></p>
 ]]></content>
       <categories>
@@ -4577,7 +4576,7 @@ MapReduce本质上就是方法三，但是如何拆分文件集，如何copy程�
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">MyMessage message, message2;</span><br><span class="line">message.ParseFromString(str1);</span><br><span class="line">message2.ParseFromString(str2);</span><br><span class="line">message.MergeFrom(message2);</span><br></pre></td></tr></table></figure>
 <p>This property is occasionally useful, as it allows you to merge two messages even if you do not know their types.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/google-protocol-buffers-encoding/">http://xnerv.wang/google-protocol-buffers-encoding/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/google-protocol-buffers-encoding/">https://xnerv.wang/google-protocol-buffers-encoding/</a></strong><br>
 Reprinted from: <a href="https://developers.google.com/protocol-buffers/docs/encoding?hl=zh-CN">(Google Developer) Protocol Buffers: Encoding</a></p>
 ]]></content>
       <categories>
@@ -4598,7 +4597,7 @@ Reprinted from: <a href="https://developers.google.com/protocol-buffers/docs/enc
 <h2 id="Answer-by-psmears"><a class="header-anchor" href="#Answer-by-psmears"></a>Answer by psmears</h2>
 <p>If you want to use your own private allocator, then use mmap() to map an amount of memory into your process, then you can use that memory as you like. Open a file descriptor to /dev/zero, and then use that as the ‘fildes’ parameter to mmap(). See man mmap for full details of the parameters to pass. In this respect mmap() plays the same role as HeapCreate().</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/">http://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/">https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/q/2880639">(StackOverflow) HeapCreate, HeapAlloc in Linux, private allocator for Linux</a></p>
 ]]></content>
       <categories>
@@ -4650,7 +4649,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/2880639">(StackOverflow) He
 <p>There are a few points of interest when it comes to the cost of a mutex. The first most vital point is waiting time. Your threads should spend only a fraction of their time waiting on mutexes. If they are waiting too often, then you are losing concurrency. In a worst case scenario many threads always trying to lock the same mutex may result in performance worse than a single thread serving all requests. This isn’t a cost of the mutex itself, but a serious concern with concurrent programming.</p>
 <p>The overhead costs of a mutex relate to the test-and-set operation and the system call that implements a mutex. The test-and-set is likely a minuscule cost; being essential to concurrent processing the CPUs have a strong incentive to make it efficient. We’ve ignored another important instruction, however: the fence. This is used in all high-level mutexes and may have a higher cost than the test-and-set operation. Most costly however is the system call. Not only do you suffer the context switch overhead of the system call, the kernel now spends some time in its scheduling code.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</a></strong><br>
 转载自：<a href="https://mortoray.com/2011/12/16/how-does-a-mutex-work-what-does-it-cost/">How does a mutex work? What does it cost?</a></p>
 ]]></content>
       <categories>
@@ -4736,7 +4735,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/2880639">(StackOverflow) He
 <li><a href="http://duartes.org/gustavo/blog/post/getting-physical-with-memory/">Getting Physical With Memory</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/how-slow-is-disk-and-network/">http://xnerv.wang/how-slow-is-disk-and-network/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/how-slow-is-disk-and-network/">https://xnerv.wang/how-slow-is-disk-and-network/</a></strong><br>
 转载自：<a href="https://cizixs.com/2017/01/03/how-slow-is-disk-and-network/">让 CPU 告诉你硬盘和网络到底有多慢</a></p>
 ]]></content>
       <categories>
@@ -4847,7 +4846,7 @@ MSVCRT!strnicmp+92:<br>
 <li>Richter, Jeffrey. <em>Programming Applications with Microsoft Windows (<a href="http://www.microsoft.com/mspress/books/2345.asp">http://www.microsoft.com/mspress/books/2345.asp</a>)</em>. Redmond: Microsoft Press, 1999.</li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/">http://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/">https://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</a></strong><br>
 转载自：<a href="https://support.microsoft.com/en-us/help/313109/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede">HOW TO: Find the Problem Exception Stack When You Receive an UnhandledExceptionFilter Call in the Stack Trace</a></p>
 ]]></content>
       <categories>
@@ -5042,7 +5041,7 @@ MSVCRT!strnicmp+92:<br>
 <li>本文写作过程中大量参考了<a href="http://www.wikipedia.org/">维基百科</a>，再次感谢这个伟大的网站，并且呼吁大家在手头允许的情况下可以适当捐助维基百科，帮助这个造福人类的系统运行下去</li>
 </ol>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/how-to-implement-a-malloc/">http://xnerv.wang/how-to-implement-a-malloc/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/how-to-implement-a-malloc/">https://xnerv.wang/how-to-implement-a-malloc/</a></strong><br>
 转载自：<a href="http://blog.codinglabs.org/articles/a-malloc-tutorial.html">如何实现一个malloc</a></p>
 ]]></content>
       <categories>
@@ -5099,7 +5098,7 @@ MSVCRT!strnicmp+92:<br>
 <p>Leader产生以后，Leader线程通过next_to_commit遍历thd，对每个thd完成事务提交ha_commit_low(),代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">MYSQL_BIN_LOG::process_commit_stage_queue</span><span class="params">(THD *thd, THD *first)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (THD *head= first ; head ; head = head-&gt;next_to_commit)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> (head-&gt;commit_error == THD::CE_NONE)</span><br><span class="line">    &#123;</span><br><span class="line">      excursion.<span class="built_in">try_to_attach_to</span>(head);</span><br><span class="line">      <span class="type">bool</span> all= head-&gt;transaction.flags.real_commit;</span><br><span class="line">      <span class="keyword">if</span> (head-&gt;transaction.flags.commit_low)</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">/* head is parked to have exited append() */</span></span><br><span class="line">        <span class="built_in">DBUG_ASSERT</span>(head-&gt;transaction.flags.ready_preempt);</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">          storage engine commit</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">ha_commit_low</span>(head, all, <span class="literal">false</span>))</span><br><span class="line">          head-&gt;commit_error= THD::CE_COMMIT_ERROR;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">      Decrement the prepared XID counter after storage engine commit.</span></span><br><span class="line"><span class="comment">      We also need decrement the prepared XID when encountering a</span></span><br><span class="line"><span class="comment">      flush error or session attach error for avoiding 3-way deadlock</span></span><br><span class="line"><span class="comment">      among user thread, rotate thread and dump thread.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">if</span> (head-&gt;transaction.flags.xid_written)</span><br><span class="line">      <span class="built_in">dec_prep_xids</span>(head);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stage_manager</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//遍历THD，标记提交完成，并广播通知</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">signal_done</span><span class="params">(THD *queue)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">mysql_mutex_lock</span>(&amp;m_lock_done);</span><br><span class="line">    <span class="keyword">for</span> (THD *thd= queue ; thd ; thd = thd-&gt;next_to_commit)</span><br><span class="line">      thd-&gt;transaction.flags.pending= <span class="literal">false</span>;</span><br><span class="line">    <span class="built_in">mysql_mutex_unlock</span>(&amp;m_lock_done);</span><br><span class="line">    <span class="built_in">mysql_cond_broadcast</span>(&amp;m_cond_done);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/">http://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/">https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</a></strong><br>
 转载自：<a href="http://hamilton.duapp.com/detail?articleId=42">MySQL 5.6中Binlog Group Commit实现</a></p>
 ]]></content>
       <categories>
@@ -5180,7 +5179,7 @@ MSVCRT!strnicmp+92:<br>
 <p>Running the <a href="https://gist.github.com/elliotchance/21e31b8ffb18cbbca23b8031639e1c3f">complete program</a> prints a table of results. The <font style="font-family: 'Courier New';">✔ means that it could replicate that kind of error (a little counterintuitive, I know):</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">                  Dirty Repeat Phantom</span><br><span class="line">read uncommitted    ✔      ✔      ✔</span><br><span class="line">read committed      ✘      ✔      ✔</span><br><span class="line">repeatable read     ✘      ✘      ✔</span><br><span class="line">serializable        ✘      ✘      ✘</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/">http://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/">https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</a></strong><br>
 转载自：<a href="http://elliot.land/post/implementing-repeatable-read-and-serializable-transaction-isolation">IMPLEMENTING REPEATABLE READ AND SERIALIZABLE TRANSACTION ISOLATION</a></p>
 ]]></content>
       <categories>
@@ -5283,7 +5282,7 @@ MSVCRT!strnicmp+92:<br>
 <p>If your using a medium like the disk this isn’t so easy. If your application isn’t too complicated you may be able to rewrite all of the non-dead rows out to a new file and switch it underneath your server. There are tons of solutions for this that aren’t specific to how MVCC works so I’ll leave that up to you.</p>
 <p>In any case we need to be sensitive to row visibility here as well. Records that have an <code>expired_xid</code> that is not <code>0</code> <em>and</em> it does not appear in the active transactions are fully dead rows.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/implementing-your-own-transactions-with-mvcc/">http://xnerv.wang/implementing-your-own-transactions-with-mvcc/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/implementing-your-own-transactions-with-mvcc/">https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</a></strong><br>
 转载自：<a href="http://elliot.land/post/implementing-your-own-transactions-with-mvcc">IMPLEMENTING YOUR OWN TRANSACTIONS WITH MVCC</a></p>
 ]]></content>
       <categories>
@@ -5303,7 +5302,7 @@ MSVCRT!strnicmp+92:<br>
     <content><![CDATA[<p><img src="/assets/innodb-log-block-structure/1.jpg" alt=""></p>
 <span id="more"></span>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/innodb-log-block-structure/">http://xnerv.wang/innodb-log-block-structure/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/innodb-log-block-structure/">https://xnerv.wang/innodb-log-block-structure/</a></strong><br>
 转载自：<a href="http://hedengcheng.com/?p=124">InnoDB Log Block Structure(InnoDB日志Block结构详解)</a></p>
 ]]></content>
       <categories>
@@ -5699,7 +5698,7 @@ MSVCRT!strnicmp+92:<br>
 </table>
 <p>引起这个死锁的原因是非插入意向的GAP X锁和插入意向X锁之间是冲突的。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/introduction-of-innodb-transaction-lock/">http://xnerv.wang/introduction-of-innodb-transaction-lock/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/introduction-of-innodb-transaction-lock/">https://xnerv.wang/introduction-of-innodb-transaction-lock/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2016/01/01/">InnoDB 事务锁系统简介</a></p>
 ]]></content>
       <categories>
@@ -5851,7 +5850,7 @@ Placement Driver server（PD）， 也是一个集群，也通过Raft协议保�
 <li><a href="http://img3.tbcdn.cn/L1/461/1/d0069515c04809a449eda659386afbe966e0d1df">http://img3.tbcdn.cn/L1/461/1/d0069515c04809a449eda659386afbe966e0d1df</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/">http://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/introduction-of-some-popular-engine-storage-formats/">https://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2017/10/04/">一些流行引擎存储格式简介</a></p>
 ]]></content>
       <categories>
@@ -5926,7 +5925,7 @@ Placement Driver server（PD）， 也是一个集群，也通过Raft协议保�
 <h2 id="更多参考"><a class="header-anchor" href="#更多参考"></a>更多参考</h2>
 <p>《Windows.Internals.Part.2.6th.Edition》 - CHAPTER 8: I/O System - I/O Completion Ports</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/iocp-usage-and-inside/">http://xnerv.wang/iocp-usage-and-inside/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/iocp-usage-and-inside/">https://xnerv.wang/iocp-usage-and-inside/</a></strong></p>
 ]]></content>
       <categories>
         <category>Windows</category>
@@ -6080,7 +6079,7 @@ Placement Driver server（PD）， 也是一个集群，也通过Raft协议保�
 <p>题图：<a href="https://unsplash.com/photos/9wwF-VmSOrY">https://unsplash.com/photos/9wwF-VmSOrY</a> By @eberhard grossgasteiger</p>
 </blockquote>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/leveldb-analysis/">http://xnerv.wang/leveldb-analysis/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/leveldb-analysis/">https://xnerv.wang/leveldb-analysis/</a></strong><br>
 转载自：<a href="http://taobaofed.org/blog/2017/07/05/leveldb-analysis/">LevelDB 实现分析</a></p>
 ]]></content>
       <categories>
@@ -6243,7 +6242,7 @@ SBIT（Sticky Bit）设置在目录上，该目录下的（一级）文件和目
 <p>Linux的chattr和lsattr可以达到和NTFS权限一样复杂的功能。</p>
 <p>The difference between fsync() and fdatasync() is that the later does not necessarily update the meta-data associated with a file – such as the “last modified” date – but only the file data.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/linux-process-kernel-and-file-system-summary/">http://xnerv.wang/linux-process-kernel-and-file-system-summary/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/linux-process-kernel-and-file-system-summary/">https://xnerv.wang/linux-process-kernel-and-file-system-summary/</a></strong></p>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -6351,7 +6350,7 @@ SBIT（Sticky Bit）设置在目录上，该目录下的（一级）文件和目
 <li><a href="https://www.ibm.com/developerworks/cn/linux/1702_zhangym_demo/index.html">那些永不消逝的进程</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/linux-session-and-processgroup-summary/">http://xnerv.wang/linux-session-and-processgroup-summary/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/linux-session-and-processgroup-summary/">https://xnerv.wang/linux-session-and-processgroup-summary/</a></strong><br>
 转载自：<a href="https://segmentfault.com/a/1190000009152815">(SegmentFault) Linux session和进程组概述</a></p>
 ]]></content>
       <categories>
@@ -6589,7 +6588,7 @@ SBIT（Sticky Bit）设置在目录上，该目录下的（一级）文件和目
 <li><a href="http://www.linusakesson.net/programming/tty/index.php">The TTY demystified</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/linux-tty-pts-summary/">http://xnerv.wang/linux-tty-pts-summary/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/linux-tty-pts-summary/">https://xnerv.wang/linux-tty-pts-summary/</a></strong><br>
 转载自：<a href="https://segmentfault.com/a/1190000009082089">(SegmentFault) Linux TTY/PTS概述</a></p>
 ]]></content>
       <categories>
@@ -6617,7 +6616,7 @@ SBIT（Sticky Bit）设置在目录上，该目录下的（一级）文件和目
 <p>常见的VNC客户端有RealVNC Viewer、Ultra VNC等。</p>
 <p>而如果你想用Windows自带的远程桌面连接Linux机器时，就必须用RDP协议了。需要在Linux上装兼容RDP的服务器，例如<a href="https://wiki.archlinux.org/index.php/Xrdp">Xrdp</a>。Xrdp使用Xvnc，X11rdp或xorgxrdp作为后端（<a href="https://blog.csdn.net/Robinsone/article/details/46686531">XRDP与VNC的关系</a>）。如果在Windows Hyper-V中安装Ubuntu等，在登录的时候就需要从几个选项中选择一个后端。根据<a href="https://www.linuxquestions.org/questions/ubuntu-63/what-is-x11rdp-4175556435/">What is x11rdp?</a>和<a href="https://tigervnc.org/doc/Xvnc.html">Xvnc</a>中所提到的，X11rdp和Xvnc都属于X Server，用于显示“虚拟屏幕”，而不是物理屏幕。而<a href="https://wiki.archlinux.org/index.php/Xorg">Xorg</a>中证实了Xorg是X-Window的一种实现，那感觉Xorg和Xvnc等并不是同一个层面上的概念，Xorg包括了X Server和X Client，而Xvnc只是X Server的一种实现。同时Xvnc对于用户而言又是VNC Server。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/linux-xwindow-investigation/">http://xnerv.wang/linux-xwindow-investigation/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/linux-xwindow-investigation/">https://xnerv.wang/linux-xwindow-investigation/</a></strong></p>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -6660,7 +6659,7 @@ SBIT（Sticky Bit）设置在目录上，该目录下的（一级）文件和目
 <p>Lock Escalation in SQL Server is mainly a nightmare. How will you delete more than 5.000 rows from a table without running into Lock Escalations? You can disable Lock Escalation temporarily, but you have to be very careful here. Another option (that I’m suggesting) is to make your <strong>DELETE</strong>/<strong>UPDATE</strong> statements in a loop as different, separate transactions: <strong>DELETE</strong>/<strong>UPDATE</strong> less than 5.000 rows, so that you can prevent Lock Escalations. As a very nice side-effect your huge, big transaction will be splitted into multiple smaller ones, which will also help you with Auto Growth issues that you maybe have with your transaction log.</p>
 <p>Thanks for reading</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/lock-escalations/">http://xnerv.wang/lock-escalations/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/lock-escalations/">https://xnerv.wang/lock-escalations/</a></strong><br>
 转载自：<a href="http://www.sqlpassion.at/archive/2014/02/25/lock-escalations/">Lock Escalations</a></p>
 ]]></content>
       <categories>
@@ -6791,7 +6790,7 @@ SBIT（Sticky Bit）设置在目录上，该目录下的（一级）文件和目
 </ul>
 <p>【注：我配了一张look-free的自行车，寓意为——如果不用专门的车锁，那么自行得自己锁自己！】</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/lock-free-queue-Implementation/">http://xnerv.wang/lock-free-queue-Implementation/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/lock-free-queue-Implementation/">https://xnerv.wang/lock-free-queue-Implementation/</a></strong><br>
 转载自：<a href="https://coolshell.cn/articles/8239.html">（ 酷 壳 – CoolShell）无锁队列的实现</a></p>
 ]]></content>
       <categories>
@@ -6922,7 +6921,7 @@ B、只有一级页表才需要总是在主存中。虚拟存储器系统可以�
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">页目录 = 0000100000</span><br><span class="line">PT = 0101000111</span><br><span class="line">offset = 001001011000</span><br></pre></td></tr></table></figure>
 <p>嗯，先根据0000100000(32)，在页目录数组中索引，找到其元素中的地址，取其高20位，找到页表的地址，页表的地址是由内核动态分配的，接着，再加一个offset，就是最终的物理地址了。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/">http://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/">https://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/</a></strong><br>
 转载自：<a href="http://bbs.chinaunix.net/thread-2083672-1-1.html">我理解的逻辑地址、线性地址、物理地址和虚拟地址</a></p>
 ]]></content>
       <categories>
@@ -6994,7 +6993,7 @@ B、只有一级页表才需要总是在主存中。虚拟存储器系统可以�
 <h3 id="slab背后的动机"><a class="header-anchor" href="#slab背后的动机"></a>slab背后的动机</h3>
 <p>与传统的内存管理模式相比， slab缓存分配器提供了很多优点。首先，内核通常依赖于对小对象的分配，它们会在系统生命周期内进行无数次分配。slab缓存分配器通过对类似大小的对象进行缓存而提供这种功能，从而避免了常见的碎片问题。slab分配器还支持通用对象的初始化，从而避免了为同一目而对一个对象重复进行初始化。最后，slab分配器还可以支持硬件缓存对齐和着色，这允许不同缓存中的对象占用相同的缓存行，从而提高缓存的利用率并获得更好的性能。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">http://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/">https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/u013009575/article/details/17751147">内存分配-----伙伴算法和slab算法</a></p>
 ]]></content>
       <categories>
@@ -7032,7 +7031,7 @@ B、只有一级页表才需要总是在主存中。虚拟存储器系统可以�
 [4] <a href="http://cs.boisestate.edu/~amit/teaching/453/slides/memory-management-handout.pdf">http://cs.boisestate.edu/~amit/teaching/453/slides/memory-management-handout.pdf</a><br>
 [5] <a href="http://www.linux-mag.com/id/827/">http://www.linux-mag.com/id/827/</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/memory-allocation-mechanism-in-linux/">http://xnerv.wang/memory-allocation-mechanism-in-linux/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/memory-allocation-mechanism-in-linux/">https://xnerv.wang/memory-allocation-mechanism-in-linux/</a></strong><br>
 转载自：<a href="http://iarchsys.com/?p=692">Memory Allocation Mechanism in Linux</a></p>
 ]]></content>
       <categories>
@@ -7129,7 +7128,7 @@ B、只有一级页表才需要总是在主存中。虚拟存储器系统可以�
 <p>I haven’t written about every type of memory barrier yet. For instance, there are also <a href="http://www.mjmwired.net/kernel/Documentation/memory-barriers.txt#305">data dependency barriers</a>. I’ll describe those further in a future post. Still, the four types given here are the big ones.</p>
 <p>If you’re interested in how CPUs work under the hood – things like stores buffers, cache coherency protocols and other hardware implementation details – and why they perform memory reordering in the first place, I’d recommend the <a href="http://www.rdrop.com/users/paulmck/scalability/paper/whymb.2010.07.23a.pdf">fine</a> <a href="http://www.kernel.org/doc/Documentation/memory-barriers.txt">work</a> of Paul McKenney &amp; David Howells. Indeed, I suspect most programmers who have successfully written lock-free code have at least a passing familiarity with such hardware details.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/memory-barriers-are-like-source-control-perations/">http://xnerv.wang/memory-barriers-are-like-source-control-perations/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/memory-barriers-are-like-source-control-perations/">https://xnerv.wang/memory-barriers-are-like-source-control-perations/</a></strong><br>
 转载自：<a href="http://preshing.com/20120710/memory-barriers-are-like-source-control-operations/">Memory Barriers Are Like Source Control Operations</a></p>
 ]]></content>
       <categories>
@@ -7171,7 +7170,7 @@ B、只有一级页表才需要总是在主存中。虚拟存储器系统可以�
 <img src="/assets/mingw-cygwin-summary-and-thinking/msys2-usr-gcc-dep.png" alt=""></p>
 <p>安装mingw-w64-i686-toolchain和mingw-w64-x86_64-toolchain则分别会在<code>mingw32\bin</code>和<code>mingw64\bin</code>目录下产生gcc.exe，并且只依赖于Windows dlls和libwinpthread-1.dll，看来这个就是MinGW-w64版本的gcc，可以生成不依赖于任何dll的Windows程序。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/mingw-cygwin-summary-and-thinking/">http://xnerv.wang/mingw-cygwin-summary-and-thinking/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/mingw-cygwin-summary-and-thinking/">https://xnerv.wang/mingw-cygwin-summary-and-thinking/</a></strong></p>
 ]]></content>
       <categories>
         <category>编译器</category>
@@ -7216,7 +7215,7 @@ B、只有一级页表才需要总是在主存中。虚拟存储器系统可以�
 <p><strong>Conclusion:</strong> Use memory maps if you access data randomly, keep it around for a long time, or if you know you can share it with other processes (<code>MAP_SHARED</code> isn’t very interesting if there is no actual sharing). Read files normally if you access data sequentially or discard it after reading. And if either method makes your program less complex, do <em>that</em>. For many real world cases there’s no sure way to show one is faster without testing your actual application and NOT a benchmark.</p>
 <p>(Sorry for necro’ing this question, but I was looking for an answer and this question kept coming up at the top of Google results.)</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/mmap-vs-reading-blocks/">http://xnerv.wang/mmap-vs-reading-blocks/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/mmap-vs-reading-blocks/">https://xnerv.wang/mmap-vs-reading-blocks/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/q/45972">(Stack Overflow) mmap() vs. reading blocks</a></p>
 ]]></content>
       <categories>
@@ -7284,7 +7283,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/45972">(Stack Overflow) mma
 <li><a href="https://technet.microsoft.com/en-us/library/ms187499(v=sql.105).aspx">SQL Memory Architecture</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/">http://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/">https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</a></strong><br>
 转载自：<a href="https://www.sqlshack.com/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/">Monitoring Memory Clerk and Buffer Pool Allocations in SQL Server</a></p>
 ]]></content>
       <categories>
@@ -7460,7 +7459,7 @@ The concept that makes this implementation possible is the memory-mapped file (o
 <li>The data that describes a GDI object resides in the client’s address space. Please also observe the restriction mentioned earlier in this article under “How the Subsystem Realizes Window GDI Objects.”</li>
 </ol>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/">http://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/">https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810501.aspx">(MSDN) Give Me a Handle, and I’ll Show You an Object</a></p>
 ]]></content>
       <categories>
@@ -7496,7 +7495,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810501.aspx"
 <h2 id="Related-topics"><a class="header-anchor" href="#Related-topics"></a>Related topics</h2>
 <p><strong><a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366533(v=vs.85).aspx">Comparing Memory Allocation Methods</a></strong></p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/msdn-heap-functions/">http://xnerv.wang/msdn-heap-functions/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/msdn-heap-functions/">https://xnerv.wang/msdn-heap-functions/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/aa366711.aspx">(MSDN) Heap Functions</a></p>
 ]]></content>
       <categories>
@@ -7626,7 +7625,7 @@ To scale on multiprocessor machines, algorithms, implementation, data structures
 </ol>
 <p><em>Murali Krishnan is a lead software design engineer with the Internet Information Server (IIS) team. He has worked on IIS since version 1.0 and has successfully shipped versions 1.0 through 4.0. Murali formed and led the IIS performance team for three years (1995-1998), and has influenced IIS performance from day one. He holds an M.S. from the University of Wisconsin-Madison and a B.S. from Anna University, India, both in Computer Science. Outside work, he reads, plays volleyball, and cooks at home.</em></p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/msdn-heap-pleasures-and-pains/">http://xnerv.wang/msdn-heap-pleasures-and-pains/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/msdn-heap-pleasures-and-pains/">https://xnerv.wang/msdn-heap-pleasures-and-pains/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810466.aspx">(MSDN) Heap: Pleasures and Pains</a></p>
 ]]></content>
       <categories>
@@ -7899,7 +7898,7 @@ Microsoft Developer Network Technology Group</p>
 <p>Heaps do at least one thing well—they allocate smaller chunks of memory rather quickly. So whenever you are reluctant to create an automatic variable in a window procedure simply for an occasional <strong>LoadString</strong> buffer, why not use <strong>GlobalAlloc</strong> or <strong>LocalAlloc</strong>, <strong>malloc</strong> or <strong>HeapAlloc</strong>? Heaps are also very good at allocating storage for dynamic data structures. Dynamic heaps lend themselves particularly well to managing several distinct dynamic data structures in an application.</p>
 <p>Finally, what is the cost of using a heap? Well, if you never use any MOVEABLE (including DISCARDABLE) memory, the cost is considerably lower, and MOVEABLE memory probably doesn’t buy you much in a 32-bit linear address space. Not to mention that at 8 bytes per MOVEABLE memory handle, the system limits processes to 65,535 handles. Each chunk of heap memory allocated in either the default heap or a dynamic heap is subject to a 16-byte granularity and is charged a 16-byte header. In total, then, allocating 1 byte of MOVEABLE memory costs 40 bytes (8 bytes for the handle table entry, 16 bytes for granularity, and 16 bytes for the header). Happy heaping.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/msdn-managing-heap-memory/">http://xnerv.wang/msdn-managing-heap-memory/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/msdn-managing-heap-memory/">https://xnerv.wang/msdn-managing-heap-memory/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810603.aspx">(MSDN) Managing Heap Memory</a></p>
 ]]></content>
       <categories>
@@ -8079,7 +8078,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810603.aspx"
 <p>Memory-mapped files are also useful for manipulating large files. Since creating a memory mapping file consumes few physical resources, extremely large files can be opened by a process and have little impact on the system. Then, smaller portions of the file called “views” can be mapped into the process’s address space just before performing I/O.</p>
 <p>There are many techniques for managing memory in applications for Windows. Whether you need the benefits of memory sharing or simply wish to manage virtual memory backed by a file on disk, memory-mapped file functions offer the support you need.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/msdn-managing-memory-mapped-files/">http://xnerv.wang/msdn-managing-memory-mapped-files/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/msdn-managing-memory-mapped-files/">https://xnerv.wang/msdn-managing-memory-mapped-files/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810613.aspx">(MSDN) Managing Memory-Mapped Files</a></p>
 ]]></content>
       <categories>
@@ -8234,7 +8233,7 @@ The query returns the size of the committed memory and the address of the base o
 <p>The virtual memory management functions in Windows offer direct management of virtual memory in Windows NT. Each process’s 2 GB user address space is divided into regions of memory that are either reserved, committed, or free virtual addresses. A region is defined as a contiguous range of addresses in which the protection, type, and base allocation of each address is the same. Within each region are one or more pages of addresses that also carry protection and pagelock flag status bits.</p>
 <p>The virtual memory management functions provide capabilities for applications to alter the state of pages in the virtual address space. An application can change the type of memory from committed to reserved or change the protection from PAGE_READWRITE to PAGE_READONLY to prevent access to a region of addresses. An application can lock a page into the working set for a process to minimize paging for a critical page of memory. The virtual memory functions are considered low-level functions, meaning they are relatively fast but they lack many high-level features.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/msdn-managing-virtual-memory/">http://xnerv.wang/msdn-managing-virtual-memory/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/msdn-managing-virtual-memory/">https://xnerv.wang/msdn-managing-virtual-memory/</a></strong><br>
 Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx">(MSDN) Managing Virtual Memory</a></p>
 ]]></content>
       <categories>
@@ -8300,7 +8299,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 </ul>
 <p>PS: engine condition pushdown 是 NDB 使用的，其它引擎不支持。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/mysql-index-condition-pushdown/">http://xnerv.wang/mysql-index-condition-pushdown/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/mysql-index-condition-pushdown/">https://xnerv.wang/mysql-index-condition-pushdown/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2015/12/08/">Index Condition Pushdown (ICP)</a></p>
 ]]></content>
       <categories>
@@ -8492,7 +8491,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">set</span> <span class="keyword">global</span> innodb_monitor_reset_all <span class="operator">=</span> <span class="string">&#x27;adaptive_hash%&#x27;</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
 <p>该表搜集了AHI子系统诸如AHI查询次数，更新次数等信息，可以很好的监控其运行状态，在某些负载下，AHI并不适合打开，关闭AHI可以避免额外的维护开销。当然这取决于你针对具体负载的性能测试。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/">http://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/">https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2015/09/01/">InnoDB Adaptive hash index介绍</a></p>
 ]]></content>
       <categories>
@@ -8513,7 +8512,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
     <content><![CDATA[<p><img src="/assets/mysql-row-format/1.jpg" alt=""></p>
 <span id="more"></span>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/mysql-row-format/">http://xnerv.wang/mysql-row-format/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/mysql-row-format/">https://xnerv.wang/mysql-row-format/</a></strong><br>
 转载自：<a href="http://hedengcheng.com/?p=127">MySQL Row Format(MySQL行格式详解)</a></p>
 ]]></content>
       <categories>
@@ -8560,7 +8559,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 <a href="http://dev.mysql.com/doc/refman/5.6/en/mrr-optimization.html">《MySQL Multi-Range Read Optimization》</a><br>
 <a href="https://www.percona.com/blog/2012/03/21/multi-range-read-mrr-in-mysql-5-6-and-mariadb-5-5/">《Multi Range Read (MRR) in MySQL 5.6 and MariaDB 5.5》</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/mysql56-new-feature-multi-range-read/">http://xnerv.wang/mysql56-new-feature-multi-range-read/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/mysql56-new-feature-multi-range-read/">https://xnerv.wang/mysql56-new-feature-multi-range-read/</a></strong><br>
 转载自：<a href="http://blog.itpub.net/22664653/viewspace-1673682/">【MySQL】MySQL5.6新特性之Multi-Range Read</a></p>
 ]]></content>
       <categories>
@@ -8581,7 +8580,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Parent</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">VirtFunc1</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Parent::VirtFunc1&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">VirtFunc2</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Parent::VirtFunc2&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Child</span> : <span class="keyword">public</span> Parent</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">VirtFunc1</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Child::VirtFunc1&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">        <span class="function"><span class="type">void</span> <span class="title">VirtFunc2</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;Child::VirtFunc2&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*virtual_function)</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">FakeVirtualTable</span> &#123;</span><br><span class="line">    virtual_function virtual_one;</span><br><span class="line"></span><br><span class="line">    virtual_function virtual_two;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">fake_virtual_one</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Faked virtual call 1&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">fake_virtual_two</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Faked virtual call 2&quot;</span> &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">/* declare a Child class and a base pointer to it. */</span></span><br><span class="line">    Child child_class_obj;</span><br><span class="line">    Parent* parent_class_ptr = &amp;child_class_obj;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* create our fake virtual table with pointers to our fake methods */</span></span><br><span class="line">    FakeVirtualTable custom_table;</span><br><span class="line">    custom_table.virtual_one = fake_virtual_one;</span><br><span class="line"></span><br><span class="line">    custom_table.virtual_two = fake_virtual_two;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* take the address of our stack virtual table and override the real object pointer to the virtual table */</span></span><br><span class="line">    FakeVirtualTable* table_ptr = &amp;custom_table;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(parent_class_ptr, &amp;table_ptr, <span class="built_in">sizeof</span>(<span class="type">void</span>*));</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* call the methods ( but we&#x27;re really calling the faked functions ) */</span></span><br><span class="line"></span><br><span class="line">    parent_class_ptr-&gt;<span class="built_in">VirtFunc1</span>();</span><br><span class="line">    parent_class_ptr-&gt;<span class="built_in">VirtFunc2</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>So, try to run that code and, of course, the expected result is having fake_virtual_one() and fake_virtual_two() functions called. No magic there, we just replace the first sizeof(void*) bytes of the object with our own table pointer. There is not a use I can think of right now, but it is funny ….</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/">http://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/">https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</a></strong><br>
 转载自：<a href="https://moythreads.com/wordpress/2007/09/14/overriding-the-virtual-table-in-a-c-object/">Overriding the virtual table in a C++ object</a></p>
 ]]></content>
       <categories>
@@ -8632,7 +8631,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 </center>
 <p>你可以分配全局变量来查看结果的变化。说明一点，上面我写的程序只统计了MEM_FREE的页面，实际上还要判断页面的访问类型，除去特殊如无法访问的页面。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/process-memory-layout/">http://xnerv.wang/process-memory-layout/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/process-memory-layout/">https://xnerv.wang/process-memory-layout/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/hustd10/article/details/50816175">进程内存布局</a></p>
 ]]></content>
       <categories>
@@ -8703,7 +8702,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 <p><a href="https://sqlperformance.com/2014/05/t-sql-queries/data-modifications-under-rcsi">The next post in this series</a> continues our examination of read committed snapshot isolation, with a look at the surprising behaviour of data modification statements under RCSI.</p>
 <p>[ <a href="https://sqlperformance.com/2014/07/t-sql-queries/isolation-levels">See the index for the whole series</a> ]</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/read-committed-snapshot-isolation/">http://xnerv.wang/read-committed-snapshot-isolation/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/read-committed-snapshot-isolation/">https://xnerv.wang/read-committed-snapshot-isolation/</a></strong><br>
 转载自：<a href="https://sqlperformance.com/2014/05/t-sql-queries/read-committed-snapshot-isolation">Read Committed Snapshot Isolation</a></p>
 ]]></content>
       <categories>
@@ -8762,7 +8761,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 <hr>
 <p><strong>（编者注：在不同版本的vc runtime之间也不能混用new和delete，即使用的都是CRT DLL。）</strong></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/release-memory-allocated-by-another-module/">http://xnerv.wang/release-memory-allocated-by-another-module/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/release-memory-allocated-by-another-module/">https://xnerv.wang/release-memory-allocated-by-another-module/</a></strong><br>
 转载自：<a href="http://guaniuzhijia.blog.163.com/blog/static/16547206920105792946352/">一个模块分配的内存由另外一个模块释放~引发的血案</a></p>
 ]]></content>
       <categories>
@@ -8801,7 +8800,7 @@ Reprinted from: <a href="https://msdn.microsoft.com/en-us/library/ms810627.aspx"
 <p>And finally, to roll back just your changes so far:</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- Roll back changes...</span></span><br><span class="line">IF <span class="variable">@startingTranCount</span> <span class="operator">&gt;</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">ROLLBACK</span> TRANSACTION MySavePointName</span><br><span class="line"><span class="keyword">ELSE</span></span><br><span class="line">    <span class="keyword">ROLLBACK</span> TRANSACTION</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/">http://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/">https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/q/9713350">(StackOverflow) SAVE TRANSACTION vs BEGIN TRANSACTION (SQL Server) how to nest transactions nicely</a></p>
 ]]></content>
       <categories>
@@ -8844,7 +8843,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/9713350">(StackOverflow) SA
 <p>Some signals, however, are special:</p>
 <figure class="highlight txt"><table><tr><td class="code"><pre><span class="line">A signal may be generated (and thus pending) for a process as</span><br><span class="line">a whole (e.g., when sent using kill(2)) or for a specific</span><br><span class="line">thread (e.g., certain signals, such as SIGSEGV and SIGFPE,</span><br><span class="line">generated as a consequence of executing a specific machine-</span><br><span class="line">language instruction are thread directed, as are signals</span><br><span class="line">targeted at a specific thread using pthread_kill(3)).  A</span><br><span class="line">process-directed signal may be delivered to any one of the</span><br><span class="line">threads that does not currently have the signal blocked.  If</span><br><span class="line">more than one of the threads has the signal unblocked, then</span><br><span class="line">the kernel chooses an arbitrary thread to which to deliver</span><br><span class="line">the signal.</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/signal-handling-with-multiple-threads-in-linux/">http://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/">https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/q/11679568">(StackOverflow) Signal handling with multiple threads in Linux</a></p>
 ]]></content>
       <categories>
@@ -8894,7 +8893,7 @@ Serializable isolation level provides the highest level of data consistency but 
 <p><a href="http://msdn.microsoft.com/en-us/library/ms189122(v=sql.105).aspx">Isolation Levels in the Database Engine</a></p>
 <p><a href="http://www.databasejournal.com/article.php/3880181/Arshad-Ali.htm"><strong>See all articles by Arshad Ali</strong></a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/">http://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/">https://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</a></strong><br>
 转载自：<a href="https://www.databasejournal.com/features/mssql/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1.html">Snapshot Isolation Level in SQL Server - What, Why and How - Part 1</a></p>
 ]]></content>
       <categories>
@@ -8927,7 +8926,7 @@ Serializable isolation level provides the highest level of data consistency but 
 <p>Hope this helps</p>
 <p>- Rob</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/">http://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/">https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</a></strong><br>
 转载自：<a href="https://social.msdn.microsoft.com/Forums/sqlserver/en-US/834b7c8f-58d8-4491-a4c4-b24593076cab/snapshot-isolation-transaction-aborted-due-to-update-conflict?forum=sqldatabaseengine">Snapshot isolation transaction aborted due to update conflict.</a></p>
 ]]></content>
       <categories>
@@ -9081,7 +9080,7 @@ RIP路由协议用“更新（UNPDATES）”和“请求（REQUESTS）”这两�
 <p><strong>欧拉回路</strong>是经过所有边一次然后回到原点，<strong>哈密顿回路</strong>是经过所有节点一次然后回到原点，TSP旅行商问题就是哈密顿回路。<br>
 可见欧拉回路是有可能重复经过一个点的，但哈密顿回路不能重复经过一条边。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/some-knowledge-points-learned-in-university/">http://xnerv.wang/some-knowledge-points-learned-in-university/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/some-knowledge-points-learned-in-university/">https://xnerv.wang/some-knowledge-points-learned-in-university/</a></strong></p>
 ]]></content>
       <categories>
         <category>数据结构与算法</category>
@@ -9149,7 +9148,7 @@ RIP路由协议用“更新（UNPDATES）”和“请求（REQUESTS）”这两�
 <p>这就明了了,如果在vs2003里开发dll,然后编译dll的时候选择/MT,那这个dll内部就会有一份_crtheap,那在加载这个dll的时候,会调用一次_heap_init,然后调用HeapCreate来初始化_crtheap.这也就意味着其他模块使用/MT选项也会如此,导致每个模块里的_crtheap值是不同的.这样跨模块执行free,就会导致在handle A上分配的内存去handle B上释放导致了崩溃.如果所有模块均使用/MD选项,则只有crt的dll里有一份_crtheap,在crt的dll被加载的时候执行一次HeapCreate并赋值给_crtheap,然后HeapAlloc与 HeapFree使用的HANDLE都是同一个_crtheap,就不会崩溃了.</p>
 <p>问题到这里就分析完毕了。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/something-about-static-library-mt-md/">http://xnerv.wang/something-about-static-library-mt-md/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/something-about-static-library-mt-md/">https://xnerv.wang/something-about-static-library-mt-md/</a></strong><br>
 转载自：<a href="https://zhuanlan.zhihu.com/p/20628410">静态库那些事儿/MT /MD</a></p>
 ]]></content>
       <categories>
@@ -9304,7 +9303,7 @@ RIP路由协议用“更新（UNPDATES）”和“请求（REQUESTS）”这两�
 <li>Daniel P. Bovet Marco Cesati “Understanding the Linux Kernel”,  O’Reilly ISBN: 0-596-00002-2, 702 pages</li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/special-features-of-linux-memory-management-mechanism/">http://xnerv.wang/special-features-of-linux-memory-management-mechanism/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/special-features-of-linux-memory-management-mechanism/">https://xnerv.wang/special-features-of-linux-memory-management-mechanism/</a></strong><br>
 转载自：<a href="https://www.apriorit.com/dev-blog/209-linux-memory-management">Special features of Linux memory management mechanism</a></p>
 ]]></content>
       <categories>
@@ -9397,7 +9396,7 @@ RIP路由协议用“更新（UNPDATES）”和“请求（REQUESTS）”这两�
 <li>Revision 4 - Added test results.</li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/spin-lock-in-cpp/">http://xnerv.wang/spin-lock-in-cpp/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/spin-lock-in-cpp/">https://xnerv.wang/spin-lock-in-cpp/</a></strong><br>
 转载自：<a href="https://www.codeproject.com/Articles/184046/Spin-Lock-in-C">Spin Lock in C++</a></p>
 ]]></content>
       <categories>
@@ -9492,7 +9491,7 @@ SPV在实现上涉及到一个问题，如何才能通过tx_hash来定位到该�
 <p>前文提到，SPV的用途是验证某个支付是否确实存在，并得到多少个确认。而钱包的用途则是用于管理自己的资产以及进行支付。简言之，SPV的应用场合往往是为发货做准备（知道钱到帐了），“轻钱包”的应用场合往往是数钱或花钱。虽然“轻钱包”中部分借鉴了SPV的机制，但和SPV是完全不用的应用方向，直接把这两个词连起略显牵强。这种钱包要么采用中心化的方式——提高了效率，但引入了信任的风险；要么采用去中心化方式——无需信任，但效率低，且增加网络的负担。</p>
 <p>SPV节点的出现使以去中心化方式来实现高效、低负荷的“轻钱包”成为了可能。笔者认为将基于SPV节点来实现的&quot;轻钱包&quot;简称为“SPV轻钱包”可能会更为合适些。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/spv-spv-nodes-spv-purses/">http://xnerv.wang/spv-spv-nodes-spv-purses/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/spv-spv-nodes-spv-purses/">https://xnerv.wang/spv-spv-nodes-spv-purses/</a></strong><br>
 转载自：<a href="http://8btc.com/thread-15128-1-1.html">SPV、SPV节点和SPV钱包 (初稿）</a></p>
 ]]></content>
       <categories>
@@ -9534,7 +9533,7 @@ SPV在实现上涉及到一个问题，如何才能通过tx_hash来定位到该�
 <a href="https://technet.microsoft.com/en-us/library/ms188270.aspx">Heap Structures</a><br>
 <a href="https://technet.microsoft.com/en-us/library/aa337560.aspx">Writing Pages</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/sql-server-buffer-management-reading-pages/">http://xnerv.wang/sql-server-buffer-management-reading-pages/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/sql-server-buffer-management-reading-pages/">https://xnerv.wang/sql-server-buffer-management-reading-pages/</a></strong><br>
 转载自：<a href="https://technet.microsoft.com/en-us/library/ms191475.aspx">Reading Pages</a></p>
 ]]></content>
       <categories>
@@ -9590,7 +9589,7 @@ SPV在实现上涉及到一个问题，如何才能通过tx_hash来定位到该�
 </li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/sql-server-buffer-management-writing-pages/">http://xnerv.wang/sql-server-buffer-management-writing-pages/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/sql-server-buffer-management-writing-pages/">https://xnerv.wang/sql-server-buffer-management-writing-pages/</a></strong><br>
 转载自：<a href="https://technet.microsoft.com/en-us/library/aa337560.aspx">Writing Pages</a></p>
 ]]></content>
       <categories>
@@ -9835,7 +9834,7 @@ SPV在实现上涉及到一个问题，如何才能通过tx_hash来定位到该�
 <li><a href="https://github.com/ept/hermitage">GitHub - ept/hermitage</a>: What are the differences between the transaction isolation levels in databases? This is a suite of test cases which differentiate isolation levels.</li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/sql-transaction-isolation-levels-explained/">http://xnerv.wang/sql-transaction-isolation-levels-explained/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/sql-transaction-isolation-levels-explained/">https://xnerv.wang/sql-transaction-isolation-levels-explained/</a></strong><br>
 转载自：<a href="http://elliot.land/post/sql-transaction-isolation-levels-explained">SQL TRANSACTION ISOLATION LEVELS EXPLAINED</a></p>
 ]]></content>
       <categories>
@@ -9918,7 +9917,7 @@ Hash(“192.168.1.100”);<br>
 <p>参考：<br>
 [1] <a href="http://blog.huanghao.me/?p=14">http://blog.huanghao.me/?p=14</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/study-consistent-hashing-in-5min/">http://xnerv.wang/study-consistent-hashing-in-5min/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/study-consistent-hashing-in-5min/">https://xnerv.wang/study-consistent-hashing-in-5min/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/cywosp/article/details/23397179/">每天进步一点点——五分钟理解一致性哈希算法(consistent hashing)</a></p>
 ]]></content>
       <categories>
@@ -10007,7 +10006,7 @@ XA 就是 X/Open DTP 定义的交易中间件与数据库之间的接口规范�
 <p>tair的分布采用的是一致性哈希算法，对于所有的key，分到Q个桶中，桶是负载均衡和数据迁移的基本单位。config server 根据一定的策略把每个桶指派到不同的data server上。因为数据按照key做hash算法，所以可以认为每个桶中的数据基本是平衡的。保证了桶分布的均衡性，就保证了数据分布的均衡性。</p>
 </blockquote>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/summary-of-distributed-theory-and-architecture/">http://xnerv.wang/summary-of-distributed-theory-and-architecture/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/summary-of-distributed-theory-and-architecture/">https://xnerv.wang/summary-of-distributed-theory-and-architecture/</a></strong></p>
 ]]></content>
       <categories>
         <category>分布式及存储</category>
@@ -10070,7 +10069,7 @@ XA 就是 X/Open DTP 定义的交易中间件与数据库之间的接口规范�
 <li><a href="http://blog.csdn.net/yuwenliang/article/details/6770750">http://blog.csdn.net/yuwenliang/article/details/6770750</a></li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/summary-of-orphan-process-and-zombie-process/">http://xnerv.wang/summary-of-orphan-process-and-zombie-process/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/summary-of-orphan-process-and-zombie-process/">https://xnerv.wang/summary-of-orphan-process-and-zombie-process/</a></strong><br>
 转载自：<a href="http://www.cnblogs.com/Anker/p/3271773.html">孤儿进程与僵尸进程[总结]</a></p>
 ]]></content>
       <categories>
@@ -10278,7 +10277,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <li>RTT是客户到服务器往返所花时间（round-trip time，简称RTT），TCP含有动态估算RTT的算法。TCP还持续估算一个给定连接的RTT，这是因为RTT受网络传输拥塞程序的变化而变化。</li>
 </ol>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/tcp-model-knowledge-summary/">http://xnerv.wang/tcp-model-knowledge-summary/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/tcp-model-knowledge-summary/">https://xnerv.wang/tcp-model-knowledge-summary/</a></strong></p>
 ]]></content>
       <categories>
         <category>网络协议</category>
@@ -10334,7 +10333,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <p><img src="https://coolshell.cn/wp-content/uploads/2012/05/rsync-algorithm-result.jpg" alt="" title="rsync algorithm result"></p>
 <p>最后想说一下，对于某些压缩文件使用rsync传输可能会传得更多，因为被压缩后的文件可能会非常的不同。对此，对于gzip和bzip2这样的命令，记得开启 “rsyncalbe” 模式。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/the-core-algorithm-of-rsync/">http://xnerv.wang/the-core-algorithm-of-rsync/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/the-core-algorithm-of-rsync/">https://xnerv.wang/the-core-algorithm-of-rsync/</a></strong><br>
 转载自：<a href="https://coolshell.cn/articles/7425.html">RSYNC 的核心算法</a></p>
 ]]></content>
       <categories>
@@ -10369,7 +10368,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <h2 id="通过蓝牙SSH"><a class="header-anchor" href="#通过蓝牙SSH"></a>通过蓝牙SSH</h2>
 <p>参考了一下文章但目前暂时未能解决这个问题，主要的问题是我的笔记本检测不到树莓派的蓝牙信号，虽然我的手机能够检测到树莓派的蓝牙。通过蓝牙SSH并不是刚需，等以后如果我能解决这个问题的时候再补完这一部分。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/">http://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/">https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</a></strong></p>
 ]]></content>
       <categories>
         <category>树莓派</category>
@@ -10411,7 +10410,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <h2 id="五、负载均衡："><a class="header-anchor" href="#五、负载均衡："></a>五、负载均衡：</h2>
 <p><img src="/assets/the-google-file-system-paper-analysis/5.png" alt=""></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/the-google-file-system-paper-analysis/">http://xnerv.wang/the-google-file-system-paper-analysis/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/the-google-file-system-paper-analysis/">https://xnerv.wang/the-google-file-system-paper-analysis/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/yuyixinye/article/details/43483139">The Google File System——论文详解</a></p>
 ]]></content>
       <categories>
@@ -10493,7 +10492,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <h2 id="Hopefully-A-Little-Less-Cryptic"><a class="header-anchor" href="#Hopefully-A-Little-Less-Cryptic"></a>Hopefully A Little Less Cryptic</h2>
 <p>The debugger syntax is indeed rich and full of nuances, which can make diving in a bit of a challenge at first. Hopefully this intro to the expression evaluators provides a good starting point for some experimentation of your own.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/">http://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/">https://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/</a></strong><br>
 转载自：<a href="http://www.osronline.com/article.cfm?article=540">The Tale of Two Evaluators: Understanding MASM and C++ Expression Evaluators in WinDbg</a></p>
 ]]></content>
       <categories>
@@ -10551,7 +10550,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <li><a href="https://stackoverflow.com/questions/25740388/what-is-the-difference-between-explicit-atomic-load-store-and-usual-operator-an">What is the difference between explicit atomic load/store and usual operator= and operator T?</a>，两者是相等的，后者使用默认的memory_order_seq_cst级别内存屏障。</li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/thread-synchronization-and-atomic-operation/">http://xnerv.wang/thread-synchronization-and-atomic-operation/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/thread-synchronization-and-atomic-operation/">https://xnerv.wang/thread-synchronization-and-atomic-operation/</a></strong></p>
 ]]></content>
       <categories>
         <category>操作系统</category>
@@ -10653,7 +10652,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
 <p>本例只是简单的演示了，在同一个事务的不同时期加的不同的MDL的锁。MYSQL中DDL的操作不属于事务操作的范围。这就给mysql主备基于语句级别同步带来了困难。mysql主备在同步的过程中，为了保证主备结构一致性，而引入了MDL机制。为了尽可能的降低MDL带来的影响。请在业务低谷的时候，执行DDL操作。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/">http://xnerv.wang/trace-metadata-lock-procedure-using-gdb/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/trace-metadata-lock-procedure-using-gdb/">https://xnerv.wang/trace-metadata-lock-procedure-using-gdb/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2017/09/06/">利用gdb跟踪MDL加锁过程</a></p>
 ]]></content>
       <categories>
@@ -10711,7 +10710,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">commit</span>;</span><br><span class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">SELECT</span> OBJECT_TYPE, OBJECT_SCHEMA, OBJECT_NAME, LOCK_TYPE, LOCK_STATUS, THREAD_ID, PROCESSLIST_ID, PROCESSLIST_INFO <span class="keyword">FROM</span> performance_schema.metadata_locks <span class="keyword">INNER</span> <span class="keyword">JOIN</span> performance_schema.threads <span class="keyword">ON</span> THREAD_ID <span class="operator">=</span> OWNER_THREAD_ID <span class="keyword">WHERE</span> PROCESSLIST_ID <span class="operator">&lt;&gt;</span> CONNECTION_ID();</span><br><span class="line"><span class="keyword">Empty</span> <span class="keyword">set</span> (<span class="number">0.01</span> sec)</span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t;</span><br><span class="line"><span class="keyword">Empty</span> <span class="keyword">set</span> (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure>
 <p>MySQL 5.7可以通过performance schema来检索MDL锁阻塞情况，方便DBA来诊断问题。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/trace-metadata-lock/">http://xnerv.wang/trace-metadata-lock/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/trace-metadata-lock/">https://xnerv.wang/trace-metadata-lock/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2015/10/02/">跟踪Metadata lock</a></p>
 ]]></content>
       <categories>
@@ -10863,7 +10862,7 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
 <p>很明显，上述的Dynamo的配置用的是CAP里的A和P。</p>
 <p>我非常推大家都去看看这篇论文：《<a href="http://www.read.seas.harvard.edu/~kohler/class/cs239-w08/decandia07dynamo.pdf">Dynamo：Amazon’s Highly Available Key-Value Store</a>》，如果英文痛苦，你可以<a href="http://vdisk.weibo.com/s/AKRQZMLLc1ol">看看译文</a>（译者不详）。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/transaction-processing-of-distributed-system/">http://xnerv.wang/transaction-processing-of-distributed-system/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/transaction-processing-of-distributed-system/">https://xnerv.wang/transaction-processing-of-distributed-system/</a></strong><br>
 转载自：<a href="https://coolshell.cn/articles/10910.html">分布式系统的事务处理</a></p>
 ]]></content>
       <categories>
@@ -10998,7 +10997,7 @@ B和D连接起来，变成一块140K的空闲内存。</p>
 <p>可以用命令ps -o majflt minflt -C program来查看进程的majflt, minflt的值，这两个值都是累加值，从进程启动开始累加。在对高性能要求的程序做压力测试的时候，我们可以多关注一下这两个值。<br>
 　　如果一个进程使用了mmap将很大的数据文件映射到进程的虚拟地址空间，我们需要重点关注majflt的值，因为相比minflt，majflt对于性能的损害是致命的，随机读一次磁盘的耗时数量级在几个毫秒，而minflt只有在大量的时候才会对性能产生影响。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">http://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/">https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</a></strong><br>
 转载自：<a href="http://blog.csdn.net/yusiguyuan/article/details/39496057">进程分配内存的两种方式–brk() 和mmap()（不涉及共享内存）</a></p>
 ]]></content>
       <categories>
@@ -11120,7 +11119,7 @@ B和D连接起来，变成一块140K的空闲内存。</p>
 <a href="http://en.wikipedia.org/wiki/Out-of-order_execution">http://en.wikipedia.org/wiki/Out-of-order_execution</a><br>
 <a href="https://www.kernel.org/doc/Documentation/memory-barriers.txt">https://www.kernel.org/doc/Documentation/memory-barriers.txt</a></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/understand-memory-barrier/">http://xnerv.wang/understand-memory-barrier/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/understand-memory-barrier/">https://xnerv.wang/understand-memory-barrier/</a></strong><br>
 转载自：<a href="http://name5566.com/4535.html">理解 Memory barrier（内存屏障）</a></p>
 ]]></content>
       <categories>
@@ -11184,7 +11183,7 @@ B和D连接起来，变成一块140K的空闲内存。</p>
 </ul>
 <p>The way MySQL implements Repeatable Read is not intuitive and, although it is required to support statement replication, can lead to some problems while running data modification and transfer to other tables in concurrent transactions. If your application can face these issues, you will need to modify your queries using <em>select … for update</em> statements and thus increase the number of locks in the database.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">http://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/">https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</a></strong><br>
 转载自：<a href="https://blog.pythian.com/understanding-mysql-isolation-levels-repeatable-read/">Understanding MySQL Isolation Levels: Repeatable-Read</a></p>
 ]]></content>
       <categories>
@@ -11217,7 +11216,7 @@ B和D连接起来，变成一块140K的空闲内存。</p>
 <p>Now in your case the SIX lock is held by a three table join select query. A select never takes any type of lock that is not a shared lock unless you explicitly tell it to (e.g. with a XLOCK hint). Such a hint is not visible within the input buffer, so I assume the IX part is a left over from the last batch on this connection. If you are using connection pooling and forget to cleanup all open transactions, such a lock can live potentially forever. But it becomes also very hard to troubleshoot.</p>
 <p>You could start by running an XEvent session that pairs OPEN TRANs with COMMITs and see if you can find the culprit that way.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/understanding-six-lock-in-sql-server/">http://xnerv.wang/understanding-six-lock-in-sql-server/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/understanding-six-lock-in-sql-server/">https://xnerv.wang/understanding-six-lock-in-sql-server/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understanding-six-lock-in-sql-server">(StackOverflow) Understanding SIX lock in SQL Server</a></p>
 ]]></content>
       <categories>
@@ -11256,7 +11255,7 @@ Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understand
 刚发现不知什么时候开始<a href="https://code.visualstudio.com/docs/languages/markdown#:~:text=Editing%20Markdown-,Document%20outline,-The%20Outline%20view">VSCode已经原生支持显示TOC大纲</a>了。效果如图：<br>
 <img src="https://code.visualstudio.com/assets/docs/languages/Markdown/markdown-outline-view.png" alt=""></p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/use-vscode-instead-of-atom-as-markdown/">http://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/use-vscode-instead-of-atom-as-markdown/">https://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</a></strong></p>
 ]]></content>
       <categories>
         <category>程序员生活</category>
@@ -11421,7 +11420,7 @@ Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understand
 <p>每次都查找 /etc/ld.so.conf 中的目录是很低效的，因此 ldconfig 程序会读取 /etc/ld.so.conf 文件中的所有目录中的文件，将库文件 real name 设置合适的软链接 soname，并将这些文件名缓存至 /etc/ld.so.cache 中。这样会大大加快库文件的寻找速度。</p>
 </blockquote>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/version-control-and-usage-of-linux-shared-library/">http://xnerv.wang/version-control-and-usage-of-linux-shared-library/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/version-control-and-usage-of-linux-shared-library/">https://xnerv.wang/version-control-and-usage-of-linux-shared-library/</a></strong><br>
 转载自：<a href="http://lovewubo.github.io/shared_library">linux共享库的版本控制和使用</a></p>
 ]]></content>
       <categories>
@@ -11514,7 +11513,7 @@ Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understand
 </li>
 </ol>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/virtual-function-and-virtual-table/">http://xnerv.wang/virtual-function-and-virtual-table/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/virtual-function-and-virtual-table/">https://xnerv.wang/virtual-function-and-virtual-table/</a></strong><br>
 转载自：<a href="http://www.cnblogs.com/fanzhidongyzby/archive/2013/01/14/2859064.html">虚函数与虚继承寻踪</a></p>
 ]]></content>
       <categories>
@@ -11567,7 +11566,7 @@ Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understand
 <p>对于信号的修改的作用于整个进程的，也就是说之前启动的 Ack Receiver 线程没有信号屏蔽字，而且注册了信号处理函数。当 SIGTERM 发生后，信号处理线程和 Ack Receiver 线程都可以接收信号处理，信号被随机的分发（测试高概率都是发给 Ack Receiver），print_signal_warning 仅仅打印信息到 errlog，就出现了无法关闭 mysqld 的情况了。</p>
 <p>修改也比较简单，把 initObject 的操作放到 my_init_signal 之后就好，注意不能把 init_common_variables 整个移到 my_init_signal 之前，因为 my_init_signal 里面还有要初始化的变量呢。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/what-analysis-of-signal-processing-mechanism/">http://xnerv.wang/what-analysis-of-signal-processing-mechanism/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/what-analysis-of-signal-processing-mechanism/">https://xnerv.wang/what-analysis-of-signal-processing-mechanism/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2017/10/10/">信号处理机制分析</a></p>
 ]]></content>
       <categories>
@@ -11619,7 +11618,7 @@ Reprinted from: <a href="https://stackoverflow.com/questions/17319971/understand
 </ul>
 </blockquote>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/">http://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/">https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/q/6979796">(StackOverflow) What are the main uses of yield(), and how does it differ from join() and interrupt()?</a></p>
 ]]></content>
       <categories>
@@ -11756,7 +11755,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/6979796">(StackOverflow) Wh
 <li>当设置为0时，事务提交不会触发redo写操作，而是留给后台线程每秒一次的刷盘操作，因此实例crash将最多丢失1秒钟内的事务</li>
 </ul>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/what-innodb-mini-transation/">http://xnerv.wang/what-innodb-mini-transation/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/what-innodb-mini-transation/">https://xnerv.wang/what-innodb-mini-transation/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2017/10/03/">InnoDB mini transation</a></p>
 ]]></content>
       <categories>
@@ -11802,7 +11801,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/6979796">(StackOverflow) Wh
 <p>One of the most effective tools for detecting/correcting memory leaks in Windows is actually <a href="http://msdn.microsoft.com/en-us/library/x98tx3cf(VS.80).aspx">Visual Studio</a> (link goes to page on using VS for memory leaks, not the product page). <a href="http://www-01.ibm.com/software/awdtools/purify/">Rational Purify</a> is another possibility. Microsoft also has a more general <a href="http://msdn.microsoft.com/en-us/library/dd744766(VS.85).aspx">best practices document</a> on this subject. There are more tools listed in this <a href="https://stackoverflow.com/questions/413477/is-there-a-good-valgrind-substitute-for-windows">previous question</a>.</p>
 <p>I hope this clears a few things up! Tracking down memory leaks is one of the most difficult things to do in debugging. Good luck.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/">http://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/">https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/q/1984186">(StackOverflow) What is private bytes, virtual bytes, working set?</a></p>
 ]]></content>
       <categories>
@@ -11869,7 +11868,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/1984186">(StackOverflow) Wh
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 <p><code>character_set_client</code> 和 <code>character_set_results</code> 是一定要和客户端一致，不要依赖于负负得正，<code>character_set_connection</code> 设置和<code>character_set_client</code> 不一致，有丢失数据的风险，所以尽量也一致，总之这3个值就是要一样，还要和客户端一致，所以才有了 set names 这个快捷命令。关于为啥要有 <code>character_set_connection</code> 这一步转换，笔者目前还没看出来，以后理解了再更新，如果读者朋友知道的话，请不吝赐教。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/what-set-names-does/">http://xnerv.wang/what-set-names-does/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/what-set-names-does/">https://xnerv.wang/what-set-names-does/</a></strong><br>
 转载自：<a href="http://mysql.taobao.org/monthly/2015/05/07/">set names 都做了什么</a></p>
 ]]></content>
       <categories>
@@ -11911,7 +11910,7 @@ Reprinted from: <a href="https://stackoverflow.com/q/1984186">(StackOverflow) Wh
 <p>Starting with Vista, there is a new concept called memory priority. Pages on the standby list that are of low priority can be reassigned for use by the new proactive file cache, SuperFetch. But this doesn’t cost any “available” RAM because they’re still on the standby list. (The old reactive cache is still there; it used to be part of the system working set; as of Windows 7 it has its own.)</p>
 <p>This is but the tip of the iceberg. The Mm chapter of Windows Internals is 200 pages long, enough for a smallish book all by itself. But if you really want to understand this stuff, there isn’t really a substitute.</p>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/">http://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/">https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</a></strong><br>
 Reprinted from: <a href="https://superuser.com/q/632254">(StackOverflow) When does Windows decide to pull out pages from Working Set?</a></p>
 ]]></content>
       <categories>
@@ -11950,7 +11949,7 @@ Reprinted from: <a href="https://superuser.com/q/632254">(StackOverflow) When do
 <p>So why can du deal with symlinks easily and not hard links? We were able to see above that hard links are indistinguishable from normal directory entries. Symlinks, however, are special, detectable, and skippable!  du notices that the symlink is a symlink, and skips it completely!</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">% <span class="built_in">ls</span> -l</span><br><span class="line">total 4</span><br><span class="line">drwxr-xr-x  3 danny  staff  102 Oct 13 18:14 test1/</span><br><span class="line">lrwxr-xr-x  1 danny  staff    5 Oct 13 18:13 test2@ -&gt; test1</span><br><span class="line">% <span class="built_in">du</span> -ah</span><br><span class="line">242M    ./test1/bigfile</span><br><span class="line">242M    ./test1</span><br><span class="line">4.0K    ./test2</span><br><span class="line">242M    .</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/">http://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/">https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</a></strong><br>
 Reprinted from: <a href="https://unix.stackexchange.com/q/22394">(StackOverflow) Why are hard links to directories not allowed in UNIX/Linux?</a></p>
 ]]></content>
       <categories>
@@ -12002,7 +12001,7 @@ Reprinted from: <a href="https://unix.stackexchange.com/q/22394">(StackOverflow)
 </li>
 </ul>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/">http://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/">https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</a></strong><br>
 Reprinted from: <a href="https://stackoverflow.com/a/19830820">(StackOverflow) Why can’t variables be declared in a switch statement? (answered by AnT)</a></p>
 ]]></content>
       <categories>
@@ -12039,7 +12038,7 @@ Reprinted from: <a href="https://stackoverflow.com/a/19830820">(StackOverflow) W
 <p>Intent Locks are technically not needed by SQL Server, because they only indicate if there is some other specific Lock Type somewhere else within the Lock Hierarchy. But based on that fact SQL Server can check in a much more efficient way if an incompatible Lock exists somewhere else if you want to acquire a specific lock at the page or table level.</p>
 <p>Thanks for your time,</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/">http://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/">https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</a></strong><br>
 转载自：<a href="https://www.sqlpassion.at/archive/2016/05/16/why-do-we-need-intent-locks-in-sql-server/">Why do we need Intent Locks in SQL Server?</a></p>
 ]]></content>
       <categories>
@@ -12082,7 +12081,7 @@ That’s one of the main reasons why implementers of relational database engines
 <p>In todays blog posting I gave you an overview of Update Locks in SQL Server, and why they are needed. As you have seen there is a really strong need for Update Locks in a relational database, because otherwise it would yield to deadlock situations and decreased concurrency. I hope that you now have a better understanding of Update Locks, and how they are used in SQL Server.</p>
 <p>Thanks for reading!</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/why-do-we-need-update-locks-in-sql-server/">http://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/">https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</a></strong><br>
 转载自：<a href="http://www.sqlpassion.at/archive/2014/07/28/why-do-we-need-update-locks-in-sql-server/">Why do we need UPDATE Locks in SQL Server?</a></p>
 ]]></content>
       <categories>
@@ -12101,7 +12100,7 @@ That’s one of the main reasons why implementers of relational database engines
     <url>/why-docker-has-ability-to-run-different-linux-distribution/</url>
     <content><![CDATA[<p>结合<a href="https://stackoverflow.com/questions/18786209/what-is-the-relationship-between-the-docker-host-os-and-the-container-base-image">What is the relationship between the docker host OS and the container base image OS?</a>、<a href="https://stackoverflow.com/questions/32841982/how-can-docker-run-distros-with-different-kernels">How can Docker run distros with different kernels?</a>和[Why docker has ability to run different linux distribution?(<a href="https://stackoverflow.com/questions/25444099/why-docker-has-ability-to-run-different-linux-distribution">https://stackoverflow.com/questions/25444099/why-docker-has-ability-to-run-different-linux-distribution</a>)这几篇文章看来，Docker实例和Host OS之间通讯的唯一桥梁就是Host OS的内核。挡在Fedora上跑一个Ubuntu 16.04的Docker实例时，Docker实例用的内核仍然是Fedora的内核，而不是Ubuntu 16.04所对应的的内核，因此有可能和原生的Ubuntu 16.04有一些内核上的区别。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/">http://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/">https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</a></strong></p>
 ]]></content>
       <categories>
         <category>Linux</category>
@@ -12126,7 +12125,7 @@ That’s one of the main reasons why implementers of relational database engines
 <p><a href="http://www.interdb.jp/pg/pgsql08.html">The Internals of PostgreSQL: Chapter 8 Buffer Manager</a>提到可以参考<a href="https://www.postgresql.org/message-id/529E267F.4050700@agliodbs.com">Why we are going to have to go DirectIO</a>这篇讨论和<a href="https://lwn.net/Articles/580542/">Thread summary: the Linux kernel and PostgreSQL</a>这篇文章。目前看来，应该还是PG的storage layer实现上过于简陋，效率上存在很大的问题，不足以脱离OS缓存而独自运行。这也印证了<a href="http://liuyangming.tech/10-2019/INNODB-vs-PgSQL-buffer.html">PgSQL和MySQL的bufferpool探讨</a>这篇文章的说法。<a href="https://madusudanan.com/blog/understanding-postgres-caching-in-depth/#OSCaching">Understanding caching in Postgres - An in-depth guide</a>这里也提到，PG依赖于OS缓存来调度写请求，这恐怕也是PG storage layer本身缺乏相应调度机制的一种表现。</p>
 <p><a href="https://lwn.net/Articles/591723/">PostgreSQL pain points</a>中也有提到flow fsync和double buffering等问题，看起来PG的developers依赖于Linux kernel提供相应的解决方案。我不知道这是否是一种正确的方向，毕竟这种与特定OS紧耦合的方案也就限制了PG在其它OS平台上运行的能力。但是考虑到现在PG本来就在Windows上跑得很差像个demo，如果PG本身的开发力量不够的话，也许这也算是一种解决方案吧。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/why-pg-uses-os-cache/">http://xnerv.wang/why-pg-uses-os-cache/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/why-pg-uses-os-cache/">https://xnerv.wang/why-pg-uses-os-cache/</a></strong></p>
 ]]></content>
       <categories>
         <category>DBMS</category>
@@ -12211,7 +12210,7 @@ Of course, <em>dog:Greyhound</em> and <em>dog:Chihuahua</em> are still prevented
 <h3 id="Conclusion"><a class="header-anchor" href="#Conclusion"></a>Conclusion</h3>
 <p>SELinux is a powerful labeling system, controlling access granted to individual processes by the kernel. The primary feature of this is type enforcement where rules define the access allowed to a process is allowed based on the labeled type of the process and the labeled type of the object. Two additional controls have been added to separate processes with the same type from each other called MCS, total separtion from each other, and MLS, allowing for process domination.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/">http://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/">https://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</a></strong><br>
 转载自：<a href="https://opensource.com/business/13/11/selinux-policy-guide">Your visual how-to guide for SELinux policy enforcement</a></p>
 ]]></content>
       <categories>

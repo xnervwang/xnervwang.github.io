@@ -55,7 +55,7 @@
 <meta property="og:description" content="前言 MySQL5.5版本开始引入了MDL锁用来保护元数据信息，让MySQL能够在并发环境下多DDL、DML同时操作下保持元数据的一致性。本文用MySQL5.7源码分析了常用SQL语句的MDL加锁实现。 MDL锁粒度 MDL_key由namespace、db_name、name组成。 namespace包含：   GLOBAL。用于global read lock，例如FLUSH TABLES">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-03-22T02:40:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:05.685Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:06.982Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -182,11 +182,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -433,7 +428,7 @@
 <p>drop table语句执行加锁GLOBAL-STATEMENT-INTENTION_EXCLUSIVE，SCHEMA-MDL_TRANSACTION-INTENTION_EXCLUSIVE，TABLE-EXCLUSIVE。</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">drop:</span><br><span class="line">          DROP opt_temporary table_or_tables if_exists</span><br><span class="line">          &#123;</span><br><span class="line">            LEX *lex=Lex;</span><br><span class="line">            lex-&gt;sql_command = SQLCOM_DROP_TABLE;</span><br><span class="line">            lex-&gt;drop_temporary= $<span class="number">2</span>;</span><br><span class="line">            lex-&gt;drop_if_exists= $<span class="number">4</span>;</span><br><span class="line">            YYPS-&gt;m_lock_type= TL_UNLOCK;</span><br><span class="line">            YYPS-&gt;m_mdl_type= MDL_EXCLUSIVE;</span><br><span class="line">          &#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">http://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/">https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</a></strong><br>
 转载自：<a target="_blank" rel="noopener" href="http://mysql.taobao.org/monthly/2018/02/01/">常用SQL语句的MDL加锁源码分析</a></p>
 
     </div>
@@ -575,7 +570,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

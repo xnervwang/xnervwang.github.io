@@ -58,7 +58,7 @@
 <meta property="og:image" content="http://utialun.bj.bcebos.com/resources/1436082689.4.stage_queue.png">
 <meta property="og:image" content="http://utialun.bj.bcebos.com/resources/1436088683.87.sync_stage.png">
 <meta property="article:published_time" content="2018-03-17T05:19:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:05.692Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:07.007Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -186,11 +186,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -339,7 +334,7 @@
 <p>Leader产生以后，Leader线程通过next_to_commit遍历thd，对每个thd完成事务提交ha_commit_low(),代码如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span></span></span><br><span class="line"><span class="function"><span class="title">MYSQL_BIN_LOG::process_commit_stage_queue</span><span class="params">(THD *thd, THD *first)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">for</span> (THD *head= first ; head ; head = head-&gt;next_to_commit)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> (head-&gt;commit_error == THD::CE_NONE)</span><br><span class="line">    &#123;</span><br><span class="line">      excursion.<span class="built_in">try_to_attach_to</span>(head);</span><br><span class="line">      <span class="type">bool</span> all= head-&gt;transaction.flags.real_commit;</span><br><span class="line">      <span class="keyword">if</span> (head-&gt;transaction.flags.commit_low)</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">/* head is parked to have exited append() */</span></span><br><span class="line">        <span class="built_in">DBUG_ASSERT</span>(head-&gt;transaction.flags.ready_preempt);</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">          storage engine commit</span></span><br><span class="line"><span class="comment">        */</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">ha_commit_low</span>(head, all, <span class="literal">false</span>))</span><br><span class="line">          head-&gt;commit_error= THD::CE_COMMIT_ERROR;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">      Decrement the prepared XID counter after storage engine commit.</span></span><br><span class="line"><span class="comment">      We also need decrement the prepared XID when encountering a</span></span><br><span class="line"><span class="comment">      flush error or session attach error for avoiding 3-way deadlock</span></span><br><span class="line"><span class="comment">      among user thread, rotate thread and dump thread.</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="keyword">if</span> (head-&gt;transaction.flags.xid_written)</span><br><span class="line">      <span class="built_in">dec_prep_xids</span>(head);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Stage_manager</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//遍历THD，标记提交完成，并广播通知</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">signal_done</span><span class="params">(THD *queue)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">mysql_mutex_lock</span>(&amp;m_lock_done);</span><br><span class="line">    <span class="keyword">for</span> (THD *thd= queue ; thd ; thd = thd-&gt;next_to_commit)</span><br><span class="line">      thd-&gt;transaction.flags.pending= <span class="literal">false</span>;</span><br><span class="line">    <span class="built_in">mysql_mutex_unlock</span>(&amp;m_lock_done);</span><br><span class="line">    <span class="built_in">mysql_cond_broadcast</span>(&amp;m_cond_done);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/">http://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/">https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</a></strong><br>
 转载自：<a target="_blank" rel="noopener" href="http://hamilton.duapp.com/detail?articleId=42">MySQL 5.6中Binlog Group Commit实现</a></p>
 
     </div>
@@ -481,7 +476,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

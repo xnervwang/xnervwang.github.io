@@ -55,7 +55,7 @@
 <meta property="og:description" content="背景 在 AliSQL 上面有人提交了一个 bug，在使用主备的时候 service stop mysql 不能关闭主库，一直显示 shutting down mysql …，到底怎么回事呢，先来看一下 service stop mysql 是怎么停止数据库的。配置 MySQL 在系统启动时启动需要把 MYSQL_BASEDIR&#x2F;support-files 目录下的脚本 mysql.sever 放">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-03-17T23:32:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:05.676Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:06.997Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -182,11 +182,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -330,7 +325,7 @@
 <p>对于信号的修改的作用于整个进程的，也就是说之前启动的 Ack Receiver 线程没有信号屏蔽字，而且注册了信号处理函数。当 SIGTERM 发生后，信号处理线程和 Ack Receiver 线程都可以接收信号处理，信号被随机的分发（测试高概率都是发给 Ack Receiver），print_signal_warning 仅仅打印信息到 errlog，就出现了无法关闭 mysqld 的情况了。</p>
 <p>修改也比较简单，把 initObject 的操作放到 my_init_signal 之后就好，注意不能把 init_common_variables 整个移到 my_init_signal 之前，因为 my_init_signal 里面还有要初始化的变量呢。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/what-analysis-of-signal-processing-mechanism/">http://xnerv.wang/what-analysis-of-signal-processing-mechanism/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/what-analysis-of-signal-processing-mechanism/">https://xnerv.wang/what-analysis-of-signal-processing-mechanism/</a></strong><br>
 转载自：<a target="_blank" rel="noopener" href="http://mysql.taobao.org/monthly/2017/10/10/">信号处理机制分析</a></p>
 
     </div>
@@ -472,7 +467,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

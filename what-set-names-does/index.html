@@ -55,7 +55,7 @@
 <meta property="og:description" content="背景 最近有同事问，set names 时会同时设置了3个session变量 123SET character_set_client &#x3D; charset_name;SET character_set_results &#x3D; charset_name;SET character_set_connection &#x3D; charset_name; 就从变量名字来看，character_set_client 是设">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2018-03-17T05:50:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:05.664Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:07.000Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="DBMS">
@@ -182,11 +182,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -342,7 +337,7 @@
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 <p><code>character_set_client</code> 和 <code>character_set_results</code> 是一定要和客户端一致，不要依赖于负负得正，<code>character_set_connection</code> 设置和<code>character_set_client</code> 不一致，有丢失数据的风险，所以尽量也一致，总之这3个值就是要一样，还要和客户端一致，所以才有了 set names 这个快捷命令。关于为啥要有 <code>character_set_connection</code> 这一步转换，笔者目前还没看出来，以后理解了再更新，如果读者朋友知道的话，请不吝赐教。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/what-set-names-does/">http://xnerv.wang/what-set-names-does/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/what-set-names-does/">https://xnerv.wang/what-set-names-does/</a></strong><br>
 转载自：<a target="_blank" rel="noopener" href="http://mysql.taobao.org/monthly/2015/05/07/">set names 都做了什么</a></p>
 
     </div>
@@ -484,7 +479,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

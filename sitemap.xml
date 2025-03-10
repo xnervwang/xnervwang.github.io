@@ -2,198 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    <loc>https://xnerv.wang/mingw-cygwin-summary-and-thinking/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-managing-heap-memory/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-heap-pleasures-and-pains/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-heap-functions/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/comparing-memory-allocation-methods/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -202,61 +13,7 @@
   <url>
     <loc>https://xnerv.wang/tcp-model-knowledge-summary/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mingw-cygwin-summary-and-thinking/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/virtual-function-and-virtual-table/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/how-to-implement-a-malloc/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/spin-lock-in-cpp/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/analysis-about-cpp-exception-implementation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -265,7 +22,7 @@
   <url>
     <loc>https://xnerv.wang/all-truths-about-python-encoding-problem/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -274,52 +31,16 @@
   <url>
     <loc>https://xnerv.wang/cpp-bean-knowledge/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
+    <loc>https://xnerv.wang/use-vscode-instead-of-atom-as-markdown/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/google-50-tshirt/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/16-useful-online-tools/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -328,16 +49,7 @@
   <url>
     <loc>https://xnerv.wang/the-first-time-to-buy-and-use-raspberry-in-usa/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/lock-free-queue-Implementation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -346,241 +58,7 @@
   <url>
     <loc>https://xnerv.wang/some-knowledge-points-learned-in-university/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/process-memory-layout/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/understand-memory-barrier/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/memory-barriers-are-like-source-control-perations/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/acquire-and-release-semantics/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/thread-synchronization-and-atomic-operation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/further-disscusion-of-pagerank-4/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/further-disscusion-of-pagerank-2/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/further-disscusion-of-pagerank-1/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/spv-spv-nodes-spv-purses/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/google-3-gifts-gfs/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/google-3-gifts-mapreduce/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/google-3-gifts-bigtable/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/cache-update-routines/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/bigtable-leveldb/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/study-consistent-hashing-in-5min/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/application-of-mvcc-in-distributed-system/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/dynamo-implement/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/transaction-processing-of-distributed-system/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/the-google-file-system-paper-analysis/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/leveldb-analysis/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -589,7 +67,16 @@
   <url>
     <loc>https://xnerv.wang/compile-windows-seafile-client/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/thread-synchronization-and-atomic-operation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -598,25 +85,7 @@
   <url>
     <loc>https://xnerv.wang/summary-of-distributed-theory-and-architecture/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/something-about-static-library-mt-md/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/release-memory-allocated-by-another-module/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -625,16 +94,7 @@
   <url>
     <loc>https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -643,7 +103,7 @@
   <url>
     <loc>https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -652,142 +112,7 @@
   <url>
     <loc>https://xnerv.wang/iocp-usage-and-inside/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/debugging-baidu-pan/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/debugging-alibaba-softwares/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/summary-of-orphan-process-and-zombie-process/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/special-features-of-linux-memory-management-mechanism/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/the-core-algorithm-of-rsync/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/memory-allocation-mechanism-in-linux/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/version-control-and-usage-of-linux-shared-library/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/linux-tty-pts-summary/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/linux-session-and-processgroup-summary/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -796,7 +121,7 @@
   <url>
     <loc>https://xnerv.wang/linux-xwindow-investigation/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -805,7 +130,7 @@
   <url>
     <loc>https://xnerv.wang/why-docker-has-ability-to-run-different-linux-distribution/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -814,268 +139,7 @@
   <url>
     <loc>https://xnerv.wang/linux-process-kernel-and-file-system-summary/</loc>
     
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/read-committed-snapshot-isolation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mysql-row-format/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/trace-metadata-lock/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/trace-metadata-lock-procedure-using-gdb/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-analysis-of-signal-processing-mechanism/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-set-names-does/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/what-innodb-mini-transation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/mysql-index-condition-pushdown/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/lock-escalations/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
-    
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1084,7 +148,862 @@
   <url>
     <loc>https://xnerv.wang/why-pg-uses-os-cache/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/format-specification-fields-scanf-and-wscanf-functions/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/four-isolation-levels-of-database-weak-consistency/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/further-disscusion-of-pagerank-1/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/further-disscusion-of-pagerank-2/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/further-disscusion-of-pagerank-4/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/google-3-gifts-bigtable/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/google-3-gifts-gfs/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/google-50-tshirt/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/google-protocol-buffers-encoding/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/heapcreate-heapalloc-in-linux-private-allocator-for-linux/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/how-slow-is-disk-and-network/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/how-to-find-the-problem-exception-stack-when-you-receive-an-unhandlede/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/how-to-implement-a-malloc/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/implement-of-binlog-group-commit-in-mysql56/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/implementing-repeatable-read-and-serializable-transaction-isolation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/implementing-your-own-transactions-with-mvcc/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/innodb-log-block-structure/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/introduction-of-innodb-transaction-lock/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/introduction-of-some-popular-engine-storage-formats/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/leveldb-analysis/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/linux-session-and-processgroup-summary/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/linux-tty-pts-summary/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/lock-free-queue-Implementation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/logical-address-linear-address-physical-address-and-virtual-address/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/memory-allocation-buddy-system-and-slab-allocator/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/memory-allocation-mechanism-in-linux/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/memory-barriers-are-like-source-control-perations/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/monitoring-memory-clerk-and-buffer-pool-allocations-in-sql-server/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-heap-functions/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-managing-memory-mapped-files/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/your-visual-how-to-guide-for-selinux-policy-enforcement/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-managing-virtual-memory/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-set-names-does/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/why-are-hard-links-to-directories-not-allowed-in-unix-linux/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/why-cant-variables-be-declared-in-a-switch-statement/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/why-do-we-need-intent-locks-in-sql-server/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/why-do-we-need-update-locks-in-sql-server/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-are-the-main-uses-of-yield-and-how-does-it-differ-from-join-and-interrupt/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-innodb-mini-transation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-is-private-bytes-virtual-bytes-working-set/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/when-does-windows-decide-to-pull-out-pages-from-working-set/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/the-core-algorithm-of-rsync/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/what-analysis-of-signal-processing-mechanism/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/trace-metadata-lock-procedure-using-gdb/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/virtual-function-and-virtual-table/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/transaction-processing-of-distributed-system/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/two-ways-of-allocating-memory-brk-and-mmap/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/understand-memory-barrier/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/understanding-six-lock-in-sql-server/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/version-control-and-usage-of-linux-shared-library/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/the-tale-of-two-evaluators-understanding-masm-and-cpp-expression-evaluators-in-windbg/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/trace-metadata-lock/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/understanding-mysql-isolation-levels-repeatable-read/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/mysql-introduction-innodb-adaptive-hash-index/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/mysql-row-format/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/sql-transaction-isolation-levels-explained/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/study-consistent-hashing-in-5min/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/the-google-file-system-paper-analysis/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/snapshot-isolation-level-in-sql-server-what-why-and-how-part-1/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/special-features-of-linux-memory-management-mechanism/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/spin-lock-in-cpp/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/spv-spv-nodes-spv-purses/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/sql-server-buffer-management-reading-pages/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/sql-server-buffer-management-writing-pages/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/summary-of-orphan-process-and-zombie-process/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/dynamo-implement/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/everything-you-always-wanted-to-know-about-fsync/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/execute-vs-read-bit-how-do-directory-permissions-in-linux-work/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/format-specification-fields-printf-and-wprintf-functions/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/google-3-gifts-mapreduce/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/lock-escalations/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/mmap-vs-reading-blocks/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-give-me-a-handle-and-i-ll-show-you-an-object/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-heap-pleasures-and-pains/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/msdn-managing-heap-memory/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/mysql-index-condition-pushdown/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/mysql56-new-feature-multi-range-read/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/overriding-the-virtual-table-in-a-cpp-object/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/process-memory-layout/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/read-committed-snapshot-isolation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/release-memory-allocated-by-another-module/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/save-transaction-vs-begin-transaction-sql-server-how-to-nest-transactions-nicely/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/snapshot-isolation-transaction-aborted-due-to-update-conflict/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/something-about-static-library-mt-md/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/analysis-about-cpp-exception-implementation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/cache-update-routines/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/comparing-memory-allocation-methods/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/ddl-commands-in-transactions-in-sql-server-versus-oracle/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/debugging-alibaba-softwares/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/debugging-baidu-pan/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/disabling-row-and-page-level-locks-in-sql-server/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/16-useful-online-tools/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1093,7 +1012,88 @@
   <url>
     <loc>https://xnerv.wang/23-design-patterns-analysis/</loc>
     
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/acquire-and-release-semantics/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/active-ftp-vs-passive-ftp-a-definitive-explanation/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/allocating-and-freeing-memory-across-module-boundaries/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/analysis-of-mdl-source-code-for-common-sql-statements/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/analysis-of-unix-linux-platform-executable-file-format/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/application-of-mvcc-in-distributed-system/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/bigtable-leveldb/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/bitcoin-a-peer-to-peer-electronic-cash-system-cn/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://xnerv.wang/10-websites-for-helping-programmers-to-relax/</loc>
+    
+    <lastmod>2025-03-10</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -1147,7 +1147,7 @@
 
   <url>
     <loc>https://xnerv.wang/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1155,1169 +1155,1169 @@
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%BD%AC%E8%BD%BD/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Java/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/OS/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Memory-Barrier/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/FTP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Active-FTP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Passive-FTP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Python/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%8E%9F%E5%88%9B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%9C%AA%E5%AE%8C%E6%88%90/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Windows/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Heap/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/DLL/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/DLL-Hell/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/C/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/C-%E5%BC%82%E5%B8%B8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/DBMS/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MySQL/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MDL/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Linux/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/COFF/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/linker/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MVCC/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Bigtable/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/LevelDB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%8C%BA%E5%9D%97%E9%93%BE%E4%B8%8E%E6%AF%94%E7%89%B9%E5%B8%81/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%AF%94%E7%89%B9%E5%B8%81/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BC%93%E5%AD%98/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MSDN/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Seafile/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MinGW/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Docker/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%8D%8F%E7%A8%8B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BA%BF%E7%A8%8B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/SQL-Server/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Oracle/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Transaction/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/WinDbg/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Row-Lock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Page-Lock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Dynamo/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Linux-API/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%AF%91%E6%96%87/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Bash/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/File-System/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Stack-Overflow/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Programing/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Isolation-Level/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/PageRank/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Google/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/BigTable/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/GFS/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MapReduce/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E9%98%BF%E9%87%8C%E6%9C%88%E9%A5%BC/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Protobuf/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Google-Developer/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Memory-Management/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Mutex/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Multi-Threads/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%80%A7%E8%83%BD%E7%93%B6%E9%A2%88/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/CPU/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%A1%AC%E7%9B%98/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/SSD/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/C/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/C%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Binlog-Group-Commit/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/InnoDB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/InnoDB-Log/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Lock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/TokuDB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/RocksDB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/TiDB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/CockroachDB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Windows-Internals/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/IOCP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E4%BF%A1%E5%8F%B7/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E4%B8%AD%E6%96%AD/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%86%85%E6%A0%B8%E6%80%81%E4%B8%8E%E7%94%A8%E6%88%B7%E6%80%81/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Shell/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Session/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/TTY/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/PTS/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/X-Window/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/X%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Lock-Escalations/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%97%A0%E9%94%81%E9%98%9F%E5%88%97/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E9%A1%B5%E8%A1%A8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Buddy-System/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Slab-Allocator/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/reprint/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BC%96%E8%AF%91%E5%99%A8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Cygwin/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/mmap/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Memory-Clerk/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Buffer-Pool/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Virtual-Memory/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Index-Condition-Pushdown/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Adaptive-hash-index/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Hash/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Row-Format/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Multi-Range-Read/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Savepoint/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/yield/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%9F%A5%E6%89%BE%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%B7%AF%E7%94%B1%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/spinlock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/SPV/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Read-Ahead/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Lazy-Writing/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Eager-Writing/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Checkpoint/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Consistent-Hashing/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/2PC/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/3PC/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%AD%A4%E5%84%BF%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/TCP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/IP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/UDP/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/rsync/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Raspberry/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/volatile/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/gdb/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Paxos/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/SIX-Lock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/VSCode/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Atom/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Markdown/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Shared-Library/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E8%99%9A%E8%A1%A8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/%E5%A4%9A%E6%80%81/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Signal/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MTR/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Private-bytes/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Working-Set/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/MySQL-charset/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Intent-Lock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/Update-Lock/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/PostgreSQL/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/PG/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/tags/SELinux/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -2326,126 +2326,126 @@
   
   <url>
     <loc>https://xnerv.wang/categories/%E7%A8%8B%E5%BA%8F%E5%91%98%E7%94%9F%E6%B4%BB/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/OS/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/Windows/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/DBMS/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/Linux/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E5%8C%BA%E5%9D%97%E9%93%BE%E4%B8%8E%E6%AF%94%E7%89%B9%E5%B8%81/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/WinDbg/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/Protobuf/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E7%BC%96%E8%AF%91%E5%99%A8/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://xnerv.wang/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/</loc>
-    <lastmod>2023-08-21</lastmod>
+    <lastmod>2025-03-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

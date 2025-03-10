@@ -55,7 +55,7 @@
 <meta property="og:description" content="Question In Linux, what happens when a program (that possibly has multiple threads) receives a signal, like SIGTERM or SIGHUP? Which thread intercepts the signal? Can multiple threads get the same sig">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2012-07-27T06:36:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:10:41.939Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:06.984Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="Linux">
@@ -182,11 +182,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -320,7 +315,7 @@
 <p>Some signals, however, are special:</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">A signal may be generated (and thus pending) for a process as</span><br><span class="line">a whole (e.g., when sent using kill(2)) or for a specific</span><br><span class="line">thread (e.g., certain signals, such as SIGSEGV and SIGFPE,</span><br><span class="line">generated as a consequence of executing a specific machine-</span><br><span class="line">language instruction are thread directed, as are signals</span><br><span class="line">targeted at a specific thread using pthread_kill(3)).  A</span><br><span class="line">process-directed signal may be delivered to any one of the</span><br><span class="line">threads that does not currently have the signal blocked.  If</span><br><span class="line">more than one of the threads has the signal unblocked, then</span><br><span class="line">the kernel chooses an arbitrary thread to which to deliver</span><br><span class="line">the signal.</span><br></pre></td></tr></table></figure>
 <hr>
-<p><strong>Article link: <a href="http://xnerv.wang/signal-handling-with-multiple-threads-in-linux/">http://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</a></strong><br>
+<p><strong>Article link: <a href="https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/">https://xnerv.wang/signal-handling-with-multiple-threads-in-linux/</a></strong><br>
 Reprinted from: <a target="_blank" rel="noopener" href="https://stackoverflow.com/q/11679568">(StackOverflow) Signal handling with multiple threads in Linux</a></p>
 
     </div>
@@ -462,7 +457,7 @@ Reprinted from: <a target="_blank" rel="noopener" href="https://stackoverflow.co
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

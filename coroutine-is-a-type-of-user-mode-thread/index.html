@@ -55,7 +55,7 @@
 <meta property="og:description" content="笔者最美好的记忆来自于早年在6502 cpu的cc800上写汇编的年代， 那个时代的计算机甚至没有操作系统，也没有实模式等保护机制。在6502上写汇编应用其实非常简单，系统会把bin文件加载到一个固定的内存地址中，cpu会固定地从一个特定的位置开始执行。然后cpu就按照你提供的机器指令开始一条一条的执行。在高级语言中的“函数调用”的概念，在汇编里主要体现为两个寄存器。寄存器是cpu内部临时保存数据">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2014-09-10T07:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:05.999Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:06.983Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="操作系统">
@@ -184,11 +184,6 @@
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
-
-  </li>
         <li class="menu-item menu-item-about">
 
     <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
@@ -302,7 +297,7 @@
 <p>在高级语言中，一个函数正在执行的位置以及其状态，内部都可以有一个抽象的表达方式。有的高级语言直接被编译成原生的机器码，那么其执行状态的表述就和操作系统的context switch的context非常类似。有的高级语言自身执行在一个虚拟机之上，那么其context的表述可能是虚拟机的instruction register和stack register，而不是80x86这样原生的机器的物理寄存器。但是原理是非常类似的。</p>
 <p>取决于语言设计者的觉悟，有的语言会把这种表达执行状态的能力直接提供出来，让一个函数在执行过程中可以把当前状态保存，然后把执行权交给另外一个函数执行，等那个函数放弃执行权回来的时候再把保存的状态恢复。这也就是所谓的协程（co-routine）。协程与线程的区别在于，协程的context switch是在完全在用户态，由语言的runtime或者是库来完成的。而线程的context switch则是操作系统来完成的。</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">http://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/">https://xnerv.wang/coroutine-is-a-type-of-user-mode-thread/</a></strong><br>
 转载自：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000000663472">【协程原理】 - 协程不过是用户态的线程</a></p>
 
     </div>
@@ -443,7 +438,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

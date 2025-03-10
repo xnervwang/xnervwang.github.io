@@ -55,7 +55,7 @@
 <meta property="og:description" content="Concurrent programming requires synchronization. We can’t have more than one thread accessing data at the same time; otherwise, we end up with a data race. The most common solution is to wrap the crit">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2011-12-16T08:00:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:05.993Z">
+<meta property="article:modified_time" content="2025-03-10T00:30:07.007Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="转载">
 <meta property="article:tag" content="OS">
@@ -182,11 +182,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
 
   </li>
         <li class="menu-item menu-item-about">
@@ -328,7 +323,7 @@
 <p>There are a few points of interest when it comes to the cost of a mutex. The first most vital point is waiting time. Your threads should spend only a fraction of their time waiting on mutexes. If they are waiting too often, then you are losing concurrency. In a worst case scenario many threads always trying to lock the same mutex may result in performance worse than a single thread serving all requests. This isn’t a cost of the mutex itself, but a serious concern with concurrent programming.</p>
 <p>The overhead costs of a mutex relate to the test-and-set operation and the system call that implements a mutex. The test-and-set is likely a minuscule cost; being essential to concurrent processing the CPUs have a strong incentive to make it efficient. We’ve ignored another important instruction, however: the fence. This is used in all high-level mutexes and may have a higher cost than the test-and-set operation. Most costly however is the system call. Not only do you suffer the context switch overhead of the system call, the kernel now spends some time in its scheduling code.</p>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">http://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</a></strong><br>
+<p><strong>本文地址：<a href="https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/">https://xnerv.wang/how-does-a-mutex-work-what-does-it-cost/</a></strong><br>
 转载自：<a target="_blank" rel="noopener" href="https://mortoray.com/2011/12/16/how-does-a-mutex-work-what-does-it-cost/">How does a mutex work? What does it cost?</a></p>
 
     </div>
@@ -470,7 +465,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>

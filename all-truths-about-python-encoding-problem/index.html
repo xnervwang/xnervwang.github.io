@@ -55,7 +55,7 @@
 <meta property="og:description" content="Python的初学者（以及很多熟练工）相信都遇到过下面的运行时错误信息：  UnicodeDecodeError: ‘ASCII’ codec can’t decode byte 0xe4 in position 0: ordinal not in range(128)  然后百度一下发现说明这个问题的网页有一大把，基本无非是下面两种解决方案：  在Python文件的开头加一句#coding&#x3D;ut">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2017-11-06T01:14:00.000Z">
-<meta property="article:modified_time" content="2023-08-21T03:06:06.063Z">
+<meta property="article:modified_time" content="2025-03-10T01:04:55.825Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="编程语言">
 <meta property="article:tag" content="Python">
@@ -184,11 +184,6 @@
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
 
   </li>
-        <li class="menu-item menu-item-leetcode">
-
-    <a href="https://leetcode.xnerv.wang/" rel="noopener" target="_blank"><i class="fa fa-fw fa-book"></i>LeetCode</a>
-
-  </li>
         <li class="menu-item menu-item-about">
 
     <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
@@ -304,15 +299,14 @@
 <li>在代码中加入：</li>
 </ol>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">&#x27;utf8&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>一般大家的做法是把两者都加上，然后问题一般也会得到解决。但很少有人会去深究过Python会什么会产生这样的编码问题，以及为什么通过加上面的代码可以解决这个问题。作为一个合格的程序员，遇到这种问题就应该追根究底，否则就只是以码谋生的码畜了 :)</p>
+<p>一般大家的做法是把两者都加上，然后问题一般也会得到解决。但很少有人会去深究过Python会什么会产生这样的编码问题，以及为什么通过加上面的代码可以解决这个问题。作为一个合格的程序员，遇到这种问题就应该追根究底 :)</p>
 <span id="more"></span>
 <h2 id="string与Unicode-string"><a class="header-anchor" href="#string与Unicode-string"></a>string与Unicode string</h2>
 <p>Python的编码问题一般只在Python2.x中存在，在Python3.x中则基本不会遇到这样的问题。根本原因在于Python2.x中存在两种字符串：string和Unicode string，两者都继承自basic string。</p>
 <p>string类似于C语言中的char*，或者C++中的std::string，本质上都是byte数组，本身不具备特定的encoding类型，而是由string的使用者决定的。例如向string中写入一个汉字，如果是UTF-8编码，则可能是三个char（或者更多），如果是GBK编码，则可能是两个char，但对于Python解释器，它并不清楚string用的是encoding，一切都是bytes。。。</p>
 <p>而Unicode string则明确地存储了Unicode编码的字符串。在Python2.x中，<code>a1=&quot;abc&quot;;</code>，a1就是一个string（是什么编码还不确定，等下再谈）。而<code>a2=u&quot;abc&quot;;</code>，a2就是一个Unicode string。</p>
 <h2 id="C-C-中的文件编码和字符串编码"><a class="header-anchor" href="#C-C-中的文件编码和字符串编码"></a>C/C++中的文件编码和字符串编码</h2>
-<p>C/C++不仅仅是一种编程语言，更是一个深入了解计算机底层原理的窗口和机会，一个只会堆砌代码而浮于表面的程序员，是不能称之为一个真正意义上的程序员的（这跟月薪有没有上3w没有关系）。</p>
-<p>我们先回过头来看看C/C++中是如何处理文件编码和字符串编码的问题的。以VC为例，VC下有两个编码的选项，分为Source encoding和Execution encoding。前者指定了源文件的编码（这比<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Byte_order_mark">BOM</a>更准确），后者是字符串常量等的编码。简单说，如果指定Source encoding为GBK，同时指定Execution encoding为UTF-8，则首先所有的源文件必须用GBK编码保存，否则VC在读入源文件时可能会无法解码其中的一些字符。同时，像<code>const char* a3=&quot;中文&quot;;</code>这样的常量字符串赋值语句，a3就是使用了UTF-8编码保存的字符串。在中文Windows系统下，如果不特意设置这两种编码，VC则一般使用的是system default encoding。</p>
+<p>C/C++不仅仅是一种编程语言，更是一个深入了解计算机底层原理的窗口和机会。我们先回过头来看看C/C++中是如何处理文件编码和字符串编码的问题的。以VC为例，VC下有两个编码的选项，分为Source encoding和Execution encoding。前者指定了源文件的编码（这比<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Byte_order_mark">BOM</a>更准确），后者是字符串常量等的编码。简单说，如果指定Source encoding为GBK，同时指定Execution encoding为UTF-8，则首先所有的源文件必须用GBK编码保存，否则VC在读入源文件时可能会无法解码其中的一些字符。同时，像<code>const char* a3=&quot;中文&quot;;</code>这样的常量字符串赋值语句，a3就是使用了UTF-8编码保存的字符串。在中文Windows系统下，如果不特意设置这两种编码，VC则一般使用的是system default encoding。</p>
 <p>（参考 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/9739070/char-encoding">Char * encoding</a>, <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/mt708818.aspx">/execution-charset (Set Execution Character Set)</a>, <a target="_blank" rel="noopener" href="https://msdn.microsoft.com/en-us/library/mt708819.aspx">/source-charset (Set Source Character Set)</a>。）</p>
 <h2 id="Python中的文件编码和字符串编码"><a class="header-anchor" href="#Python中的文件编码和字符串编码"></a>Python中的文件编码和字符串编码</h2>
 <p>对比C/C++处理编码的方法，我们再看看Python是怎么做的。</p>
@@ -339,7 +333,7 @@
 但是，如果是utf8 string，而当前环境是Windows，则输出显然会乱码。如果是中文版Windows，用的是GB编码（code page 936）。如果是英文版Windows，用的可能是ANSI编码（code page 1252）。</p>
 <h2 id="最佳实践"><a class="header-anchor" href="#最佳实践"></a>最佳实践</h2>
 <hr>
-<p><strong>本文地址：<a href="http://xnerv.wang/all-truths-about-python-encoding-problem/">http://xnerv.wang/all-truths-about-python-encoding-problem/</a></strong></p>
+<p><strong>本文地址：<a href="https://xnerv.wang/all-truths-about-python-encoding-problem/">https://xnerv.wang/all-truths-about-python-encoding-problem/</a></strong></p>
 
     </div>
 
@@ -480,7 +474,7 @@
 <div class="copyright">
   
   &copy; 2008 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2025</span>
   <span class="with-love">
     <i class="fa fa-eye"></i>
   </span>
