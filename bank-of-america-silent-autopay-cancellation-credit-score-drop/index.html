@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'VK1UJWKNY9',
+      apiKey: '7b99451966536b0cd610a773068159a0',
+      indexName: 'xnerv.wang',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="强烈建议：避免使用美国银行（Bank of America, BofA, BOA）信用卡！ 如果你手里有一张BOA信用卡，建议立刻锁卡，扔进抽屉别再用了。如果你仍然打算用，一定要小心他们的自动还款（autopay）。BOA的autopay不仅设置极其复杂，而且会在多种情况下悄悄取消你的自动还款，完全不通知你，导致逾期付款，直接影响信用评分。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BOA自动还款大坑：悄悄取消autopay，害我信用分暴跌！">
+<meta property="og:url" content="https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="强烈建议：避免使用美国银行（Bank of America, BofA, BOA）信用卡！ 如果你手里有一张BOA信用卡，建议立刻锁卡，扔进抽屉别再用了。如果你仍然打算用，一定要小心他们的自动还款（autopay）。BOA的autopay不仅设置极其复杂，而且会在多种情况下悄悄取消你的自动还款，完全不通知你，导致逾期付款，直接影响信用评分。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-18T05:52:00.000Z">
+<meta property="article:modified_time" content="2025-03-18T06:13:32.274Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="原创">
+<meta property="article:tag" content="美国生活">
+<meta property="article:tag" content="银行">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>BOA自动还款大坑：悄悄取消autopay，害我信用分暴跌！ | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">XNERV SURVEYS</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <h1 class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+
+        <h2 class="post-title" itemprop="name headline">
+          BOA自动还款大坑：悄悄取消autopay，害我信用分暴跌！
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-03-17 22:52:00" itemprop="dateCreated datePublished" datetime="2025-03-17T22:52:00-07:00">2025-03-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%BE%8E%E5%9B%BD%E7%94%9F%E6%B4%BB/" itemprop="url" rel="index">
+                    <span itemprop="name">美国生活</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>强烈建议：避免使用美国银行（Bank of America, BofA, BOA）信用卡！</p>
+<p>如果你手里有一张BOA信用卡，建议立刻锁卡，扔进抽屉别再用了。如果你仍然打算用，一定要小心他们的自动还款（autopay）。BOA的autopay不仅设置极其复杂，而且会在多种情况下悄悄取消你的自动还款，完全不通知你，导致逾期付款，直接影响信用评分。</p>
+<span id="more"></span>
+<h2 id="BOA的autopay有多坑？我亲身经历了一次血的教训"><a class="header-anchor" href="#BOA的autopay有多坑？我亲身经历了一次血的教训"></a>BOA的autopay有多坑？我亲身经历了一次血的教训</h2>
+<p>2020年，我用Chase银行的Checking Account给BOA信用卡设置了autopay，四年来一直运作正常。</p>
+<p>2024年11月，我突然发现一笔$15.70的逾期付款，查账后发现BOA悄悄取消了我的自动还款设置，且完全没有通知我。这次逾期直接导致我的信用评分大幅下降100多分，害我办不了车贷，影响了全家的财务计划。</p>
+<h2 id="BOA客服的各种甩锅"><a class="header-anchor" href="#BOA客服的各种甩锅"></a>BOA客服的各种甩锅</h2>
+<p><strong>2024年11月23日：首次联系客服，承认是他们系统问题</strong></p>
+<p>我第一时间打电话给BOA客服（888-800-9030），客服查了一下，承认是BOA的系统错误，并承诺会联系信用局撤销逾期记录。</p>
+<p>然而，几天后我收到了一封BOA的正式回信，直接变脸，表示他们不会撤销逾期记录。</p>
+<p><strong>2025年1月24日：BOA换了个理由继续甩锅</strong></p>
+<p>由于BOA违背了他们在电话中的承诺，我向 <strong>Better Business Bureau（BBB）</strong> 提交了投诉。BOA随后打电话给我，给出了一个完全不同的说法：</p>
+<blockquote>
+<p>“因为你在2024年关闭了一个BOA的支票账户，导致你的autopay被自动取消。”</p>
+</blockquote>
+<p>问题是，我的autopay一直是从Chase的账户扣款，和BOA的支票账户毫无关系！我指出他们的错误，但BOA随后还是发来了一封官方信件，坚持不肯撤销逾期记录。</p>
+<p><strong>2025年2月7日：BOA高管团队的冷漠回复</strong><br>
+我进一步向 <strong>美国消费者金融保护局（CFPB）</strong> 投诉。BOA这次又换了一套说辞：</p>
+<blockquote>
+<p>“任何客户如果关闭BOA的支票账户，我们的系统会自动删除所有autopay设置，不管这个autopay关联的是BOA账户还是外部银行。”</p>
+</blockquote>
+<p>问题是：</p>
+<ul>
+<li>这个“政策”从未通知过客户</li>
+<li>我在autopay被取消时，BOA没有发任何提醒</li>
+<li>之前的客服承认是BOA的系统问题，现在却把责任推回给客户</li>
+</ul>
+<p>最令人愤怒的是，我还特意给BOA的高管团队写了一封正式投诉邮件，详细描述了整个过程，结果他们的回复还是一样的态度冷漠——</p>
+<blockquote>
+<p>“虽然是我们系统的问题，但你自己没有每个月检查autopay，所以责任在你。”</p>
+</blockquote>
+<p>所以，BOA的逻辑是：<strong>客户信任BOA的autopay功能是客户自己的错，出了问题就得自己买单？</strong></p>
+<h2 id="BOA的autopay问题不是个例，网上已经有无数人吐槽"><a class="header-anchor" href="#BOA的autopay问题不是个例，网上已经有无数人吐槽"></a>BOA的autopay问题不是个例，网上已经有无数人吐槽</h2>
+<p>这个问题根本不是我一个人遇到的，Reddit上已经有无数人吐槽BOA的autopay：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/CreditCards/comments/1be8ja1/boa_didnt_take_out_autopay_and_didnt_tell_me_now/">BOA未执行自动还款且未通知客户，导致30天逾期</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/personalfinance/comments/wrns8v/bank_of_america_cancels_autopay_without_telling/">BOA无故取消autopay，信用分大跌</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/CreditCards/comments/w1rh7g/bank_of_america_such_a_headache_for_autopay_of/">BOA的autopay设置又臭又长</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/CRedit/comments/1g6i386/trusted_bofa_autopay_and_now_i_have_a_late_fee/">信任BOA的autopay，结果被坑得交滞纳金</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.reddit.com/r/CreditCards/comments/1fn8icm/bank_of_america_automatic_pay_is_a_joke/">BOA的autopay真是个笑话</a></li>
+</ul>
+<p>甚至在小红书和信用卡论坛上，也有不少受害者：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/67896045000000001602ac48">BOA自动还款失效导致信用分下降</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/64ed8291000000001e00ca61">BOA自动还款的设置极其反人类</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.xiaohongshu.com/explore/66c2739b000000000901755c">BOA的autopay问题到底有多离谱</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.uscardforum.com/t/topic/280896">BOA跟我同样的autopay问题的受害者</a></li>
+</ul>
+<h2 id="结论：BOA信用卡慎用，autopay更是大坑"><a class="header-anchor" href="#结论：BOA信用卡慎用，autopay更是大坑"></a>结论：BOA信用卡慎用，autopay更是大坑</h2>
+<p>如果你手里还有BOA的信用卡，建议立刻锁卡，尽量别用了。如果实在要用，千万不要相信他们的autopay，最好手动每个月检查付款状态，避免被坑。</p>
+<p>BOA的autopay系统不仅存在严重漏洞，还没有任何通知机制，出了问题完全甩锅给客户，甚至高管团队的态度也是一贯冷漠。</p>
+<p>信用是很多人的生命线，BOA这类银行的操作足以毁掉一个人的信用记录，影响买房买车甚至工作。如果你不想哪天无缘无故被逾期影响信用分，最好远离BOA的autopay大坑。那一点点的BOA信用卡积分，完全不值得你用每个月的提心吊胆作为代价。</p>
+<h2 id="后记"><a class="header-anchor" href="#后记"></a>后记</h2>
+<p>2025年刚开始，川普政府就在关闭消费者金融保护局（CFPB），从此以后，BOA这种渣行就可以更加无所顾忌地坑害用户了。</p>
+<hr>
+<p><strong>本文地址：<a href="https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/">https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/</a></strong></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%8E%9F%E5%88%9B/" rel="tag"># 原创</a>
+              <a href="/tags/%E7%BE%8E%E5%9B%BD%E7%94%9F%E6%B4%BB/" rel="tag"># 美国生活</a>
+              <a href="/tags/%E9%93%B6%E8%A1%8C/" rel="tag"># 银行</a>
+          </div>
+
+        
+
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#BOA%E7%9A%84autopay%E6%9C%89%E5%A4%9A%E5%9D%91%EF%BC%9F%E6%88%91%E4%BA%B2%E8%BA%AB%E7%BB%8F%E5%8E%86%E4%BA%86%E4%B8%80%E6%AC%A1%E8%A1%80%E7%9A%84%E6%95%99%E8%AE%AD"><span class="nav-text">BOA的autopay有多坑？我亲身经历了一次血的教训</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOA%E5%AE%A2%E6%9C%8D%E7%9A%84%E5%90%84%E7%A7%8D%E7%94%A9%E9%94%85"><span class="nav-text">BOA客服的各种甩锅</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BOA%E7%9A%84autopay%E9%97%AE%E9%A2%98%E4%B8%8D%E6%98%AF%E4%B8%AA%E4%BE%8B%EF%BC%8C%E7%BD%91%E4%B8%8A%E5%B7%B2%E7%BB%8F%E6%9C%89%E6%97%A0%E6%95%B0%E4%BA%BA%E5%90%90%E6%A7%BD"><span class="nav-text">BOA的autopay问题不是个例，网上已经有无数人吐槽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA%EF%BC%9ABOA%E4%BF%A1%E7%94%A8%E5%8D%A1%E6%85%8E%E7%94%A8%EF%BC%8Cautopay%E6%9B%B4%E6%98%AF%E5%A4%A7%E5%9D%91"><span class="nav-text">结论：BOA信用卡慎用，autopay更是大坑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-text">后记</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+  <script>
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=60335024";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  <script>
+    var _mtac = {};
+    (function() {
+      var mta = document.createElement("script");
+      mta.src = "https://pingjs.qq.com/h5/stats.js";
+      mta.setAttribute("name", "MTAH5");
+      mta.setAttribute("sid", "60335024");
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(mta, s);
+    })();
+  </script>
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>
