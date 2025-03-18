@@ -1636,69 +1636,32 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
       </tags>
   </entry>
   <entry>
-    <title>BOA自动还款大坑：悄悄取消autopay，害我信用分暴跌！</title>
+    <title>BOA的自动还款可能随时无故取消，不会提前通知</title>
     <url>/bank-of-america-silent-autopay-cancellation-credit-score-drop/</url>
-    <content><![CDATA[<p>强烈建议：避免使用美国银行（Bank of America, BofA, BOA）信用卡！</p>
-<p>如果你手里有一张BOA信用卡，建议立刻锁卡，扔进抽屉别再用了。如果你仍然打算用，一定要小心他们的自动还款（autopay）。BOA的autopay不仅是出了名地设置极其复杂，而且会在多种情况下悄悄取消你的自动还款，完全不通知你，导致逾期付款，直接影响信用评分。</p>
+    <content><![CDATA[<p>如果你使用美国银行（Bank of America, BOA, BofA）的信用卡，需要特别注意他们的自动还款（autopay）功能。按理说，自动还款应该让还款更方便，但根据我的经历，以及很多其他用户的反馈，BOA的自动还款可能会在没有任何通知的情况下被取消，导致逾期还款，影响信用评分。建议大家设个每月提醒，定期检查自己的自动还款状态，以免被坑。</p>
 <span id="more"></span>
-<h2 id="BOA的autopay有多坑？我亲身经历了一次血的教训"><a class="header-anchor" href="#BOA的autopay有多坑？我亲身经历了一次血的教训"></a>BOA的autopay有多坑？我亲身经历了一次血的教训</h2>
-<p>2020年，我用Chase银行的Checking Account给BOA信用卡设置了autopay，四年来一直运作正常。</p>
-<p>2024年11月，我突然发现一笔$15.70的逾期付款，查账后发现BOA悄悄取消了我的自动还款设置，且完全没有通知我。这次逾期直接导致我的信用评分大幅下降100多分，害我办不了车贷，影响了全家的财务计划。</p>
-<h2 id="BOA客服的各种甩锅"><a class="header-anchor" href="#BOA客服的各种甩锅"></a>BOA客服的各种甩锅</h2>
-<p><strong>2024年11月23日：首次联系客服，承认是他们系统问题</strong></p>
-<p>我第一时间打电话给BOA客服（888-800-9030），客服查了一下，承认是BOA的系统错误，并承诺会联系信用局撤销逾期记录。</p>
-<p>然而，几天后我收到了一封BOA的正式回信，直接变脸，表示他们不会撤销逾期记录。</p>
-<p><strong>2025年1月24日：BOA换了个理由继续甩锅</strong></p>
-<p>由于BOA违背了他们在电话中的承诺，我向 <strong>Better Business Bureau（BBB）</strong> 提交了投诉。BOA随后打电话给我，给出了一个完全不同的说法：</p>
+<p>我在2020年设置了自动还款，每月从Chase的支票账户自动支付BOA信用卡账单，四年来一直正常运作。但在2024年11月，我突然发现账单上有一笔$15.70的逾期还款。仔细查账后才发现，BOA悄悄取消了我的自动还款，没有发邮件、没有短信，什么通知都没有。因为这笔逾期记录，我的信用评分一下子掉了100多分，直接影响了我的车贷申请，打乱了原本的财务计划。</p>
+<p>当时我因为个人事务比较忙，差不多50天没登录BOA账户。由于一直以来自动还款都没出过问题，我也没太在意。等到我发现问题时，已经晚了。如果早点查账，或许还能及时补救，但谁会想到自动还款会自己消失呢？</p>
+<p>我联系了BOA客服，他们一开始承认是系统问题，但后来又拒绝修正我的信用记录。我随后向美国商业改善局（BBB）和消费者金融保护局（CFPB）投诉，BOA依然拒不处理。</p>
+<p>最终，我联系了BOA的高管团队，才得知真正的原因：</p>
 <blockquote>
-<p>“因为你在2024年关闭了一个BOA的支票账户，导致你的autopay被自动取消。”</p>
+<p>只要客户关闭BOA的支票账户，名下所有的自动还款设置都会被清空，即便这些自动还款是从非BOA账户（比如Chase）扣款的。</p>
 </blockquote>
-<p>问题是，我的autopay一直是从Chase的账户扣款，和BOA的支票账户毫无关系！我指出他们的错误，但BOA随后还是发来了一封官方信件，坚持不肯撤销逾期记录。</p>
-<p><strong>2025年2月7日：BOA高管团队的冷漠回复</strong><br>
-我进一步向 <strong>美国消费者金融保护局（CFPB）</strong> 投诉。BOA这次又换了一套说辞：</p>
+<p>BOA从来没有告知过我这个“规则”，也没有在取消自动还款时发出任何提醒。最后，他们给出的官方回复是：</p>
 <blockquote>
-<p>“任何客户如果关闭BOA的支票账户，我们的系统会自动删除所有autopay设置，不管这个autopay关联的是BOA账户还是外部银行。”</p>
+<p>“虽然是我们系统的问题，但你自己没有检查自动还款，所以责任在你。”</p>
 </blockquote>
-<p>问题是：</p>
+<p>这次经历让我对BOA的自动还款有了更深的警惕。建议大家每个月手动确认一次BOA的自动还款状态，即使它之前一直正常运行。</p>
+<p>如果你觉得这只是个例，其实网上有很多类似的遭遇：</p>
 <ul>
-<li>这个“政策”从未通知过客户。</li>
-<li>我在autopay被取消时，BOA没有发任何邮件或电话通知。</li>
-<li>之前的客服承认是BOA的系统问题，现在却把责任推回给客户。</li>
+<li><a href="https://www.reddit.com/r/CreditCards/comments/1be8ja1/boa_didnt_take_out_autopay_and_didnt_tell_me_now/">BOA未执行自动还款，没通知用户，结果直接逾期30天</a></li>
+<li><a href="https://www.reddit.com/r/personalfinance/comments/wrns8v/bank_of_america_cancels_autopay_without_telling/">BOA在未通知的情况下取消自动还款，导致信用评分大跌</a></li>
+<li><a href="https://www.reddit.com/r/CreditCards/comments/w1rh7g/bank_of_america_such_a_headache_for_autopay_of/">BOA的自动还款设置非常反人类</a></li>
+<li><a href="https://www.reddit.com/r/CRedit/comments/1g6i386/trusted_bofa_autopay_and_now_i_have_a_late_fee/">信任BOA的自动还款，结果被坑交滞纳金</a></li>
+<li><a href="https://www.reddit.com/r/CreditCards/comments/1fn8icm/bank_of_america_automatic_pay_is_a_joke/">BOA的自动还款系统真的让人崩溃</a></li>
+<li><a href="https://www.uscardforum.com/t/topic/280896">BOA自动还款又一受害者</a></li>
 </ul>
-<p>最令人愤怒的是，我还特意给BOA的高管团队写了一封正式投诉邮件，详细描述了整个过程。</p>
-<ul>
-<li><a href="mailto:ashley.clientcare@bofa.com">ashley.clientcare@bofa.com</a></li>
-<li><a href="mailto:michael.clientcare@bofa.com">michael.clientcare@bofa.com</a></li>
-<li><a href="mailto:holly.clientcare@bofa.com">holly.clientcare@bofa.com</a></li>
-<li><a href="mailto:brian.t.moynihan@bofa.com">brian.t.moynihan@bofa.com</a></li>
-</ul>
-<p>结果他们的回复还是一样的态度冷漠：</p>
-<blockquote>
-<p>“虽然是我们系统的问题，但你自己没有每个月检查autopay，所以责任在你。”</p>
-</blockquote>
-<p>所以，BOA的逻辑是：<strong>客户信任BOA的autopay功能是客户自己的错，出了问题就得自己买单？</strong></p>
-<h2 id="BOA的autopay问题不是个例，网上已经有无数人吐槽"><a class="header-anchor" href="#BOA的autopay问题不是个例，网上已经有无数人吐槽"></a>BOA的autopay问题不是个例，网上已经有无数人吐槽</h2>
-<p>这个问题根本不是我一个人遇到的，Reddit上已经有无数人吐槽BOA的autopay：</p>
-<ul>
-<li><a href="https://www.reddit.com/r/CreditCards/comments/1be8ja1/boa_didnt_take_out_autopay_and_didnt_tell_me_now/">BOA未执行自动还款且未通知客户，导致30天逾期</a></li>
-<li><a href="https://www.reddit.com/r/personalfinance/comments/wrns8v/bank_of_america_cancels_autopay_without_telling/">BOA无故取消autopay，信用分大跌</a></li>
-<li><a href="https://www.reddit.com/r/CreditCards/comments/w1rh7g/bank_of_america_such_a_headache_for_autopay_of/">BOA的autopay设置又臭又长</a></li>
-<li><a href="https://www.reddit.com/r/CRedit/comments/1g6i386/trusted_bofa_autopay_and_now_i_have_a_late_fee/">信任BOA的autopay，结果被坑得交滞纳金</a></li>
-<li><a href="https://www.reddit.com/r/CreditCards/comments/1fn8icm/bank_of_america_automatic_pay_is_a_joke/">BOA的autopay真是个笑话</a></li>
-</ul>
-<p>甚至在小红书和信用卡论坛上，也有不少受害者：</p>
-<ul>
-<li><a href="https://www.xiaohongshu.com/explore/67896045000000001602ac48">BOA自动还款失效导致信用分下降</a></li>
-<li><a href="https://www.xiaohongshu.com/explore/64ed8291000000001e00ca61">BOA自动还款的设置极其反人类</a></li>
-<li><a href="https://www.xiaohongshu.com/explore/66c2739b000000000901755c">BOA的autopay问题到底有多离谱</a></li>
-<li><a href="https://www.uscardforum.com/t/topic/280896">BOA跟我同样的autopay问题的受害者</a></li>
-</ul>
-<h2 id="结论：BOA信用卡慎用，autopay更是大坑"><a class="header-anchor" href="#结论：BOA信用卡慎用，autopay更是大坑"></a>结论：BOA信用卡慎用，autopay更是大坑</h2>
-<p>如果你手里还有BOA的信用卡，建议立刻锁卡，尽量别用了。如果实在要用，千万不要相信他们的autopay，最好手动每个月检查付款状态，避免被坑。</p>
-<p>BOA的autopay系统不仅存在严重漏洞，还没有任何通知机制，出了问题完全甩锅给客户，甚至高管团队的态度也是一贯冷漠。</p>
-<p>信用是很多人的生命线，BOA这类银行的操作足以毁掉一个人的信用记录，影响买房买车甚至工作。如果你不想哪天无缘无故被逾期影响信用分，最好远离BOA的autopay大坑。那一点点的BOA信用卡积分，完全不值得你用每个月的提心吊胆作为代价。</p>
-<h2 id="后记"><a class="header-anchor" href="#后记"></a>后记</h2>
-<p>2025年刚开始，川普政府就在关闭消费者金融保护局（CFPB），从此以后，BOA这种渣行就可以更加无所顾忌地坑害用户了。</p>
+<p>现在，美国联邦政府正在关闭消费者金融保护局（CFPB），以后像BOA这样的银行可能会更加肆无忌惮。因此，大家一定要更加警惕，定期检查自己的银行服务，避免被坑。</p>
 <hr>
 <p><strong>本文地址：<a href="https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/">https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop/</a></strong></p>
 ]]></content>
@@ -1712,67 +1675,32 @@ TTL与MSL是有关系的但不是简单的相等的关系，MSL要大于等于TT
       </tags>
   </entry>
   <entry>
-    <title>Bank of America Silently Canceled My Autopay and Ruined My Credit Score</title>
+    <title>BOA&#39;s autopay can randomly cancel itself without warning</title>
     <url>/bank-of-america-silent-autopay-cancellation-credit-score-drop_en/</url>
-    <content><![CDATA[<h2 id="Strong-Warning-Avoid-Using-Bank-of-America-BofA-BOA-Credit-Cards"><a class="header-anchor" href="#Strong-Warning-Avoid-Using-Bank-of-America-BofA-BOA-Credit-Cards"></a>Strong Warning: Avoid Using Bank of America (BofA, BOA) Credit Cards!</h2>
-<p>If you have a BOA credit card, lock it now and put it away. If you insist on using it, be extremely cautious with their autopay system. BOA’s autopay is not only notoriously difficult to set up, but it can also silently cancel itself under various circumstances without notifying you, leading to missed payments and a significant drop in your credit score.</p>
+    <content><![CDATA[<p>If you use a Bank of America (BOA, BofA) credit card, it’s important to be aware of widespread issues with their autopay system. While autopay is supposed to make payments easier, my experience - and that of many others - suggests that BOA’s autopay can unexpectedly cancel itself without any notification, leading to missed payments and credit score damage. Setting up a monthly reminder to check your autopay status might help avoid surprises.</p>
 <span id="more"></span>
-<h2 id="How-Bad-Is-BOA’s-Autopay-I-Learned-the-Hard-Way"><a class="header-anchor" href="#How-Bad-Is-BOA’s-Autopay-I-Learned-the-Hard-Way"></a>How Bad Is BOA’s Autopay? I Learned the Hard Way</h2>
-<p>In 2020, I set up autopay from my Chase checking account to my BOA credit card, and it worked fine for four years.</p>
-<p>In November 2024, I suddenly discovered a $15.70 late payment. When I checked my account, I found that BOA had silently canceled my autopay without any notification. As a result, my credit score dropped by over 100 points, preventing me from securing a car loan and disrupting my entire family’s financial plans.</p>
-<h2 id="BOA’s-Endless-Excuses-and-Blame-Shifting"><a class="header-anchor" href="#BOA’s-Endless-Excuses-and-Blame-Shifting"></a>BOA’s Endless Excuses and Blame-Shifting</h2>
-<h3 id="November-23-2024-First-Contact-–-BOA-Admitted-It-Was-Their-System-Issue"><a class="header-anchor" href="#November-23-2024-First-Contact-–-BOA-Admitted-It-Was-Their-System-Issue"></a>November 23, 2024: First Contact – BOA Admitted It Was Their System Issue</h3>
-<p>I immediately called BOA’s customer service at (888) 800-9030. The representative admitted that it was BOA’s system error and promised to report the mistake to the credit bureaus to remove the late payment.</p>
-<p>However, a few days later, I received an official letter from BOA stating that they would not correct the late payment.</p>
-<h3 id="January-24-2025-BOA-Changed-Their-Story-to-Shift-the-Blame"><a class="header-anchor" href="#January-24-2025-BOA-Changed-Their-Story-to-Shift-the-Blame"></a>January 24, 2025: BOA Changed Their Story to Shift the Blame</h3>
-<p>Since BOA went back on their word, I filed a complaint with the <strong>Better Business Bureau (BBB)</strong>. BOA then called me and provided an entirely different explanation:</p>
+<p>I had autopay set up from my Chase checking account to my BOA credit card for four years without any issues. Then, in November 2024, I was surprised to find a $15.70 late payment on my account. After investigating, I discovered that BOA had silently removed my autopay setting without sending any email or alert. This caused my credit score to drop by over 100 points, making it impossible for me to get a car loan as planned.</p>
+<p>During that time, I was dealing with personal matters and hadn’t checked my BOA account for about 50 days. Since I had autopay set up, I wasn’t worried about my payments. It wasn’t until I logged in much later that I noticed the issue. Had I checked sooner, I could have caught the problem earlier, but I never expected my autopay to simply disappear.</p>
+<p>I contacted BOA customer service, and they initially admitted it was a system issue. However, they later refused to fix my credit report. I then escalated my complaint to the Better Business Bureau (BBB) and the Consumer Financial Protection Bureau (CFPB), but BOA still did not correct the issue.</p>
+<p>Eventually, after reaching out to BOA’s executive team, I learned the real reason:</p>
 <blockquote>
-<p>“Your autopay was canceled because you closed a BOA checking account in 2024.”</p>
+<p>When a BOA checking account is closed, all autopay settings under the customer’s name are automatically deleted, even if the autopay was linked to a non-BOA account like Chase.</p>
 </blockquote>
-<p>The problem? My autopay was always linked to my Chase account, not a BOA account! I pointed out their mistake, but BOA still sent me a letter refusing to correct my credit report.</p>
-<h3 id="February-7-2025-BOA-Executives’-Cold-Hearted-Response"><a class="header-anchor" href="#February-7-2025-BOA-Executives’-Cold-Hearted-Response"></a>February 7, 2025: BOA Executives’ Cold-Hearted Response</h3>
-<p>I escalated the issue to the <strong>Consumer Financial Protection Bureau (CFPB)</strong>. This time, BOA changed their excuse again:</p>
-<blockquote>
-<p>“Whenever a customer closes a BOA checking account, our system automatically deletes all autopay settings under their name - regardless of whether they are linked to BOA accounts or external banks.”</p>
-</blockquote>
-<p>Here’s why this is outrageous:</p>
-<ul>
-<li>BOA never informed customers about this so-called “policy”.</li>
-<li>BOA did not notify me when my autopay was deleted, neither email nor call.</li>
-<li>BOA initially admitted it was their system issue, but later blamed the customer.</li>
-</ul>
-<p>To make matters worse, I directly emailed BOA’s executive team to formally escalate my complaint.</p>
-<ul>
-<li><a href="mailto:ashley.clientcare@bofa.com">ashley.clientcare@bofa.com</a></li>
-<li><a href="mailto:michael.clientcare@bofa.com">michael.clientcare@bofa.com</a></li>
-<li><a href="mailto:holly.clientcare@bofa.com">holly.clientcare@bofa.com</a></li>
-<li><a href="mailto:brian.t.moynihan@bofa.com">brian.t.moynihan@bofa.com</a></li>
-</ul>
-<p>Their response was just as cold and indifferent:</p>
+<p>I never received any notice about this policy, and BOA did not alert me when my autopay was canceled. Their response was essentially:</p>
 <blockquote>
 <p>“Even though it was our system’s issue, it’s still your responsibility to check your autopay every month.”</p>
 </blockquote>
-<p>So BOA’s stance is clear: <strong>If you trust their autopay, it’s your fault. If their system fails, you have to suffer the consequences.</strong></p>
-<h2 id="BOA’s-Autopay-Issues-Are-Widespread-–-You’re-Not-Alone"><a class="header-anchor" href="#BOA’s-Autopay-Issues-Are-Widespread-–-You’re-Not-Alone"></a>BOA’s Autopay Issues Are Widespread – You’re Not Alone</h2>
-<p>I’m not the only one. Many others have experienced BOA’s autopay failures. Here are just a few real complaints from Reddit:</p>
+<p>This experience has made me more cautious with BOA’s autopay system. I strongly recommend setting up a recurring reminder to manually verify your BOA autopay status every month, even if it has been working fine for years. You never know when it might cancel itself for some absurd, unexplained reason.</p>
+<p>If you’re interested, many others have shared similar experiences:</p>
 <ul>
 <li><a href="https://www.reddit.com/r/CreditCards/comments/1be8ja1/boa_didnt_take_out_autopay_and_didnt_tell_me_now/">BOA didn’t process autopay, didn’t notify me, and now I have a 30-day late payment</a></li>
 <li><a href="https://www.reddit.com/r/personalfinance/comments/wrns8v/bank_of_america_cancels_autopay_without_telling/">BOA canceled my autopay without telling me – my credit score took a hit</a></li>
 <li><a href="https://www.reddit.com/r/CreditCards/comments/w1rh7g/bank_of_america_such_a_headache_for_autopay_of/">BOA’s autopay setup is an absolute nightmare</a></li>
 <li><a href="https://www.reddit.com/r/CRedit/comments/1g6i386/trusted_bofa_autopay_and_now_i_have_a_late_fee/">I trusted BOA’s autopay and now I have a late fee</a></li>
 <li><a href="https://www.reddit.com/r/CreditCards/comments/1fn8icm/bank_of_america_automatic_pay_is_a_joke/">BOA’s autopay system is a joke</a></li>
-</ul>
-<p>Even on Chinese social media, people are complaining about the same issue:</p>
-<ul>
-<li><a href="https://www.xiaohongshu.com/explore/67896045000000001602ac48">BOA autopay failure caused a credit score drop</a></li>
-<li><a href="https://www.xiaohongshu.com/explore/64ed8291000000001e00ca61">BOA’s autopay setup is incredibly frustrating</a></li>
-<li><a href="https://www.xiaohongshu.com/explore/66c2739b000000000901755c">BOA’s autopay problems are ridiculous</a></li>
 <li><a href="https://www.uscardforum.com/t/topic/280896">Another BOA autopay victim</a></li>
 </ul>
-<h2 id="Conclusion-BOA-Credit-Cards-Are-Risky-and-Autopay-Is-a-Disaster"><a class="header-anchor" href="#Conclusion-BOA-Credit-Cards-Are-Risky-and-Autopay-Is-a-Disaster"></a>Conclusion: BOA Credit Cards Are Risky, and Autopay Is a Disaster</h2>
-<p>If you still have a BOA credit card, lock it immediately and stop using it if possible. If you must use it, never trust their autopay system. Always check your payments manually each month to avoid getting screwed over.</p>
-<p>BOA’s autopay system is broken, lacks basic notification mechanisms, and their customer service blames the customer instead of fixing their system. Even their executive team refuses to take responsibility.</p>
-<p>A missed payment - even for just $15.70 - can wreck your credit score and affect your ability to buy a car, a house, or even get a job. Is BOA’s autopay really worth the risk? Think twice before trusting them with your credit.</p>
+<p>With the Consumer Financial Protection Bureau (CFPB) being dismantled by the federal government, consumer protections are becoming weaker, making it even more important for customers to stay vigilant with their banking services.</p>
 <hr>
 <p><strong>Article link: <a href="https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop_en/">https://xnerv.wang/bank-of-america-silent-autopay-cancellation-credit-score-drop_en/</a></strong></p>
 ]]></content>
