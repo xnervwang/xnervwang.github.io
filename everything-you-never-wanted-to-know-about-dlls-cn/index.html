@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="google819a2e66056c8144">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"xnerv.wang","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"VK1UJWKNY9","apiKey":"7b99451966536b0cd610a773068159a0","indexName":"xnerv.wang","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="英文版本 Everything You Never Wanted To Know About DLLs.  最近因为一些原因，我需要调研动态链接在Windows平台上的实现细节。这篇文章主要是总结我在这个问题上所学到的知识，用于我将来的回顾和参考，但同时我也希望这篇文章对其他人所有帮助，因为我将要总结的这些内容，你可能需要东找西找才能找到。 废话不多说，让我们开始这趟旅程吧：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于DLL的一些你不会想要知道的知识">
+<meta property="og:url" content="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/index.html">
+<meta property="og:site_name" content="XNERV SURVEYS">
+<meta property="og:description" content="英文版本 Everything You Never Wanted To Know About DLLs.  最近因为一些原因，我需要调研动态链接在Windows平台上的实现细节。这篇文章主要是总结我在这个问题上所学到的知识，用于我将来的回顾和参考，但同时我也希望这篇文章对其他人所有帮助，因为我将要总结的这些内容，你可能需要东找西找才能找到。 废话不多说，让我们开始这趟旅程吧：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-10-23T06:16:00.000Z">
+<meta property="article:modified_time" content="2025-03-10T01:04:55.816Z">
+<meta property="article:author" content="Xnerv Wang (xnervwang)">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="DLL">
+<meta property="article:tag" content="译文">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.css">
+  <title>关于DLL的一些你不会想要知道的知识 | XNERV SURVEYS</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-90038341-1"></script>
+    <script>
+      if (CONFIG.hostname === location.hostname) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-90038341-1');
+      }
+    </script>
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?fa4c42961138739a56782aee8127449f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="XNERV SURVEYS" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <!--a href="https://github.com/xnervwang" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="/assets/forkme.png" alt="Fork me on GitHub" data-canonical-src="/assets/forkme_right_darkblue.png"></a-->
+    <a target="_blank" rel="noopener" href="https://github.com/xnervwang" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">XNERV SURVEYS</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">God's in his heaven.<br/>All's right with the world.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/portraits/nerv.png">
+      <meta itemprop="name" content="Xnerv Wang (xnervwang)">
+      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="XNERV SURVEYS">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于DLL的一些你不会想要知道的知识
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-10-22 23:16:00" itemprop="dateCreated datePublished" datetime="2017-10-22T23:16:00-07:00">2017-10-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Windows/" itemprop="url" rel="index"><span itemprop="name">Windows</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>英文版本 <strong><a href="/everything-you-never-wanted-to-know-about-dlls/">Everything You Never Wanted To Know About DLLs</a></strong>.</p>
+<hr>
+<p>最近因为一些原因，我需要调研动态链接在Windows平台上的实现细节。这篇文章主要是总结我在这个问题上所学到的知识，用于我将来的回顾和参考，但同时我也希望这篇文章对其他人所有帮助，因为我将要总结的这些内容，你可能需要东找西找才能找到。</p>
+<p>废话不多说，让我们开始这趟旅程吧：</p>
+<span id="more"></span>
+<h2 id="导出和导入"><a class="header-anchor" href="#导出和导入"></a>导出和导入</h2>
+<p>Windows可执行文件加载器（Windows executable loader）负责在运行程序前完成所有动态加载和符号解析工作。链接器会分别计算出每一个可执行镜像（可执行镜像是一个DLL或者一个EXE文件）导出和导入了哪些函数，这个过程是通过检查可执行镜像的.edata段和.idata段来进行的。</p>
+<p>关于.edata段和.idata段的详细信息，在<a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/windows/hardware/gg463119">PE/COFF specification</a>这篇文档中有详细说明。</p>
+<h3 id="edata段"><a class="header-anchor" href="#edata段"></a>.edata段</h3>
+<p>.edata段记录了可执行镜像导出的符号（是的，EXE也可以导出符号）。主要包括：</p>
+<ul>
+<li>导出地址表（export address table）：一个长度为N的数组，保存了导出的函数/变量的地址（相对于可执行镜像起始地址的相关地址）。这张表的索引称之为序号（ordinals）。</li>
+<li>导出名称地址表（export name pointer table）：一个长度为M的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Parallel_array">并行数组</a>（译者记：其实就是两个大小一样的数组，一个保存key，一个保存对应的value），保存的是符号地址到导出名称的映射。这个平行数组是按照导出名称的字典序排序的，从而允许进行对一个给定的导出符号名称进行二分查找。</li>
+<li>导出序号表（export ordinal table）：也是一个长度为M的并行数组，保存了序号到对应的导出名称的映射，其中导出名称对应的是导出名称地址表中的键key。</li>
+</ul>
+<p>（作为通过名称导入符号这一做法的另一种替代方法，也可以通过指定序号来导入一个符号。通过序号来导入符号的做法在运行时会稍微快一些，因为这种情况下动态链接器（dynamic linker）不需要进行查找（译者记：根据名称在导出名称地址表中找到名称对应的地址）。此外，如果导出符号的DLL并没有给某个导出项分配名称，那么通过序号来导入符号是唯一的可行之路。）</p>
+<p>那么.edata段最初是怎样被创建的呢？主要有两种方法：</p>
+<ol>
+<li>
+<p>最常见的一种情况，在编译生成一些目标文件（object files）时会创建.edata段。这些目标文件对应的源码中，定义了一些带<code>__declspec(dllimport)</code>修饰符的函数或者变量。于是编译器就会产生一个包含了这些导出项的.edata段。</p>
+</li>
+<li>
+<p>另一种比较少见的情况，开发人员会写一个.def文件，指定那些函数需要被导出。将这个.def文件提供给<code>dll tool --output-exp</code>，就能产生一个导出文件（export file）。导出文件是一个仅包含.edata段的目标文件，导出了在.def文件中声明的符号（导出了一些未解析的引用，通常链接器会填写这些引用到一个实际的地址）。程序员在将这些目标文件链接成DLL的时候，必须对这些导出库（export library）进行命名。</p>
+<p>对于以上两种情况，链接器在链接时都会从所有的目标（objects）中收集.edata段，用于给整个可执行镜像文件创建一个.edata段。最后一种可能的方式是.edata段可以被链接器自身所创建，不需要将.edata段放入到任何目标文件中：</p>
+</li>
+<li>
+<p>链接器可以选择在链接时导出目标文件中的所有符号。例如，这是<a target="_blank" rel="noopener" href="http://sourceware.org/binutils/docs/ld/WIN32.html">GNU ld的默认行为</a>（也可以通过–export-all-symbols显式地指定这种行为）。在这种情况下，由链接器来产生.edata段。（GNU ld也支持在命令行中指定一个.def文件，然后产生的.edata段就只会导出这个.def文件中声明的符号）。</p>
+</li>
+</ol>
+<h3 id="idata段"><a class="header-anchor" href="#idata段"></a>.idata段</h3>
+<p>.idata段记录了可执行镜像导入的符号信息。包括：<br>
+对于导入符号涉及到的每一个可执行镜像：</p>
+<ul>
+<li>可执行镜像的文件名。被动态链接器用于在磁盘上查找该文件。</li>
+<li>导入符号查找表（import lookup table）：一个长度为N的数组，每一项要么是一个序号，要么是一个指向导入名称字符串的指针。</li>
+<li>导入符号地址表（import address table）：一个长度为N的指针数组。动态链接器会用从导入符号查找表中对应顺序的符号的地址来填写该数组。</li>
+</ul>
+<p>.idata段中的条目以如下方式被创建：</p>
+<ol>
+<li>
+<p>最常见的一种情况，这些条目来自目标文件中的导入库（import library）。可以对你希望导出符号的DLL或者我们之前讨论过的.def文件使用dlltool工具来创建导入库。和导出库一样，用户必须在链接这些导入库时指定名称。</p>
+</li>
+<li>
+<p>或者，有一些链接器（像GNU ld）也可以让你在链接时直接指定DLL文件。对于你需要从这些DLL文件中导入的符号，链接器会自动产生相应的.idata段条目。</p>
+</li>
+</ol>
+<p>注意，跟导出符号不一样，<code>__declspec(dllimport)</code>修饰符并不会导致产生相应的.idata段。</p>
+<p>比起第一次出现，导入库有点更复杂了。Windows动态加载器将导入符号（例如，函数Func的地址）的地址填入到导入符号地址表中。然而，当其它目标文件中的汇编代码执行<code>call Func</code>时，它们期待的是用Func来命名那段code的地址。但我们直到运行时的时候才知道这个地址：我们能够静态地得知的事情只有动态链接器会将这个地址存放在哪个地方。我们称这个地方为_imp_Func。<br>
+为了处理这一层额外的中间层，导入库导出的函数Func仅仅间接引用了_imp_Func（来获得实际的函数指针），然后执行<code>jmp</code>跳转到它。同一个工程中的所有其它的目标文件现在可以调用<code>call Func</code>，仿佛Func已经在其它目标文件而不是其它DLL中定义过了一样。基于这个原因，动态链接的函数的声明上的<code>__declspec(dllimport)</code>只是可有可无的（尽管实际上如果加上这个修饰符的话，代码的效率会有轻微的提升，我们之后会谈到这一点）。<br>
+不幸的是，如果你想要从另一个DLL中导入变量，则并没有类似的技巧。如果我们有一个导入的变量myData，并没有一种方法来定义一个导入库，使得链接到这个导入库的目标文件可以通过执行<code>mov $eax, myData</code>来写入到myData所在的内存位置。取而代之的是，导入库定义了一个符号<code>__imp__myData</code>，这个符号解析到一个可以找到myData链接地址的地方。然后编译器就会保证当你在读写用<code>__declspec(dllimport)</code>定义的变量时，这些读写其实是通过<code>__imp_myData</code>来间接进行的。因为需要在使用的时候再产生不同的代码，因此在导入变量时的<code>__declspec</code>声明是不可省去的。</p>
+<h2 id="应用实例"><a class="header-anchor" href="#应用实例"></a>应用实例</h2>
+<p>理论都很好，但在实践中看看所有这些的这些部分会对我们很有帮助。</p>
+<h3 id="构建DLL"><a class="header-anchor" href="#构建DLL"></a>构建DLL</h3>
+<p>首先，让我们来构建一个简单的DLL，同时导出了函数和变量。为了最大化地进行说明，我们将使用显式地导出库，而不是用<code>declspec(dllexport)</code>来修饰我们的函数，也不是提供一个.def文件给链接器。<br>
+先创建一个.def文件，library.def：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">LIBRARY library</span><br><span class="line">EXPORTS</span><br><span class="line">   function_export</span><br><span class="line">   data_export      DATA</span><br></pre></td></tr></table></figure>
+<p>（<code>DATA</code>关键词和<code>LIBRARY</code>这一行仅仅影响到导入库如何被产生，之后本文会解释这一点。现在请暂时忽略这个。）<br>
+然后构建一个导出文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dlltool --output-exp library_exports.o -d library.def</span><br></pre></td></tr></table></figure>
+<p>产生的目标文件基本上只包含了一个.edata段，导出了符号<code>_data_export</code>和<code>_function_export</code>，名称分别是<code>data_export</code>和<code>function_export</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -xs library_exports.o</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">There is an export table in .edata at 0x0</span><br><span class="line"></span><br><span class="line">The Export Tables (interpreted .edata section contents)</span><br><span class="line"></span><br><span class="line">Export Flags                    0</span><br><span class="line">Time/Date stamp                 4e10e5c1</span><br><span class="line">Major/Minor                     0/0</span><br><span class="line">Name                            00000028 library_exports.o.dll</span><br><span class="line">Ordinal Base                    1</span><br><span class="line">Number in:</span><br><span class="line">        Export Address Table            00000002</span><br><span class="line">        [Name Pointer/Ordinal] Table    00000002</span><br><span class="line">Table Addresses</span><br><span class="line">        Export Address Table            00000040</span><br><span class="line">        Name Pointer Table              00000048</span><br><span class="line">        Ordinal Table                   00000050</span><br><span class="line"></span><br><span class="line">Export Address Table -- Ordinal Base 1</span><br><span class="line"></span><br><span class="line">[Ordinal/Name Pointer] Table</span><br><span class="line">        [   0] data_export</span><br><span class="line">        [   1] function_export</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .edata        00000070  00000000  00000000  000000b4  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec -2)(fl 0x00)(ty   0)(scl 103) (nx 1) 0x00000000 fake</span><br><span class="line">File</span><br><span class="line">[  2](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000028 name</span><br><span class="line">[  3](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000040 afuncs</span><br><span class="line">[  4](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000048 anames</span><br><span class="line">[  5](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000050 anords</span><br><span class="line">[  6](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000054 n1</span><br><span class="line">[  7](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000060 n2</span><br><span class="line">[  8](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .text</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 10](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .data</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 12](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .bss</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 14](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .edata</span><br><span class="line">AUX scnlen 0x70 nreloc 8 nlnno 0</span><br><span class="line">[ 16](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 _data_export</span><br><span class="line">[ 17](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 _function_export</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.edata]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">0000000c rva32             .edata</span><br><span class="line">0000001c rva32             .edata</span><br><span class="line">00000020 rva32             .edata</span><br><span class="line">00000024 rva32             .edata</span><br><span class="line">00000040 rva32             _data_export</span><br><span class="line">00000044 rva32             _function_export</span><br><span class="line">00000048 rva32             .edata</span><br><span class="line">0000004c rva32             .edata</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .edata:</span><br><span class="line"> 0000 00000000 c1e5104e 00000000 28000000  .......N....(...</span><br><span class="line"> 0010 01000000 02000000 02000000 40000000  ............@...</span><br><span class="line"> 0020 48000000 50000000 6c696272 6172795f  H...P...library_</span><br><span class="line"> 0030 6578706f 7274732e 6f2e646c 6c000000  exports.o.dll...</span><br><span class="line"> 0040 00000000 00000000 54000000 60000000  ........T...`...</span><br><span class="line"> 0050 00000100 64617461 5f657870 6f727400  ....data_export.</span><br><span class="line"> 0060 66756e63 74696f6e 5f657870 6f727400  function_export.</span><br></pre></td></tr></table></figure>
+<p>我们将会用一个简单的DLL实现来提供这些符号，library.c：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int data_export = 42;</span><br><span class="line"></span><br><span class="line">int function_export() &#123;</span><br><span class="line">    return 1337 + data_export;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>打包到一个DLL中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -shared -o library.dll library.c library_exports.o</span><br></pre></td></tr></table></figure>
+<p>这个DLL的导出符号表如下，可见我们已经导出了我们所需的符号信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">The Export Tables (interpreted .edata section contents)</span><br><span class="line"></span><br><span class="line">Export Flags                    0</span><br><span class="line">Time/Date stamp                 4e10e5c1</span><br><span class="line">Major/Minor                     0/0</span><br><span class="line">Name                            00005028 library_exports.o.dll</span><br><span class="line">Ordinal Base                    1</span><br><span class="line">Number in:</span><br><span class="line">        Export Address Table            00000002</span><br><span class="line">        [Name Pointer/Ordinal] Table    00000002</span><br><span class="line">Table Addresses</span><br><span class="line">        Export Address Table            00005040</span><br><span class="line">        Name Pointer Table              00005048</span><br><span class="line">        Ordinal Table                   00005050</span><br><span class="line"></span><br><span class="line">Export Address Table -- Ordinal Base 1</span><br><span class="line">        [   0] +base[   1] 200c Export RVA</span><br><span class="line">        [   1] +base[   2] 10f0 Export RVA</span><br><span class="line"></span><br><span class="line">[Ordinal/Name Pointer] Table</span><br><span class="line">        [   0] data_export</span><br><span class="line">        [   1] function_export</span><br></pre></td></tr></table></figure>
+<h3 id="使用DLL"><a class="header-anchor" href="#使用DLL"></a>使用DLL</h3>
+<p>当我们回过头来看看如何使用DLL时，事情变得更有有趣了。首先，我们需要一个导出库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dlltool --output-lib library.dll.a -d library.def</span><br></pre></td></tr></table></figure>
+<p>（我们使用导入库<code>library.dll.a</code>而不是直接使用导出符号的对象文件<code>library_exports.o</code>，是因为使用库来导入允许链接器忽略<code>.idata</code>段中并没有被使用到的符号。而相反的是链接器无法忽略<code>.edata</code>段中的任何符号，因为任何一个符号都可能被这个DLL的使用者用到）。<br>
+导入库是相当复杂的。对于每一个导入符号，导入库中都包含一个对应的目标文件（<code>disds00000.o</code>和<code>disds00001.o</code>），同时也包含了其它两个目标文件（<code>distdt.o</code>和<code>disdh.o</code>），用于设立导入列表的头部和尾部。（导入列表的头部除了其它的一些东西，还包含了在运行时需要链接的DLL的名字，这是从.def文件的LIBRARY一行派生而来的。）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br></pre></td><td class="code"><pre><span class="line">$ objdump -xs library.dll.a</span><br><span class="line">In archive library.dll.a:</span><br><span class="line"></span><br><span class="line">disdt.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$4      00000004  00000000  00000000  00000104  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  4 .idata$5      00000004  00000000  00000000  00000108  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">  5 .idata$7      0000000c  00000000  00000000  0000010c  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec -2)(fl 0x00)(ty   0)(scl 103) (nx 1) 0x00000000 fake</span><br><span class="line">File</span><br><span class="line">[  2](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .text</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  4](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .data</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  6](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .bss</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  8](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$4</span><br><span class="line">AUX scnlen 0x4 nreloc 0 nlnno 0</span><br><span class="line">[ 10](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$5</span><br><span class="line">AUX scnlen 0x4 nreloc 0 nlnno 0</span><br><span class="line">[ 12](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$7</span><br><span class="line">AUX scnlen 0x7 nreloc 0 nlnno 0</span><br><span class="line">[ 14](sec  6)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __library_dll_a_iname</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .idata$4:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$5:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$7:</span><br><span class="line"> 0000 6c696272 6172792e 646c6c00           library.dll.</span><br><span class="line"></span><br><span class="line">disdh.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$2      00000014  00000000  00000000  00000104  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, RELOC, DATA</span><br><span class="line">  4 .idata$5      00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  5 .idata$4      00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec -2)(fl 0x00)(ty   0)(scl 103) (nx 1) 0x00000000 fake</span><br><span class="line">File</span><br><span class="line">[  2](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 hname</span><br><span class="line">[  3](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 fthunk</span><br><span class="line">[  4](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .text</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  6](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .data</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[  8](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .bss</span><br><span class="line">AUX scnlen 0x0 nreloc 0 nlnno 0</span><br><span class="line">[ 10](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 1) 0x00000000 .idata$2</span><br><span class="line">AUX scnlen 0x14 nreloc 3 nlnno 0</span><br><span class="line">[ 12](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$4</span><br><span class="line">[ 13](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$5</span><br><span class="line">[ 14](sec  4)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __head_library_dll_a</span><br><span class="line">[ 15](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __library_dll_a_iname</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$2]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$4</span><br><span class="line">0000000c rva32             __library_dll_a_iname</span><br><span class="line">00000010 rva32             .idata$5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .idata$2:</span><br><span class="line"> 0000 00000000 00000000 00000000 00000000  ................</span><br><span class="line"> 0010 00000000                             ....</span><br><span class="line"></span><br><span class="line">disds00001.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000008  00000000  00000000  0000012c  2**2</span><br><span class="line">                  CONTENTS, ALLOC, LOAD, RELOC, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$7      00000004  00000000  00000000  00000134  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  4 .idata$5      00000004  00000000  00000000  00000138  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  5 .idata$4      00000004  00000000  00000000  0000013c  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  6 .idata$6      00000012  00000000  00000000  00000140  2**1</span><br><span class="line">                  CONTENTS</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .text</span><br><span class="line">[  1](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .data</span><br><span class="line">[  2](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .bss</span><br><span class="line">[  3](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$7</span><br><span class="line">[  4](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$5</span><br><span class="line">[  5](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$4</span><br><span class="line">[  6](sec  7)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$6</span><br><span class="line">[  7](sec  1)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 _function_export</span><br><span class="line">[  8](sec  5)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __imp__function_export</span><br><span class="line">[  9](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.text]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000002 dir32             .idata$5</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$7]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$5]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$4]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .text:</span><br><span class="line"> 0000 ff250000 00009090                    .%......</span><br><span class="line">Contents of section .idata$7:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$5:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$4:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$6:</span><br><span class="line"> 0000 01006675 6e637469 6f6e5f65 78706f72  ..function_expor</span><br><span class="line"> 0010 7400                                 t.</span><br><span class="line"></span><br><span class="line">disds00000.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">Sections:</span><br><span class="line">Idx Name          Size      VMA       LMA       File off  Algn</span><br><span class="line">  0 .text         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, READONLY, CODE</span><br><span class="line">  1 .data         00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC, LOAD, DATA</span><br><span class="line">  2 .bss          00000000  00000000  00000000  00000000  2**2</span><br><span class="line">                  ALLOC</span><br><span class="line">  3 .idata$7      00000004  00000000  00000000  0000012c  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  4 .idata$5      00000004  00000000  00000000  00000130  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  5 .idata$4      00000004  00000000  00000000  00000134  2**2</span><br><span class="line">                  CONTENTS, RELOC</span><br><span class="line">  6 .idata$6      0000000e  00000000  00000000  00000138  2**1</span><br><span class="line">                  CONTENTS</span><br><span class="line">SYMBOL TABLE:</span><br><span class="line">[  0](sec  1)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .text</span><br><span class="line">[  1](sec  2)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .data</span><br><span class="line">[  2](sec  3)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .bss</span><br><span class="line">[  3](sec  4)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$7</span><br><span class="line">[  4](sec  5)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$5</span><br><span class="line">[  5](sec  6)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$4</span><br><span class="line">[  6](sec  7)(fl 0x00)(ty   0)(scl   3) (nx 0) 0x00000000 .idata$6</span><br><span class="line">[  7](sec  5)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __imp__data_export</span><br><span class="line">[  8](sec  0)(fl 0x00)(ty   0)(scl   2) (nx 0) 0x00000000 __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$7]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             __head_library_dll_a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$5]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">RELOCATION RECORDS FOR [.idata$4]:</span><br><span class="line">OFFSET   TYPE              VALUE</span><br><span class="line">00000000 rva32             .idata$6</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Contents of section .idata$7:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$5:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$4:</span><br><span class="line"> 0000 00000000                             ....</span><br><span class="line">Contents of section .idata$6:</span><br><span class="line"> 0000 00006461 74615f65 78706f72 7400      ..data_export.</span><br></pre></td></tr></table></figure>
+<p>注意<code>data_export</code>对应的目标包含一个空的.text段，然而<code>function_export</code>却有定义一些代码。如果我们反汇编就会看到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">00000000 &lt;_function_export&gt;:</span><br><span class="line">   0:   ff 25 00 00 00 00       jmp    *0x0</span><br><span class="line">                        2: dir32        .idata$5</span><br><span class="line">   6:   90                      nop</span><br><span class="line">   7:   90                      nop</span><br></pre></td></tr></table></figure>
+<p>类型<code>dir32</code>的重定位告诉链接器如何填写被<code>jmp</code>间接引用的地址。我们可以看到当进入<code>_function_export</code>时，会直接跳到从名为<code>.idata$5</code>的内存处读取的地址。通过彻底地检查<code>.idata</code>段，可以发现<code>.idata$5</code>对应的是导入地址表中<code>function_export</code>这个导入名称所对应的地址，于是就能找到加载的导入项<code>function_export</code>的绝对地址。</p>
+<p>虽然只有function_export拥有一个对应的<code>_function_export</code>函数，但是以上的两个导入项在导入库中分别对应了一个符号，这个符号的名称带有__imp__前缀（<code>__imp__data_export</code>和<code>__imp__function_export</code>)。就像我们之前探讨过的那样，这个符号代表了一个内存地址，这个地址中存放的是的指向函数或变量的指针，这个指针值由动态链接器负责填写。</p>
+<p>通过一个导入库，我们就可以写一个使用这些导出函数的代码，例如这个main1.c：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">__declspec(dllimport) extern int function_export(void);</span><br><span class="line">__declspec(dllimport) extern int data_export;</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    data_export++;</span><br><span class="line"></span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译这段代码并连接导入库，我们就会得到我们期待的结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main1.c library.dll.a -o main1 &amp;&amp; ./main1</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
+<p>之所以library.dll.a内没有定义data_export符号而这段代码仍能编译，是因为main.c文件中的data_export声明上的__declspec(dllimport)修饰符导致编译器生成了直接使用__imp_data_export符号的代码，反汇编的话我们就会看到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">$ gcc -c main1.c -o main1.o &amp;&amp; objdump --disassemble -r main1.o</span><br><span class="line"></span><br><span class="line">main1.o:     file format pe-i386</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disassembly of section .text:</span><br><span class="line"></span><br><span class="line">00000000 &lt;_main&gt;:</span><br><span class="line">   0:   8d 4c 24 04             lea    0x4(%esp),%ecx</span><br><span class="line">   4:   83 e4 f0                and    $0xfffffff0,%esp</span><br><span class="line">   7:   ff 71 fc                pushl  -0x4(%ecx)</span><br><span class="line">   a:   55                      push   %ebp</span><br><span class="line">   b:   89 e5                   mov    %esp,%ebp</span><br><span class="line">   d:   51                      push   %ecx</span><br><span class="line">   e:   83 ec 14                sub    $0x14,%esp</span><br><span class="line">  11:   e8 00 00 00 00          call   16 &lt;_main+0x16&gt;</span><br><span class="line">                        12: DISP32      ___main</span><br><span class="line">  16:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        17: dir32       __imp__function_export</span><br><span class="line">  1b:   ff d0                   call   *%eax</span><br><span class="line">  1d:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  21:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        24: dir32       .rdata</span><br><span class="line">  28:   e8 00 00 00 00          call   2d &lt;_main+0x2d&gt;</span><br><span class="line">                        29: DISP32      _printf</span><br><span class="line">  2d:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        2e: dir32       __imp__data_export</span><br><span class="line">  32:   8b 00                   mov    (%eax),%eax</span><br><span class="line">  34:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  38:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        3b: dir32       .rdata</span><br><span class="line">  3f:   e8 00 00 00 00          call   44 &lt;_main+0x44&gt;</span><br><span class="line">                        40: DISP32      _printf</span><br><span class="line">  44:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        45: dir32       __imp__data_export</span><br><span class="line">  49:   8b 00                   mov    (%eax),%eax</span><br><span class="line">  4b:   8d 50 01                lea    0x1(%eax),%edx</span><br><span class="line">  4e:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        4f: dir32       __imp__data_export</span><br><span class="line">  53:   89 10                   mov    %edx,(%eax)</span><br><span class="line">  55:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        56: dir32       __imp__function_export</span><br><span class="line">  5a:   ff d0                   call   *%eax</span><br><span class="line">  5c:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  60:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        63: dir32       .rdata</span><br><span class="line">  67:   e8 00 00 00 00          call   6c &lt;_main+0x6c&gt;</span><br><span class="line">                        68: DISP32      _printf</span><br><span class="line">  6c:   a1 00 00 00 00          mov    0x0,%eax</span><br><span class="line">                        6d: dir32       __imp__data_export</span><br><span class="line">  71:   8b 00                   mov    (%eax),%eax</span><br><span class="line">  73:   89 44 24 04             mov    %eax,0x4(%esp)</span><br><span class="line">  77:   c7 04 24 00 00 00 00    movl   $0x0,(%esp)</span><br><span class="line">                        7a: dir32       .rdata</span><br><span class="line">  7e:   e8 00 00 00 00          call   83 &lt;_main+0x83&gt;</span><br><span class="line">                        7f: DISP32      _printf</span><br><span class="line">  83:   b8 00 00 00 00          mov    $0x0,%eax</span><br><span class="line">  88:   83 c4 14                add    $0x14,%esp</span><br><span class="line">  8b:   59                      pop    %ecx</span><br><span class="line">  8c:   5d                      pop    %ebp</span><br><span class="line">  8d:   8d 61 fc                lea    -0x4(%ecx),%esp</span><br><span class="line">  90:   c3                      ret</span><br><span class="line">  91:   90                      nop</span><br><span class="line">  92:   90                      nop</span><br><span class="line">  93:   90                      nop</span><br></pre></td></tr></table></figure>
+<p>实际上，我们可以看到生成的代码甚至都没有使用<code>_function_export</code>符号，取而代之的是使用了<code>imp__function_export</code>。本质上，导入库中的<code>_function_export</code>符号在每处使用的地方都已经被内联过了。这也就是为什么使用<code>__declspec(dllimport)</code>可以提高跨DLL调用的性能，不过这个修饰符在声明函数时不是必须写的。<br>
+我们也许会好奇，如果在声明时去掉<code>__declspec(dllimport)</code>修饰符会发生什么事情。鉴于我们之前讨论的关于导入变量和导入函数之间的差别，你也许以为会链接失败。我们的测试文件main2.c是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">extern int function_export(void);</span><br><span class="line">extern int data_export;</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    data_export++;</span><br><span class="line"></span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让我们来试一试：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main2.c library.dll.a -o main2 &amp;&amp; ./main2</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
+<p>见鬼了！编译居然通过了？这有点令人惊讶。之所以导入库library.dll.a没有定义<code>_data_export</code>符号但这仍能编译通过，是由于GNU ld的一个叫做自动导入的有趣的特性。如果没有自动导入特性，链接器就会如我们所愿地报错：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main2.c library.dll.a -o main2 -Wl,--disable-auto-import &amp;&amp; ./main2</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x2c): undefined reference to `_data_export&#x27;</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x41): undefined reference to `_data_export&#x27;</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x49): undefined reference to `_data_export&#x27;</span><br><span class="line">/tmp/ccGd8Urx.o:main2.c:(.text+0x63): undefined reference to `_data_export&#x27;</span><br><span class="line">collect2: ld returned 1 exit status</span><br></pre></td></tr></table></figure>
+<p>微软的链接器没有实现自动导入的特性，因此如果你用的是微软的工具链的话，你就会看到类似的错误信息。</p>
+<p>然而，有一个方法可以使得在写代码时既不用依赖于自动导入的特定，也不用使用<code>__declspec(dllimport)</code>关键字。我们新的代码main3.c就是这么写的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">extern int (*_imp__function_export)(void);</span><br><span class="line">extern int *_imp__data_export;</span><br><span class="line"></span><br><span class="line">#define function_export (*_imp__function_export)</span><br><span class="line">#define data_export (*_imp__data_export)</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    data_export++;</span><br><span class="line"></span><br><span class="line">    printf(&quot;%d\n&quot;, function_export());</span><br><span class="line">    printf(&quot;%d\n&quot;, data_export);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这段代码中，我们直接使用了源自导入库中的带<code>__imp__</code>前缀的符号。这些符号对应的是导入函数和导入变量的真实内存地址，就像代码中的预处理宏定义<code>data_export</code>和<code>function_export</code>所表示的那样。</p>
+<p>即使没有自动编译特性，这段代码也能完美地编译通过：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ gcc main3.c library.dll.a -o main3 -Wl,--disable-auto-import &amp;&amp; ./main3</span><br><span class="line">1379</span><br><span class="line">42</span><br><span class="line">1380</span><br><span class="line">43</span><br></pre></td></tr></table></figure>
+<p>如果你一直阅读到了这里，你应该已经对Windows上上DLL的导入和导出有了透彻的理解。</p>
+<hr>
+<p><strong>本文地址：<a href="https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/">https://xnerv.wang/everything-you-never-wanted-to-know-about-dlls-cn/</a></strong></p>
+
+    </div>
+
+    
+    
+    <div class="post-widgets">
+    <div
+      class="social-share"
+      
+        data-sites="weibo,qq,wechat,tencent,douban,qzone,linkedin,diandian,facebook,twitter,google"
+      
+      
+        data-wechat-qrcode-title="分享这篇文章"
+      
+      
+        data-wechat-qrcode-helper="请扫描二维码"
+      
+    >
+    </div>
+  </div>
+  <script src="//cdn.jsdelivr.net/npm/social-share.js@1/dist/js/social-share.min.js"></script>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+              <a href="/tags/DLL/" rel="tag"># DLL</a>
+              <a href="/tags/%E8%AF%91%E6%96%87/" rel="tag"># 译文</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/iocp-usage-and-inside/" rel="prev" title="IOCP的使用和技术内幕">
+      <i class="fa fa-chevron-left"></i> IOCP的使用和技术内幕
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/linux-process-kernel-and-file-system-summary/" rel="next" title="Linux进程、内核及文件系统总结">
+      Linux进程、内核及文件系统总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+  <!--hr/>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- xnerv.wang bottom ad -->
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-client="ca-pub-5173793122443057"
+        data-ad-slot="1774750366"
+        data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  <hr/-->
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%87%BA%E5%92%8C%E5%AF%BC%E5%85%A5"><span class="nav-text">导出和导入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#edata%E6%AE%B5"><span class="nav-text">.edata段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#idata%E6%AE%B5"><span class="nav-text">.idata段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="nav-text">应用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BADLL"><span class="nav-text">构建DLL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8DLL"><span class="nav-text">使用DLL</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
+      src="/portraits/nerv.png">
+  <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
+  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2008 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="eye"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Xnerv Wang (xnervwang)</span>
+</div>
+
+<div>
+  <span>God's in his heaven. All's right with the world.</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+  <!-- baidu tuijian -->
+  <div id="hm_t_123"></div>
+</body>
+</html>
