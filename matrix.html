@@ -98,11 +98,6 @@
         }
 
         .container h2 .title-text {}
-        .container h2 .countdown { 
-            font-size: 0.7em;
-            color: #0A0;
-            font-weight: normal;
-        }
         
         .clocks-wrapper {
             display: flex;
@@ -122,7 +117,7 @@
 
         #analog-local-clock { 
             border: 2px solid #0F0;
-            border-radius: 50%;     
+            border-radius: 50%;   
             background-color: #000; 
             width: 150px; 
             height: 150px;
@@ -290,11 +285,11 @@
             padding: 10px 0;
         }
         
-        /* --- NEW: Responsive Styles for Mobile Devices --- */
+        /* --- Responsive Styles for Mobile Devices --- */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
-                font-size: 14px; /* Adjust base font size for mobile */
+                font-size: 14px;
             }
 
             .container {
@@ -311,14 +306,13 @@
                 right: 8px;
             }
 
-            /* Stack clocks vertically */
             .clocks-wrapper {
                 flex-direction: column;
-                align-items: stretch; /* Make digital times take full width */
+                align-items: stretch;
             }
 
             .analog-clock-area {
-                margin: 25px auto 10px auto; /* Center the analog clock with vertical margin */
+                margin: 25px auto 10px auto;
                 padding-right: 0;
             }
             
@@ -327,42 +321,38 @@
                 height: 130px;
             }
 
-            /* Stack labels and values for all info items */
             .clock-container .clock, .ip-info .info-item, .latency-info .info-item {
-                grid-template-columns: 1fr; /* Switch to a single column layout */
-                gap: 5px; /* Add a small gap between label and value */
+                grid-template-columns: 1fr;
+                gap: 5px;
                 line-height: 1.5;
                 margin-bottom: 16px;
             }
             
             .clock .label, .info-item .label {
-                white-space: normal; /* Allow long labels to wrap */
+                white-space: normal;
                 overflow: visible;
                 text-overflow: clip;
                 font-size: 0.95em;
             }
             
             .info-item .value, .clock .time-display {
-                padding-left: 1em; /* Indent the value for clarity */
+                padding-left: 1em;
             }
             
             .ip-info .info-item .value {
-                /* Word break for long IP addresses if needed */
                 word-break: break-all;
             }
             
             .geo-icon {
-                /* Ensure icon doesn't cause overflow */
                 margin-left: 8px;
             }
 
-            /* Make modal more screen-friendly */
             .modal-content {
                 width: 95%;
                 padding: 15px;
             }
             #geo-modal-body .info-item {
-                grid-template-columns: 100px 1fr; /* Adjust modal grid for consistency */
+                grid-template-columns: 100px 1fr;
             }
         }
 
@@ -400,39 +390,39 @@
         <h2><span class="title-text" data-translate-key="publicIPAddress">公网 IP 地址</span></h2>
         <div class="info-item"> 
             <span class="label" data-translate-key="ipIpify">IP (api.ipify.org):</span>
-            <span id="ip-ipify" class="value loading" data-translate-key-status="fetching">获取中...</span>
+            <span id="ip-ipify" class="value loading" data-translate-key-status="fetching"></span>
         </div>
         <div class="info-item">
             <span class="label" data-translate-key="ipIpinfo">IP (ipinfo.io):</span>
-            <span id="ip-ipinfoio" class="value loading" data-translate-key-status="fetching">获取中...</span>
+            <span id="ip-ipinfoio" class="value loading" data-translate-key-status="fetching"></span>
         </div>
         <div class="info-item">
             <span class="label" data-translate-key="ipMyipla">IP (myip.la/json):</span>
-            <span id="ip-myipla" class="value loading" data-translate-key-status="fetching">获取中...</span>
+            <span id="ip-myipla" class="value loading" data-translate-key-status="fetching"></span>
         </div>
         </div>
 
     <div class="container latency-info">
-        <h2><span class="title-text" data-translate-key="networkLatencyTest">网络延迟测试</span><span id="latency-countdown" class="countdown"></span></h2>
+        <h2><span class="title-text" data-translate-key="networkLatencyTest">网络延迟测试</span></h2>
         <div class="info-item">
             <span class="label" data-translate-key="latencyUS">访问 美国 (example.com):</span>
-            <span id="latency-us" class="value loading" data-translate-key-status="testing">测试中...</span>
+            <span id="latency-us" class="value loading" data-translate-key-status="testing"></span>
         </div>
         <div class="info-item">
             <span class="label" data-translate-key="latencyCN">访问 中国 (baidu.com):</span>
-            <span id="latency-cn" class="value loading" data-translate-key-status="testing">测试中...</span>
+            <span id="latency-cn" class="value loading" data-translate-key-status="testing"></span>
         </div>
         <div class="info-item">
             <span class="label" data-translate-key="latencyJP">访问 日本 (yahoo.co.jp):</span>
-            <span id="latency-jp" class="value loading" data-translate-key-status="testing">测试中...</span>
+            <span id="latency-jp" class="value loading" data-translate-key-status="testing"></span>
         </div>
         <div class="info-item">
             <span class="label" data-translate-key="latencyAWS">访问 AWS (aws.amazon.com):</span>
-            <span id="latency-aws" class="value loading" data-translate-key-status="testing">测试中...</span>
+            <span id="latency-aws" class="value loading" data-translate-key-status="testing"></span>
         </div>
         <div class="info-item">
             <span class="label" data-translate-key="latencyAzure">访问 Azure (azure.microsoft.com):</span>
-            <span id="latency-azure" class="value loading" data-translate-key-status="testing">测试中...</span>
+            <span id="latency-azure" class="value loading" data-translate-key-status="testing"></span>
         </div>
     </div>
 
@@ -476,7 +466,6 @@
             pingTimeout: { zh: '访问超时', tw: '訪問超時', en: 'Ping timeout', ja: 'アクセスエラー' },
             pingErrorNetwork: { zh: '访问失败 (网络/CORS)', tw: '訪問失敗 (網路/CORS)', en: 'Ping failed (Network/CORS)', ja: 'アクセス失敗 (ネットワーク/CORS)' },
             pingCannotMeasure: { zh: '无法精确测量', tw: '無法精確測量', en: 'Cannot measure accurately', ja: '正確に測定できません' },
-            countdownNextRefresh: { zh: '下次刷新', tw: '下次刷新', en: 'Next refresh', ja: '次回更新' },
             modalTitle: { zh: 'IP 地理位置详情', tw: 'IP 地理位置詳情', en: 'IP Geolocation Details', ja: 'IPジオロケーション詳細' },
             modalQueryIP: { zh: '查询 IP:', tw: '查詢 IP:', en: 'Query IP:', ja: '照会IP:' },
             modalCountry: { zh: '国家:', tw: '國家:', en: 'Country:', ja: '国:' },
@@ -540,9 +529,13 @@
             });
             
             document.querySelectorAll('[data-translate-key-status]').forEach(el => {
-                const currentStatusKey = el.dataset.currentStatusKey; 
+                const currentStatusKey = el.dataset.currentStatusKey;
+                const defaultStatusKey = el.dataset.translateKeyStatus;
+
                 if (currentStatusKey) {
                     setStatusText(el, currentStatusKey, el.dataset.currentErrorDetail || "");
+                } else if (defaultStatusKey) {
+                    setStatusText(el, defaultStatusKey);
                 }
             });
 
@@ -550,8 +543,6 @@
             document.getElementById('lang-tw').classList.toggle('active', lang === 'tw');
             document.getElementById('lang-en').classList.toggle('active', lang === 'en');
             document.getElementById('lang-ja').classList.toggle('active', lang === 'ja');
-
-            updateLatencyCountdownDisplay(); 
             
             document.querySelectorAll('.geo-icon').forEach(icon => {
                 icon.title = getTranslation('geoIconTitle');
@@ -582,7 +573,6 @@
         const latencyJpElement = document.getElementById('latency-jp');
         const latencyAwsElement = document.getElementById('latency-aws');
         const latencyAzureElement = document.getElementById('latency-azure');
-        const latencyCountdownElement = document.getElementById('latency-countdown');
         const geoModal = document.getElementById('geo-modal');
         const geoModalBody = document.getElementById('geo-modal-body');
         const modalCloseButton = document.querySelector('.modal-close-button');
@@ -661,11 +651,10 @@
             }
         }
 
-        let latencyRefreshCountdownValue = 60;
-
         async function testLatency(url, element) {
             setStatusText(element, 'testing');
             element.className = 'value loading';
+
             const startTime = performance.now();
             try {
                 await fetch(url, { method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(10000) });
@@ -730,8 +719,6 @@
         }
 
         async function fetchGeoInfo(ipAddress) {
-            // 使用 ipinfo.io 作为更可靠的替代方案
-            // 注意: ipinfo.io 的免费服务不支持语言切换，因此地理位置信息将为英文。
             const geoApiUrl = `https://ipinfo.io/${ipAddress}/json`;
 
             try {
@@ -746,7 +733,6 @@
                      throw new Error(data.error.message || 'API returned an error');
                 }
 
-                // 成功获取数据，构建显示内容
                 geoModalBody.innerHTML = `
                     <div class="info-item"><span class="label">${getTranslation('modalQueryIP')}</span><span class="value">${data.ip || ipAddress}</span></div>
                     <div class="info-item"><span class="label">${getTranslation('modalCountry')}</span><span class="value">${data.country || 'N/A'}</span></div>
@@ -805,31 +791,43 @@
         document.getElementById('lang-tw').addEventListener('click', () => setLanguage('tw'));
         document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
         document.getElementById('lang-ja').addEventListener('click', () => setLanguage('ja'));
+        
+        function setupStaggeredLatencyTests() {
+            const tests = [
+                { element: latencyUsElement, url: 'https://example.com' },
+                { element: latencyCnElement, url: 'https://www.baidu.com' },
+                { element: latencyJpElement, url: 'https://www.yahoo.co.jp' },
+                { element: latencyAwsElement, url: 'https://aws.amazon.com' },
+                { element: latencyAzureElement, url: 'https://azure.microsoft.com' }
+            ];
+            
+            let isFirstCycle = true;
+            const initialInterval = 500;       // 0.5 seconds for the first rapid cycle
+            const subsequentInterval = 12000;  // 12 seconds for all following cycles
+            let currentTestIndex = 0;
 
-        function refreshAllLatencies() {
-            console.log("Refreshing latencies at " + new Date().toLocaleTimeString());
-            [latencyUsElement, latencyCnElement, latencyJpElement, latencyAwsElement, latencyAzureElement].forEach(el => {
-                setStatusText(el, 'testing');
-                el.className = 'value loading';
-            });
+            function runNextTest() {
+                const currentTest = tests[currentTestIndex];
+                // The `testLatency` function will set the initial translated text
+                testLatency(currentTest.url, currentTest.element);
+                
+                currentTestIndex++;
 
-            testLatency('https://example.com', latencyUsElement);
-            testLatency('https://www.baidu.com', latencyCnElement);
-            testLatency('https://www.yahoo.co.jp', latencyJpElement);
-            testLatency('https://aws.amazon.com', latencyAwsElement);
-            testLatency('https://azure.microsoft.com', latencyAzureElement);
-            latencyRefreshCountdownValue = 60; 
-            updateLatencyCountdownDisplay();
-        }
+                if (isFirstCycle && currentTestIndex === tests.length) {
+                    isFirstCycle = false;
+                    console.log("Initial fast cycle complete. Switching to slow cycle.");
+                }
 
-        function updateLatencyCountdownDisplay() {
-            if (latencyCountdownElement) {
-                latencyCountdownElement.textContent = `(${getTranslation('countdownNextRefresh')}: ${latencyRefreshCountdownValue}s)`;
+                if (currentTestIndex === tests.length) {
+                    currentTestIndex = 0;
+                }
+                
+                const intervalForNextTest = isFirstCycle ? initialInterval : subsequentInterval;
+                
+                setTimeout(runNextTest, intervalForNextTest);
             }
-            latencyRefreshCountdownValue--;
-             if (latencyRefreshCountdownValue < 0) { 
-                 latencyRefreshCountdownValue = 59;
-            }
+            
+            runNextTest();
         }
         
         function setupAnalogLocalClock() {
@@ -897,9 +895,9 @@
                 const hourAngle = (hour % 12 + minute / 60) * Math.PI / 6; 
                 drawHand(ctx, hourAngle, radius * 0.5, radius * 0.07, '#0F0');
                 const minuteAngle = (minute + second / 60) * Math.PI / 30;
-                drawHand(ctx, minuteAngle, radius * 0.65, radius * 0.05, '#0F0');
+                drawHand(ctx, minuteAngle, radius * 0.60, radius * 0.05, '#0F0');
                 const secondAngle = (second * Math.PI / 30);
-                drawHand(ctx, secondAngle, radius * 0.75, radius * 0.02, '#7FFF00');
+                drawHand(ctx, secondAngle, radius * 0.70, radius * 0.02, '#7FFF00');
             }
 
             function drawAnalogClock() {
@@ -914,7 +912,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             setLanguage(currentLanguage); 
 
-            [ipIpifyElement, ipIpinfoioElement, ipMyiplaElement].forEach(el => {
+            // Initialize IP fetching with translated status
+            const ipElements = [ipIpifyElement, ipIpinfoioElement, ipMyiplaElement];
+            ipElements.forEach(el => {
                 if(el) setStatusText(el, 'fetching');
             });
 
@@ -922,9 +922,7 @@
             fetchIP('https://api.myip.la/json', ipMyiplaElement, data => data.ip, true);
             fetchIP('https://ipinfo.io/json', ipIpinfoioElement, data => data.ip, true);
 
-            refreshAllLatencies(); 
-            setInterval(refreshAllLatencies, 60000); 
-            setInterval(updateLatencyCountdownDisplay, 1000); 
+            setupStaggeredLatencyTests();
 
             updateClocks(); 
             setInterval(updateClocks, 1000);
