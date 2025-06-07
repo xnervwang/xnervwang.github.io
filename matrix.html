@@ -528,14 +528,10 @@
                 translateElement(el, el.dataset.translateKey);
             });
             
-            // --- MODIFIED: Bug fix logic ---
             document.querySelectorAll('[data-translate-key-status]').forEach(el => {
-                // If the element has successfully displayed data, do not reset it.
                 if (el.classList.contains('success')) {
                     return;
                 }
-
-                // Otherwise, re-translate its current status (e.g., "Fetching...", "Error", etc.)
                 const currentStatusKey = el.dataset.currentStatusKey;
                 if (currentStatusKey) {
                     setStatusText(el, currentStatusKey, el.dataset.currentErrorDetail || "");
@@ -911,6 +907,18 @@
             setInterval(drawAnalogClock, 1000); 
         }
 
+        // --- MODIFICATION START ---
+        // Create a dedicated function to fetch all IPs.
+        function fetchAllIPs() {
+            // Using console.log can be helpful for debugging to see when the refresh happens.
+            console.log("Refreshing public IP addresses at " + new Date().toLocaleTimeString());
+            fetchIP('https://api.ipify.org?format=json', ipIpifyElement, data => data.ip, true);
+            fetchIP('https://api.myip.la/json', ipMyiplaElement, data => data.ip, true);
+            fetchIP('https://ipinfo.io/json', ipIpinfoioElement, data => data.ip, true);
+        }
+        // --- MODIFICATION END ---
+
+
         document.addEventListener('DOMContentLoaded', function() {
             setLanguage(currentLanguage); 
 
@@ -918,9 +926,16 @@
             ipElements.forEach(el => {
                 if(el) setStatusText(el, 'fetching');
             });
-            fetchIP('https://api.ipify.org?format=json', ipIpifyElement, data => data.ip, true);
-            fetchIP('https://api.myip.la/json', ipMyiplaElement, data => data.ip, true);
-            fetchIP('https://ipinfo.io/json', ipIpinfoioElement, data => data.ip, true);
+            
+            // --- MODIFICATION START ---
+            // 1. Fetch IPs immediately when the page loads.
+            fetchAllIPs();
+
+            // 2. Set an interval to re-fetch every 10 minutes.
+            // 10 minutes = 10 * 60 seconds * 1000 milliseconds = 600000 ms
+            setInterval(fetchAllIPs, 600000);
+            // --- MODIFICATION END ---
+
 
             setupStaggeredLatencyTests();
 
