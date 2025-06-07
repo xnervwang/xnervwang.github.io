@@ -41,7 +41,6 @@
             --latency-label-width: 390px; 
             --modal-label-width: 140px;
         }
-        /* Added for Traditional Chinese, starts with same values as Simplified */
         body.lang-tw {
             --time-label-width: 170px;
             --ip-label-width: 230px;
@@ -123,7 +122,7 @@
 
         #analog-local-clock { 
             border: 2px solid #0F0;
-            border-radius: 50%;       
+            border-radius: 50%;     
             background-color: #000; 
             width: 150px; 
             height: 150px;
@@ -290,6 +289,82 @@
             font-style: italic;
             padding: 10px 0;
         }
+        
+        /* --- NEW: Responsive Styles for Mobile Devices --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                font-size: 14px; /* Adjust base font size for mobile */
+            }
+
+            .container {
+                padding: 10px 15px;
+                width: 95%;
+            }
+
+            .container h2, .modal-content h2 {
+                font-size: 1.3em;
+            }
+
+            .lang-switcher {
+                top: 8px;
+                right: 8px;
+            }
+
+            /* Stack clocks vertically */
+            .clocks-wrapper {
+                flex-direction: column;
+                align-items: stretch; /* Make digital times take full width */
+            }
+
+            .analog-clock-area {
+                margin: 25px auto 10px auto; /* Center the analog clock with vertical margin */
+                padding-right: 0;
+            }
+            
+            #analog-local-clock {
+                width: 130px;
+                height: 130px;
+            }
+
+            /* Stack labels and values for all info items */
+            .clock-container .clock, .ip-info .info-item, .latency-info .info-item {
+                grid-template-columns: 1fr; /* Switch to a single column layout */
+                gap: 5px; /* Add a small gap between label and value */
+                line-height: 1.5;
+                margin-bottom: 16px;
+            }
+            
+            .clock .label, .info-item .label {
+                white-space: normal; /* Allow long labels to wrap */
+                overflow: visible;
+                text-overflow: clip;
+                font-size: 0.95em;
+            }
+            
+            .info-item .value, .clock .time-display {
+                padding-left: 1em; /* Indent the value for clarity */
+            }
+            
+            .ip-info .info-item .value {
+                /* Word break for long IP addresses if needed */
+                word-break: break-all;
+            }
+            
+            .geo-icon {
+                /* Ensure icon doesn't cause overflow */
+                margin-left: 8px;
+            }
+
+            /* Make modal more screen-friendly */
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            #geo-modal-body .info-item {
+                grid-template-columns: 100px 1fr; /* Adjust modal grid for consistency */
+            }
+        }
 
     </style>
 </head>
@@ -372,7 +447,6 @@
     </div>
 
     <script>
-        // --- Translations ---
         const translations = {
             pageTitle: { zh: '系统状态', tw: '系統狀態', en: 'System Status', ja: 'システム状態' },
             globalTime: { zh: '全球时间', tw: '全球時間', en: 'Global Time', ja: 'グローバル時間' },
@@ -411,12 +485,9 @@
             modalZip: { zh: '邮编:', tw: '郵遞區號:', en: 'Zip Code:', ja: '郵便番号:' },
             modalLatLon: { zh: '经纬度:', tw: '經緯度:', en: 'Coordinates:', ja: '座標:' },
             modalTimezone: { zh: '时区:', tw: '時區:', en: 'Timezone:', ja: 'タイムゾーン:' },
-            modalISP: { zh: 'ISP:', tw: 'ISP:', en: 'ISP:', ja: 'ISP:' },
-            modalOrg: { zh: '组织:', tw: '組織:', en: 'Organization:', ja: '組織:' },
-            modalAS: { zh: 'AS号码:', tw: 'AS號碼:', en: 'AS Number:', ja: 'AS番号:' },
+            modalISP: { zh: 'ISP/组织:', tw: 'ISP/組織:', en: 'ISP/Organization:', ja: 'ISP/組織:' },
             modalFetchingGeo: { zh: '正在查询地理位置信息...', tw: '正在查詢地理位置資訊...', en: 'Fetching geolocation info...', ja: 'ジオロケーション情報を取得中...' },
             modalGeoError: { zh: '无法获取地理信息', tw: '無法獲取地理資訊', en: 'Could not fetch geolocation', ja: 'ジオロケーション情報を取得できませんでした' },
-            modalGeoErrorUnknown: { zh: '未知API错误', tw: '未知API錯誤', en: 'Unknown API error', ja: '不明なAPIエラー' },
             modalGeoFetchFailed: { zh: '查询地理信息失败', tw: '查詢地理資訊失敗', en: 'Failed to query geolocation', ja: 'ジオロケーション情報の照会に失敗しました' },
             modalGeoTimeout: { zh: '查询地理信息失败 (超时)', tw: '查詢地理資訊失敗 (超時)', en: 'Failed to query geolocation (timeout)', ja: 'ジオロケーション情報の照会に失敗しました (タイムアウト)' },
             modalGeoNetworkError: { zh: '查询地理信息失败 (网络/CORS/HTTPS)', tw: '查詢地理資訊失敗 (網路/CORS/HTTPS)', en: 'Failed to query geolocation (Network/CORS/HTTPS)', ja: 'ジオロケーション情報の照会に失敗しました (ネットワーク/CORS/HTTPS)' },
@@ -424,7 +495,6 @@
             geoIconTitle: { zh: '点击查询此 IP 的地理位置', tw: '點擊查詢此 IP 的地理位置', en: 'Click to query geolocation for this IP', ja: 'クリックしてこのIPのジオロケーションを照会' }
         };
 
-        // --- NEW: Function to detect initial language ---
         function getInitialLanguage() {
             const savedLang = localStorage.getItem('system_status_lang');
             if (savedLang && translations.pageTitle[savedLang]) {
@@ -440,7 +510,7 @@
                 if (langLower.startsWith('en')) return 'en';
             }
             
-            return 'en'; // Default fallback
+            return 'en';
         }
 
         let currentLanguage = getInitialLanguage();
@@ -450,7 +520,7 @@
             const translationSet = translations[key];
             if (translationSet && translationSet[currentLanguage]) {
                 element.textContent = translationSet[currentLanguage];
-            } else if (translationSet && translationSet['en']) { // Fallback to English
+            } else if (translationSet && translationSet['en']) {
                 element.textContent = translationSet['en'];
             }
         }
@@ -526,10 +596,10 @@
         
         function getTranslation(key, replacements = {}) {
             let text = (translations[key] && translations[key][currentLanguage]) 
-                       ? translations[key][currentLanguage] 
-                       : (translations[key] && translations[key]['en']) 
-                         ? translations[key]['en'] 
-                         : `MISSING_TRANSLATION: ${key}`; 
+                        ? translations[key][currentLanguage] 
+                        : (translations[key] && translations[key]['en']) 
+                          ? translations[key]['en'] 
+                          : `MISSING_TRANSLATION: ${key}`; 
             for (const placeholder in replacements) {
                 text = text.replace(`{${placeholder}}`, replacements[placeholder]);
             }
@@ -660,38 +730,33 @@
         }
 
         async function fetchGeoInfo(ipAddress) {
-            // --- MODIFIED: Added 'tw' for zh-TW support ---
-            let apiLang = 'en';
-            if (currentLanguage === 'zh') apiLang = 'zh-CN';
-            else if (currentLanguage === 'tw') apiLang = 'zh-TW';
-            else if (currentLanguage === 'ja') apiLang = 'ja';
-            const geoApiUrl = `https://ip-api.com/json/${ipAddress}?lang=${apiLang}&fields=status,message,country,countryCode,regionName,city,zip,lat,lon,timezone,isp,org,as,query`;
-            
+            // 使用 ipinfo.io 作为更可靠的替代方案
+            // 注意: ipinfo.io 的免费服务不支持语言切换，因此地理位置信息将为英文。
+            const geoApiUrl = `https://ipinfo.io/${ipAddress}/json`;
+
             try {
-                const response = await fetch(geoApiUrl, { cache: 'no-store', signal: AbortSignal.timeout(8000) });
+                const response = await fetch(geoApiUrl, { 
+                    cache: 'no-store', 
+                    signal: AbortSignal.timeout(8000) 
+                });
                 if (!response.ok) throw new Error(`Geo API error ${response.status}`);
                 const data = await response.json();
 
-                if (data.status === 'success') {
-                    geoModalBody.innerHTML = `
-                        <div class="info-item"><span class="label">${getTranslation('modalQueryIP')}</span><span class="value">${data.query || ipAddress}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalCountry')}</span><span class="value">${data.country || 'N/A'} (${data.countryCode || 'N/A'})</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalRegion')}</span><span class="value">${data.regionName || 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalCity')}</span><span class="value">${data.city || 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalZip')}</span><span class="value">${data.zip || 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalLatLon')}</span><span class="value">${data.lat !== undefined && data.lat !== null ? data.lat.toFixed(4) : 'N/A'}, ${data.lon !== undefined && data.lon !== null ? data.lon.toFixed(4) : 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalTimezone')}</span><span class="value">${data.timezone || 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalISP')}</span><span class="value">${data.isp || 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalOrg')}</span><span class="value">${data.org || 'N/A'}</span></div>
-                        <div class="info-item"><span class="label">${getTranslation('modalAS')}</span><span class="value">${data.as || 'N/A'}</span></div>
-                    `;
-                } else {
-                    const p = document.createElement('p');
-                    p.className = 'error';
-                    setStatusText(p, 'modalGeoError', `: ${data.message || getTranslation('modalGeoErrorUnknown')}`);
-                    geoModalBody.innerHTML = '';
-                    geoModalBody.appendChild(p);
+                if (data.error) {
+                     throw new Error(data.error.message || 'API returned an error');
                 }
+
+                // 成功获取数据，构建显示内容
+                geoModalBody.innerHTML = `
+                    <div class="info-item"><span class="label">${getTranslation('modalQueryIP')}</span><span class="value">${data.ip || ipAddress}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalCountry')}</span><span class="value">${data.country || 'N/A'}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalRegion')}</span><span class="value">${data.region || 'N/A'}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalCity')}</span><span class="value">${data.city || 'N/A'}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalZip')}</span><span class="value">${data.postal || 'N/A'}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalLatLon')}</span><span class="value">${data.loc || 'N/A'}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalTimezone')}</span><span class="value">${data.timezone || 'N/A'}</span></div>
+                    <div class="info-item"><span class="label">${getTranslation('modalISP')}</span><span class="value">${data.org || 'N/A'}</span></div>
+                `;
             } catch (error) {
                 let errorKey = 'modalGeoFetchFailed';
                 if (error.name === 'TimeoutError') errorKey = 'modalGeoTimeout';
@@ -699,7 +764,7 @@
                 
                 const p = document.createElement('p');
                 p.className = 'error';
-                setStatusText(p, errorKey);
+                setStatusText(p, errorKey, `(${error.message})`);
                 geoModalBody.innerHTML = '';
                 geoModalBody.appendChild(p);
                 console.error(`获取地理信息 ${ipAddress} 失败:`, error);
@@ -816,11 +881,11 @@
                 ctx.lineWidth = width;
                 ctx.lineCap = "round"; 
                 ctx.strokeStyle = color;
-                ctx.moveTo(0, 0);      
-                ctx.rotate(angle);     
+                ctx.moveTo(0, 0);   
+                ctx.rotate(angle);   
                 ctx.lineTo(0, -length); 
                 ctx.stroke();
-                ctx.rotate(-angle);    
+                ctx.rotate(-angle);   
             }
 
             function drawTime(ctx, radius) {
@@ -877,7 +942,7 @@
             canvas.height = window.innerHeight;
             const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
             const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const nums = '01234GHIJKLMNOPQRSTUVWXYZ0123456789';
+            const nums = '0123456789';
             const alphabet = katakana + latin + nums + '$+()*&^ MeuScript';
             const fontSize = 16;
             const columns = Math.floor(canvas.width / fontSize);
