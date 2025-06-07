@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate-key="pageTitle">系统状态</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #0F0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            text-shadow: 0 0 5px #0F0, 0 0 10px #0F0;
+            padding: 20px;
+            box-sizing: border-box;
+
+            /* --- CSS Variables for Label Column Widths --- */
+            /* Defaults (tuned for Chinese) */
+            --time-label-width: 170px;
+            --ip-label-width: 230px;
+            --latency-label-width: 360px; 
+            --modal-label-width: 120px;
+        }
+
+        body.lang-en {
+            --time-label-width: 160px; 
+            --ip-label-width: 230px;
+            --latency-label-width: 380px; 
+            --modal-label-width: 150px;
+        }
+        body.lang-ja { 
+            --time-label-width: 230px; 
+            --ip-label-width: 230px;
+            --latency-label-width: 390px; 
+            --modal-label-width: 140px;
+        }
+
+
+        .lang-switcher {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 0.9em;
+            z-index: 100;
+        }
+        .lang-switcher span {
+            cursor: pointer;
+            padding: 0 5px; 
+            text-shadow: none;
+        }
+        .lang-switcher span.active {
+            font-weight: bold;
+            text-decoration: underline;
+            color: #FFF;
+        }
+
+
+        .container {
+            border: 2px solid #0F0;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            background-color: rgba(0, 20, 0, 0.75);
+            box-shadow: 0 0 15px #0F0 inset, 0 0 20px #0F0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+        }
+
+        /* General h2 styling (for IP and Latency sections) */
+        .container > h2 { 
+            margin-top: 0;
+            font-size: 1.5em;
+            border-bottom: 1px solid #0A0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* Specifically for the "全球时间" title, as it's now in .clock-section-main-header */
+        .clock-section-main-header h2 {
+            margin-top: 0;
+            font-size: 1.5em;
+            border-bottom: 1px solid #0A0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            /* No flex needed here if it's just a title */
+        }
+
+        .container h2 .title-text {}
+        .container h2 .countdown { 
+            font-size: 0.7em;
+            color: #0A0;
+            font-weight: normal;
+        }
+        
+        .clocks-wrapper {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .digital-times {
+             /* Takes up natural space */
+        }
+        .analog-clock-area { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-left: auto;      /* Pushes the clock area to the right */
+            padding-right: 60px;     /* Creates space from the right border */
+            flex-shrink: 0; 
+        }
+
+        #analog-local-clock { 
+            border: 2px solid #0F0;
+            border-radius: 50%;       
+            background-color: #000; 
+            width: 150px; 
+            height: 150px;
+        }
+        .timezone-name-display {
+            font-size: 0.9em;
+            color: #0A0; 
+            white-space: nowrap;
+        }
+
+
+        /* --- Row Item Styling using Grid --- */
+        .clock, .info-item {
+            display: grid;
+            gap: 0 10px;
+            align-items: center;
+        }
+
+        .clock-container .clock {
+            grid-template-columns: var(--time-label-width) 1fr;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .ip-info .info-item {
+            grid-template-columns: var(--ip-label-width) 1fr; 
+        }
+        .latency-info .info-item {
+            grid-template-columns: var(--latency-label-width) 1fr;
+        }
+        #geo-modal-body .info-item {
+            grid-template-columns: var(--modal-label-width) 1fr;
+            margin-bottom: 10px;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .clock .label, .info-item .label {
+            font-weight: bold;
+            color: #0F0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #geo-modal-body .label { 
+            color: #0F0;
+            font-weight: bold;
+        }
+
+        .clock .time-display {
+            color: #7FFF00;
+            word-break: break-all;
+        }
+        .info-item .value { 
+            color: #7FFF00;
+            word-break: break-all;
+        }
+        .ip-info .info-item .value { 
+            display: inline-flex; 
+            align-items: center;  
+        }
+         #geo-modal-body .value {
+            color: #7FFF00;
+            word-break: break-all;
+        }
+
+        .info-item { 
+            font-size: 1.05em;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .geo-icon {
+            margin-left: 10px; 
+            cursor: pointer;
+            display: inline-flex; 
+            align-items: center;
+            transition: transform 0.2s ease-in-out;
+        }
+        .geo-icon svg {
+            width: 1em;
+            height: 1em;
+            fill: #0F0;
+            transition: fill 0.2s ease-in-out;
+        }
+        .geo-icon:hover svg {
+            fill: #FFF;
+        }
+        .geo-icon:hover {
+            transform: scale(1.2);
+        }
+
+        .matrix-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .loading, .error {
+            color: #FF8C00;
+            font-style: italic;
+        }
+        .success {
+            color: #7FFF00;
+            font-style: normal;
+        }
+
+        /* --- Modal Styles --- */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInModal 0.3s ease-out;
+        }
+
+        @keyframes fadeInModal {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            border: 2px solid #0F0;
+            padding: 20px 25px;
+            background-color: rgba(0, 25, 0, 0.9);
+            box-shadow: 0 0 20px #0F0 inset, 0 0 25px #0F0;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 650px;
+            position: relative;
+            animation: slideInModal 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: #0F0;
+            text-shadow: 0 0 5px #0F0;
+        }
+
+        @keyframes slideInModal {
+            from { transform: translateY(-60px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .modal-content h2 {
+            font-size: 1.6em;
+            margin-top: 0;
+            border-bottom: 1px solid #0A0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .modal-close-button {
+            color: #0F0;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            text-shadow: 0 0 8px #0F0;
+            transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .modal-close-button:hover,
+        .modal-close-button:focus {
+            color: #FFF;
+            transform: scale(1.1);
+            text-decoration: none;
+        }
+        
+        #geo-modal-body .loading,
+        #geo-modal-body .error {
+            color: #FF8C00;
+            font-style: italic;
+            padding: 10px 0;
+        }
+
+    </style>
+</head>
+<body class="lang-zh"> 
+    <div class="lang-switcher">
+        <span id="lang-zh" data-lang="zh">中</span> /
+        <span id="lang-en" data-lang="en">EN</span> /
+        <span id="lang-ja" data-lang="ja">日</span>
+    </div>
+
+    <div class="container clock-container">
+        <div class="clock-section-main-header">
+            <h2><span class="title-text" data-translate-key="globalTime">全球时间</span></h2>
+        </div>
+        <div class="clocks-wrapper">
+            <div class="digital-times">
+                <div class="clock" id="utc-time"><span class="label" data-translate-key="timeUTC">UTC:</span> <span class="time-display"></span></div>
+                <div class="clock" id="pst-time"><span class="label" data-translate-key="timePST">PST (西雅图):</span> <span class="time-display"></span></div>
+                <div class="clock" id="china-time"><span class="label" data-translate-key="timeChina">中国 (上海):</span> <span class="time-display"></span></div>
+                <div class="clock" id="germany-time"><span class="label" data-translate-key="timeGermany">德国 (柏林):</span> <span class="time-display"></span></div>
+                <div class="clock" id="japan-time"><span class="label" data-translate-key="timeJapan">日本 (东京):</span> <span class="time-display"></span></div>
+                <div class="clock" id="india-time"><span class="label" data-translate-key="timeIndia">印度 (新德里):</span> <span class="time-display"></span></div>
+            </div>
+            <div class="analog-clock-area">
+                <canvas id="analog-local-clock" width="150" height="150" data-translate-key-title="localAnalogClockTitle"></canvas>
+                 <span id="local-timezone-name" class="timezone-name-display"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container ip-info">
+        <h2><span class="title-text" data-translate-key="publicIPAddress">公网 IP 地址</span></h2>
+        <div class="info-item"> 
+            <span class="label" data-translate-key="ipIpify">IP (api.ipify.org):</span>
+            <span id="ip-ipify" class="value loading" data-translate-key-status="fetching">获取中...</span>
+        </div>
+        <div class="info-item">
+            <span class="label" data-translate-key="ipIpinfo">IP (ipinfo.io):</span>
+            <span id="ip-ipinfoio" class="value loading" data-translate-key-status="fetching">获取中...</span>
+        </div>
+        <div class="info-item">
+            <span class="label" data-translate-key="ipMyipla">IP (myip.la/json):</span>
+            <span id="ip-myipla" class="value loading" data-translate-key-status="fetching">获取中...</span>
+        </div>
+        </div>
+
+    <div class="container latency-info">
+        <h2><span class="title-text" data-translate-key="networkLatencyTest">网络延迟测试</span><span id="latency-countdown" class="countdown"></span></h2>
+        <div class="info-item">
+            <span class="label" data-translate-key="latencyUS">访问 美国 (example.com):</span>
+            <span id="latency-us" class="value loading" data-translate-key-status="testing">测试中...</span>
+        </div>
+        <div class="info-item">
+            <span class="label" data-translate-key="latencyCN">访问 中国 (baidu.com):</span>
+            <span id="latency-cn" class="value loading" data-translate-key-status="testing">测试中...</span>
+        </div>
+        <div class="info-item">
+            <span class="label" data-translate-key="latencyJP">访问 日本 (yahoo.co.jp):</span>
+            <span id="latency-jp" class="value loading" data-translate-key-status="testing">测试中...</span>
+        </div>
+        <div class="info-item">
+            <span class="label" data-translate-key="latencyAWS">访问 AWS (aws.amazon.com):</span>
+            <span id="latency-aws" class="value loading" data-translate-key-status="testing">测试中...</span>
+        </div>
+        <div class="info-item">
+            <span class="label" data-translate-key="latencyAzure">访问 Azure (azure.microsoft.com):</span>
+            <span id="latency-azure" class="value loading" data-translate-key-status="testing">测试中...</span>
+        </div>
+    </div>
+
+    <canvas class="matrix-rain" id="matrixCanvas"></canvas>
+
+    <div id="geo-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close-button">&times;</span>
+            <h2 data-translate-key="modalTitle">IP 地理位置详情</h2>
+            <div id="geo-modal-body">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Translations ---
+        const translations = {
+            pageTitle: { zh: '系统状态', en: 'System Status', ja: 'システム状態' },
+            globalTime: { zh: '全球时间', en: 'Global Time', ja: 'グローバル時間' },
+            localAnalogClockTitle: { zh: '本地时间模拟时钟', en: 'Local Analog Clock', ja: 'ローカルアナログ時計' },
+            timeUTC: { zh: 'UTC:', en: 'UTC:', ja: 'UTC:' },
+            timePST: { zh: 'PST (西雅图):', en: 'PST (SEA):', ja: 'PST (シアトル):' },
+            timeChina: { zh: '中国 (上海):', en: 'CN (SHA):', ja: '中国 (上海):' },
+            timeGermany: { zh: '德国 (柏林):', en: 'DE (BER):', ja: 'ドイツ (ベルリン):' },
+            timeJapan: { zh: '日本 (东京):', en: 'JP (HND):', ja: '日本 (東京):' },
+            timeIndia: { zh: '印度 (新德里):', en: 'IN (DEL):', ja: 'インド (ニューデリー):' },
+            publicIPAddress: { zh: '公网 IP 地址', en: 'Public IP Address', ja: 'パブリックIPアドレス' },
+            ipIpify: { zh: 'IP (api.ipify.org):', en: 'IP (api.ipify.org):', ja: 'IP (api.ipify.org):' },
+            ipIpinfo: { zh: 'IP (ipinfo.io):', en: 'IP (ipinfo.io):', ja: 'IP (ipinfo.io):' },
+            ipMyipla: { zh: 'IP (myip.la/json):', en: 'IP (myip.la/json):', ja: 'IP (myip.la/json):' },
+            // DELETED: Translation for seeip.org removed.
+            networkLatencyTest: { zh: '网络延迟测试', en: 'Network Latency Test', ja: 'ネットワーク遅延テスト' },
+            latencyUS: { zh: '访问 美国 (example.com):', en: 'Ping USA (example.com):', ja: '米国へアクセス (example.com):' },
+            latencyCN: { zh: '访问 中国 (baidu.com):', en: 'Ping China (baidu.com):', ja: '中国へアクセス (baidu.com):' },
+            latencyJP: { zh: '访问 日本 (yahoo.co.jp):', en: 'Ping Japan (yahoo.co.jp):', ja: '日本へアクセス (yahoo.co.jp):' },
+            latencyAWS: { zh: '访问 AWS (aws.amazon.com):', en: 'Ping AWS (aws.amazon.com):', ja: 'AWSへアクセス (aws.amazon.com):' },
+            latencyAzure: { zh: '访问 Azure (azure.microsoft.com):', en: 'Ping Azure (azure.microsoft.com):', ja: 'Azureへアクセス (azure.microsoft.com):' },
+            fetching: { zh: '获取中...', en: 'Fetching...', ja: '取得中...' },
+            testing: { zh: '测试中...', en: 'Testing...', ja: 'テスト中...' },
+            fetchFailed: { zh: '获取失败', en: 'Fetch failed', ja: '取得失敗' },
+            fetchTimeout: { zh: '获取超时', en: 'Fetch timeout', ja: '取得タイムアウト' },
+            fetchErrorNetwork: { zh: '获取失败 (网络/CORS)', en: 'Fetch failed (Network/CORS)', ja: '取得失敗 (ネットワーク/CORS)' },
+            pingFailed: { zh: '访问失败', en: 'Ping failed', ja: 'アクセス失敗' },
+            pingTimeout: { zh: '访问超时', en: 'Ping timeout', ja: 'アクセスエラー' },
+            pingErrorNetwork: { zh: '访问失败 (网络/CORS)', en: 'Ping failed (Network/CORS)', ja: 'アクセス失敗 (ネットワーク/CORS)' },
+            pingCannotMeasure: { zh: '无法精确测量', en: 'Cannot measure accurately', ja: '正確に測定できません' },
+            countdownNextRefresh: { zh: '下次刷新', en: 'Next refresh', ja: '次回更新' },
+            modalTitle: { zh: 'IP 地理位置详情', en: 'IP Geolocation Details', ja: 'IPジオロケーション詳細' },
+            modalQueryIP: { zh: '查询 IP:', en: 'Query IP:', ja: '照会IP:' },
+            modalCountry: { zh: '国家:', en: 'Country:', ja: '国:' },
+            modalRegion: { zh: '地区:', en: 'Region:', ja: '地域:' },
+            modalCity: { zh: '城市:', en: 'City:', ja: '都市:' },
+            modalZip: { zh: '邮编:', en: 'Zip Code:', ja: '郵便番号:' },
+            modalLatLon: { zh: '经纬度:', en: 'Coordinates:', ja: '座標:' },
+            modalTimezone: { zh: '时区:', en: 'Timezone:', ja: 'タイムゾーン:' },
+            modalISP: { zh: 'ISP:', en: 'ISP:', ja: 'ISP:' },
+            modalOrg: { zh: '组织:', en: 'Organization:', ja: '組織:' },
+            modalAS: { zh: 'AS号码:', en: 'AS Number:', ja: 'AS番号:' },
+            modalFetchingGeo: { zh: '正在查询地理位置信息...', en: 'Fetching geolocation info...', ja: 'ジオロケーション情報を取得中...' },
+            modalGeoError: { zh: '无法获取地理信息', en: 'Could not fetch geolocation', ja: 'ジオロケーション情報を取得できませんでした' },
+            modalGeoErrorUnknown: { zh: '未知API错误', en: 'Unknown API error', ja: '不明なAPIエラー' },
+            modalGeoFetchFailed: { zh: '查询地理信息失败', en: 'Failed to query geolocation', ja: 'ジオロケーション情報の照会に失敗しました' },
+            modalGeoTimeout: { zh: '查询地理信息失败 (超时)', en: 'Failed to query geolocation (timeout)', ja: 'ジオロケーション情報の照会に失敗しました (タイムアウト)' },
+            modalGeoNetworkError: { zh: '查询地理信息失败 (网络/CORS/HTTPS)', en: 'Failed to query geolocation (Network/CORS/HTTPS)', ja: 'ジオロケーション情報の照会に失敗しました (ネットワーク/CORS/HTTPS)' },
+            modalInvalidIP: { zh: '提供的 IP 地址 ({ip}) 格式无效。', en: 'Invalid IP address format ({ip}).', ja: '提供されたIPアドレス ({ip}) の形式が無効です。' },
+            geoIconTitle: { zh: '点击查询此 IP 的地理位置', en: 'Click to query geolocation for this IP', ja: 'クリックしてこのIPのジオロケーションを照会' }
+        };
+
+        let currentLanguage = localStorage.getItem('system_status_lang') || 'zh';
+
+        function translateElement(element, key, isStatus = false) {
+            if (!element) return;
+            const translationSet = translations[key];
+            if (translationSet && translationSet[currentLanguage]) {
+                element.textContent = translationSet[currentLanguage];
+            } else if (isStatus && translations[key] && translations[key]['en']) { 
+                element.textContent = translations[key]['en'];
+            } else if (translations[key] && translations[key]['zh']) {
+                 element.textContent = translations[key]['zh'];
+            }
+        }
+        
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('system_status_lang', lang);
+            if (lang === 'zh') document.documentElement.lang = 'zh-CN';
+            else if (lang === 'en') document.documentElement.lang = 'en';
+            else if (lang === 'ja') document.documentElement.lang = 'ja';
+            document.body.className = 'lang-' + lang;
+
+
+            document.querySelectorAll('[data-translate-key]').forEach(el => {
+                translateElement(el, el.dataset.translateKey);
+            });
+            
+            document.querySelectorAll('[data-translate-key-status]').forEach(el => {
+                const currentStatusKey = el.dataset.currentStatusKey; 
+                if (currentStatusKey) {
+                    setStatusText(el, currentStatusKey, el.dataset.currentErrorDetail || "");
+                }
+            });
+
+            document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-ja').classList.toggle('active', lang === 'ja');
+
+            updateLatencyCountdownDisplay(); 
+            
+            document.querySelectorAll('.geo-icon').forEach(icon => {
+                icon.title = getTranslation('geoIconTitle');
+            });
+
+            const modalTitleElement = geoModal.querySelector('h2[data-translate-key="modalTitle"]');
+            if (modalTitleElement) translateElement(modalTitleElement, 'modalTitle');
+            
+            const modalBodyFirstChild = geoModalBody.firstChild;
+            if (modalBodyFirstChild && modalBodyFirstChild.dataset && modalBodyFirstChild.dataset.currentStatusKey) {
+                setStatusText(modalBodyFirstChild, modalBodyFirstChild.dataset.currentStatusKey, modalBodyFirstChild.dataset.currentErrorDetail || "");
+            }
+
+            const analogClockCanvas = document.getElementById('analog-local-clock');
+            if (analogClockCanvas) {
+                const canvasTitleKey = analogClockCanvas.dataset.translateKeyTitle;
+                if (canvasTitleKey && translations[canvasTitleKey] && translations[canvasTitleKey][currentLanguage]) {
+                    analogClockCanvas.title = translations[canvasTitleKey][currentLanguage];
+                }
+            }
+        }
+
+
+        const ipIpifyElement = document.getElementById('ip-ipify');
+        const ipIpinfoioElement = document.getElementById('ip-ipinfoio');
+        const ipMyiplaElement = document.getElementById('ip-myipla');
+        // DELETED: Element for seeip.org removed.
+
+        const latencyUsElement = document.getElementById('latency-us');
+        const latencyCnElement = document.getElementById('latency-cn');
+        const latencyJpElement = document.getElementById('latency-jp');
+        const latencyAwsElement = document.getElementById('latency-aws');
+        const latencyAzureElement = document.getElementById('latency-azure');
+        const latencyCountdownElement = document.getElementById('latency-countdown');
+
+        const geoModal = document.getElementById('geo-modal');
+        const geoModalBody = document.getElementById('geo-modal-body');
+        const modalCloseButton = document.querySelector('.modal-close-button');
+
+        function isValidIP(ipString) {
+            if (typeof ipString !== 'string') return false;
+            const ipv4Pattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+            const ipv6Pattern = /(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))/;
+            return ipv4Pattern.test(ipString) || ipv6Pattern.test(ipString);
+        }
+        
+        function getTranslation(key, replacements = {}) {
+            let text = (translations[key] && translations[key][currentLanguage]) ? translations[key][currentLanguage] : 
+                       (translations[key] && translations[key]['en']) ? translations[key]['en'] : 
+                       `MISSING_TRANSLATION: ${key}`; 
+            for (const placeholder in replacements) {
+                text = text.replace(`{${placeholder}}`, replacements[placeholder]);
+            }
+            return text;
+        }
+
+        function setStatusText(element, statusKey, detail = "") {
+            if (!element) return;
+            element.textContent = getTranslation(statusKey) + (detail ? ` ${detail}` : "");
+            element.dataset.currentStatusKey = statusKey; 
+            element.dataset.currentErrorDetail = detail;
+        }
+
+        async function fetchIP(url, element, ipProcessor = data => data.ip, makeClickable = false) {
+            setStatusText(element, 'fetching');
+            element.className = 'value loading';
+            
+            const oldIconInside = element.querySelector('.geo-icon');
+            if (oldIconInside) oldIconInside.remove();
+
+            try {
+                const response = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(7000) });
+                if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+                const data = await response.json();
+                const ip = ipProcessor(data);
+                if (!ip) throw new Error('IP not found in response');
+                
+                element.textContent = ''; 
+                const ipTextNode = document.createTextNode(ip);
+                element.appendChild(ipTextNode); 
+                element.className = 'value success';
+                delete element.dataset.currentStatusKey; 
+                delete element.dataset.currentErrorDetail;
+
+                if (makeClickable && isValidIP(ip)) {
+                    const iconContainer = document.createElement('span');
+                    iconContainer.className = 'geo-icon';
+                    iconContainer.title = getTranslation('geoIconTitle');
+                    iconContainer.innerHTML = `<svg viewBox="0 0 24 24" style="width:1em; height:1em; vertical-align:middle;"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>`;
+                    iconContainer.addEventListener('click', (e) => {
+                        e.stopPropagation(); 
+                        showGeoInfo(ip);
+                    });
+                    element.appendChild(iconContainer); 
+                }
+
+            } catch (error) {
+                let errorKey = 'fetchFailed';
+                let errorDetail = `(${error.message.substring(0, 20)})`;
+                if (error.name === 'TimeoutError') errorKey = 'fetchTimeout';
+                else if (error.name === 'TypeError' && error.message.toLowerCase().includes('failed to fetch')) errorKey = 'fetchErrorNetwork';
+                
+                setStatusText(element, errorKey, errorDetail);
+                element.className = 'value error';
+                const iconInside = element.querySelector('.geo-icon');
+                if(iconInside) iconInside.remove();
+
+                console.warn(`获取 IP 从 ${url} 失败:`, error);
+            }
+        }
+
+        let latencyRefreshCountdownValue = 60;
+
+        async function testLatency(url, element) {
+            setStatusText(element, 'testing');
+            element.className = 'value loading';
+            const startTime = performance.now();
+            try {
+                await fetch(url, { method: 'HEAD', mode: 'no-cors', cache: 'no-store', signal: AbortSignal.timeout(10000) });
+                const endTime = performance.now();
+                const latency = endTime - startTime;
+
+                if (latency > 0 && latency < 10000) {
+                    element.textContent = `${latency.toFixed(0)} ms`;
+                    element.className = 'value success';
+                    delete element.dataset.currentStatusKey;
+                    delete element.dataset.currentErrorDetail;
+                } else {
+                    setStatusText(element, 'pingCannotMeasure');
+                    element.className = 'value error';
+                }
+            } catch (error) {
+                let errorKey = 'pingFailed';
+                let errorDetail = `(${error.name})`;
+                if (error.name === 'TimeoutError') errorKey = 'pingTimeout';
+                else if (error.message.toLowerCase().includes('failed to fetch')) errorKey = 'pingErrorNetwork';
+                
+                setStatusText(element, errorKey, errorDetail);
+                element.className = 'value error';
+                console.warn(`测试 ${url} 延迟失败:`, error);
+            }
+        }
+
+        function updateClocks() {
+            const now = new Date();
+            const dateOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            const timeOptions = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+            const setDateTime = (selector, timeZone) => {
+                const el = document.querySelector(selector + ' .time-display');
+                if (el) {
+                    try {
+                        const dateStr = now.toLocaleDateString('en-CA', { ...dateOptions, timeZone });
+                        const timeStr = now.toLocaleTimeString('en-GB', { ...timeOptions, timeZone });
+                        el.textContent = `${dateStr} ${timeStr}`;
+                    } catch (e) {
+                        el.textContent = 'Time Error';
+                        console.error("Error formatting date/time for", timeZone, e);
+                    }
+                }
+            };
+
+            setDateTime('#utc-time', 'UTC');
+            setDateTime('#pst-time', 'America/Los_Angeles');
+            setDateTime('#china-time', 'Asia/Shanghai');
+            setDateTime('#germany-time', 'Europe/Berlin');
+            setDateTime('#japan-time', 'Asia/Tokyo');
+            setDateTime('#india-time', 'Asia/Kolkata');
+        }
+
+        function showGeoModal() {
+            translateElement(geoModal.querySelector('h2[data-translate-key="modalTitle"]'), 'modalTitle');
+            geoModal.style.display = 'flex';
+        }
+
+        function hideGeoModal() {
+            geoModal.style.display = 'none';
+        }
+
+        async function fetchGeoInfo(ipAddress) {
+            let apiLang = 'en';
+            if (currentLanguage === 'zh') apiLang = 'zh-CN';
+            else if (currentLanguage === 'ja') apiLang = 'ja';
+            const geoApiUrl = `https://ip-api.com/json/${ipAddress}?lang=${apiLang}&fields=status,message,country,countryCode,regionName,city,zip,lat,lon,timezone,isp,org,as,query`;
+            
+            try {
+                const response = await fetch(geoApiUrl, { cache: 'no-store', signal: AbortSignal.timeout(8000) });
+                if (!response.ok) throw new Error(`Geo API error ${response.status}`);
+                const data = await response.json();
+
+                if (data.status === 'success') {
+                    let htmlContent = `
+                        <div class="info-item"><span class="label">${getTranslation('modalQueryIP')}</span><span class="value">${data.query || ipAddress}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalCountry')}</span><span class="value">${data.country || 'N/A'} (${data.countryCode || 'N/A'})</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalRegion')}</span><span class="value">${data.regionName || 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalCity')}</span><span class="value">${data.city || 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalZip')}</span><span class="value">${data.zip || 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalLatLon')}</span><span class="value">${data.lat !== undefined && data.lat !== null ? data.lat.toFixed(4) : 'N/A'}, ${data.lon !== undefined && data.lon !== null ? data.lon.toFixed(4) : 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalTimezone')}</span><span class="value">${data.timezone || 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalISP')}</span><span class="value">${data.isp || 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalOrg')}</span><span class="value">${data.org || 'N/A'}</span></div>
+                        <div class="info-item"><span class="label">${getTranslation('modalAS')}</span><span class="value">${data.as || 'N/A'}</span></div>
+                    `;
+                    geoModalBody.innerHTML = htmlContent;
+                } else {
+                    const p = document.createElement('p');
+                    p.className = 'error';
+                    setStatusText(p, 'modalGeoError', `: ${data.message || getTranslation('modalGeoErrorUnknown')}`);
+                    geoModalBody.innerHTML = '';
+                    geoModalBody.appendChild(p);
+                }
+            } catch (error) {
+                let errorKey = 'modalGeoFetchFailed';
+                if (error.name === 'TimeoutError') errorKey = 'modalGeoTimeout';
+                else if (error.message.toLowerCase().includes('failed to fetch')) errorKey = 'modalGeoNetworkError';
+                
+                const p = document.createElement('p');
+                p.className = 'error';
+                setStatusText(p, errorKey);
+                geoModalBody.innerHTML = '';
+                geoModalBody.appendChild(p);
+                console.error(`获取地理信息 ${ipAddress} 失败:`, error);
+            }
+        }
+
+        function showGeoInfo(ipAddress) {
+            translateElement(geoModal.querySelector('h2[data-translate-key="modalTitle"]'), 'modalTitle');
+            if (!isValidIP(ipAddress)) {
+                console.warn("Invalid IP Address:", ipAddress);
+                const p = document.createElement('p');
+                p.className = 'error';
+                p.textContent = getTranslation('modalInvalidIP', {ip: ipAddress}); 
+                geoModalBody.innerHTML = '';
+                geoModalBody.appendChild(p);
+                showGeoModal();
+                return;
+            }
+            const loadingP = document.createElement('p');
+            loadingP.className = 'loading';
+            setStatusText(loadingP, 'modalFetchingGeo');
+            geoModalBody.innerHTML = ''; 
+            geoModalBody.appendChild(loadingP);
+
+            showGeoModal();
+            fetchGeoInfo(ipAddress);
+        }
+
+        modalCloseButton.addEventListener('click', hideGeoModal);
+        geoModal.addEventListener('click', (event) => {
+            if (event.target === geoModal) hideGeoModal();
+        });
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && geoModal.style.display === 'flex') hideGeoModal();
+        });
+
+        document.getElementById('lang-zh').addEventListener('click', () => setLanguage('zh'));
+        document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+        document.getElementById('lang-ja').addEventListener('click', () => setLanguage('ja'));
+
+        function refreshAllLatencies() {
+            console.log("Refreshing latencies at " + new Date().toLocaleTimeString());
+            [latencyUsElement, latencyCnElement, latencyJpElement, latencyAwsElement, latencyAzureElement].forEach(el => {
+                setStatusText(el, 'testing');
+                el.className = 'value loading';
+            });
+
+            testLatency('https://example.com', latencyUsElement);
+            testLatency('https://www.baidu.com', latencyCnElement);
+            testLatency('https://www.yahoo.co.jp', latencyJpElement);
+            testLatency('https://aws.amazon.com', latencyAwsElement);
+            testLatency('https://azure.microsoft.com', latencyAzureElement);
+            latencyRefreshCountdownValue = 60; 
+            updateLatencyCountdownDisplay();
+        }
+
+        function updateLatencyCountdownDisplay() {
+            if (latencyCountdownElement) {
+                latencyCountdownElement.textContent = `(${getTranslation('countdownNextRefresh')}: ${latencyRefreshCountdownValue}s)`;
+            }
+            latencyRefreshCountdownValue--;
+             if (latencyRefreshCountdownValue < 0) { 
+                 latencyRefreshCountdownValue = 59;
+            }
+        }
+        
+        function setupAnalogLocalClock() {
+            const canvas = document.getElementById('analog-local-clock');
+            const timezoneNameElement = document.getElementById('local-timezone-name');
+
+            if (!canvas || !canvas.getContext || !timezoneNameElement) return; 
+
+            try {
+                const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                timezoneNameElement.textContent = timeZone;
+            } catch (e) {
+                console.error("Could not get timezone name:", e);
+                timezoneNameElement.textContent = "N/A";
+            }
+            
+            const canvasTitleKey = canvas.dataset.translateKeyTitle;
+            if (canvasTitleKey && translations[canvasTitleKey] && translations[canvasTitleKey][currentLanguage]) {
+                canvas.title = translations[canvasTitleKey][currentLanguage];
+            }
+
+
+            const ctx = canvas.getContext('2d');
+            const radius = canvas.width / 2; 
+            ctx.translate(radius, radius); 
+
+            function drawFace(ctx, radius) {
+                ctx.clearRect(-radius, -radius, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.arc(0, 0, radius * 0.03, 0, 2 * Math.PI);
+                ctx.fillStyle = '#0F0'; 
+                ctx.fill();
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i * Math.PI / 6); 
+                    const x1 = Math.sin(angle) * (radius * 0.75);
+                    const y1 = -Math.cos(angle) * (radius * 0.75);
+                    const x2 = Math.sin(angle) * (radius * 0.92);
+                    const y2 = -Math.cos(angle) * (radius * 0.92);
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(x1, y1);
+                    ctx.lineTo(x2, y2);
+                    ctx.strokeStyle = '#0F0'; 
+                    ctx.lineWidth = radius * 0.05; 
+                    ctx.stroke();
+                }
+            }
+
+            function drawHand(ctx, angle, length, width, color) {
+                ctx.beginPath();
+                ctx.lineWidth = width;
+                ctx.lineCap = "round"; 
+                ctx.strokeStyle = color;
+                ctx.moveTo(0, 0);     
+                ctx.rotate(angle);     
+                ctx.lineTo(0, -length); 
+                ctx.stroke();
+                ctx.rotate(-angle);    
+            }
+
+            function drawTime(ctx, radius) {
+                const now = new Date();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                const second = now.getSeconds();
+
+                const hourAngle = (hour % 12 + minute / 60) * Math.PI / 6; 
+                drawHand(ctx, hourAngle, radius * 0.5, radius * 0.07, '#0F0');
+                const minuteAngle = (minute + second / 60) * Math.PI / 30;
+                drawHand(ctx, minuteAngle, radius * 0.7, radius * 0.05, '#0F0');
+                const secondAngle = (second * Math.PI / 30);
+                drawHand(ctx, secondAngle, radius * 0.8, radius * 0.02, '#7FFF00'); 
+            }
+
+            function drawAnalogClock() {
+                drawFace(ctx, radius);
+                drawTime(ctx, radius);
+            }
+
+            drawAnalogClock(); 
+            setInterval(drawAnalogClock, 1000); 
+        }
+
+
+        // --- Initial Calls ---
+        document.addEventListener('DOMContentLoaded', function() {
+            setLanguage(currentLanguage); 
+
+            // DELETED: Removed seeip.org element from the initialization list.
+            [ipIpifyElement, ipIpinfoioElement, ipMyiplaElement].forEach(el => {
+                if(el) setStatusText(el, 'fetching');
+            });
+
+            fetchIP('https://api.ipify.org?format=json', ipIpifyElement, data => data.ip, true);
+            fetchIP('https://api.myip.la/json', ipMyiplaElement, data => data.ip, true);
+            fetchIP('https://ipinfo.io/json', ipIpinfoioElement, data => data.ip, true);
+            // DELETED: Call to fetch IP from seeip.org has been removed.
+
+            refreshAllLatencies(); 
+
+            setInterval(refreshAllLatencies, 60000); 
+            setInterval(updateLatencyCountdownDisplay, 1000); 
+
+            updateClocks(); 
+            setInterval(updateClocks, 1000);
+            
+            setupAnalogLocalClock(); 
+            setupRain(); 
+        });
+
+
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        let rainInterval;
+        function setupRain() {
+            if (rainInterval) clearInterval(rainInterval);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
+            const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const nums = '0123456789';
+            const alphabet = katakana + latin + nums + '$+()*&^ MeuScript';
+            const fontSize = 16;
+            const columns = Math.floor(canvas.width / fontSize);
+            const rainDrops = [];
+            for (let x = 0; x < columns; x++) {
+                rainDrops[x] = 1 + Math.floor(Math.random() * (canvas.height / fontSize + 50));
+            }
+            let frameCount = 0;
+            function drawMatrixRain() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.font = fontSize + 'px monospace';
+                for (let i = 0; i < rainDrops.length; i++) {
+                    const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                    if (rainDrops[i] * fontSize < canvas.height && Math.random() > 0.99 && frameCount % 3 === 0) {
+                        ctx.fillStyle = '#9F9';
+                        ctx.shadowBlur = 5;
+                        ctx.shadowColor = '#0F0';
+                    } else {
+                        ctx.fillStyle = '#0F0';
+                        ctx.shadowBlur = 0;
+                    }
+                    ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                    ctx.shadowBlur = 0; 
+                    if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        rainDrops[i] = 0;
+                    }
+                    rainDrops[i]++;
+                }
+                frameCount++;
+            }
+            rainInterval = setInterval(drawMatrixRain, 33);
+        }
+    </script>
+</body>
+</html>
