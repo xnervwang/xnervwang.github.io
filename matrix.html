@@ -528,14 +528,17 @@
                 translateElement(el, el.dataset.translateKey);
             });
             
+            // --- MODIFIED: Bug fix logic ---
             document.querySelectorAll('[data-translate-key-status]').forEach(el => {
-                const currentStatusKey = el.dataset.currentStatusKey;
-                const defaultStatusKey = el.dataset.translateKeyStatus;
+                // If the element has successfully displayed data, do not reset it.
+                if (el.classList.contains('success')) {
+                    return;
+                }
 
+                // Otherwise, re-translate its current status (e.g., "Fetching...", "Error", etc.)
+                const currentStatusKey = el.dataset.currentStatusKey;
                 if (currentStatusKey) {
                     setStatusText(el, currentStatusKey, el.dataset.currentErrorDetail || "");
-                } else if (defaultStatusKey) {
-                    setStatusText(el, defaultStatusKey);
                 }
             });
 
@@ -808,7 +811,6 @@
 
             function runNextTest() {
                 const currentTest = tests[currentTestIndex];
-                // The `testLatency` function will set the initial translated text
                 testLatency(currentTest.url, currentTest.element);
                 
                 currentTestIndex++;
@@ -912,12 +914,10 @@
         document.addEventListener('DOMContentLoaded', function() {
             setLanguage(currentLanguage); 
 
-            // Initialize IP fetching with translated status
             const ipElements = [ipIpifyElement, ipIpinfoioElement, ipMyiplaElement];
             ipElements.forEach(el => {
                 if(el) setStatusText(el, 'fetching');
             });
-
             fetchIP('https://api.ipify.org?format=json', ipIpifyElement, data => data.ip, true);
             fetchIP('https://api.myip.la/json', ipMyiplaElement, data => data.ip, true);
             fetchIP('https://ipinfo.io/json', ipIpinfoioElement, data => data.ip, true);
