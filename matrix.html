@@ -404,7 +404,6 @@
             ipIpify: { zh: 'IP (api.ipify.org):', en: 'IP (api.ipify.org):', ja: 'IP (api.ipify.org):' },
             ipIpinfo: { zh: 'IP (ipinfo.io):', en: 'IP (ipinfo.io):', ja: 'IP (ipinfo.io):' },
             ipMyipla: { zh: 'IP (myip.la/json):', en: 'IP (myip.la/json):', ja: 'IP (myip.la/json):' },
-            // DELETED: Translation for seeip.org removed.
             networkLatencyTest: { zh: '网络延迟测试', en: 'Network Latency Test', ja: 'ネットワーク遅延テスト' },
             latencyUS: { zh: '访问 美国 (example.com):', en: 'Ping USA (example.com):', ja: '米国へアクセス (example.com):' },
             latencyCN: { zh: '访问 中国 (baidu.com):', en: 'Ping China (baidu.com):', ja: '中国へアクセス (baidu.com):' },
@@ -507,7 +506,6 @@
         const ipIpifyElement = document.getElementById('ip-ipify');
         const ipIpinfoioElement = document.getElementById('ip-ipinfoio');
         const ipMyiplaElement = document.getElementById('ip-myipla');
-        // DELETED: Element for seeip.org removed.
 
         const latencyUsElement = document.getElementById('latency-us');
         const latencyCnElement = document.getElementById('latency-cn');
@@ -817,7 +815,7 @@
                 ctx.lineWidth = width;
                 ctx.lineCap = "round"; 
                 ctx.strokeStyle = color;
-                ctx.moveTo(0, 0);     
+                ctx.moveTo(0, 0);      
                 ctx.rotate(angle);     
                 ctx.lineTo(0, -length); 
                 ctx.stroke();
@@ -833,9 +831,11 @@
                 const hourAngle = (hour % 12 + minute / 60) * Math.PI / 6; 
                 drawHand(ctx, hourAngle, radius * 0.5, radius * 0.07, '#0F0');
                 const minuteAngle = (minute + second / 60) * Math.PI / 30;
-                drawHand(ctx, minuteAngle, radius * 0.7, radius * 0.05, '#0F0');
+                // --- MODIFICATION HERE ---
+                drawHand(ctx, minuteAngle, radius * 0.60, radius * 0.05, '#0F0'); // Was 0.7
                 const secondAngle = (second * Math.PI / 30);
-                drawHand(ctx, secondAngle, radius * 0.8, radius * 0.02, '#7FFF00'); 
+                // --- MODIFICATION HERE ---
+                drawHand(ctx, secondAngle, radius * 0.70, radius * 0.02, '#7FFF00'); // Was 0.8
             }
 
             function drawAnalogClock() {
@@ -852,7 +852,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             setLanguage(currentLanguage); 
 
-            // DELETED: Removed seeip.org element from the initialization list.
             [ipIpifyElement, ipIpinfoioElement, ipMyiplaElement].forEach(el => {
                 if(el) setStatusText(el, 'fetching');
             });
@@ -860,7 +859,6 @@
             fetchIP('https://api.ipify.org?format=json', ipIpifyElement, data => data.ip, true);
             fetchIP('https://api.myip.la/json', ipMyiplaElement, data => data.ip, true);
             fetchIP('https://ipinfo.io/json', ipIpinfoioElement, data => data.ip, true);
-            // DELETED: Call to fetch IP from seeip.org has been removed.
 
             refreshAllLatencies(); 
 
