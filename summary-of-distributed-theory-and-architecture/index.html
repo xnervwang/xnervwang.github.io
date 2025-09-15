@@ -21,12 +21,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"xnerv.wang","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="CAP理论及BASE理论  分布式系统的CAP理论  一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。 麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
+    <meta name="description" content="CAP理论及BASE理论 分布式系统的CAP理论 一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式理论及架构的一些整理">
 <meta property="og:url" content="https://xnerv.wang/summary-of-distributed-theory-and-architecture/index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
-<meta property="og:description" content="CAP理论及BASE理论  分布式系统的CAP理论  一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。 麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
+<meta property="og:description" content="CAP理论及BASE理论 分布式系统的CAP理论 一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg">
 <meta property="og:image" content="http://img.blog.csdn.net/20130508221106201">
@@ -181,7 +181,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAP%E7%90%86%E8%AE%BA%E5%8F%8ABASE%E7%90%86%E8%AE%BA"><span class="nav-text">CAP理论及BASE理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84CAP%E7%90%86%E8%AE%BA"><span class="nav-text">分布式系统的CAP理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84BASE%E7%90%86%E8%AE%BA"><span class="nav-text">分布式系统的BASE理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E3%80%81%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE%E3%80%81%E4%B8%89%E9%98%B6%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE"><span class="nav-text">关于分布式事务、两阶段提交协议、三阶提交协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%842PC%E5%92%8C3PC"><span class="nav-text">深入理解分布式系统的2PC和3PC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XA%E4%BA%8B%E5%8A%A1"><span class="nav-text">XA事务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98"><span class="nav-text">拜占庭将军问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="nav-text">开源分布式系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HBase"><span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%85%A8%E7%90%83%E7%BA%A7%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93Google-Spanner"><span class="nav-text">解析全球级分布式数据库Google Spanner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OceanBase"><span class="nav-text">OceanBase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TFS%EF%BC%88Taobao-FileSystem%EF%BC%89"><span class="nav-text">TFS（Taobao !FileSystem）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tair"><span class="nav-text">Tair</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tair%E7%9A%84%E6%80%BB%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-text">tair的总体结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tair%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="nav-text">tair的负载均衡算法</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CAP%E7%90%86%E8%AE%BA%E5%8F%8ABASE%E7%90%86%E8%AE%BA"><span class="nav-text">CAP理论及BASE理论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84CAP%E7%90%86%E8%AE%BA"><span class="nav-text">分布式系统的CAP理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%84BASE%E7%90%86%E8%AE%BA"><span class="nav-text">分布式系统的BASE理论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E3%80%81%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE%E3%80%81%E4%B8%89%E9%98%B6%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE"><span class="nav-text">关于分布式事务、两阶段提交协议、三阶提交协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E7%9A%842PC%E5%92%8C3PC"><span class="nav-text">深入理解分布式系统的2PC和3PC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#XA%E4%BA%8B%E5%8A%A1"><span class="nav-text">XA事务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98"><span class="nav-text">拜占庭将军问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="nav-text">开源分布式系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E6%9E%90%E5%85%A8%E7%90%83%E7%BA%A7%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93Google-Spanner"><span class="nav-text">解析全球级分布式数据库Google Spanner</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OceanBase"><span class="nav-text">OceanBase</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TFS%EF%BC%88Taobao-FileSystem%EF%BC%89"><span class="nav-text">TFS（Taobao !FileSystem）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tair"><span class="nav-text">Tair</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tair%E7%9A%84%E6%80%BB%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-text">tair的总体结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tair%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AE%97%E6%B3%95"><span class="nav-text">tair的负载均衡算法</span></a></li></ol></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -190,7 +190,7 @@
     <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
       src="/portraits/nerv.png">
   <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
-  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。</div>
+  <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -243,7 +243,7 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="XNERV SURVEYS">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。">
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -284,75 +284,46 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="CAP理论及BASE理论"><a class="header-anchor" href="#CAP理论及BASE理论"></a>CAP理论及BASE理论</h2>
-<p><img src="http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg" alt="分布式系统的CAP理论"></p>
-<h3 id="分布式系统的CAP理论"><a class="header-anchor" href="#分布式系统的CAP理论"></a><a href="http://www.hollischuang.com/archives/666">分布式系统的CAP理论</a></h3>
-<blockquote>
-<p>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。<br>
-<a href="http://www.glassbeam.com/sites/all/themes/glassbeam/images/blog/10.1.1.67.6951.pdf">麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP</a></p>
+    <div class="post-body" itemprop="articleBody"><h2 id="CAP理论及BASE理论"><a href="#CAP理论及BASE理论" class="headerlink" title="CAP理论及BASE理论"></a>CAP理论及BASE理论</h2><p><img src="http://www.hollischuang.com/wp-content/uploads/2015/12/cap.jpg" alt="分布式系统的CAP理论"></p>
+<h3 id="分布式系统的CAP理论"><a href="#分布式系统的CAP理论" class="headerlink" title="分布式系统的CAP理论"></a><a href="http://www.hollischuang.com/archives/666">分布式系统的CAP理论</a></h3><blockquote>
+<p>一个分布式系统最多只能同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition tolerance）这三项中的两项。<br><a href="http://www.glassbeam.com/sites/all/themes/glassbeam/images/blog/10.1.1.67.6951.pdf">麻省理工学院的Seth Gilbert和Nancy Lynch从理论上证明了CAP</a></p>
 </blockquote>
 <span id="more"></span>
-<h3 id="分布式系统的BASE理论"><a class="header-anchor" href="#分布式系统的BASE理论"></a><a href="http://www.hollischuang.com/archives/672">分布式系统的BASE理论</a></h3>
-<blockquote>
+
+<h3 id="分布式系统的BASE理论"><a href="#分布式系统的BASE理论" class="headerlink" title="分布式系统的BASE理论"></a><a href="http://www.hollischuang.com/archives/672">分布式系统的BASE理论</a></h3><blockquote>
 <p>eBay的架构师Dan Pritchett源于对大规模分布式系统的实践总结，在ACM上发表文章提出BASE理论，BASE理论是对CAP理论的延伸，核心思想是即使无法做到强一致性（Strong Consistency，CAP的一致性就是强一致性），但应用可以采用适合的方式达到最终一致性（Eventual Consitency）。</p>
 <blockquote>
 <p>BASE是指基本可用（Basically Available）、软状态（ Soft State）、最终一致性（ Eventual Consistency）。</p>
 <ul>
-<li>基本可用（Basically Available）<br>
-基本可用是指分布式系统在出现故障的时候，允许损失部分可用性，即保证核心可用。<br>
-电商大促时，为了应对访问量激增，部分用户可能会被引导到降级页面，服务层也可能只提供降级服务。这就是损失部分可用性的体现。</li>
-<li>软状态（ Soft State）<br>
-软状态是指允许系统存在中间状态，而该中间状态不会影响系统整体可用性。分布式存储中一般一份数据至少会有三个副本，允许不同节点间副本同步的延时就是软状态的体现。mysql replication的异步复制也是一种体现。</li>
-<li>最终一致性（ Eventual Consistency）<br>
-最终一致性是指系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。弱一致性和强一致性相反，最终一致性是弱一致性的一种特殊情况。</li>
+<li>基本可用（Basically Available）<br>基本可用是指分布式系统在出现故障的时候，允许损失部分可用性，即保证核心可用。<br>电商大促时，为了应对访问量激增，部分用户可能会被引导到降级页面，服务层也可能只提供降级服务。这就是损失部分可用性的体现。</li>
+<li>软状态（ Soft State）<br>软状态是指允许系统存在中间状态，而该中间状态不会影响系统整体可用性。分布式存储中一般一份数据至少会有三个副本，允许不同节点间副本同步的延时就是软状态的体现。mysql replication的异步复制也是一种体现。</li>
+<li>最终一致性（ Eventual Consistency）<br>最终一致性是指系统中的所有数据副本经过一定时间后，最终能够达到一致的状态。弱一致性和强一致性相反，最终一致性是弱一致性的一种特殊情况。</li>
 </ul>
 </blockquote>
 </blockquote>
-<p>两阶段提交主要保证了分布式事务的原子性：即所有结点要么全做要么全不做。<br>
-一个协调者，多个参与者。协调者收集参与者的投票，全通过就commit，否则abort。<br>
-将提交分成两阶段进行的目的很明确，就是尽可能晚地提交事务，让事务在提交前尽可能地完成所有能完成的工作，这样，最后的提交阶段将是一个耗时极短的微小操作，这种操作在一个分布式系统中失败的概率是非常小的，也就是所谓的“网络通讯危险期”非常的短暂，这是两阶段提交确保分布式事务原子性的关键所在。（唯一理论上两阶段提交出现问题的情况是当协调者发出提交指令后当机并出现磁盘故障等永久性错误，导致事务不可追踪和恢复）。<br>
-（注意，二阶段提交相对的就是一阶段提交，就是普通的本地事务模式）</p>
-<h3 id="关于分布式事务、两阶段提交协议、三阶提交协议"><a class="header-anchor" href="#关于分布式事务、两阶段提交协议、三阶提交协议"></a><a href="http://www.hollischuang.com/archives/681">关于分布式事务、两阶段提交协议、三阶提交协议</a></h3>
-<blockquote>
-<p>无论是二阶段提交还是三阶段提交都无法彻底解决分布式的一致性问题。Google Chubby的作者Mike Burrows说过， there is only one consensus protocol, and that’s Paxos” – all other approaches are just broken versions of Paxos. 意即世上只有一种一致性算法，那就是Paxos，所有其他一致性算法都是Paxos算法的不完整版。<br>
-3PC在2PC的基础上，加上了第一个CanCommit阶段。在第三个doCommit阶段，如果超时会自动commit，其它阶段超时会自动rollback。</p>
+<p>两阶段提交主要保证了分布式事务的原子性：即所有结点要么全做要么全不做。<br>一个协调者，多个参与者。协调者收集参与者的投票，全通过就commit，否则abort。<br>将提交分成两阶段进行的目的很明确，就是尽可能晚地提交事务，让事务在提交前尽可能地完成所有能完成的工作，这样，最后的提交阶段将是一个耗时极短的微小操作，这种操作在一个分布式系统中失败的概率是非常小的，也就是所谓的“网络通讯危险期”非常的短暂，这是两阶段提交确保分布式事务原子性的关键所在。（唯一理论上两阶段提交出现问题的情况是当协调者发出提交指令后当机并出现磁盘故障等永久性错误，导致事务不可追踪和恢复）。<br>（注意，二阶段提交相对的就是一阶段提交，就是普通的本地事务模式）</p>
+<h3 id="关于分布式事务、两阶段提交协议、三阶提交协议"><a href="#关于分布式事务、两阶段提交协议、三阶提交协议" class="headerlink" title="关于分布式事务、两阶段提交协议、三阶提交协议"></a><a href="http://www.hollischuang.com/archives/681">关于分布式事务、两阶段提交协议、三阶提交协议</a></h3><blockquote>
+<p>无论是二阶段提交还是三阶段提交都无法彻底解决分布式的一致性问题。Google Chubby的作者Mike Burrows说过， there is only one consensus protocol, and that’s Paxos” – all other approaches are just broken versions of Paxos. 意即世上只有一种一致性算法，那就是Paxos，所有其他一致性算法都是Paxos算法的不完整版。<br>3PC在2PC的基础上，加上了第一个CanCommit阶段。在第三个doCommit阶段，如果超时会自动commit，其它阶段超时会自动rollback。</p>
 </blockquote>
-<h4 id="深入理解分布式系统的2PC和3PC"><a class="header-anchor" href="#深入理解分布式系统的2PC和3PC"></a><a href="http://www.hollischuang.com/archives/1580">深入理解分布式系统的2PC和3PC</a></h4>
-<blockquote>
-<p>2PC协议中，如果出现协调者和参与者都挂了的情况，有可能导致数据不一致。（这个应该指的是一个参加者节点在一段很短的时间内处于数据不一致状态，这也是不允许的，即使之后能够逐步恢复）<br>
-简单概括一下就是，如果挂掉的那台机器已经执行了commit，那么协调者可以从所有未挂掉的参与者的状态中分析出来，并执行commit。如果挂掉的那个参与者执行了rollback，那么协调者和其他的参与者执行的肯定也是rollback操作。<br>
-所以，再多引入一个阶段之后，3PC解决了2PC中存在的那种由于协调者和参与者同时挂掉有可能导致的数据一致性问题。<br>
-3PC存在的问题<br>
-在doCommit阶段，如果参与者无法及时接收到来自协调者的doCommit或者rebort请求时，会在等待超时之后，会继续进行事务的提交。<br>
-所以，由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。</p>
+<h4 id="深入理解分布式系统的2PC和3PC"><a href="#深入理解分布式系统的2PC和3PC" class="headerlink" title="深入理解分布式系统的2PC和3PC"></a><a href="http://www.hollischuang.com/archives/1580">深入理解分布式系统的2PC和3PC</a></h4><blockquote>
+<p>2PC协议中，如果出现协调者和参与者都挂了的情况，有可能导致数据不一致。（这个应该指的是一个参加者节点在一段很短的时间内处于数据不一致状态，这也是不允许的，即使之后能够逐步恢复）<br>简单概括一下就是，如果挂掉的那台机器已经执行了commit，那么协调者可以从所有未挂掉的参与者的状态中分析出来，并执行commit。如果挂掉的那个参与者执行了rollback，那么协调者和其他的参与者执行的肯定也是rollback操作。<br>所以，再多引入一个阶段之后，3PC解决了2PC中存在的那种由于协调者和参与者同时挂掉有可能导致的数据一致性问题。<br>3PC存在的问题<br>在doCommit阶段，如果参与者无法及时接收到来自协调者的doCommit或者rebort请求时，会在等待超时之后，会继续进行事务的提交。<br>所以，由于网络原因，协调者发送的abort响应没有及时被参与者接收到，那么参与者在等待超时之后执行了commit操作。这样就和其他接到abort命令并执行回滚的参与者之间存在数据不一致的情况。</p>
 </blockquote>
-<h4 id="XA事务"><a class="header-anchor" href="#XA事务"></a>XA事务</h4>
-<p>MySQL的XA事务，估计就是对XA事务的支持。这样如果有一个XA事务管理器，就可以在MySQL和其它支持XA事务的数据库如SQL Server之间，进行分布式事务处理了。</p>
+<h4 id="XA事务"><a href="#XA事务" class="headerlink" title="XA事务"></a>XA事务</h4><p>MySQL的XA事务，估计就是对XA事务的支持。这样如果有一个XA事务管理器，就可以在MySQL和其它支持XA事务的数据库如SQL Server之间，进行分布式事务处理了。</p>
 <blockquote>
-<p>X/Open 组织（即现在的 Open Group ）定义了分布式事务处理模型。 X/Open DTP 模型（ 1994 ）包括应用程序（ AP ）、事务管理器（ TM ）、资源管理器（ RM ）、通信资源管理器（ CRM ）四部分。一般，常见的事务管理器（ TM ）是交易中间件，常见的资源管理器（ RM ）是数据库，常见的通信资源管理器（ CRM ）是消息中间件。    通常把一个数据库内部的事务处理，如对多个表的操作，作为本地事务看待。数据库的事务处理对象是本地事务，而分布式事务处理的对象是全局事务。<br>
-XA 就是 X/Open DTP 定义的交易中间件与数据库之间的接口规范（即接口函数），交易中间件用它来通知数据库事务的开始、结束以及提交、回滚等。 XA 接口函数由数据库厂商提供。</p>
+<p>X&#x2F;Open 组织（即现在的 Open Group ）定义了分布式事务处理模型。 X&#x2F;Open DTP 模型（ 1994 ）包括应用程序（ AP ）、事务管理器（ TM ）、资源管理器（ RM ）、通信资源管理器（ CRM ）四部分。一般，常见的事务管理器（ TM ）是交易中间件，常见的资源管理器（ RM ）是数据库，常见的通信资源管理器（ CRM ）是消息中间件。    通常把一个数据库内部的事务处理，如对多个表的操作，作为本地事务看待。数据库的事务处理对象是本地事务，而分布式事务处理的对象是全局事务。<br>XA 就是 X&#x2F;Open DTP 定义的交易中间件与数据库之间的接口规范（即接口函数），交易中间件用它来通知数据库事务的开始、结束以及提交、回滚等。 XA 接口函数由数据库厂商提供。</p>
 </blockquote>
-<h2 id="拜占庭将军问题"><a class="header-anchor" href="#拜占庭将军问题"></a><a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98">拜占庭将军问题</a></h2>
-<p>拜占庭将军问题（Byzantine Generals Problem），是由莱斯利兰伯特提出的点对点通信中的基本问题。 在分布式计算上，不同的计算机透过讯息交换，尝试达成共识；但有时候，系统上协调计算机（Coordinator / Commander）或成员计算机 （Member / Lieutanent）可能因系统错误并交换错的讯息，导致影响最终的系统一致性。拜占庭将军问题就根据错误计算机的数量，寻找可能的解决办法 ，这无法找到一个绝对的答案，但只可以用来验证一个机制的有效程度）。</p>
-<h2 id="开源分布式系统"><a class="header-anchor" href="#开源分布式系统"></a>开源分布式系统</h2>
-<h3 id="HBase"><a class="header-anchor" href="#HBase"></a><img src="http://img.blog.csdn.net/20130508221106201" alt="HBase"></h3>
-<p>HBase可以看作对应Google BigTable的开源实现。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。</p>
-<h3 id="解析全球级分布式数据库Google-Spanner"><a class="header-anchor" href="#解析全球级分布式数据库Google-Spanner"></a><a href="http://www.csdn.net/article/2012-09-19/2810132-google-spanner-next-database-datacenter">解析全球级分布式数据库Google Spanner</a></h3>
-<h3 id="OceanBase"><a class="header-anchor" href="#OceanBase"></a><a href="http://blog.csdn.net/expleeve/article/details/8484213">OceanBase</a></h3>
-<p><img src="http://img.my.csdn.net/uploads/201301/09/1357697101_4690.jpg" alt="OceanBase"></p>
+<h2 id="拜占庭将军问题"><a href="#拜占庭将军问题" class="headerlink" title="拜占庭将军问题"></a><a href="https://zh.wikipedia.org/wiki/%E6%8B%9C%E5%8D%A0%E5%BA%AD%E5%B0%86%E5%86%9B%E9%97%AE%E9%A2%98">拜占庭将军问题</a></h2><p>拜占庭将军问题（Byzantine Generals Problem），是由莱斯利兰伯特提出的点对点通信中的基本问题。 在分布式计算上，不同的计算机透过讯息交换，尝试达成共识；但有时候，系统上协调计算机（Coordinator &#x2F; Commander）或成员计算机 （Member &#x2F; Lieutanent）可能因系统错误并交换错的讯息，导致影响最终的系统一致性。拜占庭将军问题就根据错误计算机的数量，寻找可能的解决办法 ，这无法找到一个绝对的答案，但只可以用来验证一个机制的有效程度）。</p>
+<h2 id="开源分布式系统"><a href="#开源分布式系统" class="headerlink" title="开源分布式系统"></a>开源分布式系统</h2><h3 id=""><a href="#" class="headerlink" title=""></a><img src="http://img.blog.csdn.net/20130508221106201" alt="HBase"></h3><p>HBase可以看作对应Google BigTable的开源实现。HBase不同于一般的关系数据库，它是一个适合于非结构化数据存储的数据库。另一个不同的是HBase基于列的而不是基于行的模式。</p>
+<h3 id="解析全球级分布式数据库Google-Spanner"><a href="#解析全球级分布式数据库Google-Spanner" class="headerlink" title="解析全球级分布式数据库Google Spanner"></a><a href="http://www.csdn.net/article/2012-09-19/2810132-google-spanner-next-database-datacenter">解析全球级分布式数据库Google Spanner</a></h3><h3 id="OceanBase"><a href="#OceanBase" class="headerlink" title="OceanBase"></a><a href="http://blog.csdn.net/expleeve/article/details/8484213">OceanBase</a></h3><p><img src="http://img.my.csdn.net/uploads/201301/09/1357697101_4690.jpg" alt="OceanBase"></p>
 <p>一个高性能的分布式表格系统，提供类似BigTable的性能和扩展性，但表格中保存的是强类型的数据，比如integer, string， datetime等。 它使用C++编写，运行于64位Linux环境下。生产环境下需要使用多台机器搭建OceanBase集群以提供高可用和高性能，但是你也完全可以使用一台机器运行OceanBase。</p>
-<h3 id="TFS（Taobao-FileSystem）"><a class="header-anchor" href="#TFS（Taobao-FileSystem）"></a><a href="http://code.taobao.org/p/tfs/wiki/intro/">TFS（Taobao !FileSystem）</a></h3>
-<p>淘宝针对海量非结构化数据存储设计的分布式系统，构筑在普通的Linux机器集群上，可为外部提供高可靠和高并发的存储访问。高可扩展、高可用、高性能、面向互联网服务。</p>
-<h3 id="Tair"><a class="header-anchor" href="#Tair"></a><a href="http://tair.taobao.org/">Tair</a></h3>
-<blockquote>
-<p>Tair是一个高性能，分布式，可扩展，高可靠的key/value结构存储系统。</p>
+<h3 id="TFS（Taobao-FileSystem）"><a href="#TFS（Taobao-FileSystem）" class="headerlink" title="TFS（Taobao !FileSystem）"></a><a href="http://code.taobao.org/p/tfs/wiki/intro/">TFS（Taobao !FileSystem）</a></h3><p>淘宝针对海量非结构化数据存储设计的分布式系统，构筑在普通的Linux机器集群上，可为外部提供高可靠和高并发的存储访问。高可扩展、高可用、高性能、面向互联网服务。</p>
+<h3 id="Tair"><a href="#Tair" class="headerlink" title="Tair"></a><a href="http://tair.taobao.org/">Tair</a></h3><blockquote>
+<p>Tair是一个高性能，分布式，可扩展，高可靠的key&#x2F;value结构存储系统。</p>
 </blockquote>
-<h4 id="tair的总体结构"><a class="header-anchor" href="#tair的总体结构"></a>tair的总体结构</h4>
-<blockquote>
+<h4 id="tair的总体结构"><a href="#tair的总体结构" class="headerlink" title="tair的总体结构"></a>tair的总体结构</h4><blockquote>
 <p><img src="https://www.lvtao.net/content/uploadfile/201312/3bdf79391dc2ddf5c52a67d08d87ad3720131225075456.jpg" alt="tair的总体结构"></p>
 </blockquote>
-<h4 id="tair的负载均衡算法"><a class="header-anchor" href="#tair的负载均衡算法"></a>tair的负载均衡算法</h4>
-<p><img src="https://www.lvtao.net/content/uploadfile/201312/2a4ba3d47c43013ec31257aee3be666d20131225075456.jpg" alt="tair的负载均衡算法"></p>
+<h4 id="tair的负载均衡算法"><a href="#tair的负载均衡算法" class="headerlink" title="tair的负载均衡算法"></a>tair的负载均衡算法</h4><p><img src="https://www.lvtao.net/content/uploadfile/201312/2a4ba3d47c43013ec31257aee3be666d20131225075456.jpg" alt="tair的负载均衡算法"></p>
 <blockquote>
 <p>tair的分布采用的是一致性哈希算法，对于所有的key，分到Q个桶中，桶是负载均衡和数据迁移的基本单位。config server 根据一定的策略把每个桶指派到不同的data server上。因为数据按照key做hash算法，所以可以认为每个桶中的数据基本是平衡的。保证了桶分布的均衡性，就保证了数据分布的均衡性。</p>
 </blockquote>
@@ -401,6 +372,24 @@ XA 就是 X/Open DTP 定义的交易中间件与数据库之间的接口规范�
 
   <footer class="footer">
     <div class="footer-inner">
+  <div class="languages">
+    <label class="lang-select-label">
+      <i class="fa fa-language"></i>
+      <span>简体中文</span>
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </label>
+    <select class="lang-select" data-canonical="" aria-label="选择语言">
+      
+        <option value="zh-CN" data-href="/summary-of-distributed-theory-and-architecture/" selected="">
+          简体中文
+        </option>
+      
+        <option value="en" data-href="/en/summary-of-distributed-theory-and-architecture/" selected="">
+          English
+        </option>
+      
+    </select>
+  </div>
 
   <div class="copyright">
     &copy; 2008 – 

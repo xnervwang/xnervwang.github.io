@@ -32,11 +32,11 @@
 <meta property="article:modified_time" content="2025-03-31T01:07:37.612Z">
 <meta property="article:author" content="Xnerv Wang (xnervwang)">
 <meta property="article:tag" content="原创">
+<meta property="article:tag" content="Windows">
 <meta property="article:tag" content="分布式及存储">
 <meta property="article:tag" content="Seafile">
 <meta property="article:tag" content="MinGW">
 <meta property="article:tag" content="Docker">
-<meta property="article:tag" content="Windows">
 <meta name="twitter:card" content="summary">
 
 
@@ -185,7 +185,7 @@
     <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
       src="/portraits/nerv.png">
   <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
-  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。</div>
+  <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -238,7 +238,7 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="XNERV SURVEYS">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。">
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -279,34 +279,27 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>Seafile是国内少有的做的还不错的开源产品之一。相信很多朋友都经历过几年前的各大云盘厂商大战然后纷纷衰落的这个过程。金山快盘应该是我用过的个人觉得最好的一款云盘了，和Windows GUI的集成也非常完美。可惜现如今各大云盘不是停止运营了就是今非昔比了。因此与其每天提心吊胆地担心自己宝贵的“资源”是不是会被某度网盘封杀，作为码农的我们何不自己动手来搭建一个私有云盘。Seafile的UI是基于Qt，考虑到可移植性和跨平台兼容性，虽然不能像金山快盘那样拥有一些Windows上的特效，例如在托盘上查看当前在上传/下载哪些文件，以及上传/下载的进度。但优势是多平台，在Linux、安卓，iOS上都有相应的客户端。</p>
+    <div class="post-body" itemprop="articleBody"><p>Seafile是国内少有的做的还不错的开源产品之一。相信很多朋友都经历过几年前的各大云盘厂商大战然后纷纷衰落的这个过程。金山快盘应该是我用过的个人觉得最好的一款云盘了，和Windows GUI的集成也非常完美。可惜现如今各大云盘不是停止运营了就是今非昔比了。因此与其每天提心吊胆地担心自己宝贵的“资源”是不是会被某度网盘封杀，作为码农的我们何不自己动手来搭建一个私有云盘。Seafile的UI是基于Qt，考虑到可移植性和跨平台兼容性，虽然不能像金山快盘那样拥有一些Windows上的特效，例如在托盘上查看当前在上传&#x2F;下载哪些文件，以及上传&#x2F;下载的进度。但优势是多平台，在Linux、安卓，iOS上都有相应的客户端。</p>
 <p>Seafile官网只提供了Linux版本客户端的编译方法，并没有提供Windows版本的步骤。搜索了官方论坛，虽然有不少人提问问过，但是官方并没有给出回答。只能说国内的开源的文档还需要进一步完善，遮遮掩掩不算是真正的开源。<a href="http://www.ilovecpp.com/2018/06/25/seafile-compile/">搭建seafile windows客户端的交叉编译环境</a>这篇文章给出了一种基于MinGW在Fedora上交叉编译Windows版本Seafile的方法。我曾尝试过在Ubuntu 18.04上重复这个步骤，但是因为一些packages的原因没能成功。不同的Linux发行版之间的package有一些区别。我也曾尝试过在Windows上的MinGW上交叉编译，但有一些packages死活找不到在Windows MinGW上对应的版本，而且编译时也有一些错误（Windows上的MinGW好像是跑在Cygwin上面的，也就是说Cygwin上的packages可能不全或者跟Fedora上有一些不同）。最终由于时间关系，我放弃了去弄清楚其中的原因，而是采用在Ubuntu上用docker安装Fedora镜像这种类似作弊的方法来重现这篇文章中的步骤。</p>
 <span id="more"></span>
-<p>基于<a href="http://www.ilovecpp.com/2018/06/25/seafile-compile/">搭建seafile windows客户端的交叉编译环境</a>这篇文章，我写了一些脚本来自动化整个编译流程以及打包流程，这些脚本我都放到了GitHub上：<a href="https://github.com/xnervwang/SeafileClientBuildTools">xnervwang/SeafileClientBuildTools</a>。脚本分成两种，一种是在Host环境（例如我的Ubuntu）上执行的，一种是在docker实例中执行的。先介绍一下各个脚本的作用：</p>
+
+<p>基于<a href="http://www.ilovecpp.com/2018/06/25/seafile-compile/">搭建seafile windows客户端的交叉编译环境</a>这篇文章，我写了一些脚本来自动化整个编译流程以及打包流程，这些脚本我都放到了GitHub上：<a href="https://github.com/xnervwang/SeafileClientBuildTools">xnervwang&#x2F;SeafileClientBuildTools</a>。脚本分成两种，一种是在Host环境（例如我的Ubuntu）上执行的，一种是在docker实例中执行的。先介绍一下各个脚本的作用：</p>
 <ul>
-<li>
-<p><code>InitDockerVerification.sh</code>：这个脚本是在Host环境中执行的。会根据<code>Dockerfile</code>创建相应的Fedora docker image，并且在当前的Host目录创建三个文件夹：build, ms-build, ms-build64，分别用于存放编译出来的Linux版本的Seafile客户端，32位Windows客户端，64位Windows客户端。build, ms-build, ms-build64这三个目录会通过docker volume映射到docker实例内，从而便于docker实例和Host共享目录。</p>
+<li><p><code>InitDockerVerification.sh</code>：这个脚本是在Host环境中执行的。会根据<code>Dockerfile</code>创建相应的Fedora docker image，并且在当前的Host目录创建三个文件夹：build, ms-build, ms-build64，分别用于存放编译出来的Linux版本的Seafile客户端，32位Windows客户端，64位Windows客户端。build, ms-build, ms-build64这三个目录会通过docker volume映射到docker实例内，从而便于docker实例和Host共享目录。</p>
 </li>
-<li>
-<p><code>Dockerfile</code>：<code>InitDockerVerification.sh</code>在创建docker image时会使用该文件。这个<code>Dockerfile</code>指定docker镜像在创建时，会git clone我的git repo <a href="https://github.com/xnervwang/SeafileClientBuildTools">xnervwang/SeafileClientBuildTools</a>，然后运行其中的<code>InstallDevPackagesFedora.sh</code>安装编译所需要的一些packages。然后基于该docker镜像创建的docker实例会自动执行<code>DockerEntry.sh</code>。</p>
+<li><p><code>Dockerfile</code>：<code>InitDockerVerification.sh</code>在创建docker image时会使用该文件。这个<code>Dockerfile</code>指定docker镜像在创建时，会git clone我的git repo <a href="https://github.com/xnervwang/SeafileClientBuildTools">xnervwang&#x2F;SeafileClientBuildTools</a>，然后运行其中的<code>InstallDevPackagesFedora.sh</code>安装编译所需要的一些packages。然后基于该docker镜像创建的docker实例会自动执行<code>DockerEntry.sh</code>。</p>
 </li>
-<li>
-<p><code>RunDockerVerification.sh</code>：创建docker实例并启动。</p>
+<li><p><code>RunDockerVerification.sh</code>：创建docker实例并启动。</p>
 </li>
-<li>
-<p><code>DockerEntry.sh</code>：这个脚本被docker实例在启动时执行，会先更新本地的git repo，然后执行<code>OneKey.sh</code>。<code>OneKey.sh</code>会编译Linux版本的Seafile客户端，32位Windows客户端，64位Windows客户端。然后调用<code>ResolveDllDeps.py</code>这个脚本分别对三种客户端进行打包，打包后的产物分别位于build, ms-build, ms-build64这三个目录内。</p>
+<li><p><code>DockerEntry.sh</code>：这个脚本被docker实例在启动时执行，会先更新本地的git repo，然后执行<code>OneKey.sh</code>。<code>OneKey.sh</code>会编译Linux版本的Seafile客户端，32位Windows客户端，64位Windows客户端。然后调用<code>ResolveDllDeps.py</code>这个脚本分别对三种客户端进行打包，打包后的产物分别位于build, ms-build, ms-build64这三个目录内。</p>
 </li>
-<li>
-<p><code>ResolveDllDeps.py</code>：这是我写的一个比较有意思的脚本。可以自动递归分析binary所依赖的所有.so动态链接库文件，然后将这些.so文件都复制到打包目录中，从而便于发布。需要注意的是编译出来的Seafile客户端还依赖于qt5/plugins/imageformats和qt5/plugins/platforms这两个插件目录，但是我的这个脚本却无法从Seafile客户端的可执行文件推导出这样的依赖关系。我推测可能这两个插件目录中的插件是通过dlopen的方式动态加载的，因此不能通过静态分析获得依赖关系。所以我将这连个目录中的.so也加入到了第一级的binary列表中。</p>
+<li><p><code>ResolveDllDeps.py</code>：这是我写的一个比较有意思的脚本。可以自动递归分析binary所依赖的所有.so动态链接库文件，然后将这些.so文件都复制到打包目录中，从而便于发布。需要注意的是编译出来的Seafile客户端还依赖于qt5&#x2F;plugins&#x2F;imageformats和qt5&#x2F;plugins&#x2F;platforms这两个插件目录，但是我的这个脚本却无法从Seafile客户端的可执行文件推导出这样的依赖关系。我推测可能这两个插件目录中的插件是通过dlopen的方式动态加载的，因此不能通过静态分析获得依赖关系。所以我将这连个目录中的.so也加入到了第一级的binary列表中。</p>
 </li>
-<li>
-<p><code>Makefile</code>：这个是在docker实例中，在<code>DockerEntry.sh</code>执行编译时所使用的的Makefile。</p>
+<li><p><code>Makefile</code>：这个是在docker实例中，在<code>DockerEntry.sh</code>执行编译时所使用的的Makefile。</p>
 </li>
-<li>
-<p><code>Toolchain-cross-linux.i686.cmake/Toolchain-cross-linux.x86_64.cmake</code>：MinGW编译工具所使用的配置文件，分别用于32位/64位Windows客户端。</p>
+<li><p><code>Toolchain-cross-linux.i686.cmake/Toolchain-cross-linux.x86_64.cmake</code>：MinGW编译工具所使用的配置文件，分别用于32位&#x2F;64位Windows客户端。</p>
 </li>
-<li>
-<p><code>DropDockerVerification.sh</code>：删除docker实例和相关的生成目录。</p>
+<li><p><code>DropDockerVerification.sh</code>：删除docker实例和相关的生成目录。</p>
 </li>
 </ul>
 <p>因此，基本的使用方法就是，首先基于<a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">docker官方文档</a>安装docker环境，然后git clone我的git repo，然后先执行<code>InitDockerVerification.sh</code>环境，然后以后就可以每次通过执行<code>RunDockerVerification.sh</code>来获取编译后的客户端，分别位于Host机器的build, ms-build, ms-build64这三个目录内。</p>
@@ -322,11 +315,11 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/%E5%8E%9F%E5%88%9B/" rel="tag"># 原创</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
               <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%8F%8A%E5%AD%98%E5%82%A8/" rel="tag"># 分布式及存储</a>
               <a href="/tags/Seafile/" rel="tag"># Seafile</a>
               <a href="/tags/MinGW/" rel="tag"># MinGW</a>
               <a href="/tags/Docker/" rel="tag"># Docker</a>
-              <a href="/tags/Windows/" rel="tag"># Windows</a>
           </div>
 
         
@@ -357,6 +350,24 @@
 
   <footer class="footer">
     <div class="footer-inner">
+  <div class="languages">
+    <label class="lang-select-label">
+      <i class="fa fa-language"></i>
+      <span>简体中文</span>
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </label>
+    <select class="lang-select" data-canonical="" aria-label="选择语言">
+      
+        <option value="zh-CN" data-href="/compile-windows-seafile-client/" selected="">
+          简体中文
+        </option>
+      
+        <option value="en" data-href="/en/compile-windows-seafile-client/" selected="">
+          English
+        </option>
+      
+    </select>
+  </div>
 
   <div class="copyright">
     &copy; 2008 – 

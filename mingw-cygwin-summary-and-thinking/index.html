@@ -21,12 +21,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"xnerv.wang","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。所有调研都基于Windows平台。 关于MinGW和Cygwin的关系 网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。 从MinG">
+    <meta name="description" content="本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。所有调研都基于Windows平台。 关于MinGW和Cygwin的关系网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。 从MinGW">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于MinGW和Cygwin的一些个人总结和推测">
 <meta property="og:url" content="https://xnerv.wang/mingw-cygwin-summary-and-thinking/index.html">
 <meta property="og:site_name" content="XNERV SURVEYS">
-<meta property="og:description" content="本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。所有调研都基于Windows平台。 关于MinGW和Cygwin的关系 网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。 从MinG">
+<meta property="og:description" content="本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。所有调研都基于Windows平台。 关于MinGW和Cygwin的关系网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。 从MinGW">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://xnerv.wang/assets/mingw-cygwin-summary-and-thinking/mingw-gcc-dep.png">
 <meta property="og:image" content="https://xnerv.wang/assets/mingw-cygwin-summary-and-thinking/mingw-bash-dep.png">
@@ -188,7 +188,7 @@
     <img class="site-author-image" itemprop="image" alt="Xnerv Wang (xnervwang)"
       src="/portraits/nerv.png">
   <p class="site-author-name" itemprop="name">Xnerv Wang (xnervwang)</p>
-  <div class="site-description" itemprop="description">Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。</div>
+  <div class="site-description" itemprop="description"></div>
 </div>
 <div class="site-state-wrap animated">
   <nav class="site-state">
@@ -241,7 +241,7 @@
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
       <meta itemprop="name" content="XNERV SURVEYS">
-      <meta itemprop="description" content="Xnerv Wang (xnervwang) 的技术博客吗，主要涉及C/C++、数据库引擎开发、文件系统、TCP/IP与网络、分布式系统和Linux等领域。">
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
@@ -283,30 +283,24 @@
     
     
     <div class="post-body" itemprop="articleBody"><p>本文主要是对MinGW和Cygwin相关的一些名词的研究和推测，以求澄清一些似乎而非的概念，并记录当前已经弄清楚的一些问题，以及还需要进一步调研的一些细节。所有调研都基于Windows平台。</p>
-<h2 id="关于MinGW和Cygwin的关系"><a class="header-anchor" href="#关于MinGW和Cygwin的关系"></a>关于MinGW和Cygwin的关系</h2>
-<p>网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。</p>
+<h2 id="关于MinGW和Cygwin的关系"><a href="#关于MinGW和Cygwin的关系" class="headerlink" title="关于MinGW和Cygwin的关系"></a>关于MinGW和Cygwin的关系</h2><p>网上大部分博文复制粘贴的文章都是讨论MinGW和Cygwin的区别和优劣。而我主要是分析两者的联系，以及一些需要同时用到MinGW和Cygwin的交叉编译场景。</p>
 <p>从<a href="https://en.wikipedia.org/wiki/MinGW">MinGW的维基百科</a>上看，Cygwin是提供一个模拟的POSIX层（cygwin1.dll）。我推测Cygwin也提供了一系列基于Cygwin的编译工具，在将需要移植的Linux代码在Cygwin上重新编译后，可以获得可以在Windows上直接运行的exe，而这个exe调用的还是POSIX风格的API，只不过这些API由cygwin1.dll提供模拟实现。而MinGW也提供了一系列编译工具，但MinGW-GCC是在编译时将代码中的POSIX API调用直接修改为对应的Windows API调用，从而不需要一个额外的dll转换层。需要额外提到的是，gcc的这种在编译时直接修改调用的API的行为不仅不少见，而且非常常见，在64位Linux上编译C++程序时，例如调用open这个函数，实际上在gcc编译后，调用的是libc中的open64函数，这个可以通过objdump导出外部依赖符号表来确认。另外就是，MinGW并不提供某些难以用Windows API实现的POSIX API，例如fork()，mmap()和ioctl()。</p>
 <span id="more"></span>
-<h2 id="MinGW和MinGW-w64"><a class="header-anchor" href="#MinGW和MinGW-w64"></a>MinGW和MinGW-w64</h2>
-<p>MinGW（mingw32）据说更新太慢代码太老，因此另一帮人就新搞了一个MinGW-w64，据说老的MinGW不支持编译64位程序。不知道是不是这就意味着可以完全放弃掉MinGW而直接采用MinGW-x64？</p>
+
+<h2 id="MinGW和MinGW-w64"><a href="#MinGW和MinGW-w64" class="headerlink" title="MinGW和MinGW-w64"></a>MinGW和MinGW-w64</h2><p>MinGW（mingw32）据说更新太慢代码太老，因此另一帮人就新搞了一个MinGW-w64，据说老的MinGW不支持编译64位程序。不知道是不是这就意味着可以完全放弃掉MinGW而直接采用MinGW-x64？</p>
 <p>在安装MinGW时需要选择线程模型：posix或win32。从<a href="https://stackoverflow.com/questions/17242516/mingw-w64-threads-posix-vs-win32">mingw-w64 threads: posix vs win32</a>看来，win32是在C++11之前MinGW-GCC搞的一套基于win32 threads模型的多线程库，而posix则是基于libwinpthreads，支持C++11的一些新的头文件。有另外一个单独的GitHub项目<a href="https://github.com/meganz/mingw-std-threads">mingw-std-threads</a>可以让win32模型也支持这些C++11头文件。</p>
 <p>MinGW-w64可以安装在Windows上，可以安装在Linux上，甚至可以安装在Cygwin里（<a href="https://cygwin.com/install.html">而CygWin看起来只能安装在Windows中</a>）。MinGW（mingw32）好像有另外一个相关项目<a href="http://www.mingw.org/wiki/linuxcrossmingw">MinGW cross compiling environment</a>提供Linux安装，但感觉项目不是很活跃。并且从这篇<a href="https://mxe.cc/#history">更新日志</a>来看，似乎作者已经放弃更新并转向MinGW-w64。</p>
-<h2 id="MSYS"><a class="header-anchor" href="#MSYS"></a>MSYS</h2>
-<p>根据<a href="http://www.mingw.org/wiki/msys">MinGW官网对于MSYS的描述</a>，MSYS是对MinGW的补充，提供了bash，make， gawk和grep等GNU工具来辅助编译。从网上可以找到的一些MinGW编译入门文章来看，完全可以在Windows cmd环境中调用MinGW的gcc命令行去编译基于MinGW的Windows程序，并不是一定需要在bash环境中进行，但是像bash脚本这种应该还是需要bash环境的。另外据说<a href="https://github.com/msys2/msys2/wiki/History">MSYS是从Cygwin派生出来的分支</a>，本来我推测像MSYS中的gcc应该是运行在cygwin1.dll或者类似名字的dll模拟层上。但是检查了gcc的dll依赖关系：<br>
-<img src="/assets/mingw-cygwin-summary-and-thinking/mingw-gcc-dep.png" alt=""></p>
+<h2 id="MSYS"><a href="#MSYS" class="headerlink" title="MSYS"></a>MSYS</h2><p>根据<a href="http://www.mingw.org/wiki/msys">MinGW官网对于MSYS的描述</a>，MSYS是对MinGW的补充，提供了bash，make， gawk和grep等GNU工具来辅助编译。从网上可以找到的一些MinGW编译入门文章来看，完全可以在Windows cmd环境中调用MinGW的gcc命令行去编译基于MinGW的Windows程序，并不是一定需要在bash环境中进行，但是像bash脚本这种应该还是需要bash环境的。另外据说<a href="https://github.com/msys2/msys2/wiki/History">MSYS是从Cygwin派生出来的分支</a>，本来我推测像MSYS中的gcc应该是运行在cygwin1.dll或者类似名字的dll模拟层上。但是检查了gcc的dll依赖关系：<br><img src="/assets/mingw-cygwin-summary-and-thinking/mingw-gcc-dep.png"></p>
 <p>发现MinGW上的gcc最终似乎是直接依赖于Windows的dlls，并没有类似cygwin1.dll的东西。这种有点奇怪了，难道这个gcc是通过Cygwin上的MinGW-GCC用自举（bootstrapping）的方式创建出来的？找到关于MinGW-x64有关自举编译的一篇文章<a href="https://sourceforge.net/p/mingw-w64/wiki2/Native%20Win64%20compiler/">Creating a native Win64 compiler</a>，我怀疑MinGW是不是也是用的类似的自举编译gcc。</p>
-<p>但是再看bash的话，bash.exe却还是依赖于msys1.0.dll以及其它一些msys开头的dlls。猜测这些dlls应该就是类似于cygwin1.dll的模拟层。MinGW和MSYS是通过同一个安装程序来安装，推测由于gcc.exe属于MinGW，而bash.exe属于MSYS，而只有MSYS的工具才需要依赖msys相关的dlls。检查安装路径后果然发现，gcc.exe是在<code>C:\MinGW\bin</code>下面，而bash.exe是在<code>C:\MinGW\msys\1.0\bin</code>下面，印证了我的想法。<br>
-<img src="/assets/mingw-cygwin-summary-and-thinking/mingw-bash-dep.png" alt=""></p>
+<p>但是再看bash的话，bash.exe却还是依赖于msys1.0.dll以及其它一些msys开头的dlls。猜测这些dlls应该就是类似于cygwin1.dll的模拟层。MinGW和MSYS是通过同一个安装程序来安装，推测由于gcc.exe属于MinGW，而bash.exe属于MSYS，而只有MSYS的工具才需要依赖msys相关的dlls。检查安装路径后果然发现，gcc.exe是在<code>C:\MinGW\bin</code>下面，而bash.exe是在<code>C:\MinGW\msys\1.0\bin</code>下面，印证了我的想法。<br><img src="/assets/mingw-cygwin-summary-and-thinking/mingw-bash-dep.png"></p>
 <p>此外结合<a href="https://zh.wikipedia.org/wiki/MinGW">MinGW的中文维基百科</a>和我自己的MinGW-w64安装经历，选择i686工具链时可以从DWARF和SJLJ这两种异常实现机制中二选一，而选择x86_64时需要从SEH和SJLJ中二选一。</p>
-<h2 id="MSYS2"><a class="header-anchor" href="#MSYS2"></a>MSYS2</h2>
-<p>回过头来再看看MSYS2。MSYS2似乎是配套MinGW-w64出现的，提供三种配置的模式：msys2，mingw64（使用mingw-w64 x86_64 toolchain工具链）和mingw32（使用mingw-w64 i686 toolchain工具链）。个人推测msys2模式编译出来的程序需要依赖msys2.0.dll，就像Cygwin下编译出来的程序一样。据说MSYS2相对于Cygwin的最大区别是移植了包管理工具Pacman。据说三种模式的主要区别是在$PATH中的搜索优先顺序不同，msys2只使用<code>/usr/local/bin</code>和<code>/usr/bin</code>下的工具，mingw64优先使用<code>/mingw64/bin</code>下的工具，mingw32优先使用<code>/mingw32/bin</code>下的工具。</p>
+<h2 id="MSYS2"><a href="#MSYS2" class="headerlink" title="MSYS2"></a>MSYS2</h2><p>回过头来再看看MSYS2。MSYS2似乎是配套MinGW-w64出现的，提供三种配置的模式：msys2，mingw64（使用mingw-w64 x86_64 toolchain工具链）和mingw32（使用mingw-w64 i686 toolchain工具链）。个人推测msys2模式编译出来的程序需要依赖msys2.0.dll，就像Cygwin下编译出来的程序一样。据说MSYS2相对于Cygwin的最大区别是移植了包管理工具Pacman。据说三种模式的主要区别是在$PATH中的搜索优先顺序不同，msys2只使用<code>/usr/local/bin</code>和<code>/usr/bin</code>下的工具，mingw64优先使用<code>/mingw64/bin</code>下的工具，mingw32优先使用<code>/mingw32/bin</code>下的工具。</p>
 <p>类似于MinGW和MSYS，安装MSYS2的时候也会自动安装MinGW-w64。而且看起来在x64平台上是mingw64和mingw32会同时被安装。</p>
 <p>我首先单独安装了MinGW-w64，看起来其中的gcc等工具也是直接依赖于Windows的dlls，并没有一个中间层dll。并且在安装的时候需要选择是用x86_64工具链还是i686工具链，以及异常的处理方式。这么看来安装MSYS2的话就可以同时拥有两种工具链了。安装MSYS2时并没有要求选择异常处理机制和所使用的线程库，根据<a href="https://sourceforge.net/p/mingw-w64/discussion/723797/thread/ef7d51a4/">What’s the difference between Mingw-builds and Mingw packages in Msys2</a>这个帖子中的讨论，看起来</p>
 <blockquote>
 <p>MSYS2 only provides posix thread model, dwarf for i686, seh for x86_64</p>
 </blockquote>
-<p>使用Pacman直接安装的gcc依赖于msys2系列的dlls。我估计这就类似于在Cygwin上直接安装gcc，会依赖于cygwin1.dll。如果要安装只依赖于Windows native dlls的gcc，应该安装mingw版本的gcc。<br>
-<img src="/assets/mingw-cygwin-summary-and-thinking/msys2-usr-gcc-dep.png" alt=""></p>
+<p>使用Pacman直接安装的gcc依赖于msys2系列的dlls。我估计这就类似于在Cygwin上直接安装gcc，会依赖于cygwin1.dll。如果要安装只依赖于Windows native dlls的gcc，应该安装mingw版本的gcc。<br><img src="/assets/mingw-cygwin-summary-and-thinking/msys2-usr-gcc-dep.png"></p>
 <p>安装mingw-w64-i686-toolchain和mingw-w64-x86_64-toolchain则分别会在<code>mingw32\bin</code>和<code>mingw64\bin</code>目录下产生gcc.exe，并且只依赖于Windows dlls和libwinpthread-1.dll，看来这个就是MinGW-w64版本的gcc，可以生成不依赖于任何dll的Windows程序。</p>
 <hr>
 <p><strong>本文地址：<a href="https://xnerv.wang/mingw-cygwin-summary-and-thinking/">https://xnerv.wang/mingw-cygwin-summary-and-thinking/</a></strong></p>
@@ -353,6 +347,24 @@
 
   <footer class="footer">
     <div class="footer-inner">
+  <div class="languages">
+    <label class="lang-select-label">
+      <i class="fa fa-language"></i>
+      <span>简体中文</span>
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </label>
+    <select class="lang-select" data-canonical="" aria-label="选择语言">
+      
+        <option value="zh-CN" data-href="/mingw-cygwin-summary-and-thinking/" selected="">
+          简体中文
+        </option>
+      
+        <option value="en" data-href="/en/mingw-cygwin-summary-and-thinking/" selected="">
+          English
+        </option>
+      
+    </select>
+  </div>
 
   <div class="copyright">
     &copy; 2008 – 
